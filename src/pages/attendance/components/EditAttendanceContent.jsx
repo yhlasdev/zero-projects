@@ -27,7 +27,7 @@ const EditAttendance = ({ data, onClose }) => {
     <Box p={3}>
       <Box
         sx={{
-          px: 3,
+          px: 0,
           pb: 2,
           borderBottom: "1px solid #eee",
           display: "flex",
@@ -44,7 +44,13 @@ const EditAttendance = ({ data, onClose }) => {
       </Box>
 
       {/* Header */}
-      <Box display="flex" alignItems="center" gap={2} mb={3}>
+      <Box
+        display="flex"
+        alignItems="center"
+        sx={{ backgroundColor: "#aaa7a7", borderRadius: 3, padding: 2, my: 2 }}
+        gap={2}
+        mb={3}
+      >
         <Avatar src={data.avatar} />
         <Box>
           <Typography fontWeight={600}>{data.name}</Typography>
@@ -55,7 +61,7 @@ const EditAttendance = ({ data, onClose }) => {
       </Box>
 
       <Grid container spacing={2}>
-        <Grid item xs={6}>
+        <Grid size={6}>
           <Typography fontSize={13} mb={0.5}>
             Check In Time
           </Typography>
@@ -67,7 +73,7 @@ const EditAttendance = ({ data, onClose }) => {
           />
         </Grid>
 
-        <Grid item xs={6}>
+        <Grid size={6}>
           <Typography fontSize={13} mb={0.5}>
             Check Out Time
           </Typography>
@@ -79,7 +85,7 @@ const EditAttendance = ({ data, onClose }) => {
           />
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Typography fontSize={13} mb={0.5}>
             Status
           </Typography>
@@ -95,7 +101,7 @@ const EditAttendance = ({ data, onClose }) => {
           </TextField>
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Typography fontSize={13} mb={0.5}>
             Edit Reason
           </Typography>

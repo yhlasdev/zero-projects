@@ -76,7 +76,7 @@ const AttendancePage = () => {
       <GlobalModal
         open={openEditModal}
         onClose={() => setOpenEditModal(false)}
-        maxWidth="md"
+        maxWidth="sm"
         fullWidth
       >
         {selectedRow && (

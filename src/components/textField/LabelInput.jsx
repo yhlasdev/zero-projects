@@ -1,11 +1,17 @@
 import { Box, TextField, Typography } from "@mui/material";
 
-const FieldLabel = ({ label, ...props }) => (
-  <Box sx={{marginTop: 1}}>
-    <Typography fontSize={13} mb={0.5}>
+const FieldLabel = ({ label, maxRows = 1, ...props }) => (
+  <Box sx={{ marginTop: 1 }}>
+    <Typography fontSize={14} mb={0.5}>
       {label}
     </Typography>
-    <TextField fullWidth size="small" {...props} />
+    <TextField
+      rows={maxRows}
+      fullWidth
+      size="small"
+      multiline={maxRows > 1}
+      {...props}
+    />
   </Box>
 );
 
