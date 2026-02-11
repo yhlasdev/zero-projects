@@ -9,9 +9,10 @@ export default function TableActions({ onView, onEdit, onDelete }) {
       <IconButton size="small" onClick={onView}>
         <VisibilityIcon fontSize="small" />
       </IconButton>
-      <IconButton size="small" onClick={onEdit}>
-        <BorderColorIcon fontSize="small" />
-      </IconButton>
+      {onEdit &&
+        <IconButton size="small" onClick={onEdit}>
+          <BorderColorIcon fontSize="small" />
+        </IconButton>}
       {onDelete && (
         <IconButton size="small" onClick={onDelete}>
           <DeleteIcon fontSize="small" />

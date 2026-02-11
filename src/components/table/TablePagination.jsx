@@ -8,6 +8,8 @@ export default function TablePaginationInfo({ total }) {
         justifyContent: "space-between",
         alignItems: "center",
         p: 2,
+        backgroundColor: '#fff',
+        borderRadius: '0 0 10px 10px'
       }}
     >
       <Typography>
