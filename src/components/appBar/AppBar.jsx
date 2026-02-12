@@ -5,8 +5,8 @@ export default function HeaderAppBar({ children }) {
     <AppBar
       position="static"
       sx={{
-        paddingTop: 2,
-        paddingBottom: 2,
+        paddingTop: 1.5,
+        paddingBottom: 1.5,
         marginTop: 2,
         backgroundColor: "#fff",
         borderRadius: "10px 10px 0 0",
