@@ -18,6 +18,7 @@ import Features from "./components/Features";
 import { About } from "./components/About";
 import MobileDownload from "./components/MobileDownload";
 import { VideoSection } from "./components/VideoSection";
+import { Sponsors } from './components/Sponsors'
 
 const Welcome = () => {
     return (
@@ -106,7 +107,10 @@ const Welcome = () => {
                 <Box mb={10} ></Box>
                 <About />
                 <MobileDownload />
+                <Box mb={10}></Box>
                 <VideoSection />
+                <Box mb={10}></Box>
+                <Sponsors />
             </Box>
 
             {/* VIDEO SECTION */}
