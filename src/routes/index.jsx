@@ -15,12 +15,17 @@ import AnnouncementsPage from "../pages/announcements/Announcements";
 import DocumentsPage from "../pages/documents/Documents";
 import CalendarPage from "../pages/calendar/Calendar";
 import SettingsPage from "../pages/settings/Settings";
+import Welcome from "../pages/welcome/welcome";
 
 const routes = createBrowserRouter(
   [
     {
       path: "/",
-      element: <Navigate to="/dashboard" replace />,
+      element: (
+        <PageWrapperNoAuth>
+          <Welcome />
+        </PageWrapperNoAuth>
+      ),
     },
     {
       path: "/dashboard",

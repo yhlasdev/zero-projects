@@ -45,6 +45,14 @@
     @apply bg-[#eeeeee] dark:bg-[#2F4B53]
   }
 
+  .main-color-text {
+    @apply text-[#1A4D7A]
+  }
+
+  .main-color-bg {
+    @apply bg-[#1A4D7A]
+  }
+
 }
 
 
