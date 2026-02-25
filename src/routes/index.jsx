@@ -17,6 +17,7 @@ import CalendarPage from "../pages/calendar/Calendar";
 import SettingsPage from "../pages/settings/Settings";
 import Welcome from "../pages/welcome/welcome";
 import RegisterPage from "../pages/register/register";
+import LoginPage from "../pages/login/login";
 
 const routes = createBrowserRouter(
   [
@@ -33,6 +34,14 @@ const routes = createBrowserRouter(
       element: (
         <PageWrapperNoAuth>
           <RegisterPage />
+        </PageWrapperNoAuth>
+      ),
+    },
+    {
+      path: "/login",
+      element: (
+        <PageWrapperNoAuth>
+          <LoginPage />
         </PageWrapperNoAuth>
       ),
     },

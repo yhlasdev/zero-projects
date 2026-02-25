@@ -18,8 +18,12 @@ import { VideoSection } from "./components/VideoSection";
 import { Sponsors } from './components/Sponsors'
 import FieldLabel from "../../components/textField/LabelInput";
 import Footer from "./components/Footer";
+import { useNavigate } from "react-router-dom";
 
 const Welcome = () => {
+
+    const navigate = useNavigate();
+
     return (
         <>
             {/* HEADER */}
@@ -31,6 +35,7 @@ const Welcome = () => {
 
                     <Box>
                         <Button
+                            onClick={() => navigate('/login')}
                             variant="outlined"
                             sx={{
                                 mr: 2,
@@ -45,6 +50,7 @@ const Welcome = () => {
                             Giriş
                         </Button>
                         <Button
+                            onClick={() => navigate('/register')}
                             className=" main-color-bg text-white"
                             sx={{
                                 textTransform: 'none',

@@ -1,5 +1,6 @@
 import i18n from '../../libs/i18n';
 import { axiosInstance } from '../axiosInstance';
+import Cookies from "js-cookie";
 
 const config = {
   withCredentials: false,
@@ -14,9 +15,7 @@ const privateConfig = {
   withCredentials: false,
 };
 
-const getAccessToken = () => localStorage.getItem('accessToken');
-
-
+const getAccessToken = () => Cookies.get("auth_token");
 export const api = {
   // Get
   get: async (url) => {
@@ -48,12 +47,11 @@ export const api = {
   },
   // Get private
   getPrivate: async (url, queryParams) => {
-    const token = 'Bearer ' + getAccessToken();
     const config = {
       ...privateConfig,
       headers: {
         ...privateConfig.headers,
-        Authorization: token
+        Authorization: getAccessToken()
       },
       params: queryParams
     };

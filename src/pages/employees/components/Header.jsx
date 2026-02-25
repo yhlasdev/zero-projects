@@ -1,46 +1,48 @@
-import { useState } from "react";
 import { MenuItem } from "@mui/material";
 import DebounceSelect from "../../../components/select/DebounceSelect";
 import HeaderAppBar from "../../../components/appBar/AppBar";
 import HeaderButton from "../../../components/buttons/Button";
 import HeaderSearch from "../../../components/textField/HeaderSearch";
 import AddIcon from "@mui/icons-material/Add";
+import { useQuery } from "@tanstack/react-query";
+import { getAllDepartment } from "../../../api/queries/getters";
 
-const Header = ({ onAddClick }) => {
-  const [department, setDepartment] = useState("");
-  const [employee, setEmployee] = useState("");
-  const [search, setSearch] = useState("");
+const Header = ({ onAddClick, setFilter, filters }) => {
+  const { data, isLoading } = useQuery({
+    queryKey: ['departments'],
+    queryFn: getAllDepartment
+  });
+
+  const departments = data?.data?.data || [];
+
+  const handleDepartmentChange = (e) => {
+    const value = e.target.value;
+    setFilter(prev => ({ ...prev, department_id: value }));
+  };
 
   return (
     <HeaderAppBar>
       <HeaderSearch
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
+        value={filters.search || ""}
+        onChange={(e) => setFilter(prev => ({ ...prev, search: e.target.value }))}
         placeholder="Search employee"
       />
 
       <DebounceSelect
-        value={department}
-        onChange={(e) => setDepartment(e.target.value)}
+        value={filters.department || ""}
+        onChange={handleDepartmentChange}
         displayEmpty
       >
-        <MenuItem value="" disabled>
-          All department
-        </MenuItem>
-        <MenuItem value={1}>IT</MenuItem>
-        <MenuItem value={2}>HR</MenuItem>
-      </DebounceSelect>
-
-      <DebounceSelect
-        value={employee}
-        onChange={(e) => setEmployee(e.target.value)}
-        displayEmpty
-      >
-        <MenuItem value="" disabled>
-          All employee
-        </MenuItem>
-        <MenuItem value={1}>John</MenuItem>
-        <MenuItem value={2}>Jane</MenuItem>
+        <MenuItem value="">All department</MenuItem>
+        {isLoading ? (
+          <MenuItem disabled>Loading...</MenuItem>
+        ) : (
+          departments.map((dept) => (
+            <MenuItem key={dept.id} value={dept.id}>
+              {dept.name}
+            </MenuItem>
+          ))
+        )}
       </DebounceSelect>
 
       <HeaderButton icon={<AddIcon />} onClick={onAddClick}>

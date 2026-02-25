@@ -8,30 +8,28 @@ import {
   Paper,
 } from "@mui/material";
 
-export default function GlobalTable({ columns, rows }) {
+export default function GlobalTable({ columns, rows = [] }) {
   return (
-    <TableContainer
-      component={Paper}
-      elevation={0}
-      sx={{
-        height: "calc(100vh - 367px)",
-      }}
-    >
+    <TableContainer component={Paper} elevation={0}>
       <Table>
         <TableHead>
           <TableRow>
             {columns.map((col) => (
-              <TableCell key={col.key}>{col.label}</TableCell>
+              <TableCell key={col.key}>
+                {col.label}
+              </TableCell>
             ))}
           </TableRow>
         </TableHead>
 
         <TableBody>
           {rows.map((row, index) => (
-            <TableRow key={index}>
+            <TableRow key={row.id ?? index}>
               {columns.map((col) => (
                 <TableCell key={col.key}>
-                  {col.render ? col.render(row) : row[col.key]}
+                  {col.render
+                    ? col.render(row)
+                    : row[col.key]}
                 </TableCell>
               ))}
             </TableRow>
