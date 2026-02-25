@@ -13,7 +13,7 @@ const FieldLabel = ({ label, maxRows = 1, icon, ...props }) => (
           endAdornment: icon ? icon : undefined,
         },
       }}
-      size="small"
+      size="large"
       multiline={maxRows > 1}
       {...props}
     />
