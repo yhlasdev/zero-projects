@@ -46,7 +46,7 @@
   }
 
   .main-color-text {
-    @apply text-[#1A4D7A]
+    @apply text-[#1A4D7A] dark:text-white
   }
 
   .main-color-bg {

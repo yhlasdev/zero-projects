@@ -10,6 +10,8 @@ import Typography from "@mui/material/Typography";
 import { useSidebarItems } from "../../hooks/useSidebarItems";
 import { useLocation, useNavigate } from "react-router-dom";
 
+import websiteLogo from '../../assets/logo/logo.png'
+
 export const Sidebar = () => {
   const { sidebarItemsRoutes } = useSidebarItems();
   const location = useLocation();
@@ -32,13 +34,18 @@ export const Sidebar = () => {
     >
       <Box
         sx={{
-          height: 70,
+          height: 80,
           display: "flex",
+          paddingLeft: '10px',
           alignItems: "center",
-          justifyContent: "center",
+          justifyContent: "start",
+          gap: 2,
         }}
       >
-        <Typography variant="h6" fontWeight="bold">
+        <Box>
+          <img src={websiteLogo} />
+        </Box>
+        <Typography variant="h5" className=" main-color-text" >
           Yerinde
         </Typography>
       </Box>
