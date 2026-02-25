@@ -49,6 +49,11 @@
     @apply text-[#1A4D7A] dark:text-white
   }
 
+
+  .main-color-text-custom {
+    @apply text-[#265d8d] dark:text-white
+  }
+
   .main-color-bg {
     @apply bg-[#1A4D7A]
   }

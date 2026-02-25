@@ -65,16 +65,16 @@ export const Sidebar = () => {
                 mb: 1,
                 borderRadius: '8px',
                 "&.Mui-selected": {
-                  backgroundColor: "#1976d2",
+                  backgroundColor: "#1A4D7A",
                   color: "#fff",
                 },
                 "&.Mui-selected:hover": {
-                  backgroundColor: "#1565c0",
+                  backgroundColor: "#265d8d",
                 },
               }}
             >
               <ListItemIcon>
-                <Icon className={`${isActive && 'text-white'}`} />
+                <Icon className={`${isActive && 'text-[#eeeeee]'}`} />
               </ListItemIcon>
 
               <ListItemText primary={item.name} />
