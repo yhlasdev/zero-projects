@@ -27,11 +27,9 @@ const AttendancePage = () => {
   });
 
   const attendanceQuery = useInfiniteGet({
-    key: ["attendances", filters],
-    apiFn: ({ page, limit, ...restFilters }) =>
+    key: ["attendances"],
+    apiFn: ({ ...restFilters }) =>
       getAllAttendance({
-        page,
-        limit,
         date: restFilters.date?.format("YYYY-MM-DD"),
         search: restFilters.search,
         department_ids: restFilters.department_ids,
@@ -43,19 +41,27 @@ const AttendancePage = () => {
   });
 
   const rows = attendanceQuery.data.map((item) => ({
-    id: item.employee_id,
-    name: `${item.user?.first_name} ${item.user?.last_name}`,
-    department: item.department?.name || "-",
-    position: item.job?.title || "-",
-    checkIn: item.check_in || "-",
-    checkOut: item.check_out || "-",
-    status: item.status,
-    hours: item.hours,
-    avatar: `https://i.pravatar.cc/150?u=${item.user?.id}`,
+    attendance_id: item?.attendance_id,
+    employee_id: item?.employee_id,
+    name: `${item?.user?.first_name} ${item.user?.last_name}`,
+    department: item?.department?.name || "-",
+    position: item?.job?.title || "-",
+    checkInRaw: item?.check_in,
+    checkOutRaw: item?.check_out,
+    checkIn: item?.check_in
+      ? dayjs(item?.check_in).format("HH:mm")
+      : "-",
+    checkOut: item?.check_out
+      ? dayjs(item?.check_out).format("HH:mm")
+      : "-",
+    status: item?.status,
+    hours: item?.hours,
+    reason: item?.reason || '',
+    avatar: `https://i.pravatar.cc/150?u=${item?.user?.id}`,
   }));
 
   const columns = [
-    { key: "id", label: "ID" },
+    { key: "employee_id", label: "ID" },
     {
       key: "employee",
       label: "Employee",
@@ -98,7 +104,7 @@ const AttendancePage = () => {
   return (
     <Box className="attendance">
       {openViewModal ? (
-        <AttendanceDetailsContent employee={selectedRow} />
+        <AttendanceDetailsContent employee={selectedRow} onClose={setOpenViewModal} />
       ) : (
         <>
           <PageTitle
@@ -110,8 +116,12 @@ const AttendancePage = () => {
             columns={columns}
             rows={rows}
             onScroll={attendanceQuery.handleScroll}
+            isLoading={attendanceQuery.isLoading}
+            isFetchingNextPage={attendanceQuery.isFetchingNextPage}
+            isError={attendanceQuery.isError}
+            emptyMessage="No attendance records found"
           />
-          <TablePaginationInfo total={attendanceQuery.totalItems} />
+          {/* <TablePaginationInfo total={attendanceQuery.totalItems} /> */}
         </>
       )}
 
@@ -124,8 +134,10 @@ const AttendancePage = () => {
         {selectedRow && (
           <EditAttendance
             data={selectedRow}
-            onClose={() => setOpenEditModal(false)}
-          />
+            onClose={() => {
+              setOpenEditModal(false);
+              attendanceQuery.refetch();
+            }} />
         )}
       </GlobalModal>
     </Box>

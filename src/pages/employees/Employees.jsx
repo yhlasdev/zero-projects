@@ -103,34 +103,19 @@ const EmployeesPage = () => {
             setFilter={setFilter}
             filters={filters}
           />
-          <Box
+          <GlobalTable
+            columns={columns}
+            rows={employeeQuery?.data}
             onScroll={employeeQuery.handleScroll}
-            sx={{
-              height: "calc(100vh - 367px)",
-              overflowY: "auto",
-            }}
-          >
-            <GlobalTable
-              columns={columns}
-              rows={employeeQuery.data}
-            />
-
-            {employeeQuery.isLoading && (
-              <Box textAlign="center" py={2}>
-                <CircularProgress />
-              </Box>
-            )}
-
-            {employeeQuery.isFetchingNextPage && (
-              <Box textAlign="center" py={2}>
-                <CircularProgress />
-              </Box>
-            )}
-          </Box>
-
-          <TablePaginationInfo
-            total={employeeQuery.totalItems}
+            isLoading={employeeQuery.isLoading}
+            isFetchingNextPage={employeeQuery.isFetchingNextPage}
+            isError={employeeQuery.isError}
+            emptyMessage="No attendance records found"
           />
+
+          {/* <TablePaginationInfo
+            total={employeeQuery.totalItems}
+          /> */}
         </>
       )}
 

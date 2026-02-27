@@ -33,10 +33,24 @@ export const getAllJobs = async (department_id) => {
   });
 };
 
-export const getAllAttendance = ({ date, department_ids, status, search }) =>
-  api.getPrivate("/company-service/attendances/get-by-date", {
+export const getAllAttendance = async ({ date, department_ids, status, search }) => {
+  return await api.getPrivate("/company-service/attendances/get-by-date", {
     date, department_ids, status, search
-  });
+  })
+};
 
-export const getEmployeeImage = (employee_id) =>
-  api.getPrivate(`/storage-service/attendances/${employee_id}`);
+export const getEmployeeImage = async (employee_id) => {
+  return await api.getPrivate(`/storage-service/attendances/${employee_id}`)
+};
+
+export const getEmployeeDetail = async ({ employee_id, start_date, end_date }) => {
+  return api.getPrivate(`/company-service/attendances/by-employee/${employee_id}`, { start_date, end_date })
+};
+
+export const getLeavesAll = async ({ page, limit, status, type }) => {
+  return await api.getPrivate(`/company-service/leaves/get-all`, { page, limit, status, type })
+};
+
+export const getLeavesById = async (id) => {
+  return await api.getPrivate(`/company-service/leaves/get/${id}`)
+};

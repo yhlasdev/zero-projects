@@ -19,8 +19,12 @@ export const useValidSchema = () => {
     attendance_id: numReqValidSchema
   });
 
+  const LeaveValid = yup.object({
+    // leaves_id: numReqValidSchema
+  });
   return {
-    AttendanceValid
+    AttendanceValid,
+    LeaveValid
   }
 
 }

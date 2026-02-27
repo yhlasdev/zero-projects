@@ -1,25 +1,26 @@
 import { useState } from "react";
 import { Box, Button, Grid, Typography, Avatar, MenuItem, IconButton, TextField } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { CustomForm } from "../../../components/form/CustomForm";
 import CustomFormTextField from '../../../components/textField/CustomTextField';
 import { useValidSchema } from "../../../hooks/useValidShema";
 import { updateAttendance } from "../../../api/queries/put";
+import { useAppMutation } from "../../../hooks/useMutation";
+import dayjs from "dayjs";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
 
 const EditAttendance = ({ data, onClose }) => {
-  const queryClient = useQueryClient();
   const { AttendanceValid } = useValidSchema();
-
   const [avatar] = useState(data.avatar);
 
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
-      attendance_id: data.id,
-      check_in: data.checkIn,
-      check_out: data.checkOut,
+      attendance_id: data.attendance_id,
+      check_in: data.checkInRaw ? dayjs(data.checkInRaw) : null,
+      check_out: data.checkOutRaw ? dayjs(data.checkOutRaw) : null,
       status: data.status,
       reason: data.reason || "",
     },
@@ -43,26 +44,23 @@ const EditAttendance = ({ data, onClose }) => {
   // }, [data.id]);
 
 
-  const mutation = useMutation({
+  const mutation = useAppMutation({
     mutationFn: updateAttendance,
+    queryKey: ["attendances"],
     onSuccess: () => {
-      queryClient.invalidateQueries(["attendances"]);
       onClose();
     },
   });
 
+
   const submitHandler = async (formData) => {
-    try {
-      await mutation.mutateAsync({
-        attendance_id: formData.attendance_id,
-        check_in: formData.check_in,
-        check_out: formData.check_out,
-        status: formData.status,
-        reason: formData.reason,
-      });
-    } catch (err) {
-      console.error(err);
-    }
+    await mutation.mutateAsync({
+      attendance_id: Number(formData.attendance_id),
+      check_in: formData.check_in,
+      check_out: formData.check_out,
+      status: formData.status,
+      reason: formData.reason,
+    });
   };
 
   return (
@@ -71,7 +69,7 @@ const EditAttendance = ({ data, onClose }) => {
         {/* Header */}
         <Box sx={{ px: 0, pb: 2, borderBottom: "1px solid #eee", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <Typography sx={{ fontWeight: "bold", fontSize: 18 }}>Edit Attendance Record</Typography>
-          <IconButton onClick={onClose}><CloseIcon /></IconButton>
+          <IconButton size="small" onClick={onClose}><CloseIcon /></IconButton>
         </Box>
 
         {/* Employee Info */}
@@ -86,21 +84,49 @@ const EditAttendance = ({ data, onClose }) => {
         {/* Form Fields */}
         <Grid container spacing={2}>
           <Grid size={6}>
-            <CustomFormTextField
+            <Controller
+              name="check_in"
               control={control}
-              errors={errors}
-              name='check_in'
-              label='Check In time'
-              className="w-full"
+              render={({ field }) => (
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <TimePicker
+                    label="Check In"
+                    value={field.value}
+                    onChange={(value) => field.onChange(value)}
+                    slotProps={{
+                      textField: {
+                        fullWidth: true,
+                        size: "small",
+                        error: !!errors.check_in,
+                        helperText: errors.check_in?.message,
+                      },
+                    }}
+                  />
+                </LocalizationProvider>
+              )}
             />
           </Grid>
           <Grid size={6}>
-            <CustomFormTextField
+            <Controller
+              name="check_out"
               control={control}
-              errors={errors}
-              name='check_out'
-              label='Check Out time'
-              className="w-full"
+              render={({ field }) => (
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <TimePicker
+                    label="Check Out"
+                    value={field.value}
+                    onChange={(value) => field.onChange(value)}
+                    slotProps={{
+                      textField: {
+                        fullWidth: true,
+                        size: "small",
+                        error: !!errors.check_out,
+                        helperText: errors.check_out?.message,
+                      },
+                    }}
+                  />
+                </LocalizationProvider>
+              )}
             />
           </Grid>
           <Grid size={12}>
@@ -132,8 +158,8 @@ const EditAttendance = ({ data, onClose }) => {
         {/* Buttons */}
         <Box display="flex" justifyContent="flex-end" gap={1.5} mt={3}>
           <Button variant="outlined" onClick={onClose}>Cancel</Button>
-          <Button variant="contained" type="submit" disabled={mutation.isLoading}>
-            {mutation.isLoading ? "Saving..." : "Save Changes"}
+          <Button variant="contained" type="submit" disabled={mutation.isPending}>
+            {mutation.isPending ? "Saving..." : "Save Changes"}
           </Button>
         </Box>
       </CustomForm>

@@ -7,8 +7,8 @@ export const useInfiniteGet = ({
   limit = 10,
   filters = {},
   enabled = true,
-  dataKey = "employees", // default array key
-  countKey = "count", // toplam item sayısı
+  dataKey = "leaves",
+  countKey = "count"
 }) => {
   const lastFetchRef = useRef(0);
 
@@ -20,6 +20,7 @@ export const useInfiniteGet = ({
     isLoading,
     isError,
     error,
+    refetch,
   } = useInfiniteQuery({
     queryKey: [key, filters, limit],
     initialPageParam: 1,
@@ -39,15 +40,12 @@ export const useInfiniteGet = ({
       return fetchedSoFar < totalCount ? allPages.length + 1 : undefined;
     },
   });
-
-  // Flatten edilmiş data
   const flatData = useMemo(() => {
     return data?.pages.flatMap((page) => page?.data?.data?.[dataKey] ?? []) ?? [];
   }, [data, dataKey]);
 
   const totalCount = data?.pages?.[0]?.data?.data?.[countKey] ?? 0;
 
-  // Scroll handler
   const handleScroll = useCallback(
     (event) => {
       const { scrollTop, scrollHeight, clientHeight } = event.currentTarget;
@@ -76,5 +74,6 @@ export const useInfiniteGet = ({
     isError,
     error,
     handleScroll,
+    refetch
   };
 };

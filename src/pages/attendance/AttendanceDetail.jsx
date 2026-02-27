@@ -1,282 +1,172 @@
-import {
-  Box,
-  Typography,
-  Avatar,
-  Paper,
-  Stack,
-  Button,
-  Chip,
-  Divider,
-  TextField,
-} from "@mui/material";
+import { Box, Typography, Paper, Stack, Chip, IconButton, CircularProgress } from "@mui/material";
+import { useState, useEffect } from "react";
+import dayjs from "dayjs";
+import { useQuery } from "@tanstack/react-query";
+import { getEmployeeDetail } from "../../api/queries/getters";
+import DateRangeSelect from "./components/DateRangeSelect";
+import CloseIcon from "@mui/icons-material/Close";
+import { formatTime } from "../../utils/formatTime";
 
-import PrintIcon from "@mui/icons-material/Print";
-import FileDownloadIcon from "@mui/icons-material/FileDownload";
-import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+export default function AttendanceDetailsContent({ employee, onClose }) {
+  const [dateRange, setDateRange] = useState([
+    dayjs().subtract(1, "day"),
+    dayjs(),
+  ]); const startDate = dateRange[0]?.format("YYYY-MM-DD");
+  const endDate = dateRange[1]?.format("YYYY-MM-DD");
 
-const records = [
-  {
-    date: "23.01.2026",
-    day: "Fri",
-    checkIn: "08:55",
-    checkOut: "17:30",
-    hours: "8.5h",
-    status: "Present",
-  },
-  {
-    date: "22.01.2026",
-    day: "Thu",
-    checkIn: "08:55",
-    checkOut: "17:30",
-    hours: "8.5h",
-    status: "Present",
-  },
-  {
-    date: "21.01.2026",
-    day: "Wed",
-    checkIn: "08:55",
-    checkOut: "17:30",
-    hours: "8.5h",
-    status: "Present",
-  },
-  {
-    date: "20.01.2026",
-    day: "Tue",
-    checkIn: "08:55",
-    checkOut: "17:30",
-    hours: "8.5h",
-    status: "Present",
-  },
-  {
-    date: "19.01.2026",
-    day: "Mon",
-    checkIn: "-",
-    checkOut: "-",
-    hours: "-",
-    status: "Weekend",
-  },
-];
+  const { data, isFetching, refetch } = useQuery({
+    queryKey: ["employee-attendance", employee?.employee_id, startDate, endDate],
+    queryFn: () =>
+      getEmployeeDetail({
+        employee_id: employee.employee_id,
+        start_date: startDate,
+        end_date: endDate,
+      }),
+    enabled: !!employee,
+  });
 
-export default function AttendanceDetailsContent({ employee }) {
-  if (!employee) return null;
+  useEffect(() => {
+    if (employee && startDate && endDate) refetch();
+  }, [employee, startDate, endDate]);
+
+  const attendance = data?.data?.data || {};
+  const records = attendance?.attendances || [];
+  const avgCheckIn = formatTime(attendance?.avg_check_in);
+  const avgCheckOut = formatTime(attendance?.avg_check_out);
+  const totalHours = attendance?.total_hours?.toFixed(1) || "-";
+  const presentDays = attendance?.present_days || "-";
+  const departmentName = employee?.department || "-";
+  const position = employee?.position || "-";
+  const employeeName = employee?.name || '';
 
   return (
-    <Paper sx={{ padding: 3 }}>
+    <Paper sx={{ padding: 3, position: "relative" }}>
+      {/* LOADING OVERLAY */}
+      {isFetching && (
+        <Box
+          sx={{
+            position: "absolute",
+            inset: 0,
+            backgroundColor: "rgba(255,255,255,0.6)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 10,
+            borderRadius: 1,
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      )}
 
       {/* HEADER */}
-      <Stack direction="row" justifyContent="space-between">
-
-        <Box display="flex" gap={2}>
-
-          <Box>
-            <Typography variant="body2" color="text.secondary">
-              Attendance Details
-            </Typography>
-
-            <Typography fontSize={20} fontWeight={600}>
-              {employee.name}
-            </Typography>
-
-            <Typography variant="body2" color="text.secondary">
-              {employee.position} • {employee.department}
-            </Typography>
-          </Box>
+      <Stack direction="row" justifyContent="space-between" mb={1}>
+        <Box>
+          <Typography variant="body2" color="text.secondary">Attendance Details</Typography>
+          <Typography py={1} fontSize={25} fontWeight={600}>{employeeName}</Typography>
+          <Typography variant="body2" color="text.secondary">{position} • {departmentName}</Typography>
         </Box>
-
+        <IconButton size="small" onClick={() => onClose(false)}><CloseIcon /></IconButton>
       </Stack>
 
       {/* SUMMARY CARDS */}
-      <Stack direction="row" spacing={2} mt={3} mb={3}>
-
-        <SummaryCard title="08:58" subtitle="Avg Check In" />
-        <SummaryCard title="17:28" subtitle="Avg Check Out" />
-        <SummaryCard title="42.3h" subtitle="Total Hours" />
-        <SummaryCard title="5/7" subtitle="Present Days" />
-
+      <Stack direction={{ xs: "column", sm: "row" }} spacing={2} mt={1.5} mb={1}>
+        <SummaryCard title={avgCheckIn} subtitle="Avg Check In" />
+        <SummaryCard title={avgCheckOut} subtitle="Avg Check Out" />
+        <SummaryCard title={totalHours} subtitle="Total Hours" />
+        <SummaryCard title={presentDays} subtitle="Present Days" />
       </Stack>
 
-      {/* RECORDS HEADER */}
-      <Stack
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-        mb={2}
-      >
-        <Typography fontWeight={600}>
-          Daily Check-in / Check-out Records
-        </Typography>
-
-        <Stack direction="row" spacing={1}>
-
-          <Button
-            startIcon={<PrintIcon />}
-            variant="outlined"
-            size="small"
-          >
-            Print
-          </Button>
-
-          <Button
-            startIcon={<FileDownloadIcon />}
-            variant="outlined"
-            size="small"
-          >
-            Export
-          </Button>
-
-          <TextField
-            size="small"
-            placeholder="Start date"
-            InputProps={{
-              endAdornment: <CalendarTodayIcon fontSize="small" />,
-            }}
-          />
-
-          <TextField
-            size="small"
-            placeholder="End date"
-            InputProps={{
-              endAdornment: <CalendarTodayIcon fontSize="small" />,
-            }}
-          />
-
-        </Stack>
-      </Stack>
+      {/* DATE RANGE SELECT */}
+      <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
+        <Typography>Daily Check in / Check out Records</Typography>
+        <DateRangeSelect value={dateRange} onChange={setDateRange} />
+      </Box>
 
       {/* RECORDS LIST */}
-      <Stack spacing={2}>
-
-        {records.map((item, index) => {
-
-          const dayNumber = item.date.split(".")[0];
-
+      <Box
+        sx={{
+          flex: 1,
+          overflowY: "auto",
+          height: "calc(100vh - 420px)",
+          display: "flex",
+          flexDirection: "column",
+          gap: 1.5,
+          mt: 2
+        }}
+      >
+        {records.map((item) => {
+          const dayNumber = dayjs(item.work_date).format("DD");
           return (
             <Paper
-              key={index}
+              key={item.attendance_id}
               sx={{
                 p: 2,
                 borderRadius: 3,
                 border: "1px solid #e0e0e0",
+                width: "100%",
+                boxSizing: "border-box",
               }}
               elevation={0}
             >
               <Stack
-                direction="row"
+                direction={{ xs: "column", sm: "row" }}
                 alignItems="center"
+                justifyContent={'space-between'}
                 spacing={3}
               >
-
-                {/* DAY BOX */}
-                <Box
-                  sx={{
-                    width: 50,
-                    height: 50,
-                    borderRadius: 2,
-                    backgroundColor: "#0A2540",
-                    color: "#fff",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    flexDirection: "column",
-                  }}
-                >
-                  <Typography fontWeight={600}>
-                    {dayNumber}
-                  </Typography>
-                </Box>
-
-                {/* DATE */}
-                <Box width={'auto'}>
-                  <Typography fontWeight={500}>
-                    {item.date}
-                  </Typography>
-
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
+                <Box display={'flex'} gap={2} alignItems={'center'}>
+                  <Box
+                    sx={{
+                      width: 50,
+                      height: 50,
+                      borderRadius: 2,
+                      backgroundColor: "#0A2540",
+                      color: "#fff",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexDirection: "column",
+                    }}
                   >
-                    {item.day}
-                  </Typography>
+                    <Typography fontWeight={600}>{dayNumber}</Typography>
+                  </Box>
+
+                  <Box width={{ xs: "100%", sm: "auto" }}>
+                    <Typography fontWeight={500}>{dayjs(item.work_date).format("DD.MM.YYYY")}</Typography>
+                    <Typography variant="body2" color="text.secondary">{dayjs(item.work_date).format("ddd")}</Typography>
+                  </Box>
                 </Box>
+                <InfoBlock label="CHECK IN" value={formatTime(item.check_in)} />
+                <InfoBlock label="CHECK OUT" value={formatTime(item.check_out)} />
+                <InfoBlock label="HOURS" value={item.hours?.toFixed(1) || "-"} />
 
-                {/* CHECK IN */}
-                <InfoBlock
-                  label="CHECK IN"
-                  value={item.checkIn}
-                />
-
-                {/* CHECK OUT */}
-                <InfoBlock
-                  label="CHECK OUT"
-                  value={item.checkOut}
-                />
-
-                {/* HOURS */}
-                <InfoBlock
-                  label="HOURS"
-                  value={item.hours}
-                />
-
-                {/* STATUS */}
                 <Box ml="auto">
-                  <Chip
-                    label={item.status}
-                    color={
-                      item.status === "Present"
-                        ? "success"
-                        : "default"
-                    }
-                  />
+                  <Chip label={item.status} color={item.status === "Present" ? "success" : "default"} />
                 </Box>
-
               </Stack>
             </Paper>
           );
         })}
-
-      </Stack>
-
+      </Box>
     </Paper>
   );
 }
 
-/* summary card */
 function SummaryCard({ title, subtitle }) {
   return (
-    <Paper
-      sx={{
-        flex: 1,
-        p: 2,
-        borderRadius: 3,
-        border: "1px solid #e0e0e0",
-      }}
-      elevation={0}
-    >
-      <Typography fontWeight={600}>
-        {title}
-      </Typography>
-
-      <Typography variant="body2" color="text.secondary">
-        {subtitle}
-      </Typography>
+    <Paper sx={{ flex: 1, p: 2, borderRadius: 3, border: "1px solid #e0e0e0" }} elevation={0}>
+      <Typography fontWeight={600}>{title}</Typography>
+      <Typography variant="body2" color="text.secondary">{subtitle}</Typography>
     </Paper>
   );
 }
 
-/* info block */
 function InfoBlock({ label, value }) {
   return (
     <Box width={100}>
-      <Typography
-        variant="body2"
-        color="text.secondary"
-      >
-        {label}
-      </Typography>
-
-      <Typography fontWeight={600}>
-        {value}
-      </Typography>
+      <Typography variant="body2" color="text.secondary">{label}</Typography>
+      <Typography fontWeight={600}>{value}</Typography>
     </Box>
   );
 }
