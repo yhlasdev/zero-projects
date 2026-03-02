@@ -8,7 +8,7 @@ export const useInfiniteGet = ({
   filters = {},
   enabled = true,
   dataKey = "data",
-  countKey = "count"
+  countKey = "count",
 }) => {
   const lastFetchRef = useRef(0);
 
@@ -34,16 +34,31 @@ export const useInfiniteGet = ({
     getNextPageParam: (lastPage, allPages) => {
       const totalCount = lastPage?.data?.data?.[countKey] ?? 0;
       const fetchedSoFar = allPages.flatMap(
-        (p) => p?.data?.data?.[dataKey] ?? []
+        (p) => p?.data?.data?.[dataKey] ?? [],
       ).length;
 
       return fetchedSoFar < totalCount ? allPages.length + 1 : undefined;
     },
   });
+  // const flatData = useMemo(() => {
+  //   return data?.pages.flatMap((page) =>  page?.data?.data?.[dataKey] ? page?.data?.data?.[dataKey] : page?.data?.data ? page?.data?.data : [] ) || [];
+  // }, [data, dataKey]);
   const flatData = useMemo(() => {
-    return data?.pages.flatMap((page) =>  page?.data?.data?.[dataKey] ? page?.data?.data?.[dataKey] : page?.data?.data ) ?? [];
-  }, [data, dataKey]);
+    if (!data?.pages) return [];
 
+    return data.pages.flatMap((page) => {
+      const pageData = page?.data?.data?.[dataKey];
+      const pageData2 = page?.data?.data;
+
+      if (Array.isArray(pageData)) {
+        return pageData;
+      }
+      if (Array.isArray(pageData2)) {
+        return pageData2;
+      }
+      return [];
+    });
+  }, [data, dataKey]);
   const totalCount = data?.pages?.[0]?.data?.data?.[countKey] ?? 0;
 
   const handleScroll = useCallback(
@@ -62,7 +77,7 @@ export const useInfiniteGet = ({
         fetchNextPage();
       }
     },
-    [hasNextPage, isFetchingNextPage, fetchNextPage]
+    [hasNextPage, isFetchingNextPage, fetchNextPage],
   );
 
   return {
@@ -74,6 +89,6 @@ export const useInfiniteGet = ({
     isError,
     error,
     handleScroll,
-    refetch
+    refetch,
   };
 };

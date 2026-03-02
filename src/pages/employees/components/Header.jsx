@@ -6,16 +6,17 @@ import HeaderSearch from "../../../components/textField/HeaderSearch";
 import AddIcon from "@mui/icons-material/Add";
 import { useQuery } from "@tanstack/react-query";
 import { getAllDepartment, getAllJobs } from "../../../api/queries/getters";
+import JobSelect from "./JobSelect";
 
 const Header = ({ onAddClick, setFilter, filters }) => {
   const { data, isLoading } = useQuery({
-    queryKey: ['departments'],
-    queryFn: getAllDepartment
+    queryKey: ["departments"],
+    queryFn: getAllDepartment,
   });
   const { data: jobsData, isLoading: jobsLoading } = useQuery({
-    queryKey: ['jobs', filters.department_id],
+    queryKey: ["jobs", filters.department_id],
     queryFn: () => getAllJobs(filters.department_id),
-    enabled: !!filters.department_id
+    enabled: !!filters.department_id,
   });
   const departments = data?.data?.data || [];
   const allJobs = jobsData?.data?.data || [];
@@ -23,10 +24,10 @@ const Header = ({ onAddClick, setFilter, filters }) => {
   const handleDepartmentChange = (e) => {
     const value = e.target.value;
 
-    setFilter(prev => ({
+    setFilter((prev) => ({
       ...prev,
       department_id: value,
-      job_id: ""
+      job_id: "",
     }));
   };
 
@@ -34,17 +35,14 @@ const Header = ({ onAddClick, setFilter, filters }) => {
     <HeaderAppBar>
       <HeaderSearch
         value={filters.search}
-        onSearch={(val) =>
-          setFilter((prev) => ({ ...prev, search: val }))
-        }
+        onSearch={(val) => setFilter((prev) => ({ ...prev, search: val }))}
       />
 
       <DebounceSelect
         value={filters.department_id || ""}
         onChange={handleDepartmentChange}
-        onClear={() =>
-          setFilter((prev) => ({ ...prev, department_id: "" }))
-        }
+        placeholder="All department"
+        onClear={() => setFilter((prev) => ({ ...prev, department_id: "" }))}
       >
         {isLoading ? (
           <MenuItem disabled>Loading...</MenuItem>
@@ -56,27 +54,17 @@ const Header = ({ onAddClick, setFilter, filters }) => {
           ))
         )}
       </DebounceSelect>
-      <DebounceSelect
-        key={filters.department_id || "no-dept"}
-        disabled={!filters.department_id}
+      <JobSelect
+        value={filters.job_id || ""}
         onChange={(e) =>
           setFilter((prev) => ({ ...prev, job_id: e.target.value }))
         }
-        onClear={() =>
-          setFilter((prev) => ({ ...prev, job_id: "" }))
-        }
+        onClear={() => setFilter((prev) => ({ ...prev, job_id: "" }))}
         placeholder="All Jobs"
-      >
-        {jobsLoading ? (
-          <MenuItem disabled>Loading...</MenuItem>
-        ) : (
-          allJobs.map((job) => (
-            <MenuItem key={job.id} value={job.id}>
-              {job.title}
-            </MenuItem>
-          ))
-        )}
-      </DebounceSelect>
+        options={allJobs}
+        loading={jobsLoading}
+        disabled={!filters.department_id}
+      />
       <HeaderButton icon={<AddIcon />} onClick={onAddClick}>
         Add Employee
       </HeaderButton>

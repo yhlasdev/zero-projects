@@ -1,49 +1,41 @@
 import {
   FormControl,
   Select,
+  MenuItem,
+  InputLabel,
   IconButton,
   InputAdornment,
-  InputLabel,
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import React from "react";
-export default function DebounceSelect({
-  children,
+
+function JobSelect({
   value,
   onChange,
   onClear,
-  label,
   placeholder,
-  ...props
+  options,
+  disabled,
+  loading,
 }) {
   const hasValue = value !== "" && value !== null && value !== undefined;
-  const labelId = `select-label-${label?.replace(/\s/g, "")}`;
 
   return (
-    <FormControl size="small" sx={{ width: "100%" }} variant="outlined">
-      <InputLabel id={labelId} shrink={hasValue || props.displayEmpty}>
-        {label}
-      </InputLabel>
-
+    <FormControl size="small" fullWidth variant="outlined">
       <Select
-        sx={{ borderRadius: 2.5 }}
-        IconComponent={KeyboardArrowDownIcon}
-        labelId={labelId}
         value={value ?? ""}
+        sx={{ borderRadius: 2.5 }}
         onChange={onChange}
-        label={label}
+        disabled={disabled || loading}
+        label=''
         displayEmpty={!!placeholder}
+        IconComponent={KeyboardArrowDownIcon}
         renderValue={(selectedId) => {
-          if (!hasValue && placeholder) {
+          if (!hasValue)
             return <span style={{ color: "#9e9e9e" }}>{placeholder}</span>;
-          }
 
-          const selectedItem = React.Children.toArray(children).find(
-            (child) => child.props.value === selectedId,
-          );
-
-          return selectedItem ? selectedItem.props.children : selectedId;
+          const selectedItem = options.find((opt) => opt.id === selectedId);
+          return selectedItem ? selectedItem.title : selectedId;
         }}
         endAdornment={
           hasValue ? (
@@ -63,16 +55,19 @@ export default function DebounceSelect({
             </InputAdornment>
           ) : null
         }
-        {...props}
       >
-        {/* {placeholder && (
-          <MenuItem disabled value="">
-            {placeholder}
-          </MenuItem>
-        )} */}
-
-        {children}
+        {loading ? (
+          <MenuItem disabled>Loading...</MenuItem>
+        ) : (
+          options.map((job) => (
+            <MenuItem key={job.id} value={job.id}>
+              {job.title}
+            </MenuItem>
+          ))
+        )}
       </Select>
     </FormControl>
   );
 }
+
+export default JobSelect;

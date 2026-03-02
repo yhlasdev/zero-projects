@@ -1,21 +1,36 @@
 import { IconButton } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
-import DeleteIcon from "@mui/icons-material/Delete";
+import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
+import CalendarMonthSharpIcon from "@mui/icons-material/CalendarMonthSharp";
 
-export default function TableActions({ onView, onEdit, onDelete }) {
+export default function TableActions({
+  onView,
+  onEdit,
+  onDelete,
+  onCalendar,
+  onVisibility,
+}) {
   return (
     <>
-      <IconButton size="small" onClick={onView}>
-        <VisibilityIcon fontSize="small" />
-      </IconButton>
-      {onEdit &&
+      {onVisibility && (
+        <IconButton size="small" onClick={onView}>
+          <VisibilityIcon  sx={{fontSize: 25}}/>
+        </IconButton>
+      )}
+      {onCalendar && (
+        <IconButton size="small" onClick={onCalendar} sx={{fontSize: 25}}>
+          <CalendarMonthSharpIcon />
+        </IconButton>
+      )}
+      {onEdit && (
         <IconButton size="small" onClick={onEdit}>
-          <BorderColorIcon fontSize="small" />
-        </IconButton>}
+          <BorderColorIcon sx={{fontSize: '22px'}} />
+        </IconButton>
+      )}
       {onDelete && (
         <IconButton size="small" onClick={onDelete}>
-          <DeleteIcon fontSize="small" />
+          <DeleteForeverOutlinedIcon sx={{fontSize: 25}}/>
         </IconButton>
       )}
     </>

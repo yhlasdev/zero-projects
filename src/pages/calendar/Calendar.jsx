@@ -10,7 +10,7 @@ import AddEvent from "./components/AddEvent";
 function CalendarPage() {
   const [openAddModal, setOpenAddModal] = useState(false);
 
- 
+
 
   return (
     <Box>

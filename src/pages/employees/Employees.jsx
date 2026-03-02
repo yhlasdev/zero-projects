@@ -74,7 +74,7 @@ const EmployeesPage = () => {
       label: "Actions",
       render: (row) => (
         <TableActions
-          onView={() => {
+          onCalendar={() => {
             setSelectedEmployee(row);
             setOpenViewModal(true);
           }}

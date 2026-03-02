@@ -28,7 +28,14 @@ export default function GlobalTable({
       onScroll={onScroll}
     >
       <Table stickyHeader>
-        <TableHead sx={{ bgcolor: "#dee1ec" }}>
+        <TableHead
+          sx={{
+            "& .MuiTableCell-stickyHeader": {
+              backgroundColor: "#F4F4F4",
+              fontWeight: 600
+            },
+          }}
+        >
           <TableRow>
             {columns.map((col) => (
               <TableCell key={col.key}>{col.label}</TableCell>
