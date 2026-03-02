@@ -9,11 +9,10 @@ export default function TableActions({
   onEdit,
   onDelete,
   onCalendar,
-  onVisibility,
 }) {
   return (
     <>
-      {onVisibility && (
+      {onView && (
         <IconButton size="small" onClick={onView}>
           <VisibilityIcon  sx={{fontSize: 25}}/>
         </IconButton>
