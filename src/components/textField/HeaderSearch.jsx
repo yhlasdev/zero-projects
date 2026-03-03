@@ -24,7 +24,7 @@ export default function HeaderSearch({ value, onSearch }) {
           handleSearch();
         }
       }}
-      sx={{ width: "100%", ".css-y9uafn-MuiInputBase-root-MuiOutlinedInput-root": {borderRadius: 2.5, pl: 0.5} }}
+      sx={{ width: 290, ".css-y9uafn-MuiInputBase-root-MuiOutlinedInput-root": {borderRadius: 2.5, pl: 0.5} }}
       InputProps={{
         startAdornment: (
           <InputAdornment position="start">

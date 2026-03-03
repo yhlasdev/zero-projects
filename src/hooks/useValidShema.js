@@ -16,7 +16,7 @@ export const useValidSchema = () => {
 
 
   const AttendanceValid = yup.object({
-    attendance_id: numReqValidSchema
+    // attendance_id: numReqValidSchema
   });
 
   const LeaveValid = yup.object({

@@ -7,7 +7,7 @@ export default function GlobalModal({
   ...dialogProps
 }) {
   return (
-    <Dialog open={open} onClose={onClose} {...dialogProps}>
+    <Dialog open={open} onClose={onClose} {...dialogProps} sx={{".css-1hp2eyy-MuiPaper-root-MuiDialog-paper": {borderRadius: '12px'}}}>
       {children}
     </Dialog>
   );

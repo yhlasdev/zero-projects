@@ -8,7 +8,7 @@ export const themeConfig = createTheme({
         light: {
             palette: {
                 mode: "light",
-                primary: { main: "#1a2b4a" },
+                primary: { main: "#0F3254" },
                 background: { default: "#ffffff", paper: "#ffffff", secondary: "#ffffff" },
                 text: { primary: "#333333", secondary: "#555555" },
             }

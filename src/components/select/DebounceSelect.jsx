@@ -15,13 +15,14 @@ export default function DebounceSelect({
   onClear,
   label,
   placeholder,
+  width = "100%",
   ...props
 }) {
   const hasValue = value !== "" && value !== null && value !== undefined;
   const labelId = `select-label-${label?.replace(/\s/g, "")}`;
 
   return (
-    <FormControl size="small" sx={{ width: "100%" }} variant="outlined">
+    <FormControl size="small" sx={{ width: width }} variant="outlined">
       <InputLabel id={labelId} shrink={hasValue || props.displayEmpty}>
         {label}
       </InputLabel>

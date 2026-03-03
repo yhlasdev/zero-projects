@@ -4,12 +4,12 @@ import Header from "./components/Header";
 import EmployeeCell from "../../components/table/EmployeeCell";
 import TableActions from "../../components/table/TableActions";
 import GlobalTable from "../../components/table/Table";
-import TablePaginationInfo from "../../components/table/TablePagination";
 import StatusChip from "../../components/table/StatusChip";
 import { useState } from "react";
 import GlobalModal from "../../components/modal/GlobalModal";
 import EditAttendance from "./components/EditAttendanceContent";
 import AttendanceDetailsContent from "./AttendanceDetail";
+import BulkExportModal from "./components/BulkeExport";
 import { useInfiniteGet } from "../../hooks/useInfiniteList";
 import { getAllAttendance } from "../../api/queries/getters";
 import dayjs from "dayjs";
@@ -18,6 +18,7 @@ const AttendancePage = () => {
   const [openEditModal, setOpenEditModal] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [openViewModal, setOpenViewModal] = useState(false);
+  const [openExportModal, setOpenExportModal] = useState(false);
 
   const [filters, setFilters] = useState({
     date: dayjs(),
@@ -48,15 +49,11 @@ const AttendancePage = () => {
     position: item?.job?.title || "-",
     checkInRaw: item?.check_in,
     checkOutRaw: item?.check_out,
-    checkIn: item?.check_in
-      ? dayjs(item?.check_in).format("HH:mm")
-      : "-",
-    checkOut: item?.check_out
-      ? dayjs(item?.check_out).format("HH:mm")
-      : "-",
+    checkIn: item?.check_in ? dayjs(item?.check_in).format("HH:mm") : "-",
+    checkOut: item?.check_out ? dayjs(item?.check_out).format("HH:mm") : "-",
     status: item?.status,
     hours: item?.hours,
-    reason: item?.reason || '',
+    reason: item?.reason || "",
     avatar: `https://i.pravatar.cc/150?u=${item?.user?.id}`,
   }));
 
@@ -69,7 +66,7 @@ const AttendancePage = () => {
         <EmployeeCell
           name={row.name}
           subTitle={row.position}
-          avatar={row.avatar}
+          avatar={`http://194.156.117.223:8004/yerinde/storage-service/attendances/${row?.employee_id}`}
         />
       ),
     },
@@ -104,14 +101,26 @@ const AttendancePage = () => {
   return (
     <Box className="attendance">
       {openViewModal ? (
-        <AttendanceDetailsContent employee={selectedRow} onClose={setOpenViewModal} />
+        <AttendanceDetailsContent
+          employee={selectedRow}
+          onClose={setOpenViewModal}
+        />
       ) : (
         <>
-          <PageTitle
-            title="Attendance Report"
-            subTitle="Track and manage employee attendance records"
-          />
-          <Header filters={filters} setFilters={setFilters} />
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "flex-start",
+              justifyContent: "space-between",
+            }}
+          >
+            <PageTitle
+              title="Attendance Report"
+              subTitle="Track and manage employee attendance records"
+            />
+          </Box>
+
+          <Header filters={filters} setFilters={setFilters} setOpenExportModal={setOpenExportModal} />
           <GlobalTable
             columns={columns}
             rows={rows}
@@ -121,10 +130,10 @@ const AttendancePage = () => {
             isError={attendanceQuery.isError}
             emptyMessage="No attendance records found"
           />
-          {/* <TablePaginationInfo total={attendanceQuery.totalItems} /> */}
         </>
       )}
 
+      {/* Edit modal */}
       <GlobalModal
         open={openEditModal}
         onClose={() => setOpenEditModal(false)}
@@ -137,9 +146,17 @@ const AttendancePage = () => {
             onClose={() => {
               setOpenEditModal(false);
               attendanceQuery.refetch();
-            }} />
+            }}
+          />
         )}
       </GlobalModal>
+
+      <BulkExportModal
+        open={openExportModal}
+        onClose={() => setOpenExportModal(false)}
+        rows={rows}
+        date={filters.date}
+      />
     </Box>
   );
 };
