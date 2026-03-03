@@ -30,3 +30,8 @@ export const calendarAdd = async (objectData) => {
   const response = await api.postPrivate('company-service/calendars/add', objectData);
   return response;
 };
+
+export const registerPhone = async (objectData) => {
+  const response = await api.post('company-service/sms/send', objectData);
+  return response;
+};
