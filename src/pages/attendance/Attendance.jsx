@@ -52,7 +52,7 @@ const AttendancePage = () => {
     checkIn: item?.check_in ? dayjs(item?.check_in).format("HH:mm") : "-",
     checkOut: item?.check_out ? dayjs(item?.check_out).format("HH:mm") : "-",
     status: item?.status,
-    hours: item?.hours,
+    hours: item?.hours?.toFixed(1),
     reason: item?.reason || "",
     avatar: `https://i.pravatar.cc/150?u=${item?.user?.id}`,
   }));

@@ -16,9 +16,10 @@ const Header = ({ setFilter, filters }) => {
 
   return (
     <HeaderAppBar>
-      <Box width={"100%"} display={"flex"} gap={4} p={2}>
+      <Box width={"100%"} display={"flex"} gap={3}>
         <DebounceSelect
-          label="Type"
+          label="All types"
+          width="297px"
           value={filters.type || ""}
           onChange={(e) => setFilter({ ...filters, type: e.target.value })}
           onClear={() => setFilter({ ...filters, type: "" })}
@@ -31,7 +32,8 @@ const Header = ({ setFilter, filters }) => {
         </DebounceSelect>
 
         <DebounceSelect
-          label="Status"
+          label="All status"
+          width="297px"
           value={filters.status || ""}
           onChange={(e) => setFilter({ ...filters, status: e.target.value })}
           onClear={() => setFilter({ ...filters, status: "" })}

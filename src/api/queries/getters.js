@@ -119,3 +119,17 @@ export const getCalendar = async ({ employee_id, week_start }) => {
     week_start,
   });
 };
+
+export const getAttendanceStatistic = async () => {
+  const response = await api.getPrivate(
+    "/company-service/dashboard/attendance-stats",
+  );
+  return response;
+};
+
+export const getAttendanceDetailHour = async () => {
+  const response = await api.getPrivate(
+    "/company-service/dashboard/base-stats",
+  );
+  return response;
+};

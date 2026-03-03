@@ -19,6 +19,7 @@ import { updateAttendance } from "../../../api/queries/put";
 import { useAppMutation } from "../../../hooks/useMutation";
 import dayjs from "dayjs";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import CustomTimePicker from "./CustomDateSelect";
 
 const EditAttendance = ({ data, onClose }) => {
   const { AttendanceValid } = useValidSchema();
@@ -37,21 +38,6 @@ const EditAttendance = ({ data, onClose }) => {
     resolver: yupResolver(AttendanceValid),
     mode: "onSubmit",
   });
-
-  // const getEmployeeImage = async (attendance_id) => {
-  //   try {
-  //     const response = await axios.get(`http://194.156.117.223:8004/yerinde/storage-service/attendances/${attendance_id}`);
-  //     // response.data.image veya response.data.imageUrl API response'una göre ayarla
-  //     return response.data.image || response.data.imageUrl || data.avatar;
-  //   } catch (err) {
-  //     console.error("Employee image fetch error:", err);
-  //     return data.avatar; // hata olursa default avatar kullan
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   getEmployeeImage(data.id).then(setAvatar);
-  // }, [data.id]);
 
   const mutation = useAppMutation({
     mutationFn: updateAttendance,
@@ -111,7 +97,7 @@ const EditAttendance = ({ data, onClose }) => {
             gap={2}
           >
             <Avatar
-              src={`http://194.156.117.223:8004/yerinde/storage-service/attendances/${data?.employee_id}`}
+              src={`http://194.156.117.223:8004/yerinde/storage-service/attendances/${data?.attendance_id}`}
               alt={data?.employee_id}
             />
             <Box>
@@ -124,23 +110,22 @@ const EditAttendance = ({ data, onClose }) => {
 
           <Grid container spacing={2}>
             <Grid size={6}>
-              <CustomFormTextField
+              <CustomTimePicker
                 control={control}
-                label={"Check in Time"}
+                name="check_in"
+                label="Check In Time"
                 errors={errors}
                 marginTop={0}
-                name="check_in"
-                className="w-full"
               />
             </Grid>
+
             <Grid size={6}>
-              <CustomFormTextField
+              <CustomTimePicker
                 control={control}
-                label={"Check out Time"}
+                name="check_out"
+                label="Check Out Time"
                 errors={errors}
                 marginTop={0}
-                name="check_out"
-                className="w-full"
               />
             </Grid>
             <Grid size={12}>
@@ -159,9 +144,11 @@ const EditAttendance = ({ data, onClose }) => {
                     SelectProps={{
                       IconComponent: KeyboardArrowDownIcon,
                     }}
-                    sx={{".css-15exkk5-MuiInputBase-root-MuiOutlinedInput-root": {
-                      borderRadius: '8px'
-                    }}}
+                    sx={{
+                      ".css-15exkk5-MuiInputBase-root-MuiOutlinedInput-root": {
+                        borderRadius: "8px",
+                      },
+                    }}
                   >
                     <MenuItem value="present">Present</MenuItem>
                     <MenuItem value="absent">Absent</MenuItem>

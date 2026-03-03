@@ -85,8 +85,7 @@ const LeaveRequestsPage = () => {
       <GlobalModal
         open={Boolean(selectedRow)}
         onClose={() => setSelectedRow(null)}
-        maxWidth="md"
-        fullWidth
+        width={896}
       >
         <LeaveRequestDetail
           leave_id={selectedRow?.leave_id}

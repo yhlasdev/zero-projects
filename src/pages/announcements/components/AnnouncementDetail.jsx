@@ -3,41 +3,49 @@ import {
   Typography,
   Divider,
   IconButton,
-  CircularProgress,
   Grid,
   Chip,
-  Button,
+  LinearProgress,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import { useQuery } from "@tanstack/react-query";
-import { formatTimeYear } from "../../../utils/formatTime";
+import dayjs from "dayjs";
 import { getAnnouncementById } from "../../../api/queries/getters";
-import { CalendarIcon } from "@mui/x-date-pickers";
-import StatusChip from "../../../components/table/StatusChip";
 import GlobalLoader from "../../../components/Loading";
+import StatusChip from "../../../components/table/StatusChip";
 
 const AnnouncementDetail = ({ onClose, id }) => {
-  const {
-    data: announcement,
-    isLoading,
-    isError,
-  } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["announcement", id],
     queryFn: () => getAnnouncementById(id),
     enabled: !!id,
   });
 
-  const val = announcement?.data?.data;
+  const val = data?.data?.data;
+
+  const readCount = val?.ReadCount || 0;
+  const sendCount = val?.SendCount || 0;
+  const percentage =
+    sendCount > 0 ? Math.round((readCount / sendCount) * 100) : 0;
+
+  const targetAudienceLabel =
+    val?.TargetAudience === "all_employees"
+      ? "All employees"
+      : val?.TargetAudience;
 
   return (
-    <Box p={3}>
+    <Box>
+      {/* Header */}
       <Box
         display="flex"
         justifyContent="space-between"
+        px={3}
+        pt={2}
         alignItems="center"
-        mb={2}
       >
-        <Typography fontSize={20} fontWeight={700} color="primary">
+        <Typography fontSize={18} fontWeight={600}>
           Announcement Details
         </Typography>
         <IconButton onClick={onClose}>
@@ -45,38 +53,90 @@ const AnnouncementDetail = ({ onClose, id }) => {
         </IconButton>
       </Box>
 
-      <Divider sx={{ mb: 3 }} />
+      <Divider sx={{ mb: 2, mt: 1 }} />
+
       {isLoading ? (
         <GlobalLoader />
       ) : isError ? (
-        <Box>Some problems</Box>
+        <Box>Something went wrong</Box>
       ) : (
-        <Box>
-          <Typography>Office Renovation Notice</Typography>
-          <Box display={"flex"} py={4} gap={4}>
-            <Box>
-              <CalendarIcon />
-              {formatTimeYear(val?.CreatedAt)}
+        <Box px={3} pb={5}>
+          {/* Title */}
+          <Typography fontSize={20} fontWeight={600} mb={2}>
+            {val?.Text?.split("\n")[0] || "Untitled"}
+          </Typography>
+
+          {/* Meta Info */}
+          <Box display="flex" alignItems="center" gap={3} mb={3}>
+            <Box display="flex" alignItems="center" gap={1}>
+              <PersonOutlineIcon fontSize="small" />
+              <Typography color="text.secondary">Company</Typography>
             </Box>
+
+            <Box display="flex" alignItems="center" gap={1}>
+              <CalendarTodayIcon fontSize="small" />
+              <Typography color="text.secondary">
+                {dayjs(val?.CreatedAt).format("YYYY-MM-DD")}
+              </Typography>
+            </Box>
+
             <StatusChip status={val?.Status} />
           </Box>
 
-          <Typography sx={{ bgcolor: "#ececec", p: 2, borderRadius: 1 }}>
-            {val?.Text}
-          </Typography>
+          {/* Description Box */}
+          <Box
+            sx={{
+              backgroundColor: "#F5F5F5",
+              borderRadius: "10px",
+              padding: 3,
+              mb: 4,
+              whiteSpace: "pre-line",
+            }}
+          >
+            <Typography color="text.secondary">{val?.Text}</Typography>
+          </Box>
 
-          <Grid container py={4}>
+          {/* Stats Section */}
+          <Grid container spacing={4}>
             <Grid size={6}>
-              <Typography>Target Audience</Typography>
-              <Typography>{val?.TargetAudience}</Typography>
+              <Typography fontSize={14} color="text.secondary" mb={0.5}>
+                Target Audience
+              </Typography>
+              <Typography fontWeight={600}>{targetAudienceLabel}</Typography>
             </Grid>
+
             <Grid size={6}>
-              <Typography>Read statistic</Typography>
-              <Typography>
-                {val?.ReadCount} / {val?.SendCount}
+              <Typography fontSize={14} color="text.secondary" mb={0.5}>
+                Read Statistics
+              </Typography>
+              <Typography fontWeight={600}>
+                {readCount} / {sendCount} ({percentage}%)
               </Typography>
             </Grid>
           </Grid>
+
+          {/* Progress */}
+          <Box mt={4}>
+            <Box display="flex" justifyContent="space-between" mb={1}>
+              <Typography fontSize={14}>Read Progress</Typography>
+              <Typography fontSize={14}>
+                {percentage}%
+              </Typography>
+            </Box>
+
+            <LinearProgress
+              variant="determinate"
+              value={percentage}
+              sx={{
+                height: 8,
+                borderRadius: 5,
+                backgroundColor: "#E0E0E0",
+                "& .MuiLinearProgress-bar": {
+                  backgroundColor: "#1E8E5A",
+                },
+              }}
+            />
+          </Box>
         </Box>
       )}
     </Box>

@@ -1,8 +1,8 @@
 import { IconButton } from "@mui/material";
-import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
 import CalendarMonthSharpIcon from "@mui/icons-material/CalendarMonthSharp";
 import { AiOutlineEdit } from "react-icons/ai";
 import { CgEye } from "react-icons/cg";
+import { RiDeleteBinLine } from "react-icons/ri";
 
 export default function TableActions({
   onView,
@@ -29,7 +29,7 @@ export default function TableActions({
       )}
       {onDelete && (
         <IconButton size="small" onClick={onDelete}>
-          <DeleteForeverOutlinedIcon sx={{fontSize: 20}}/>
+          <RiDeleteBinLine sx={{fontSize: 20}}/>
         </IconButton>
       )}
     </>

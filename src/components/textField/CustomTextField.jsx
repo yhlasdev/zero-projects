@@ -21,6 +21,7 @@ const CustomFormTextField = ({
   errorTitle = false,
   marginTop = 2,
   rowNum = 1,
+  closeIcon = true,
   ...rest
 }) => {
   const errorMessage = getErrorMessage(errors, name);
@@ -46,8 +47,11 @@ const CustomFormTextField = ({
                 borderRadius: "8px",
               },
               ".css-1d5mxy5-MuiInputBase-root-MuiOutlinedInput-root": {
-                borderRadius: '8px'
-              }
+                borderRadius: "8px",
+              },
+              ".css-h72nk5-MuiInputBase-root-MuiOutlinedInput-root": {
+                borderRadius: "8px",
+              },
             }}
             //.css-1d5mxy5-MuiInputBase-root-MuiOutlinedInput-root
             rows={rowNum}
@@ -61,7 +65,7 @@ const CustomFormTextField = ({
             //   shrink: true,
             // }}
             InputProps={{
-              endAdornment: field.value ? (
+              endAdornment: field.value && closeIcon ? (
                 <InputAdornment position="end">
                   <IconButton
                     onClick={() => field.onChange("")}

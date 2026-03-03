@@ -127,10 +127,68 @@ const AnnouncementsPage = () => {
       </Box>
 
       <HeaderAppBar>
-        <Tabs value={tab} onChange={handleTabChange} sx={{ px: 2 }}>
-          <Tab label="All Announcements" />
-          <Tab label="Published" />
-          <Tab label="Drafts" />
+        <Tabs
+          value={tab}
+          onChange={handleTabChange}
+          sx={{
+            px: 2,
+            minHeight: "48px",
+            "& .MuiTabs-indicator": {
+              display: "none",
+            },
+          }}
+        >
+          <Tab
+            label="All"
+            sx={{
+              textTransform: "none",
+              fontWeight: 500,
+              fontSize: "1rem",
+              minWidth: "auto",
+              px: 1.5,
+              mx: 0.5,
+              borderRadius: "12px", 
+              color: "#475467", 
+              "&.Mui-selected": {
+                backgroundColor: "#0F3254",
+                color: "#fff",
+              },
+            }}
+          />
+          <Tab
+            label="Published"
+            sx={{
+              textTransform: "none",
+              fontWeight: 500,
+              fontSize: "1rem",
+              minWidth: "auto",
+              px: 1.5,
+              mx: 0.5,
+              borderRadius: "12px",
+              color: "#475467",
+              "&.Mui-selected": {
+                backgroundColor: "#102A43",
+                color: "#fff",
+              },
+            }}
+          />
+          <Tab
+            label="Draft"
+            sx={{
+              textTransform: "none",
+              fontWeight: 500,
+              fontSize: "1rem",
+              minWidth: "auto",
+              px: 1.5,
+              mx: 0.5,
+              borderRadius: "12px",
+              color: "#475467",
+              "&.Mui-selected": {
+                backgroundColor: "#102A43",
+                color: "#fff",
+              },
+            }}
+          />
         </Tabs>
       </HeaderAppBar>
 
@@ -144,12 +202,7 @@ const AnnouncementsPage = () => {
         emptyMessage="No announcements found for this category."
       />
 
-      <GlobalModal
-        open={isModal}
-        onClose={handleCloseModal}
-        maxWidth="sm"
-        fullWidth
-      >
+      <GlobalModal open={isModal} onClose={handleCloseModal} width={896}>
         <AnnouncementContent
           data={selectedAnnouncement}
           onClose={handleCloseModal}
@@ -159,8 +212,7 @@ const AnnouncementsPage = () => {
       <GlobalModal
         open={isDetailModal}
         onClose={() => setIsDetailModal(false)}
-        maxWidth="md"
-        fullWidth
+        width={896}
       >
         <AnnouncementDetail
           id={selectedId?.ID}

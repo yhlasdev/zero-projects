@@ -37,8 +37,8 @@ const AnnouncementContent = ({ onClose, data }) => {
   const submitHandler = async (formData) => {
     if (isEdit) {
       await mutation.mutateAsync({
-        id: data.ID || data.id, 
-        objectData: formData, 
+        id: data.ID || data.id,
+        objectData: formData,
       });
     } else {
       await mutation.mutateAsync(formData);
@@ -53,13 +53,15 @@ const AnnouncementContent = ({ onClose, data }) => {
   const targetOptions = [{ value: "all_employees", label: "all_employees" }];
 
   return (
-    <Box p={3}>
+    <Box>
       <CustomForm handleSubmit={handleSubmit(submitHandler)}>
         <Box
           display="flex"
           justifyContent="space-between"
           alignItems="center"
           mb={2}
+          px={3}
+          pt={1.5}
         >
           <Typography fontSize={18} fontWeight={600}>
             {isEdit ? "Edit Announcement" : "New Announcement"}
@@ -72,54 +74,62 @@ const AnnouncementContent = ({ onClose, data }) => {
 
         <Divider sx={{ mb: 2 }} />
 
-        <CustomFormTextField
-          control={control}
-          errors={errors}
-          name="text"
-          rowNum={4}
-          className="w-full"
-          label={"Text"}
-        />
-
-        <Box display={"flex"} gap={4}>
-          <CustomFormSelect
-            name="target_audience"
-            label="target_audience"
+        <Box px={3} pb={3}>
+          <CustomFormTextField
             control={control}
             errors={errors}
-            options={targetOptions}
+            name="text"
+            rowNum={4}
+            className="w-full"
+            label={"Text"}
+            closeIcon={false}
           />
-          <CustomFormSelect
-            name="status"
-            label="Status"
-            control={control}
-            errors={errors}
-            options={statusOptions}
-          />
-        </Box>
-        <Box
-          sx={{
-            pt: 3,
-            display: "flex",
-            justifyContent: "flex-end",
-            gap: 1,
-          }}
-        >
-          <Button variant="outlined" onClick={onClose}>
-            Cancel
-          </Button>
 
-          <Button
-            variant="contained"
-            type="submit"
-            disabled={mutation.isPending}
+          <Box display={"flex"} gap={4} mt={3}>
+            <CustomFormSelect
+              name="target_audience"
+              label="Target Audience"
+              control={control}
+              errors={errors}
+              options={targetOptions}
+            />
+            <CustomFormSelect
+              name="status"
+              label="Status"
+              control={control}
+              errors={errors}
+              options={statusOptions}
+            />
+          </Box>
+          <Box
+            sx={{
+              pt: 3,
+              display: "flex",
+              justifyContent: "flex-end",
+              gap: 1,
+            }}
           >
-            {mutation.isPending
-              ? "Saving..."
-              : isEdit
-                ? "Update"
-                : "Add Announcement"}
-          </Button>
+            <Button
+              variant="outlined"
+              onClick={onClose}
+              sx={{ borderRadius: "8px" }}
+            >
+              Cancel
+            </Button>
+
+            <Button
+              variant="contained"
+              type="submit"
+              sx={{ borderRadius: "8px" }}
+              disabled={mutation.isPending}
+            >
+              {mutation.isPending
+                ? "Saving..."
+                : isEdit
+                  ? "Save changes"
+                  : "Create Announcement"}
+            </Button>
+          </Box>
         </Box>
       </CustomForm>
     </Box>

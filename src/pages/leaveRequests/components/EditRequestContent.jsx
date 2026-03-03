@@ -57,7 +57,7 @@ const EditLeaveRequest = ({ leave_id, onClose }) => {
   };
 
   return (
-    <Box p={3} minHeight="400px" display="flex" flexDirection="column">
+    <Box minHeight="400px" display="flex" flexDirection="column">
       {isLoading ? (
         <Box
           flex={1}
@@ -84,158 +84,174 @@ const EditLeaveRequest = ({ leave_id, onClose }) => {
           </Button>
         </Box>
       ) : (
-        // Veri başarıyla yüklendiyse form gösterilir
         <CustomForm handleSubmit={handleSubmit}>
-          {/* Header */}
           <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            mb={2}
+            sx={{
+              px: 3,
+              py: 2,
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
           >
-            <Typography fontSize={18} fontWeight={600}>
-              Leave Request Details
+            <Typography
+              sx={{
+                fontWeight: 600,
+                fontSize: "18px",
+                lineHeight: "28px",
+                verticalAlign: "middle",
+              }}
+            >
+              Edit Attendance Record
             </Typography>
-            <IconButton onClick={onClose}>
-              <CloseIcon />
+            <IconButton size="small" onClick={onClose}>
+              <CloseIcon sx={{ width: "21px", height: "21px" }} />
             </IconButton>
           </Box>
           <Divider sx={{ mb: 2 }} />
+          <Box px={4} py={2}>
+            {/* Top Info */}
+            <Paper
+              elevation={0}
+              sx={{ borderRadius: "8px", p: 3, mb: 3, bgcolor: "#F4F4F4" }}
+            >
+              <Box display="grid" gridTemplateColumns="1fr 1fr" gap={3}>
+                <Box>
+                  <Typography fontSize={13} color="text.secondary">
+                    Employee
+                  </Typography>
+                  <Typography
+                    fontWeight={500}
+                    fontSize={16}
+                    color="#333333"
+                    mb={1}
+                  >
+                    {data?.user
+                      ? `${data.user.first_name} ${data.user.last_name}`
+                      : "-"}
+                  </Typography>
+                  <Typography fontSize={13} mt={3} color="text.secondary">
+                    Position
+                  </Typography>
+                  <Typography>{data?.job?.title || "-"}</Typography>
+                </Box>
+                <Box>
+                  <Typography fontSize={13} color="text.secondary">
+                    Department
+                  </Typography>
+                  <Typography fontWeight={500} mb={1}>
+                    {data?.department?.name || "-"}
+                  </Typography>
+                  <Typography fontSize={13} mt={2.5} color="text.secondary">
+                    Leave Balance
+                  </Typography>
+                  <Typography>{data?.leave_balance || 0} days</Typography>
+                </Box>
+              </Box>
+            </Paper>
 
-          {/* Top Info */}
-          <Paper
-            elevation={0}
-            sx={{ borderRadius: 3, p: 3, mb: 3, bgcolor: "#f1f3f5" }}
-          >
-            <Box display="grid" gridTemplateColumns="1fr 1fr" gap={3}>
+            {/* Leave Info */}
+            <Box display="grid" gridTemplateColumns="1fr 1fr" gap={3} mb={3}>
               <Box>
                 <Typography fontSize={13} color="text.secondary">
-                  Employee
+                  Leave Type
                 </Typography>
-                <Typography fontWeight={600} mb={1}>
-                  {data?.user
-                    ? `${data.user.first_name} ${data.user.last_name}`
-                    : "-"}
-                </Typography>
-                <Typography fontSize={13} mt={3} color="text.secondary">
-                  Position
-                </Typography>
-                <Typography>{data?.job?.title || "-"}</Typography>
+                <Chip
+                  label={data?.leave_type || "Unknown"}
+                  size="small"
+                  sx={{
+                    mt: 0.5,
+                    backgroundColor:
+                      leaveTypeColors[data?.leave_type]?.bg || "#eee",
+                    color: leaveTypeColors[data?.leave_type]?.color || "#333",
+                    fontWeight: 500,
+                  }}
+                />
               </Box>
               <Box>
                 <Typography fontSize={13} color="text.secondary">
-                  Department
+                  Status
                 </Typography>
-                <Typography fontWeight={600} mb={1}>
-                  {data?.department?.name || "-"}
+                <Chip
+                  label={data?.leave_status || "Pending"}
+                  size="small"
+                  sx={{
+                    mt: 0.5,
+                    backgroundColor:
+                      statusColors[data?.leave_status]?.bg || "#eee",
+                    color: statusColors[data?.leave_status]?.color || "#333",
+                    fontWeight: 500,
+                  }}
+                />
+              </Box>
+              <Box>
+                <Typography fontSize={13} color="text.secondary">
+                  Start Date
                 </Typography>
-                <Typography fontSize={13} mt={3} color="text.secondary">
-                  Leave Balance
+                <Typography fontSize={"16px"}>
+                  {formatTimeYear(data?.start_date)}
                 </Typography>
-                <Typography>{data?.leave_balance || 0} days</Typography>
+              </Box>
+              <Box>
+                <Typography fontSize={13} color="text.secondary">
+                  End Date
+                </Typography>
+                <Typography>{formatTimeYear(data?.end_date)}</Typography>
+              </Box>
+              <Box>
+                <Typography fontSize={13} color="text.secondary">
+                  Total Days
+                </Typography>
+                <Typography>{data?.total_days || 0} days</Typography>
+              </Box>
+              <Box>
+                <Typography fontSize={13} color="text.secondary">
+                  Applied Date
+                </Typography>
+                <Typography>{formatTimeYear(data?.applied_date)}</Typography>
+              </Box>
+              <Box gridColumn="span 2">
+                <Typography fontSize={13} color="text.secondary" mb={0.5}>
+                  Reason
+                </Typography>
+                <Typography
+                  sx={{
+                    borderRadius: 2,
+                    p: 1.5,
+                    bgcolor: "#F4F4F4",
+                    border: "1px solid #e9ecef",
+                  }}
+                >
+                  {data?.reason || "No reason provided."}
+                </Typography>
               </Box>
             </Box>
-          </Paper>
 
-          {/* Leave Info */}
-          <Box display="grid" gridTemplateColumns="1fr 1fr" gap={3} mb={3}>
-            <Box>
-              <Typography fontSize={13} color="text.secondary">
-                Leave Type
-              </Typography>
-              <Chip
-                label={data?.leave_type || "Unknown"}
-                size="small"
-                sx={{
-                  mt: 0.5,
-                  backgroundColor:
-                    leaveTypeColors[data?.leave_type]?.bg || "#eee",
-                  color: leaveTypeColors[data?.leave_type]?.color || "#333",
-                  fontWeight: 500,
-                }}
-              />
-            </Box>
-            <Box>
-              <Typography fontSize={13} color="text.secondary">
-                Status
-              </Typography>
-              <Chip
-                label={data?.leave_status || "Pending"}
-                size="small"
-                sx={{
-                  mt: 0.5,
-                  backgroundColor:
-                    statusColors[data?.leave_status]?.bg || "#eee",
-                  color: statusColors[data?.leave_status]?.color || "#333",
-                  fontWeight: 500,
-                }}
-              />
-            </Box>
-            <Box>
-              <Typography fontSize={13} color="text.secondary">
-                Start Date
-              </Typography>
-              <Typography>{formatTimeYear(data?.start_date)}</Typography>
-            </Box>
-            <Box>
-              <Typography fontSize={13} color="text.secondary">
-                End Date
-              </Typography>
-              <Typography>{formatTimeYear(data?.end_date)}</Typography>
-            </Box>
-            <Box>
-              <Typography fontSize={13} color="text.secondary">
-                Total Days
-              </Typography>
-              <Typography>{data?.total_days || 0} days</Typography>
-            </Box>
-            <Box>
-              <Typography fontSize={13} color="text.secondary">
-                Applied Date
-              </Typography>
-              <Typography>{formatTimeYear(data?.applied_date)}</Typography>
-            </Box>
-            <Box gridColumn="span 2">
-              <Typography fontSize={13} color="text.secondary" mb={0.5}>
-                Reason
-              </Typography>
-              <Typography
-                sx={{
-                  borderRadius: 2,
-                  p: 1.5,
-                  bgcolor: "#f8f9fa",
-                  border: "1px solid #e9ecef",
-                }}
+            <Divider sx={{ mt: 2 }} />
+
+            {/* Actions */}
+            <Box display="flex" justifyContent="flex-end" gap={1} mt={2}>
+              <Button
+                variant="contained"
+                sx={{ bgcolor: "#D93B2D", borderRadius: "8px" }}
+                onClick={onClose}
+                disabled={mutation.isPending}
               >
-                {data?.reason || "No reason provided."}
-              </Typography>
+                Reject
+              </Button>
+              <Button
+                variant="contained"
+                type="submit"
+                sx={{ bgcolor: "#299764", borderRadius: "8px" }}
+                disabled={mutation.isPending}
+              >
+                {mutation.isPending ? (
+                  <CircularProgress size={24} color="inherit" />
+                ) : (
+                  "Approve"
+                )}
+              </Button>
             </Box>
-          </Box>
-
-          <Divider sx={{ mt: 2 }} />
-
-          {/* Actions */}
-          <Box display="flex" justifyContent="flex-end" gap={1} mt={2}>
-            <Button
-              variant="outlined"
-              color="inherit"
-              onClick={onClose}
-              disabled={mutation.isPending}
-            >
-              Close
-            </Button>
-            <Button
-              variant="contained"
-              color="success"
-              type="submit" // Bu butona tıklandığında handleSubmit çalışır
-              disabled={mutation.isPending}
-            >
-              {mutation.isPending ? (
-                <CircularProgress size={24} color="inherit" />
-              ) : (
-                "Approve"
-              )}
-            </Button>
           </Box>
         </CustomForm>
       )}
