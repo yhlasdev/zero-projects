@@ -3,11 +3,22 @@ import { LeftSide } from "./components/leftSide";
 import { RightSide } from "./components/rightSide";
 
 const RegisterPage = () => {
-    return (
-        <Box className='flex p-2 items-center h-screen mx-auto' sx={{ maxWidth: '1500px' }}>
 
-            <LeftSide />
-            <RightSide />
+    return (
+        <Box sx={{
+            minHeight: '100vh',
+            paddingY: '50px',
+            display: 'flex',
+            alignItems: 'center',
+            boxSizing: 'border-box'
+        }}>
+            <Box
+                className='flex items-center mx-auto'
+                sx={{ maxWidth: '1500px', height: '100%', gap: 4 }}
+            >
+                <LeftSide />
+                <RightSide />
+            </Box>
         </Box>
     );
 };

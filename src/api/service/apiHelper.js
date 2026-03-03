@@ -16,7 +16,21 @@ const privateConfig = {
 };
 
 const getAccessToken = () => Cookies.get("auth_token");
+
 export const api = {
+
+  postVerify: async (url, data, token) => {
+    const config = {
+      ...privateConfig,
+      headers: {
+        ...privateConfig.headers,
+        "Authorization": token,
+      },
+    };
+    const res = await axiosInstance.post(url, { ...data }, { ...config });
+    return res;
+  },
+
   // Get
   get: async (url) => {
     const response = await axiosInstance.get(url, { ...config });
