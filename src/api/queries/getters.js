@@ -94,12 +94,33 @@ export const getAllDocuments = async ({ page, limit, search }) => {
   });
 };
 
+export const getAllEmployeeForTask = async ({ search }) => {
+  return await api.getPrivate("/company-service/tasks/employees", {
+    search,
+  });
+};
+
 export const getAllAnnouncement = async ({ page, limit, status }) => {
   return await api.getPrivate("/company-service/announcements/get-all", {
     page,
     limit,
     status,
   });
+};
+
+export const getAllBoardTask = async ({ page, limit }) => {
+  return await api.getPrivate("/company-service/tasks/board", {
+    page,
+    limit,
+  });
+};
+
+export const getTaskCalendar = async ({ month, year }) => {
+  return await api.getPrivate(`/company-service/tasks/by-month?month=${month}&year=${year}`);
+};
+
+export const getMainCalendar = async ({ month, year }) => {
+  return await api.getPrivate(`/company-service/calendars/my?month=${month}&year=${year}`);
 };
 
 export const getAnnouncementById = async (id) => {
@@ -130,6 +151,18 @@ export const getAttendanceStatistic = async () => {
 export const getAttendanceDetailHour = async () => {
   const response = await api.getPrivate(
     "/company-service/dashboard/base-stats",
+  );
+  return response;
+};
+
+export const getDahsboardDayHour = async () => {
+  const response = await api.getPrivate("/company-service/dashboard/day-hours");
+  return response;
+};
+
+export const getDahsboardHourStat = async () => {
+  const response = await api.getPrivate(
+    "/company-service/dashboard/hours-statistics",
   );
   return response;
 };

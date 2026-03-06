@@ -21,13 +21,13 @@ function JobSelect({
   const hasValue = value !== "" && value !== null && value !== undefined;
 
   return (
-    <FormControl size="small" fullWidth variant="outlined">
+    <FormControl size="small" sx={{ width: "297px" }} variant="outlined">
       <Select
         value={value ?? ""}
         sx={{ borderRadius: 2.5 }}
         onChange={onChange}
         disabled={disabled || loading}
-        label=''
+        label=""
         displayEmpty={!!placeholder}
         IconComponent={KeyboardArrowDownIcon}
         renderValue={(selectedId) => {

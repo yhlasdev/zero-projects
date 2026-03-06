@@ -19,6 +19,7 @@ const TasksPage = () => {
           justifyContent: "space-between",
           alignItems: "center",
           mb: 3,
+          height: 60,
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>

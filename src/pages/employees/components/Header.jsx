@@ -1,9 +1,7 @@
 import { MenuItem } from "@mui/material";
 import DebounceSelect from "../../../components/select/DebounceSelect";
 import HeaderAppBar from "../../../components/appBar/AppBar";
-import HeaderButton from "../../../components/buttons/Button";
 import HeaderSearch from "../../../components/textField/HeaderSearch";
-import AddIcon from "@mui/icons-material/Add";
 import { useQuery } from "@tanstack/react-query";
 import { getAllDepartment, getAllJobs } from "../../../api/queries/getters";
 import JobSelect from "./JobSelect";
@@ -42,6 +40,7 @@ const Header = ({ onAddClick, setFilter, filters }) => {
         value={filters.department_id || ""}
         onChange={handleDepartmentChange}
         placeholder="All department"
+        width="297px"
         onClear={() => setFilter((prev) => ({ ...prev, department_id: "" }))}
       >
         {isLoading ? (
@@ -65,9 +64,9 @@ const Header = ({ onAddClick, setFilter, filters }) => {
         loading={jobsLoading}
         disabled={!filters.department_id}
       />
-      <HeaderButton icon={<AddIcon />} onClick={onAddClick}>
+      {/* <HeaderButton icon={<AddIcon />} onClick={onAddClick}>
         Add Employee
-      </HeaderButton>
+      </HeaderButton> */}
     </HeaderAppBar>
   );
 };

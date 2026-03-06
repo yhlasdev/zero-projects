@@ -14,6 +14,8 @@ export const StatisticCard = ({
         flex: 1,
         borderRadius: "12px",
         boxShadow: "0px 2px 10px rgba(0,0,0,0.05)",
+        width: 208,
+        height: 170,
       }}
     >
       <CardContent
@@ -29,8 +31,8 @@ export const StatisticCard = ({
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            width: 40,
-            height: 40,
+            width: 48,
+            height: 48,
             borderRadius: "8px",
             bgcolor: bgColor,
           }}
@@ -38,13 +40,13 @@ export const StatisticCard = ({
           <Icon sx={{ color: iconColor, fontSize: "22px" }} />
         </Box>
 
-        <Typography variant="h5" sx={{ fontWeight: "700", color: "#101828" }}>
+        <Typography fontSize={25} sx={{ fontWeight: "700", color: "#101828", lineHeight: '32px' }}>
           {count}
         </Typography>
 
         <Typography
-          variant="body2"
-          sx={{ color: "#667085", fontWeight: "500" }}
+          fontSize={14}
+          sx={{ color: "#667085", fontWeight: "400", lineHeight:'20px' }}
         >
           {text}
         </Typography>

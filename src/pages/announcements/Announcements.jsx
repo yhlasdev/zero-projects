@@ -119,8 +119,8 @@ const AnnouncementsPage = () => {
         />
         <HeaderButton
           onClick={() => handleOpenModal(null)}
-          width={220}
-          icon={<AddIcon />}
+          width={'200px'}
+          icon={<AddIcon sx={{ width: "14px", height: "14px" }} />}
         >
           New Announcement
         </HeaderButton>
@@ -147,8 +147,8 @@ const AnnouncementsPage = () => {
               minWidth: "auto",
               px: 1.5,
               mx: 0.5,
-              borderRadius: "12px", 
-              color: "#475467", 
+              borderRadius: "12px",
+              color: "#475467",
               "&.Mui-selected": {
                 backgroundColor: "#0F3254",
                 color: "#fff",

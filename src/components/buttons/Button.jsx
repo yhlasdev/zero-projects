@@ -9,8 +9,7 @@ export default function HeaderButton({
   return (
     <Button
       variant="contained"
-      fullWidth
-      sx={{ maxWidth: width }}
+      sx={{ maxWidth: width, borderRadius: "8px", fontSize: "12px"}}
       startIcon={icon}
       {...props}
     >

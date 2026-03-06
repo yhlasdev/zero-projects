@@ -1,153 +1,182 @@
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import {
   Box,
   Typography,
   IconButton,
   Paper,
+  CircularProgress,
 } from "@mui/material";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Add as AddIcon,
-} from "@mui/icons-material";
+import { ChevronLeft, ChevronRight } from "@mui/icons-material";
+import { getMainCalendar } from "../../../api/queries/getters";
 
-const DateSelect = () => {
-  const EVENTS = [
-    {
-      id: 1,
-      date: "2026-01-01",
-      title: "New Year Holiday",
-      type: "publicHoliday",
-    },
-    {
-      id: 2,
-      date: "2026-01-09",
-      title: "Engineering Team Meeting",
-      type: "engineeringTeam",
-    },
-    {
-      id: 3,
-      date: "2026-01-23",
-      title: "All Hands Meeting",
-      type: "allHandsMeeting",
-    },
-    {
-      id: 4,
-      date: "2026-01-23",
-      title: "Engineering Team Meeting",
-      type: "engineeringTeam",
-    },
-    {
-      id: 5,
-      date: "2026-01-25",
-      title: "Engineering Team Meeting",
-      type: "engineeringTeam",
-    },
-  ];
+const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const MONTHS = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
 
-  const EVENT_STYLES = {
-    publicHoliday: {
-      bg: "#fce4ec",
-      color: "#c62828",
-      dot: "#e53935",
-      label: "Public Holiday",
-    },
-    companyEvent: {
-      bg: "#e8f5e9",
-      color: "#2e7d32",
-      dot: "#43a047",
-      label: "Company Event",
-    },
-    departmentEvent: {
-      bg: "#e3f2fd",
-      color: "#1565c0",
-      dot: "#1e88e5",
-      label: "Department Event",
-    },
-    note: {
-      bg: "#fffde7",
-      color: "#f57f17",
-      dot: "#fdd835",
-      label: "Note",
-    },
-    engineeringTeam: {
-      bg: "#e3f2fd",
-      color: "#1565c0",
-      dot: "#1e88e5",
-      label: "Engineering Team",
-    },
-    allHandsMeeting: {
-      bg: "#e8f5e9",
-      color: "#2e7d32",
-      dot: "#43a047",
-      label: "All Hands Meeting",
-    },
-  };
+const EVENT_STYLES = {
+  public_holiday: {
+    bg: "#fce4ec",
+    color: "#c62828",
+    dot: "#e53935",
+    label: "Public Holiday",
+  },
+  company_event: {
+    bg: "#e8f5e9",
+    color: "#2e7d32",
+    dot: "#43a047",
+    label: "Company Event",
+  },
+  department_event: {
+    bg: "#e3f2fd",
+    color: "#1565c0",
+    dot: "#1e88e5",
+    label: "Department Event",
+  },
+  note: { bg: "#fffde7", color: "#f57f17", dot: "#fdd835", label: "Note" },
+  engineering_team: {
+    bg: "#e3f2fd",
+    color: "#1565c0",
+    dot: "#1e88e5",
+    label: "Engineering Team",
+  },
+  all_hands: {
+    bg: "#e8f5e9",
+    color: "#2e7d32",
+    dot: "#43a047",
+    label: "All Hands Meeting",
+  },
+  default: { bg: "#f3f4f6", color: "#374151", dot: "#9ca3af", label: "Event" },
+};
 
-  const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-  const MONTHS = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December",
-  ];
+const LEGEND_STATIC = [
+  "public_holiday",
+  "company_event",
+  "department_event",
+  "note",
+];
 
-  function getDaysInMonth(year, month) {
-    return new Date(year, month + 1, 0).getDate();
-  }
+const getStyle = (event_type = "") =>
+  EVENT_STYLES[event_type.toLowerCase()] ?? EVENT_STYLES.default;
 
-  function getFirstDayOfMonth(year, month) {
-    return new Date(year, month, 1).getDay();
-  }
+const getDaysInMonth = (y, m) => new Date(y, m + 1, 0).getDate();
+const getFirstDayOfMonth = (y, m) => new Date(y, m, 1).getDay();
+const fmtKey = (y, m, d) =>
+  `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
 
-  const [currentDate, setCurrentDate] = useState(new Date(2026, 0, 1));
-  // const [view, setView] = useState("month");
+const MainCalendar = () => {
+  const today = new Date();
+
+  const [currentDate, setCurrentDate] = useState(
+    new Date(today.getFullYear(), today.getMonth(), 1),
+  );
+  const [selectedKey, setSelectedKey] = useState(
+    fmtKey(today.getFullYear(), today.getMonth(), today.getDate()),
+  );
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
-  const daysInMonth = getDaysInMonth(year, month);
-  const firstDay = getFirstDayOfMonth(year, month);
 
-  const handlePrev = () => {
-    setCurrentDate(new Date(year, month - 1, 1));
-  };
-
-  const handleNext = () => {
-    setCurrentDate(new Date(year, month + 1, 1));
-  };
-
-  const getEventsForDay = (day) => {
-    const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-    return EVENTS.filter((e) => e.date === dateStr);
-  };
-
-  const totalCells = Math.ceil((firstDay + daysInMonth) / 7) * 7;
-  const cells = Array.from({ length: totalCells }, (_, i) => {
-    const dayNum = i - firstDay + 1;
-    return dayNum >= 1 && dayNum <= daysInMonth ? dayNum : null;
+  const { data: eventMap = {}, isLoading } = useQuery({
+    queryKey: ["mainCalendar", year, month],
+    queryFn: () => getMainCalendar({ month: month + 1, year }),
+    staleTime: 5 * 60 * 1000,
+    select: (res) => {
+      const raw = Array.isArray(res?.data?.data) ? res?.data?.data : (res?.data ?? []);
+      const map = {};
+      raw.forEach(({ date, events }) => {
+        const key = date?.split("T")[0];
+        if (key) map[key] = events ?? [];
+      });
+      return map;
+    },
   });
 
-  const today = new Date();
-  const isToday = (day) =>
-    day === today.getDate() &&
-    month === today.getMonth() &&
-    year === today.getFullYear();
+  const daysInMonth = getDaysInMonth(year, month);
+  const firstDay = getFirstDayOfMonth(year, month);
+  const prevDays = getDaysInMonth(year, month - 1);
+  const totalCells = Math.ceil((firstDay + daysInMonth) / 7) * 7;
 
-  const _legendItems = [
-    { type: "publicHoliday" },
-    { type: "companyEvent" },
-    { type: "departmentEvent" },
-    { type: "note" },
-    { type: "engineeringTeam" },
-    { type: "allHandsMeeting" },
-  ];
+  const cells = Array.from({ length: totalCells }, (_, i) => {
+    const diff = i - firstDay;
+    if (diff < 0) return { day: prevDays + diff + 1, currentMonth: false };
+    if (diff < daysInMonth) return { day: diff + 1, currentMonth: true };
+    return { day: diff - daysInMonth + 1, currentMonth: false };
+  });
+
+  const isToday = (cell) =>
+    cell.currentMonth &&
+    today.getDate() === cell.day &&
+    today.getMonth() === month &&
+    today.getFullYear() === year;
+
+  const isSelected = (cell) =>
+    cell.currentMonth && fmtKey(year, month, cell.day) === selectedKey;
+
+  const handlePrev = () => setCurrentDate(new Date(year, month - 1, 1));
+  const handleNext = () => setCurrentDate(new Date(year, month + 1, 1));
+
+  const handleDayClick = (cell) => {
+    if (!cell.currentMonth) return;
+    setSelectedKey(fmtKey(year, month, cell.day));
+  };
+
+  const dynamicTypes = [
+    ...new Set(
+      Object.values(eventMap)
+        .flat()
+        .map((e) => e.event_type),
+    ),
+  ].filter((t) => !LEGEND_STATIC.includes(t));
 
   return (
-    <Paper elevation={1} sx={{ p: 3, borderRadius: 2 }}>
-      {/* Month Navigation */}
-      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", mb: 2, gap: 2 }}>
+    <Paper
+      elevation={1}
+      sx={{ p: 3, borderRadius: 2, position: "relative", maxWidth: "100%" }}
+    >
+      {isLoading && (
+        <Box
+          sx={{
+            position: "absolute",
+            inset: 0,
+            bgcolor: "rgba(255,255,255,0.75)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 10,
+            borderRadius: 2,
+          }}
+        >
+          <CircularProgress size={28} />
+        </Box>
+      )}
+
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 2,
+        }}
+      >
         <IconButton onClick={handlePrev} size="small" sx={{ color: "#555" }}>
           <ChevronLeft fontSize="small" />
         </IconButton>
-        <Typography variant="subtitle1" fontWeight={600} sx={{ color: "#1a1a1a", minWidth: 140, textAlign: "center" }}>
+        <Typography
+          sx={{ fontWeight: 700, fontSize: "16px", color: "#1a1a1a" }}
+        >
           {MONTHS[month]} {year}
         </Typography>
         <IconButton onClick={handleNext} size="small" sx={{ color: "#555" }}>
@@ -155,93 +184,115 @@ const DateSelect = () => {
         </IconButton>
       </Box>
 
-      {/* Day Headers */}
-      <Box sx={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", mb: 0 }}>
-        {DAYS.map((day) => (
+      <Box sx={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)" }}>
+        {WEEKDAYS.map((d) => (
           <Box
-            key={day}
+            key={d}
             sx={{
               py: 1,
               textAlign: "center",
               borderBottom: "1px solid #e0e0e0",
               borderRight: "1px solid #e0e0e0",
-              "&:first-of-type": { borderLeft: "1px solid #e0e0e0" },
+              borderTop: "1px solid #e0e0e0",
+              "&:first-of-type": {
+                borderLeft: "1px solid #e0e0e0",
+                borderRadius: "8px 0 0 0",
+              },
+              "&:last-of-type": { borderRadius: "0 8px 0 0" },
             }}
           >
-            <Typography variant="caption" sx={{ color: "#666", fontWeight: 500, fontSize: "0.75rem" }}>
-              {day}
+            <Typography
+              sx={{ color: "#666", fontWeight: 500, fontSize: "12px" }}
+            >
+              {d}
             </Typography>
           </Box>
         ))}
       </Box>
 
-      {/* Calendar Grid */}
       <Box
         sx={{
           display: "grid",
           gridTemplateColumns: "repeat(7, 1fr)",
           border: "1px solid #e0e0e0",
           borderTop: "none",
+          borderRadius: "0 0 8px 8px",
+          overflow: "hidden",
         }}
       >
-        {cells.map((day, idx) => {
-          const events = day ? getEventsForDay(day) : [];
-          const isCurrentDay = day ? isToday(day) : false;
-          const isSelected = day === 23 && month === 0 && year === 2026;
+        {cells.map((cell, idx) => {
+          const key = cell.currentMonth ? fmtKey(year, month, cell.day) : null;
+          const events = key ? (eventMap[key] ?? []) : [];
+          const today_ = isToday(cell);
+          const selected = isSelected(cell);
 
           return (
             <Box
               key={idx}
+              onClick={() => handleDayClick(cell)}
               sx={{
                 minHeight: 130,
                 p: 0.75,
                 borderRight: "1px solid #e0e0e0",
                 borderBottom: "1px solid #e0e0e0",
-                bgcolor: isSelected ? "#e8f4f8" : day ? "#fff" : "#fafafa",
-                "&:nth-of-type(7n+1)": { borderLeft: "none" },
-                cursor: day ? "pointer" : "default",
-                "&:hover": day ? { bgcolor: isSelected ? "#dceef5" : "#f9f9f9" } : {},
+                outline: selected ? "2px solid #4db6ac" : "none",
+                outlineOffset: "-1px",
+                bgcolor: selected
+                  ? "#e8f4f8"
+                  : cell.currentMonth
+                    ? "#fff"
+                    : "#fafafa",
+                cursor: cell.currentMonth ? "pointer" : "default",
+                transition: "background 0.15s",
+                "&:hover": cell.currentMonth
+                  ? { bgcolor: selected ? "#dceef5" : "#f9f9f9" }
+                  : {},
               }}
             >
-              {day && (
+              {cell.currentMonth && (
                 <>
                   <Typography
-                    variant="caption"
                     sx={{
                       display: "block",
                       mb: 0.5,
-                      color: isCurrentDay ? "#1a2e4a" : "#333",
-                      fontWeight: isCurrentDay ? 700 : 400,
-                      fontSize: "0.8rem",
+                      fontSize: "13px",
+                      fontWeight: today_ ? 700 : 400,
+                      color: today_ ? "#1a2e4a" : "#333",
                     }}
                   >
-                    {day}
+                    {cell.day}
                   </Typography>
-                  <Box sx={{ display: "flex", flexDirection: "column", gap: 0.3 }}>
+
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "3px",
+                    }}
+                  >
                     {events.map((event) => {
-                      const style = EVENT_STYLES[event.type];
+                      const s = getStyle(event.event_type);
                       return (
                         <Box
                           key={event.id}
                           sx={{
-                            bgcolor: style.bg,
-                            borderRadius: 0.5,
+                            bgcolor: s.bg,
+                            borderRadius: "4px",
                             px: 0.75,
-                            py: 0.2,
+                            py: "2px",
                             overflow: "hidden",
                           }}
                         >
                           <Typography
-                            variant="caption"
                             noWrap
                             sx={{
-                              color: style.color,
-                              fontSize: "0.65rem",
+                              fontSize: "10px",
                               fontWeight: 500,
-                              display: "block",
+                              color: s.color,
+                              lineHeight: 1.5,
                             }}
                           >
-                            {event.title}
+                            {event.event_title}
                           </Typography>
                         </Box>
                       );
@@ -254,54 +305,104 @@ const DateSelect = () => {
         })}
       </Box>
 
-      {/* Legend */}
       <Box sx={{ mt: 3 }}>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 2, flexWrap: "wrap" }}>
-          <Typography variant="caption" sx={{ color: "#555", fontWeight: 600, fontSize: "0.75rem" }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 2,
+            flexWrap: "wrap",
+          }}
+        >
+          <Typography sx={{ fontSize: "12px", fontWeight: 700, color: "#555" }}>
             Conditional characters:
           </Typography>
-          {["publicHoliday", "companyEvent", "departmentEvent", "note"].map((type) => {
-            const style = EVENT_STYLES[type];
+          {LEGEND_STATIC.map((type) => {
+            const s = getStyle(type);
             return (
-              <Box key={type} sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+              <Box
+                key={type}
+                sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
+              >
                 <Box
                   sx={{
                     width: 10,
                     height: 10,
                     borderRadius: "50%",
-                    bgcolor: style.dot,
+                    bgcolor: s.dot,
                   }}
                 />
-                <Typography variant="caption" sx={{ color: "#555", fontSize: "0.72rem" }}>
-                  {style.label}
+                <Typography sx={{ fontSize: "12px", color: "#555" }}>
+                  {s.label}
                 </Typography>
               </Box>
             );
           })}
         </Box>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 2, flexWrap: "wrap", mt: 1 }}>
-          {["engineeringTeam", "allHandsMeeting"].map((type) => {
-            const style = EVENT_STYLES[type];
-            return (
-              <Box key={type} sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-                <Box
-                  sx={{
-                    width: 10,
-                    height: 10,
-                    borderRadius: "50%",
-                    bgcolor: style.dot,
-                  }}
-                />
-                <Typography variant="caption" sx={{ color: "#555", fontSize: "0.72rem" }}>
-                  {style.label}
-                </Typography>
-              </Box>
-            );
-          })}
-        </Box>
-      </Box>
-    </Paper>
-  )
-}
 
-export default DateSelect
+        {dynamicTypes.length > 0 && (
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 2,
+              flexWrap: "wrap",
+              mt: 1,
+            }}
+          >
+            {dynamicTypes.map((type) => {
+              const s = getStyle(type);
+              return (
+                <Box
+                  key={type}
+                  sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
+                >
+                  <Box
+                    sx={{
+                      width: 10,
+                      height: 10,
+                      borderRadius: "50%",
+                      bgcolor: s.dot,
+                    }}
+                  />
+                  <Typography sx={{ fontSize: "12px", color: "#555" }}>
+                    {s.label}
+                  </Typography>
+                </Box>
+              );
+            })}
+          </Box>
+        )}
+      </Box>
+
+      {selectedKey && (eventMap[selectedKey] ?? []).length > 0 && (
+        <Box sx={{ mt: 2, pt: 2, borderTop: "1px solid #e0e0e0", display: "flex", gap: 2}}>
+          {(eventMap[selectedKey] ?? []).map((event) => {
+            const s = getStyle(event.event_type);
+            return (
+              <Box
+                key={event.id}
+                sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.8 }}
+              >
+                <Box
+                  sx={{
+                    width: 10,
+                    height: 10,
+                    borderRadius: "50%",
+                    bgcolor: s.dot,
+                    flexShrink: 0,
+                  }}
+                />
+                <Typography sx={{ fontSize: "13px", color: "#333" }}>
+                  {event.event_title}
+                </Typography>
+              </Box>
+            );
+          })}
+        </Box>
+      )}
+    </Paper>
+  );
+};
+
+export default MainCalendar;

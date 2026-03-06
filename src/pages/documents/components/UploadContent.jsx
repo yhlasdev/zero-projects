@@ -2,23 +2,21 @@ import CloseIcon from "@mui/icons-material/Close";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { Box, Button, Divider, IconButton, Typography } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { documentAdd } from "../../../api/queries/post";
 import { useAppMutation } from "../../../hooks/useMutation";
 
 const UploadContent = ({ closeSet }) => {
-  const { control, handleSubmit, setValue, watch } = useForm({
+  const { control, handleSubmit } = useForm({
     defaultValues: {
       description: "",
-      file: "",
-      file_type: "",
       title: "",
     },
     mode: "onSubmit",
   });
 
   const fileInputRef = useRef(null);
-  const selectedFile = watch("file");
+  const [selectedFile, setSelectedFile] = useState(null); // ← useState ile yönet
 
   const mutation = useAppMutation({
     mutationFn: documentAdd,
@@ -31,17 +29,6 @@ const UploadContent = ({ closeSet }) => {
   const handleFileChange = (file) => {
     if (!file) return;
 
-    const allowedTypes = [
-      "image/jpeg", // jpg, jpeg
-      "image/png",
-      "text/plain", // txt
-      "application/pdf",
-      "application/msword", // doc
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // docx
-      "application/vnd.ms-excel", // xls
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // xlsx (isteğe bağlı)
-    ];
-
     const allowedExtensions = [
       "jpg",
       "jpeg",
@@ -49,16 +36,13 @@ const UploadContent = ({ closeSet }) => {
       "txt",
       "pdf",
       "xls",
+      "xlsx",
       "doc",
       "docx",
     ];
+    const fileExtension = file.name.split(".").pop().toUpperCase();
 
-    const fileExtension = file.name.split(".").pop().toLowerCase();
-
-    if (
-      !allowedTypes.includes(file.type) &&
-      !allowedExtensions.includes(fileExtension)
-    ) {
+    if (!allowedExtensions.includes(fileExtension)) {
       alert("Unsupported file format");
       return;
     }
@@ -68,18 +52,28 @@ const UploadContent = ({ closeSet }) => {
       return;
     }
 
-    setValue("file", file);
-    setValue("file_type", file.type);
+    setSelectedFile(file); // ← direkt state'e yaz
   };
 
   const submitHandler = async (data) => {
-    console.log(data, "data");
-    mutation.mutate(data);
+    if (!selectedFile) {
+      alert("Please select a file");
+      return;
+    }
+
+    const fileExtension = selectedFile.name.split(".").pop().toLowerCase();
+
+    const formData = new FormData();
+    formData.append("title", data.title);
+    formData.append("description", data.description);
+    formData.append("file", selectedFile); // ← gerçek File objesi
+    formData.append("file_type", fileExtension.toUpperCase()); // ← düz string, JSON.stringify yok
+
+    mutation.mutate(formData);
   };
 
   return (
     <Box p={3}>
-      {/* HEADER */}
       <Box
         sx={{
           display: "flex",
@@ -97,7 +91,6 @@ const UploadContent = ({ closeSet }) => {
       <Divider sx={{ mb: 3 }} />
 
       <form onSubmit={handleSubmit(submitHandler)}>
-        {/* TITLE */}
         <Controller
           name="title"
           control={control}
@@ -106,18 +99,19 @@ const UploadContent = ({ closeSet }) => {
               <Typography mb={1}>Document Title</Typography>
               <input
                 {...field}
+                required
                 style={{
                   width: "100%",
                   padding: "10px",
                   borderRadius: 6,
                   border: "1px solid #ccc",
+                  boxSizing: "border-box",
                 }}
               />
             </Box>
           )}
         />
 
-        {/* DESCRIPTION */}
         <Controller
           name="description"
           control={control}
@@ -132,15 +126,16 @@ const UploadContent = ({ closeSet }) => {
                   padding: "10px",
                   borderRadius: 6,
                   border: "1px solid #ccc",
+                  boxSizing: "border-box",
+                  resize: "vertical",
                 }}
               />
             </Box>
           )}
         />
 
-        {/* FILE UPLOAD AREA */}
         <Box
-          onClick={() => fileInputRef.current.click()}
+          onClick={() => fileInputRef.current?.click()}
           onDragOver={(e) => e.preventDefault()}
           onDrop={(e) => {
             e.preventDefault();
@@ -154,9 +149,7 @@ const UploadContent = ({ closeSet }) => {
             cursor: "pointer",
             backgroundColor: "#fafafa",
             mb: 3,
-            "&:hover": {
-              backgroundColor: "#f0f4f8",
-            },
+            "&:hover": { backgroundColor: "#f0f4f8" },
           }}
         >
           <CloudUploadIcon sx={{ fontSize: 40, color: "#98a2b3" }} />
@@ -166,18 +159,18 @@ const UploadContent = ({ closeSet }) => {
               : "Click to upload or drag and drop"}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            JPG, JPEG, PNG, TXT, PDF, XLS, DOC, DOCX (max. 10MB)
+            JPG, JPEG, PNG, TXT, PDF, XLS, XLSX, DOC, DOCX (max. 10MB)
           </Typography>
 
           <input
             type="file"
-            hidden
             ref={fileInputRef}
             onChange={(e) => handleFileChange(e.target.files[0])}
+            style={{ display: "none" }}
+            accept=".jpg,.jpeg,.png,.txt,.pdf,.xls,.xlsx,.doc,.docx"
           />
         </Box>
 
-        {/* BUTTONS */}
         <Box display="flex" justifyContent="end" gap={2}>
           <Button variant="outlined" onClick={closeSet}>
             Cancel
