@@ -404,7 +404,6 @@ const BoardView = ({ page = 1, limit = 50 }) => {
     limit,
   });
 
-  console.log("Board Data:", data);
   const [showMore, setShowMore] = useState({});
 
   const toggleShowMore = (key) =>

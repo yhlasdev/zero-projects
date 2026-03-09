@@ -10,7 +10,9 @@ export const SponsorItem = ({ image_url }) => {
                 p: 5,
                 display: 'flex',
                 justifyContent: 'center',
-                alignItems: 'center'
+                alignItems: 'center',
+                height: '180px',
+                width: '420px'
             }}>
             <img src={image_url} />
         </Box>

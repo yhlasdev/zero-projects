@@ -39,15 +39,16 @@ export const VideoSection = () => {
   const [activeVideo, setActiveVideo] = useState(videoList[0]);
 
   return (
-    <Box sx={{ display: 'flex', gap: 2, p: 4, }}>
+    <Box sx={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
 
-      <Box sx={{ flex: 1, flexGrow: 1 }}>
+      <Box mx={11}>
         <Paper
           elevation={0}
           sx={{
-            borderRadius: '20px',
+            borderRadius: '18px',
             overflow: 'hidden',
-            height: '100%',
+            width: '575px',
+            height: '345px',
             position: 'relative',
             boxShadow: '0px 10px 30px rgba(0,0,0,0.1)'
           }}
@@ -64,18 +65,19 @@ export const VideoSection = () => {
       </Box>
 
       <Box sx={{ flexGrow: 1, flex: 1 }}>
-        <List sx={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 2 }}>
-          {videoList.map((video) => {
+        <List sx={{ width: '530px', height: '323px', display: 'flex', flexDirection: 'column', gap: 2 }}>
+          {videoList.map((video, index) => {
             const isActive = activeVideo.id === video.id;
             return (
               <ListItemButton
-                key={video.id}
+                key={video.id || index}
                 onClick={() => setActiveVideo(video)}
                 sx={{
                   borderRadius: '12px',
                   border: '1px solid',
-                  borderColor: isActive ? '#1a3e72' : '#f0f0f0',
-                  backgroundColor: isActive ? '#eef2f6' : 'transparent',
+                  height: '72px',
+                  borderColor: isActive ? '#2557A7' : '#f0f0f0',
+                  backgroundColor: isActive ? '#E8F0FB' : 'transparent',
                   '&:hover': { backgroundColor: '#f5f7f9' },
                   p: 2,
                   transition: '0.3s'
@@ -84,11 +86,12 @@ export const VideoSection = () => {
                 <ListItemAvatar>
                   <Avatar
                     sx={{
-                      bgcolor: '#1a3e72',
+                      bgcolor: '#1B2E4B',
                       width: 32,
                       height: 32,
                       fontSize: '14px',
-                      fontWeight: 'bold'
+                      fontWeight: 'bold',
+                      borderRadius: '10px'
                     }}
                   >
                     {video.id}
@@ -98,16 +101,16 @@ export const VideoSection = () => {
                 <ListItemText
                   primary={
                     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                      <Typography variant="subtitle1" fontWeight="bold" color="#1a3e72">
+                      <Typography variant="subtitle1" fontWeight={600} fontSize={14} color="#1B2E4B">
                         {video.title}
                       </Typography>
-                      <Typography variant="caption" fontWeight="bold" color="#1a3e72">
+                      <Typography variant="caption" fontWeight="bold" color="#2557A7">
                         {video.time}
                       </Typography>
                     </Box>
                   }
                   secondary={
-                    <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                    <Typography color="#6B7280" fontSize={12} >
                       {video.desc}
                     </Typography>
                   }

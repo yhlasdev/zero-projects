@@ -63,7 +63,7 @@ export const StatisticSection = () => {
     },
     {
       text: "Total Hours Month",
-      count: stats?.TotalHoursMonth.toFixed(1) || 0,
+      count: stats?.TotalHoursMonth?.toFixed?.(1) || 0,
       icon: TimerIcon,
       bgColor: "#E0E7FF",
       iconColor: "#6366F1",

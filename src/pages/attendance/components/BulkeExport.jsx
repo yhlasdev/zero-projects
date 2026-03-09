@@ -29,7 +29,7 @@ const fmtHours = (val) => {
   if (!val && val !== 0) return "-";
   const n = Number(val);
   if (n === 0) return "-";
-  return n % 1 === 0 ? n + "h" : n.toFixed(2) + "h";
+  return n % 1 === 0 ? n + "h" : n.toFixed?.(2) + "h";
 };
 const getInitials = (name = "") => {
   const parts = name.trim().split(" ");

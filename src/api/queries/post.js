@@ -8,56 +8,89 @@ export const addComplexApi = async (objectData) => {
  */
 
 export const loginEmail = async (objectData) => {
-  const response = await api.postPrivate('/companies/login-mail', objectData);
+  const response = await api.postPrivate("/companies/login-mail", objectData);
   return response;
 };
 
 export const loginPhone = async (objectData) => {
-  const response = await api.postPrivate('/companies/login-phone', objectData);
+  const response = await api.postPrivate("/companies/login-phone", objectData);
   return response;
 };
 
 export const documentAdd = async (objectData) => {
-  const response = await api.postPrivate('company-service/documents/add', objectData);
+  const response = await api.postPrivate(
+    "company-service/documents/add",
+    objectData,
+  );
   return response;
 };
 
 export const createDocument = async (objectData) => {
-  const response = await api.postPrivate('company-service/tasks/add', objectData);
+  const response = await api.postPrivate(
+    "company-service/tasks/add",
+    objectData,
+  );
   return response;
 };
 
 export const announcementAdd = async (objectData) => {
-  const response = await api.postPrivate('company-service/announcements/send', objectData);
+  const response = await api.postPrivate(
+    "company-service/announcements/send",
+    objectData,
+  );
   return response;
 };
 
 export const calendarAdd = async (objectData) => {
-  const response = await api.postPrivate('company-service/calendars/add', objectData);
+  const response = await api.postPrivate(
+    "company-service/calendars/add",
+    objectData,
+  );
   return response;
 };
 
 export const registerPhone = async (objectData) => {
-  const response = await api.post('company-service/sms/send', objectData);
+  const response = await api.post("company-service/sms/send", objectData);
   return response;
 };
 
-
 export const registerEmail = async (objectData) => {
-  const response = await api.post('company-service/mail/send', objectData);
+  const response = await api.post("company-service/mail/send", objectData);
   return response;
 };
 
 export const registerVerify = async (objectData, token, url) => {
-  const response = await api.postVerify(url, objectData, token)
+  const response = await api.postVerify(url, objectData, token);
   return response;
-}
+};
 export const uploadFileDocument = async (objectData) => {
-  const response = await api.postPrivate('company-service/tasks/upload-file', objectData);
+  const response = await api.postPrivate(
+    "company-service/tasks/upload-file",
+    objectData,
+  );
   return response;
 };
 
 export const uploadFileDocumentTask = async (objectData) => {
-  const response = await mediaApi('company-service/tasks/upload-file', objectData);
+  const response = await mediaApi(
+    "company-service/tasks/upload-file",
+    objectData,
+  );
+  return response;
+};
+
+export const updateContactCompanies = async (objectData) => {
+  const response = await api.postPrivate(
+    "company-service/companies/update-contact",
+    objectData,
+  );
+  return response;
+};
+
+export const updateContactOverview = async (objectData) => {
+  const response = await api.postPrivate(
+    "company-service/companies/update-profile",
+    objectData,
+  );
   return response;
 };

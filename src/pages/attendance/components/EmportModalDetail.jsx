@@ -24,7 +24,7 @@ export default function ExportModal({
   const records = attendance?.attendances || [];
   const avgCheckIn = formatTime(attendance?.avg_check_in);
   const avgCheckOut = formatTime(attendance?.avg_check_out);
-  const totalHours = attendance?.total_hours?.toFixed(1) || "-";
+  const totalHours = attendance?.total_hours?.toFixed?.(1) || "-";
   const presentDays = attendance?.present_days || "-";
   const totalDays = records.length || "-";
   const weekendDays = records.filter((r) => r.status === "Weekend").length;

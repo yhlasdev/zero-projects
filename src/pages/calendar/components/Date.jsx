@@ -94,7 +94,9 @@ const MainCalendar = () => {
     queryFn: () => getMainCalendar({ month: month + 1, year }),
     staleTime: 5 * 60 * 1000,
     select: (res) => {
-      const raw = Array.isArray(res?.data?.data) ? res?.data?.data : (res?.data ?? []);
+      const raw = Array.isArray(res?.data?.data)
+        ? res?.data?.data
+        : (res?.data ?? []);
       const map = {};
       raw.forEach(({ date, events }) => {
         const key = date?.split("T")[0];
@@ -376,7 +378,15 @@ const MainCalendar = () => {
       </Box>
 
       {selectedKey && (eventMap[selectedKey] ?? []).length > 0 && (
-        <Box sx={{ mt: 2, pt: 2, borderTop: "1px solid #e0e0e0", display: "flex", gap: 2}}>
+        <Box
+          sx={{
+            mt: 2,
+            pt: 2,
+            borderTop: "1px solid #e0e0e0",
+            display: "flex",
+            gap: 2,
+          }}
+        >
           {(eventMap[selectedKey] ?? []).map((event) => {
             const s = getStyle(event.event_type);
             return (

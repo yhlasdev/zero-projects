@@ -5,7 +5,7 @@ const Contact = () => {
   };
 
   return (
-    <section className="contact">
+    <section className="contact" style={{ backgroundColor: "linear-gradient(135deg, #0F3254, #1A4D7A)" }}>
       <div className="container">
         <h2>Habarlaşmak</h2>
 

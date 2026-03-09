@@ -5,12 +5,14 @@ import sponsorImage from '../../../assets/images/sponsor_image.png'
 
 export const Sponsors = () => {
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{ width: '100%', height: '670px' }}>
       <Typography
         sx={{
-          fontSize: '40px',
+          fontSize: '52px',
           fontWeight: 800,
-          textAlign: 'center'
+          textAlign: 'center',
+          paddingTop: '60px',
+          paddingBottom: '80px'
         }} className=" main-color-text">Biziň hyzmatdaşlarymyz</Typography>
 
       <Box

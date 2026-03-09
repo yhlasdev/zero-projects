@@ -245,7 +245,7 @@ export default function AttendanceDetailsContent({ employee, onClose }) {
                   />
                   <InfoBlock
                     label="HOURS"
-                    value={item.hours?.toFixed(1) || "-"}
+                    value={item.hours?.toFixed?.(1) || "-"}
                   />
 
                   <Box ml="auto">

@@ -23,7 +23,6 @@ const CurrentLastMonthSection = () => {
     queryFn: getDahsboardDayHour,
   });
 
-  console.log(response?.data);
   
   return (
     <Box>

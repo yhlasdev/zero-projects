@@ -123,6 +123,14 @@ export const getMainCalendar = async ({ month, year }) => {
   return await api.getPrivate(`/company-service/calendars/my?month=${month}&year=${year}`);
 };
 
+export const getSettingsContact = async () => {
+  return await api.getPrivate('/company-service/companies/get-contact');
+};
+
+export const getSettingsOverview = async () => {
+  return await api.getPrivate('/company-service/companies/get-profile');
+};
+
 export const getAnnouncementById = async (id) => {
   return await api.getPrivate("/company-service/announcements/get/" + id);
 };

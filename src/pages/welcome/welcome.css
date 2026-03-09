@@ -53,10 +53,15 @@ body {
 .about,
 .mobile,
 .video,
-.sponsors,
+.sponsors {
+  padding: 80px 60px;
+  text-align: center;
+}
+
 .contact {
   padding: 80px 60px;
   text-align: center;
+  min-height: 100vh;
 }
 
 .video-box {
