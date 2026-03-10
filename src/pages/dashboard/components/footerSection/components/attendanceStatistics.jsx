@@ -32,18 +32,18 @@ export default function AttendanceStats() {
   const chartData = [
     {
       label: "Present",
-      value: Math.round(stats.PresentsLast30 || 0),
+      value: Math.round(stats?.presents_last_30 || 0),
       color: "#27ae60",
     },
     {
       label: "Late",
-      value: Math.round(stats.LatesLast30 || 0),
+      value: Math.round(stats.lates_last_30 || 0),
       color: "#f1c40f",
     },
     {
       label: "Absent",
-      value: Math.round(stats.AbsentsLast30 || 0),
-      color: "#e74c3c", 
+      value: Math.round(stats.absents_last_30 || 0),
+      color: "#e74c3c",
     },
   ];
 
@@ -56,7 +56,7 @@ export default function AttendanceStats() {
         boxShadow: "0px 4px 20px rgba(0,0,0,0.05)",
       }}
     >
-      <Typography fontSize={20} fontWeight={700} color="#344054" mb={4}>
+      <Typography fontSize={20} fontWeight={700} mb={4}>
         Attendance Statistics
       </Typography>
 
@@ -77,20 +77,20 @@ export default function AttendanceStats() {
                   bgcolor: item.color,
                 }}
               />
-              <Typography variant="body1" fontWeight={500} color="#475467">
+              <Typography variant="body1" fontWeight={500} >
                 {item.label}
               </Typography>
             </Box>
-            <Typography variant="body1" fontWeight={600} color="#101828">
+            <Typography variant="body1" fontWeight={600} >
               {item.value}%
             </Typography>
           </Box>
         ))}
       </Stack>
+      {/* 
+      <Divider sx={{ my: 3, opacity: 0.6 }} /> */}
 
-      <Divider sx={{ my: 3, opacity: 0.6 }} />
-
-      <Box
+      {/*    <Box
         sx={{
           display: "flex",
           height: 12,
@@ -114,9 +114,9 @@ export default function AttendanceStats() {
               />
             ),
         )}
-      </Box>
+      </Box> */}
 
-      {chartData.every((item) => item.value === 0) && (
+      {/*   {chartData.every((item) => item.value === 0) && (
         <Typography
           variant="caption"
           color="text.disabled"
@@ -124,7 +124,7 @@ export default function AttendanceStats() {
         >
           Son 30 güne maglumat tapylmady
         </Typography>
-      )}
+      )} */}
     </Card>
   );
 }

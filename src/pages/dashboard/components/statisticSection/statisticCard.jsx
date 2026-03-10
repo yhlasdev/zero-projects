@@ -40,13 +40,13 @@ export const StatisticCard = ({
           <Icon sx={{ color: iconColor, fontSize: "22px" }} />
         </Box>
 
-        <Typography fontSize={25} sx={{ fontWeight: "700", color: "#101828", lineHeight: '32px' }}>
+        <Typography fontSize={25} sx={{ fontWeight: "700", lineHeight: '32px' }}>
           {count}
         </Typography>
 
         <Typography
           fontSize={14}
-          sx={{ color: "#667085", fontWeight: "400", lineHeight:'20px' }}
+          sx={{ fontWeight: "400", lineHeight: '20px' }}
         >
           {text}
         </Typography>
