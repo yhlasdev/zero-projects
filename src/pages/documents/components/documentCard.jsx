@@ -1,163 +1,115 @@
-import {
-    Card,
-    CardContent,
-    Typography,
-    Box,
-    Button,
-    IconButton,
-} from "@mui/material";
+import { Box, Typography, Button, IconButton, Stack } from "@mui/material";
 
+import DownloadIcon from "@mui/icons-material/Download";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import DescriptionIcon from "@mui/icons-material/Description";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
-import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
-import DownloadIcon from "@mui/icons-material/Download";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import TableChartIcon from "@mui/icons-material/TableChart";
+
+const getFileIcon = (type) => {
+  if (type?.includes("pdf"))
+    return <PictureAsPdfIcon sx={{ color: "#E53935" }} />;
+  if (type?.includes("excel") || type?.includes("sheet"))
+    return <TableChartIcon sx={{ color: "#2E7D32" }} />;
+
+  return <DescriptionIcon sx={{ color: "#1976D2" }} />;
+};
 
 export const DocumentCard = ({
-    title,
-    size,
-    description,
-    date,
-    author,
-    type = "other",
-    onDownload,
-    onEdit,
-    onDelete,
+  title,
+  description,
+  file_type,
+  updated_at,
+  manager_name,
+  onDownload,
+  onEdit,
+  onDelete,
 }) => {
-    const getIcon = () => {
-        switch (type) {
-            case "pdf":
-                return <PictureAsPdfIcon sx={{ color: "#E53935", fontSize: 28 }} />;
-            case "doc":
-                return <DescriptionIcon sx={{ color: "#1976D2", fontSize: 28 }} />;
-            case "xls":
-                return (
-                    <InsertDriveFileIcon sx={{ color: "#2E7D32", fontSize: 28 }} />
-                );
-            default:
-                return <InsertDriveFileIcon sx={{ fontSize: 28 }} />;
-        }
-    };
-
-    return (
-        <Card
-            sx={{
-                borderRadius: 4,
-                border: "1px solid #e5e7eb",
-            }}
+  return (
+    <Box
+      sx={{
+        p: 3,
+        border: "1px solid #E5E7EB",
+        borderRadius: "12px",
+        background: "#fff",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        transition: "0.2s",
+        "&:hover": {
+          boxShadow: "0 8px 20px rgba(0,0,0,0.05)",
+        },
+      }}
+    >
+      <Stack direction="row" spacing={2} alignItems="center">
+        <Box
+          sx={{
+            width: 48,
+            height: 48,
+            borderRadius: "10px",
+            background: "#F3F4F6",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
         >
-            <CardContent sx={{ p: 3 }}>
-                {/* TOP SECTION */}
-                <Box sx={{ display: "flex", gap: 2 }}>
+          {getFileIcon(file_type)}
+        </Box>
 
-                    {/* ICON BOX */}
-                    <Box
-                        sx={{
-                            width: 56,
-                            height: 56,
-                            borderRadius: 3,
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                        }}
-                    >
-                        {getIcon()}
-                    </Box>
+        <Box>
+          <Typography fontWeight={600}>{title}</Typography>
+          <Typography fontSize={12} color="text.secondary">
+            {file_type}
+          </Typography>
+        </Box>
+      </Stack>
 
-                    {/* TITLE + SIZE */}
-                    <Box>
-                        <Typography fontWeight={600} fontSize={18}>
-                            {title}
-                        </Typography>
+      <Typography
+        sx={{
+          mt: 2,
+          fontSize: 14,
+          color: "text.secondary",
+        }}
+      >
+        {description}
+      </Typography>
 
-                        <Typography
-                            variant="body2"
-                            sx={{ mt: 0.5 }}
-                        >
-                            {size}
-                        </Typography>
-                    </Box>
-                </Box>
+      <Stack direction="row" justifyContent="space-between" sx={{ mt: 2 }}>
+        <Typography fontSize={12} color="text.secondary">
+          {updated_at}
+        </Typography>
 
-                {/* DESCRIPTION */}
-                <Typography
-                    variant="body1"
-                    sx={{
-                        mt: 2.5,
-                        lineHeight: 1.6,
-                    }}
-                >
-                    {description}
-                </Typography>
+        <Typography fontSize={12} color="text.secondary">
+          {manager_name}
+        </Typography>
+      </Stack>
 
-                {/* DATE + AUTHOR */}
-                <Box
-                    sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        mt: 2.5,
-                    }}
-                >
-                    <Typography variant="body2" color="text.secondary">
-                        {date}
-                    </Typography>
+      <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
+        <Button
+          startIcon={<DownloadIcon />}
+          fullWidth
+          variant="contained"
+          sx={{
+            background: "#F3F4F6",
+            color: "#111",
+            boxShadow: "none",
+            "&:hover": { background: "#E5E7EB" },
+          }}
+          onClick={onDownload}
+        >
+          Download
+        </Button>
 
-                    <Typography variant="body2" color="text.secondary">
-                        {author}
-                    </Typography>
-                </Box>
+        <IconButton onClick={onEdit}>
+          <EditIcon fontSize="small" />
+        </IconButton>
 
-                {/* ACTIONS */}
-                <Box
-                    sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 1.5,
-                        mt: 3,
-                    }}
-                >
-                    <Button
-                        fullWidth
-                        variant="contained"
-                        startIcon={<DownloadIcon />}
-                        onClick={onDownload}
-                        sx={{
-                            textTransform: "none",
-                            borderRadius: 3,
-                            backgroundColor: "#e5e7eb",
-                            color: "#111827",
-                            boxShadow: "none",
-                            "&:hover": {
-                                backgroundColor: "#d1d5db",
-                                boxShadow: "none",
-                            },
-                        }}
-                    >
-                        Download
-                    </Button>
-
-                    <IconButton
-                        onClick={onEdit}
-                        sx={{
-                            border: "1px solid #e5e7eb",
-                            borderRadius: 2,
-                        }}
-                    >
-                        <EditOutlinedIcon fontSize="small" />
-                    </IconButton>
-
-                    <IconButton
-                        onClick={onDelete}
-                        sx={{
-                            border: "1px solid #e5e7eb",
-                            borderRadius: 2,
-                        }}
-                    >
-                        <DeleteOutlineIcon fontSize="small" />
-                    </IconButton>
-                </Box>
-            </CardContent>
-        </Card>
-    );
+        <IconButton onClick={onDelete}>
+          <DeleteIcon fontSize="small" />
+        </IconButton>
+      </Stack>
+    </Box>
+  );
 };
