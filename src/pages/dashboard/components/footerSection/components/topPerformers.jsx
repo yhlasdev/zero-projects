@@ -10,7 +10,9 @@ import {
     Avatar,
     Box
 } from "@mui/material";
-
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { getAllTopPerformers } from "../../../../../api/queries/getters";
+/* 
 const employees = [
     {
         rank: 1,
@@ -52,7 +54,8 @@ const employees = [
         hours: "8.5h",
         avatar: "https://i.pravatar.cc/150?img=5"
     }
-];
+]; */
+
 
 const getRankColor = (rank) => {
     if (rank === 1) return "#FFF3CD";
@@ -62,6 +65,21 @@ const getRankColor = (rank) => {
 };
 
 export const TopPerformers = () => {
+
+    const { data: topPerformers = [], isLoading, isError } = useQuery({
+        queryKey: ['topPerformers'],
+        queryFn: async () => {
+            const response = await getAllTopPerformers();
+            return response.data;
+        }
+    });
+
+    const allTopPerformers = topPerformers?.data || [];
+
+    console.log('this=======', allTopPerformers);
+
+
+
     return (
         <Card sx={{ p: 3, borderRadius: '8px' }}>
             <Typography variant="h5" mb={2}>
@@ -80,8 +98,14 @@ export const TopPerformers = () => {
                         </TableRow>
                     </TableHead>
 
+                    {isLoading ? (
+                        <Box>Yuklenyar</Box>
+                    ) : isError ? (
+                        <Box>Yanlyslyk</Box>
+                    ) : null}
+
                     <TableBody>
-                        {employees.map((emp) => (
+                        {allTopPerformers.map((emp) => (
                             <TableRow key={emp.rank} hover>
                                 {/* Rank */}
                                 <TableCell>
@@ -104,16 +128,21 @@ export const TopPerformers = () => {
                                 {/* Employee */}
                                 <TableCell>
                                     <Box display="flex" alignItems="center" gap={2}>
-                                        <Avatar src={emp.avatar} />
-                                        {emp.name}
+                                        <Avatar src={`http://194.156.117.223:8004/yerinde/storage-service/attendances/${emp.employee_id}`} />
+                                        <Typography fontWeight={600}>
+                                            {emp.first_name}
+                                        </Typography>
+                                        <Typography fontWeight={600}>
+                                            {emp.last_name}
+                                        </Typography>
                                     </Box>
                                 </TableCell>
 
                                 <TableCell>{emp.department}</TableCell>
-                                <TableCell>{emp.position}</TableCell>
+                                <TableCell>{emp.job}</TableCell>
 
                                 <TableCell align="right" sx={{ fontWeight: 600 }}>
-                                    {emp.hours}
+                                    {emp.hours.toFixed(1)}
                                 </TableCell>
                             </TableRow>
                         ))}

@@ -174,3 +174,9 @@ export const getDahsboardHourStat = async () => {
   );
   return response;
 };
+
+
+export const getAllTopPerformers = async () => {
+  const response = await api.getPrivate("/company-service/dashboard/top5-employees");
+  return response;
+}
