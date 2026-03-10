@@ -15,8 +15,6 @@ export default function AttendanceStats() {
 
   const stats = response?.data?.data;
 
-  console.log('this-----stats-----', stats);
-
   if (isLoading) {
     return (
       <Skeleton
@@ -39,12 +37,12 @@ export default function AttendanceStats() {
     },
     {
       label: "Late",
-      value: Math.round(stats.absents_last_30 || 0),
+      value: Math.round(stats.lates_last_30 || 0),
       color: "#f1c40f",
     },
     {
       label: "Absent",
-      value: Math.round(stats.lates_last_30 || 0),
+      value: Math.round(stats.absents_last_30 || 0),
       color: "#e74c3c",
     },
   ];

@@ -10,51 +10,8 @@ import {
     Avatar,
     Box
 } from "@mui/material";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { getAllTopPerformers } from "../../../../../api/queries/getters";
-/* 
-const employees = [
-    {
-        rank: 1,
-        name: "Robert Martinez",
-        department: "Sales",
-        position: "Sales Director",
-        hours: "9.5h",
-        avatar: "https://i.pravatar.cc/150?img=1"
-    },
-    {
-        rank: 2,
-        name: "Michael Chen",
-        department: "Engineering",
-        position: "Engineering Manager",
-        hours: "9h",
-        avatar: "https://i.pravatar.cc/150?img=2"
-    },
-    {
-        rank: 3,
-        name: "David Wilson",
-        department: "Engineering",
-        position: "Chief Technology Officer",
-        hours: "9h",
-        avatar: "https://i.pravatar.cc/150?img=3"
-    },
-    {
-        rank: 4,
-        name: "Sarah Johnson",
-        department: "Engineering",
-        position: "Senior Software Engineer",
-        hours: "8.5h",
-        avatar: "https://i.pravatar.cc/150?img=4"
-    },
-    {
-        rank: 5,
-        name: "Lisa Anderson",
-        department: "Marketing",
-        position: "Chief Marketing Officer",
-        hours: "8.5h",
-        avatar: "https://i.pravatar.cc/150?img=5"
-    }
-]; */
 
 
 const getRankColor = (rank) => {
