@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getDahsboardDayHour } from "../../../../api/queries/getters";
 
 const CurrentLastMonthSection = () => {
-  
+
   const { data: response } = useQuery({
     queryKey: ["dahsboardHourStatistic"],
     queryFn: getDahsboardDayHour,
@@ -50,8 +50,8 @@ const CurrentLastMonthSection = () => {
           gap: 2,
         }}
       >
-        <MonthStatistic title={"Su ay (jikme-jik)"} data={currentlyMonth} />
-        <MonthStatistic title={"Gecen ay (jikme-jik)"} data={lastMonth} />
+        <MonthStatistic titleColor={'#1D61E7'} title={"Su ay (jikme-jik)"} data={currentlyMonth} />
+        <MonthStatistic titleColor={'#D93B2D'} title={"Gecen ay (jikme-jik)"} data={lastMonth} />
       </Box>
     </Box>
   );

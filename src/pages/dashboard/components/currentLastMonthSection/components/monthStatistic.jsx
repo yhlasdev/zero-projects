@@ -2,30 +2,31 @@ import { Box, Divider, Typography } from "@mui/material"
 import { CustomDivider } from "../../../../../components/customDivider"
 import { StatisticLine } from "./statisticLine"
 import { Wrapper } from "../../../../../components/wrapper"
+import dayjs from "dayjs"
 
 
-export const MonthStatistic = ({ title, data }) => {
+export const MonthStatistic = ({ titleColor, title, data }) => {
     return (
         <Wrapper sx={{ flex: 1, p: 3, borderRadius: '8px' }}>
             <Box className=' flex flex-col gap-2 flex-1'>
-                <Typography variant="h4"> {title} </Typography>
+                <Typography variant="h4" color={titleColor}> {title} </Typography>
                 <CustomDivider />
                 <StatisticLine
                     prefix={'In kop islenen gun'}
-                    suffix={`${data[0].suffix} sagat`}
-                    suffixUp={data[0].suffixUp}
+                    suffix={`${Math.ceil(data[0].suffix)} sagat`}
+                    suffixUp={dayjs(data[0].suffixUp).format('DD.MM.YYYY')}
                 />
                 <Divider />
                 <StatisticLine
                     prefix={'In az islenen gun'}
-                    suffix={`${data[1].suffix} sagat`}
-                    suffixUp={data[1].suffixUp}
+                    suffix={`${Math.ceil(data[1].suffix)} sagat`}
+                    suffixUp={dayjs(data[1].suffixUp).format('DD.MM.YYYY')}
                 />
                 <Divider />
                 <StatisticLine
                     prefix={'Ortaca gundelik'}
-                    suffix={`${data[2].suffix} sagat`}
-                    suffixUp={data[2].suffixUp}
+                    suffix={`${Math.ceil(data[2].suffix)} sagat`}
+                    suffixUp={dayjs(data[2].suffixUp).format('DD.MM.YYYY')}
                 />
                 <Divider />
             </Box>
