@@ -15,6 +15,8 @@ export default function AttendanceStats() {
 
   const stats = response?.data?.data;
 
+  console.log('this-----stats-----', stats);
+
   if (isLoading) {
     return (
       <Skeleton
@@ -32,17 +34,17 @@ export default function AttendanceStats() {
   const chartData = [
     {
       label: "Present",
-      value: Math.round(stats.PresentsLast30 || 0),
+      value: Math.round(stats?.presents_last_30 || 0),
       color: "#27ae60",
     },
     {
       label: "Late",
-      value: Math.round(stats.LatesLast30 || 0),
+      value: Math.round(stats.absents_last_30 || 0),
       color: "#f1c40f",
     },
     {
       label: "Absent",
-      value: Math.round(stats.AbsentsLast30 || 0),
+      value: Math.round(stats.lates_last_30 || 0),
       color: "#e74c3c",
     },
   ];
@@ -87,10 +89,10 @@ export default function AttendanceStats() {
           </Box>
         ))}
       </Stack>
+      {/* 
+      <Divider sx={{ my: 3, opacity: 0.6 }} /> */}
 
-      <Divider sx={{ my: 3, opacity: 0.6 }} />
-
-      <Box
+      {/*    <Box
         sx={{
           display: "flex",
           height: 12,
@@ -114,9 +116,9 @@ export default function AttendanceStats() {
               />
             ),
         )}
-      </Box>
+      </Box> */}
 
-      {chartData.every((item) => item.value === 0) && (
+      {/*   {chartData.every((item) => item.value === 0) && (
         <Typography
           variant="caption"
           color="text.disabled"
@@ -124,7 +126,7 @@ export default function AttendanceStats() {
         >
           Son 30 güne maglumat tapylmady
         </Typography>
-      )}
+      )} */}
     </Card>
   );
 }
