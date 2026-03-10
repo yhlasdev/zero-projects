@@ -52,7 +52,7 @@ const UploadContent = ({ closeSet }) => {
       return;
     }
 
-    setSelectedFile(file); // ← direkt state'e yaz
+    setSelectedFile(file);
   };
 
   const submitHandler = async (data) => {
@@ -66,8 +66,8 @@ const UploadContent = ({ closeSet }) => {
     const formData = new FormData();
     formData.append("title", data.title);
     formData.append("description", data.description);
-    formData.append("file", selectedFile); // ← gerçek File objesi
-    formData.append("file_type", fileExtension.toUpperCase()); // ← düz string, JSON.stringify yok
+    formData.append("file", selectedFile);
+    formData.append("file_type", fileExtension.toUpperCase()); 
 
     mutation.mutate(formData);
   };

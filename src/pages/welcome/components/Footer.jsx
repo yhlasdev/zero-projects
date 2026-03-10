@@ -4,7 +4,8 @@ import {
   Grid,
   Typography,
   Link,
-  Divider
+  Divider,
+  Stack,
 } from "@mui/material";
 
 const Footer = () => {
@@ -12,87 +13,99 @@ const Footer = () => {
     <Box
       component="footer"
       sx={{
-        backgroundColor: "#0B1F2E",
-        color: "#B0C4D4",
-        pt: 8,
+        backgroundColor: "#071A26",
+        color: "#9FB3C8",
+        pt: { xs: 6, md: 10 },
         pb: 4,
       }}
     >
-      <Grid container sx={{ maxWidth: '1500px' }} className=' flex justify-between mx-auto' spacing={6}>
+      <Container maxWidth="lg">
+        <Grid container spacing={6}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+            <Typography
+              sx={{
+                color: "#6EC1FF",
+                mb: 2,
+                fontWeight: 600,
+                fontSize: 20,
+              }}
+            >
+              Ýerinde
+            </Typography>
 
-        <Grid item xs={12} md={3}>
-          <Typography
-            variant="h5"
-            sx={{ color: "#6EC1FF", mb: 2, fontWeight: 600 }}
-          >
-            Ýerinde
-          </Typography>
-          <Typography variant="body2">
-            Häzirki zaman HR we işgärleriň iş  <br /> tertibini dolandyrmak platformasy.
-          </Typography>
+            <Typography variant="body2" sx={{ lineHeight: 1.8 }}>
+              Häzirki zaman HR we işgärleriň iş tertibini dolandyrmak
+              platformasy.
+            </Typography>
+          </Grid>
+
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+            <FooterTitle text="Çözgütler" />
+
+            <Stack spacing={1}>
+              <FooterLink text="HR dolandyryş" />
+              <FooterLink text="Iş tertibi we gatnaşyk" />
+              <FooterLink text="Rugsatlar" />
+              <FooterLink text="Hasabatlar" />
+            </Stack>
+          </Grid>
+
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+            <FooterTitle text="Kompaniýa" />
+
+            <Stack spacing={1}>
+              <FooterLink text="Biz barada" />
+              <FooterLink text="Karýera" />
+              <FooterLink text="Habarlar" />
+              <FooterLink text="Habarlaşmak" />
+            </Stack>
+          </Grid>
+
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+            <FooterTitle text="Goldaw" />
+
+            <Stack spacing={1}>
+              <FooterLink text="Kömek merkezi" />
+              <FooterLink text="Dokumentasiýa" />
+              <FooterLink text="Gizlinlik syýasaty" />
+            </Stack>
+          </Grid>
         </Grid>
 
-        <Grid item xs={12} md={3}>
-          <Typography
-            variant="h5"
-            sx={{ color: "#6EC1FF", mb: 2, fontWeight: 600 }}
-          >
-            Çözgütler
-          </Typography>
-          <FooterLink text="HR dolandyryş" />
-          <FooterLink text="Iş tertibi we gatnaşyk" />
-          <FooterLink text="Rugsatlar" />
-          <FooterLink text="Hasabatlar" />
-        </Grid>
+        <Divider sx={{ mt: 6, mb: 4, borderColor: "#183546" }} />
 
-        <Grid item xs={12} md={3}>
-          <Typography
-            variant="h5"
-            sx={{ color: "#6EC1FF", mb: 2, fontWeight: 600 }}
-          >
-            Kompaniýa
-          </Typography>
-          <FooterLink text="Biz barada" />
-          <FooterLink text="Karýera" />
-          <FooterLink text="Habarlar" />
-          <FooterLink text="Habarlaşmak" />
-        </Grid>
-
-        <Grid item xs={12} md={3}>
-          <Typography
-            variant="h5"
-            sx={{ color: "#6EC1FF", mb: 2, fontWeight: 600 }}
-          >
-            Goldaw
-          </Typography>
-          <FooterLink text="Kömek merkezi" />
-          <FooterLink text="Dokumentasiýa" />
-          <FooterLink text="Gizlinlik syýasaty" />
-        </Grid>
-
-      </Grid>
-
-      <Divider sx={{ my: 6, borderColor: "#1E3A4C" }} />
-
-      <Typography variant="body2" align="center" sx={{ opacity: 0.6 }}>
-        © {new Date().getFullYear()} Yerinde. All rights reserved.
-      </Typography>
+        <Typography variant="body2" align="center" sx={{ opacity: 0.6 }}>
+          © 2025 Ýerinde. Ähli hukuklar goralan.
+        </Typography>
+      </Container>
     </Box>
   );
 };
+
+const FooterTitle = ({ text }) => (
+  <Typography
+    sx={{
+      color: "#6EC1FF",
+      mb: 2,
+      fontWeight: 600,
+      fontSize: 18,
+    }}
+  >
+    {text}
+  </Typography>
+);
 
 const FooterLink = ({ text }) => (
   <Link
     href="#"
     underline="none"
-    display="block"
     sx={{
-      mb: 1,
-      color: "#B0C4D4",
+      color: "#9FB3C8",
       fontSize: 14,
+      transition: "0.2s",
       "&:hover": {
-        color: "#6EC1FF"
-      }
+        color: "#6EC1FF",
+      },
     }}
   >
     {text}

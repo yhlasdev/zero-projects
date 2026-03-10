@@ -1,9 +1,5 @@
 import { useState } from "react";
-import {
-  Box,
-  Divider,
-  Grid,
-} from "@mui/material";
+import { Box, Divider, Grid, Paper, Typography } from "@mui/material";
 
 import { PageTitle } from "../../components/pageTitle/pageTitle";
 import { CustomDivider } from "../../components/customDivider";
@@ -35,41 +31,6 @@ const DocumentsPage = () => {
     filters,
     dataKey: "documents",
   });
-
-  console.log(data, "data");
-
-  const documents = [
-    {
-      id: 1,
-      title: "Employee Handbook 2024",
-      size: "2.4 MB",
-      description:
-        "Complete guide to company policies, procedures and employee benefits.",
-      date: "2024-01-10",
-      author: "Amanda White",
-      type: "pdf",
-    },
-    {
-      id: 2,
-      title: "Code of Conduct",
-      size: "1.8 MB",
-      description:
-        "Professional standards and ethical guidelines for all employees.",
-      date: "2024-01-05",
-      author: "Amanda White",
-      type: "doc",
-    },
-    {
-      id: 3,
-      title: "IT Security Policy",
-      size: "1.2 MB",
-      description:
-        "Guidelines for data protection, password management and cybersecurity.",
-      date: "2024-01-15",
-      author: "David Wilson",
-      type: "pdf",
-    },
-  ];
 
   return (
     <>
@@ -117,21 +78,33 @@ const DocumentsPage = () => {
           }}
         >
           <Grid container spacing={3}>
-            {documents.map((doc) => (
-              <Grid item xs={12} sm={6} md={4} key={doc.id}>
+            {data?.length > 0 ? data?.map((doc) => (
+              <Grid key={doc.id} size={{ xs: 12, sm: 6, md: 4 }}>
                 <DocumentCard
                   title={doc.title}
-                  size={doc.size}
                   description={doc.description}
-                  date={doc.date}
-                  author={doc.author}
-                  type={doc.type}
-                  onDownload={() => console.log("Download", doc.id)}
-                  onEdit={() => console.log("Edit", doc.id)}
-                  onDelete={() => console.log("Delete", doc.id)}
+                  file_type={doc.file_type}
+                  updated_at={doc.updated_at}
+                  manager_name={doc.manager_name}
+                  onDownload={() => window.open(doc.file)}
+                  onEdit={() => console.log("edit", doc.id)}
+                  onDelete={() => console.log("delete", doc.id)}
                 />
               </Grid>
-            ))}
+            )): 
+            <Typography
+              sx={{
+                p: 3,
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                height: 'calc(100vh - 370px)',
+              }}
+            >
+              No documents found.
+            </Typography>
+            }
           </Grid>
         </Wrapper>
       </Box>

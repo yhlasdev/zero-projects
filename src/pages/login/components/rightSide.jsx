@@ -20,6 +20,7 @@ import axios from "axios";
 import FieldLabelPasswordInput from "../../../components/textField/passwordTextField";
 import FieldLabel from "../../../components/textField/LabelInput";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const loginPhone = async ({ phone, password }) => {
   const response = await axios.post(
@@ -121,6 +122,7 @@ export const RightSide = () => {
           sameSite: "Strict",
         });
         navigate("/dashboard");
+        toast.success("Logged in successfully!");
       }
     },
   });
