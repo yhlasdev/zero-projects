@@ -5,42 +5,96 @@ import {
   Grid,
   IconButton,
   Paper,
-  Stack,
+  Skeleton,
+  Alert,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  CircularProgress,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
+import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import AddDepartmentModal from "../modal/AddDepartment";
+import EditDepartmentModal from "../modal/EditDepartment";
+import { getAllDepartments } from "../../../api/queries/getters";
+import { deleteDepartment } from "../../../api/queries/delete";
+import { AiOutlineEdit } from "react-icons/ai";
+import { RiDeleteBinLine } from "react-icons/ri";
 
-const initialDepartments = [
-  {
-    id: 1,
-    name: "Engineering",
-    head: "David Wilson",
-    employeeCount: 48,
-    positions: [
-      { id: 1, title: "Software Engineer", employees: 25 },
-      { id: 2, title: "Senior Software Engineer", employees: 12 },
-      { id: 3, title: "Engineering Manager", employees: 5 },
-      { id: 4, title: "DevOps Engineer", employees: 4 },
-      { id: 5, title: "Chief Technology Officer", employees: 1 },
-      { id: 6, title: "QA Engineer", employees: 1 },
-    ],
-  },
-  {
-    id: 2,
-    name: "Sales",
-    head: "Robert Martinez",
-    employeeCount: 32,
-    positions: [
-      { id: 1, title: "Sales Representative", employees: 18 },
-      { id: 2, title: "Senior Sales Representative", employees: 8 },
-      { id: 3, title: "Sales Manager", employees: 4 },
-      { id: 4, title: "Sales Director", employees: 1 },
-      { id: 5, title: "Account Executive", employees: 1 },
-    ],
-  },
-];
+const DeleteConfirmDialog = ({
+  open,
+  onClose,
+  onConfirm,
+  isPending,
+  departmentName,
+}) => (
+  <Dialog
+    open={open}
+    onClose={onClose}
+    PaperProps={{ sx: { width: 500, borderRadius: "12px", p: 0 } }}
+  >
+    <DialogTitle sx={{ px: 3, pt: 2, pb: 2 }}>
+      <Typography variant="h6" textAlign={"center"} fontWeight={700}>
+        Delete Department
+      </Typography>
+    </DialogTitle>
+
+    <DialogContent sx={{ px: 3, py: 1 }}>
+      <Typography variant="body2" color="text.secondary">
+        Are you sure you want to delete
+        <Typography
+          component="span"
+          variant="body2"
+          mx={1}
+          fontWeight={600}
+          color="text.primary"
+        >
+          {departmentName}
+        </Typography>
+        ? This action cannot be undone.
+      </Typography>
+    </DialogContent>
+
+    <DialogActions sx={{ px: 3, py: 2.5, gap: 1 }}>
+      <Button
+        variant="outlined"
+        onClick={onClose}
+        disabled={isPending}
+        sx={{
+          textTransform: "none",
+          borderRadius: 1.5,
+          px: 2.5,
+          fontWeight: 500,
+          color: "text.primary",
+          borderColor: "grey.300",
+        }}
+      >
+        Cancel
+      </Button>
+      <Button
+        variant="contained"
+        onClick={onConfirm}
+        disabled={isPending}
+        startIcon={
+          isPending ? <CircularProgress size={14} color="inherit" /> : null
+        }
+        sx={{
+          textTransform: "none",
+          borderRadius: 1.5,
+          px: 2.5,
+          fontWeight: 600,
+          "&:hover": { bgcolor: "error.dark" },
+        }}
+      >
+        {isPending ? "Deleting..." : "Delete"}
+      </Button>
+    </DialogActions>
+  </Dialog>
+);
 
 const PositionCard = ({ position, onEdit, onDelete }) => (
   <Box
@@ -53,14 +107,15 @@ const PositionCard = ({ position, onEdit, onDelete }) => (
       display: "flex",
       alignItems: "center",
       justifyContent: "space-between",
+      bgcolor: "background.paper",
     }}
   >
     <Box>
-      <Typography variant="body2" fontWeight={500}>
+      <Typography variant="body2" fontWeight={500} color="text.primary">
         {position.title}
       </Typography>
-      <Typography variant="caption">
-        {position.employees} employees
+      <Typography variant="caption" color="text.secondary">
+        {position.employeeCount ?? position.employees ?? 0} employees
       </Typography>
     </Box>
     <Box display="flex" gap={0.5}>
@@ -74,67 +129,110 @@ const PositionCard = ({ position, onEdit, onDelete }) => (
   </Box>
 );
 
-const DepartmentCard = ({ department, onEditDept, onDeleteDept, onAddPosition, onEditPosition, onDeletePosition }) => (
-  <Paper
-    variant="outlined"
-    sx={{ borderRadius: 2, overflow: "hidden", mb: 2 }}
-  >
-    {/* Department Header */}
+const DepartmentCard = ({
+  department,
+  onEditDept,
+  onDeleteDept,
+  onAddPosition,
+  onEditPosition,
+  onDeletePosition,
+}) => {
+  const positions = department.positions ?? department.jobPositions ?? [];
+
+  return (
+    <Paper
+      variant="outlined"
+      sx={{ borderRadius: 2, overflow: "hidden", mb: 2 }}
+    >
+      <Box
+        sx={{
+          px: 3,
+          py: 2,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          borderBottom: "1px solid",
+          borderColor: "grey.200",
+          bgcolor: "grey.50",
+        }}
+      >
+        <Box>
+          <Typography variant="subtitle1" fontWeight={700}>
+            {department?.name}
+          </Typography>
+          <Typography variant="caption" color="text.secondary">
+            Head: {department?.head_of_departments} •{" "}
+            {department?.employee_count || 0} employees
+          </Typography>
+        </Box>
+
+        <Box display="flex" alignItems="center" gap={1}>
+          <Button
+            variant="outlined"
+            size="small"
+            startIcon={<AddIcon sx={{ fontSize: 14 }} />}
+            onClick={() => onAddPosition(department.id)}
+            sx={{
+              textTransform: "none",
+              fontSize: "0.75rem",
+              borderRadius: 1.5,
+              px: 1.5,
+              py: 0.5,
+            }}
+          >
+            Add Position
+          </Button>
+          <IconButton size="small" onClick={() => onEditDept(department)}>
+            <AiOutlineEdit size={20} />
+          </IconButton>
+          <IconButton size="small" onClick={() => onDeleteDept(department)}>
+            <RiDeleteBinLine />
+          </IconButton>
+        </Box>
+      </Box>
+
+      <Box sx={{ p: 2 }}>
+        {positions.length === 0 ? (
+          <Typography variant="body2" color="text.secondary" sx={{ py: 1 }}>
+            No positions yet.
+          </Typography>
+        ) : (
+          <Grid container spacing={1.5}>
+            {positions.map((pos) => (
+              <Grid item xs={12} sm={6} md={4} key={pos.id}>
+                <PositionCard
+                  position={pos}
+                  onEdit={onEditPosition}
+                  onDelete={(posId) => onDeletePosition(department.id, posId)}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        )}
+      </Box>
+    </Paper>
+  );
+};
+
+const DepartmentSkeleton = () => (
+  <Paper variant="outlined" sx={{ borderRadius: 2, overflow: "hidden", mb: 2 }}>
     <Box
       sx={{
         px: 3,
         py: 2,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
+        bgcolor: "grey.50",
         borderBottom: "1px solid",
+        borderColor: "grey.200",
       }}
     >
-      <Box>
-        <Typography variant="subtitle1" fontWeight={700}>
-          {department.name}
-        </Typography>
-        <Typography variant="caption">
-          Head: {department.head} • {department.employeeCount} employees
-        </Typography>
-      </Box>
-
-      <Box display="flex" alignItems="center" gap={1}>
-        <Button
-          variant="outlined"
-          size="small"
-          startIcon={<AddIcon sx={{ fontSize: 14 }} />}
-          onClick={() => onAddPosition(department.id)}
-          sx={{
-            textTransform: "none",
-            fontSize: "0.75rem",
-            borderRadius: 1.5,
-            px: 1.5,
-            py: 0.5,
-          }}
-        >
-          Add Position
-        </Button>
-        <IconButton size="small" onClick={() => onEditDept(department)}>
-          <BorderColorOutlinedIcon sx={{ fontSize: 16 }} />
-        </IconButton>
-        <IconButton size="small" onClick={() => onDeleteDept(department.id)}>
-          <DeleteOutlineIcon sx={{ fontSize: 17 }} />
-        </IconButton>
-      </Box>
+      <Skeleton variant="text" width={160} height={24} />
+      <Skeleton variant="text" width={220} height={18} />
     </Box>
-
     <Box sx={{ p: 2 }}>
       <Grid container spacing={1.5}>
-        {department.positions.map((pos) => (
-          <Grid size={4} key={pos.id}>
-            <Stack spacing={2}>
-              <PositionCard
-                position={pos}
-                onEdit={onEditPosition}
-                onDelete={(posId) => onDeletePosition(department.id, posId)}
-              />
-            </Stack>
+        {[1, 2, 3].map((i) => (
+          <Grid item xs={12} sm={6} md={4} key={i}>
+            <Skeleton variant="rounded" height={60} />
           </Grid>
         ))}
       </Grid>
@@ -143,75 +241,114 @@ const DepartmentCard = ({ department, onEditDept, onDeleteDept, onAddPosition, o
 );
 
 const CompanyStructure = () => {
-  const [departments, setDepartments] = useState(initialDepartments);
+  const queryClient = useQueryClient();
+  const [addDeptOpen, setAddDeptOpen] = useState(false);
+  const [editDept, setEditDept] = useState(null);
+  const [deleteDept, setDeleteDept] = useState(null);
 
-  const handleDeleteDept = (deptId) => {
-    setDepartments((prev) => prev.filter((d) => d.id !== deptId));
-  };
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["departments"],
+    queryFn: getAllDepartments,
+    select: (res) => {
+      if (Array.isArray(res?.data?.data)) return res.data.data;
+      return [];
+    },
+  });
 
-  const handleDeletePosition = (deptId, posId) => {
-    setDepartments((prev) =>
-      prev.map((d) =>
-        d.id === deptId
-          ? { ...d, positions: d.positions.filter((p) => p.id !== posId) }
-          : d
-      )
-    );
-  };
+  const { mutate: confirmDelete, isPending: isDeleting } = useMutation({
+    mutationFn: () => deleteDepartment({ id: deleteDept?.id.toString() }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["departments"] });
+      setDeleteDept(null);
+    },
+    onError: (err) => {
+      console.error("Delete department error:", err);
+    },
+  });
 
-  const handleAddDepartment = () => {
-    // Add your modal/form logic here
-    console.log("Add Department clicked");
-  };
-
-  const handleAddPosition = (deptId) => {
-    // Add your modal/form logic here
-    console.log("Add Position clicked for dept:", deptId);
-  };
-
-  const handleEditDept = (dept) => {
-    console.log("Edit dept:", dept);
-  };
-
-  const handleEditPosition = (pos) => {
-    console.log("Edit position:", pos);
-  };
+  const handleDeletePosition = (deptId, posId) =>
+    console.log("Delete pos:", posId, "dept:", deptId);
+  const handleAddPosition = (deptId) =>
+    console.log("Add position for dept:", deptId);
+  const handleEditPosition = (pos) => console.log("Edit pos:", pos);
 
   return (
     <Box>
-      {/* ── Header ── */}
-      <Box display="flex" alignItems="center" justifyContent="space-between" mb={3}>
-        <Typography variant="h6" fontWeight={700}>
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="space-between"
+        mb={3}
+      >
+        <Typography fontSize={18} fontWeight={600}>
           Departments & Positions
         </Typography>
         <Button
           variant="contained"
           size="medium"
           startIcon={<AddIcon />}
-          onClick={handleAddDepartment}
+          onClick={() => setAddDeptOpen(true)}
           sx={{
             textTransform: "none",
             borderRadius: 1.5,
             px: 2.5,
             fontWeight: 600,
+            bgcolor: "#1a2e44",
+            "&:hover": { bgcolor: "#243d58" },
           }}
         >
           Add Department
         </Button>
       </Box>
 
-      {/* ── Department List ── */}
-      {departments.map((dept) => (
-        <DepartmentCard
-          key={dept.id}
-          department={dept}
-          onEditDept={handleEditDept}
-          onDeleteDept={handleDeleteDept}
-          onAddPosition={handleAddPosition}
-          onEditPosition={handleEditPosition}
-          onDeletePosition={handleDeletePosition}
-        />
-      ))}
+      {isLoading && (
+        <>
+          {[1, 2, 3].map((i) => (
+            <DepartmentSkeleton key={i} />
+          ))}
+        </>
+      )}
+
+      {isError && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          Getting the department: {error?.message ?? "Some problems"}
+        </Alert>
+      )}
+
+      {!isLoading && !isError && data?.length === 0 && (
+        <Typography color="text.secondary">Not added the Department</Typography>
+      )}
+
+      {!isLoading &&
+        !isError &&
+        data?.map((dept) => (
+          <DepartmentCard
+            key={dept.id}
+            department={dept}
+            onEditDept={(d) => setEditDept(d)}
+            onDeleteDept={(d) => setDeleteDept(d)}
+            onAddPosition={handleAddPosition}
+            onEditPosition={handleEditPosition}
+            onDeletePosition={handleDeletePosition}
+          />
+        ))}
+
+      <AddDepartmentModal
+        open={addDeptOpen}
+        onClose={() => setAddDeptOpen(false)}
+      />
+      <EditDepartmentModal
+        open={!!editDept}
+        department={editDept}
+        onClose={() => setEditDept(null)}
+      />
+      <DeleteConfirmDialog
+        open={!!deleteDept}
+        onClose={() => setDeleteDept(null)}
+        onConfirm={confirmDelete}
+        isPending={isDeleting}
+        departmentName={deleteDept?.name}
+      />
     </Box>
   );
 };

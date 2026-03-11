@@ -94,3 +94,11 @@ export const updateContactOverview = async (objectData) => {
   );
   return response;
 };
+
+export const updateDepartments = async (objectData) => {
+  const response = await api.postPrivate(
+    "company-service/departments/add",
+    objectData,
+  );
+  return response;
+};

@@ -12,7 +12,6 @@ export default function AttendanceStats() {
     queryFn: getAttendanceStatistic,
   });
 
-
   const stats = response?.data?.data;
 
   if (isLoading) {
@@ -77,20 +76,20 @@ export default function AttendanceStats() {
                   bgcolor: item.color,
                 }}
               />
-              <Typography variant="body1" fontWeight={500} >
+              <Typography variant="body1" fontWeight={500}>
                 {item.label}
               </Typography>
             </Box>
-            <Typography variant="body1" fontWeight={600} >
+            <Typography variant="body1" fontWeight={600}>
               {item.value}%
             </Typography>
           </Box>
         ))}
       </Stack>
-      {/* 
-      <Divider sx={{ my: 3, opacity: 0.6 }} /> */}
 
-      {/*    <Box
+      <Divider sx={{ my: 3, opacity: 0.6 }} />
+
+      <Box
         sx={{
           display: "flex",
           height: 12,
@@ -114,9 +113,9 @@ export default function AttendanceStats() {
               />
             ),
         )}
-      </Box> */}
+      </Box>
 
-      {/*   {chartData.every((item) => item.value === 0) && (
+      {chartData.every((item) => item.value === 0) && (
         <Typography
           variant="caption"
           color="text.disabled"
@@ -124,7 +123,7 @@ export default function AttendanceStats() {
         >
           Son 30 güne maglumat tapylmady
         </Typography>
-      )} */}
+      )}
     </Card>
   );
 }

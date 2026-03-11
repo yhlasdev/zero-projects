@@ -1,5 +1,5 @@
-import i18n from '../../libs/i18n';
-import { axiosInstance } from '../axiosInstance';
+import i18n from "../../libs/i18n";
+import { axiosInstance } from "../axiosInstance";
 import Cookies from "js-cookie";
 
 const config = {
@@ -8,9 +8,9 @@ const config = {
 
 const privateConfig = {
   headers: {
-    "Authorization": "",
+    Authorization: "",
     "Content-type": "application/json",
-    "Accept-Language": i18n.language
+    "Accept-Language": i18n.language,
   },
   withCredentials: false,
 };
@@ -18,13 +18,12 @@ const privateConfig = {
 const getAccessToken = () => Cookies.get("auth_token");
 
 export const api = {
-
   postVerify: async (url, data, token) => {
     const config = {
       ...privateConfig,
       headers: {
         ...privateConfig.headers,
-        "Authorization": token,
+        Authorization: token,
       },
     };
     const res = await axiosInstance.post(url, { ...data }, { ...config });
@@ -65,9 +64,9 @@ export const api = {
       ...privateConfig,
       headers: {
         ...privateConfig.headers,
-        Authorization: getAccessToken()
+        Authorization: getAccessToken(),
       },
-      params: queryParams
+      params: queryParams,
     };
     const res = axiosInstance.get(url, { ...config });
     return res;
@@ -78,7 +77,7 @@ export const api = {
       ...privateConfig,
       headers: {
         ...privateConfig.headers,
-        "Authorization": getAccessToken(),
+        Authorization: getAccessToken(),
       },
     };
     const res = await axiosInstance.post(url, { ...data }, { ...config });
@@ -90,7 +89,7 @@ export const api = {
       ...privateConfig,
       headers: {
         ...privateConfig.headers,
-        Authorization: getAccessToken()
+        Authorization: getAccessToken(),
       },
     };
     const res = await axiosInstance.put(url, { ...data }, { ...config });
@@ -110,12 +109,11 @@ export const api = {
   },
   // Delete private
   deletePrivate: async (url, data) => {
-    const token = 'Bearer ' + getAccessToken();
     const config = {
       ...privateConfig,
       headers: {
         ...privateConfig.headers,
-        Authorization: token
+        Authorization: getAccessToken(),
       },
     };
     const res = await axiosInstance.delete(url, { ...config, data: data });

@@ -16,7 +16,7 @@ const UploadContent = ({ closeSet }) => {
   });
 
   const fileInputRef = useRef(null);
-  const [selectedFile, setSelectedFile] = useState(null); // ← useState ile yönet
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const mutation = useAppMutation({
     mutationFn: documentAdd,

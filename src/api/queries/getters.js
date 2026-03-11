@@ -21,7 +21,7 @@ import { api } from "../service/apiHelper";
 export const getAllEmployee = async ({
   page,
   limit,
-  department_id,
+  department_id = 1773233729975,
   job_id,
   search,
 }) => {
@@ -116,19 +116,23 @@ export const getAllBoardTask = async ({ page, limit }) => {
 };
 
 export const getTaskCalendar = async ({ month, year }) => {
-  return await api.getPrivate(`/company-service/tasks/by-month?month=${month}&year=${year}`);
+  return await api.getPrivate(
+    `/company-service/tasks/by-month?month=${month}&year=${year}`,
+  );
 };
 
 export const getMainCalendar = async ({ month, year }) => {
-  return await api.getPrivate(`/company-service/calendars/my?month=${month}&year=${year}`);
+  return await api.getPrivate(
+    `/company-service/calendars/my?month=${month}&year=${year}`,
+  );
 };
 
 export const getSettingsContact = async () => {
-  return await api.getPrivate('/company-service/companies/get-contact');
+  return await api.getPrivate("/company-service/companies/get-contact");
 };
 
 export const getSettingsOverview = async () => {
-  return await api.getPrivate('/company-service/companies/get-profile');
+  return await api.getPrivate("/company-service/companies/get-profile");
 };
 
 export const getAnnouncementById = async (id) => {
@@ -175,8 +179,22 @@ export const getDahsboardHourStat = async () => {
   return response;
 };
 
-
 export const getAllTopPerformers = async () => {
-  const response = await api.getPrivate("/company-service/dashboard/top5-employees");
+  const response = await api.getPrivate(
+    "/company-service/dashboard/top5-employees",
+  );
   return response;
-}
+};
+
+export const getAllDepartments = async () => {
+  const response = await api.getPrivate("/company-service/departments/get-all");
+  return response;
+};
+
+export const getNewRequest = async (status) => {
+  const response = await api.getPrivate(
+    "/company-service/employees/join-requests",
+    status,
+  );
+  return response;
+};
