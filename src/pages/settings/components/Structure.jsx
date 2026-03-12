@@ -152,8 +152,6 @@ const DepartmentCard = ({
           alignItems: "center",
           justifyContent: "space-between",
           borderBottom: "1px solid",
-          borderColor: "grey.200",
-          bgcolor: "grey.50",
         }}
       >
         <Box>

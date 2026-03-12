@@ -193,6 +193,7 @@ export const RightSide = () => {
             transition: "all 0.2s",
             "&.Mui-selected": {
               backgroundColor: "#FFFFFF",
+              color: "#9F9F9F",
               // "&:hover": { backgroundColor: "#0a2540" },
             },
           },

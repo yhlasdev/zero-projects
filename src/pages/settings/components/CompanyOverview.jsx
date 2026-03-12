@@ -18,7 +18,6 @@ import { getSettingsOverview } from "../../../api/queries/getters";
 import { updateContactOverview } from "../../../api/queries/post";
 import toast from "react-hot-toast";
 
-// ─── Google Maps embed with lat/lng ──────────────────────────────────────────
 const OfficeMap = ({ latitude, longitude }) => {
   if (!latitude || !longitude) return null;
   const src = `https://maps.google.com/maps?q=${latitude},${longitude}&z=15&output=embed`;
@@ -56,19 +55,16 @@ const DEFAULT_VALUES = {
   open_year: "",
 };
 
-// ─── Component ────────────────────────────────────────────────────────────────
 const CompanyOverview = () => {
   const queryClient = useQueryClient();
   const [logoPreview, setLogoPreview] = useState(null);
 
-  // GET
   const { data, isLoading, isError } = useQuery({
     queryKey: ["overview-info"],
     queryFn: getSettingsOverview,
     select: (res) => res?.data?.data ?? res?.data ?? {},
   });
 
-  // Form
   const {
     control,
     handleSubmit,
@@ -94,7 +90,6 @@ const CompanyOverview = () => {
     }
   }, [data, reset]);
 
-  // UPDATE
   const mutation = useMutation({
     mutationFn: updateContactOverview,
     onSuccess: (_, variables) => {
@@ -172,7 +167,7 @@ const CompanyOverview = () => {
               style={{ width: "100%", height: "100%", objectFit: "contain" }}
             />
           ) : (
-            <Avatar sx={{ width: 56, height: 56, bgcolor: "primary.light" }}>
+            <Avatar sx={{ width: 56, height: 56 }}>
               <LocationOnIcon />
             </Avatar>
           )}
@@ -324,7 +319,7 @@ const CompanyOverview = () => {
                 disabled
                 sx={{
                   "& .MuiInputBase-input.Mui-disabled": {
-                    WebkitTextFillColor: hasLocation ? "#6b7280" : "#9ca3af",
+                    WebkitTextFillColor: hasLocation ? "#6b7280" : "#9b9b9b",
                   },
                 }}
               />
@@ -352,7 +347,6 @@ const CompanyOverview = () => {
                 flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "center",
-                bgcolor: "grey.50",
                 gap: 1,
               }}
             >

@@ -1,4 +1,11 @@
-import { Box, Typography, Button, IconButton, Stack } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Button,
+  IconButton,
+  Stack,
+  Paper,
+} from "@mui/material";
 
 import DownloadIcon from "@mui/icons-material/Download";
 import EditIcon from "@mui/icons-material/Edit";
@@ -27,17 +34,17 @@ export const DocumentCard = ({
   onDelete,
 }) => {
   return (
-    <Box
+    <Paper
       sx={{
         p: 3,
         border: "1px solid #E5E7EB",
         borderRadius: "12px",
-        background: "#fff",
         height: "100%",
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
         transition: "0.2s",
+        width: "350px",
         "&:hover": {
           boxShadow: "0 8px 20px rgba(0,0,0,0.05)",
         },
@@ -49,7 +56,6 @@ export const DocumentCard = ({
             width: 48,
             height: 48,
             borderRadius: "10px",
-            background: "#F3F4F6",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -110,6 +116,6 @@ export const DocumentCard = ({
           <DeleteIcon fontSize="small" />
         </IconButton>
       </Stack>
-    </Box>
+    </Paper>
   );
 };

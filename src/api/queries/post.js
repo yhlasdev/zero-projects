@@ -102,3 +102,12 @@ export const updateDepartments = async (objectData) => {
   );
   return response;
 };
+
+export const createWeaklySchedule = async (objectData) => {
+  const response = await api.postPrivate(
+    "company-service/schedules/create-weekly",
+    objectData,
+  );
+  return response;
+};
+

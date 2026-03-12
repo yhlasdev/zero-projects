@@ -6,6 +6,7 @@ import {
   IconButton,
   Paper,
   CircularProgress,
+  useColorScheme,
 } from "@mui/material";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import { getMainCalendar } from "../../../api/queries/getters";
@@ -78,7 +79,7 @@ const fmtKey = (y, m, d) =>
 
 const MainCalendar = () => {
   const today = new Date();
-
+  const { mode } = useColorScheme();
   const [currentDate, setCurrentDate] = useState(
     new Date(today.getFullYear(), today.getMonth(), 1),
   );
@@ -153,7 +154,6 @@ const MainCalendar = () => {
           sx={{
             position: "absolute",
             inset: 0,
-            bgcolor: "rgba(255,255,255,0.75)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -173,15 +173,13 @@ const MainCalendar = () => {
           mb: 2,
         }}
       >
-        <IconButton onClick={handlePrev} size="small" sx={{ color: "#555" }}>
+        <IconButton onClick={handlePrev} size="small">
           <ChevronLeft fontSize="small" />
         </IconButton>
-        <Typography
-          sx={{ fontWeight: 700, fontSize: "16px", color: "#1a1a1a" }}
-        >
+        <Typography sx={{ fontWeight: 700, fontSize: "16px" }}>
           {MONTHS[month]} {year}
         </Typography>
-        <IconButton onClick={handleNext} size="small" sx={{ color: "#555" }}>
+        <IconButton onClick={handleNext} size="small">
           <ChevronRight fontSize="small" />
         </IconButton>
       </Box>
@@ -203,9 +201,7 @@ const MainCalendar = () => {
               "&:last-of-type": { borderRadius: "0 8px 0 0" },
             }}
           >
-            <Typography
-              sx={{ color: "#666", fontWeight: 500, fontSize: "12px" }}
-            >
+            <Typography sx={{ fontWeight: 500, fontSize: "12px" }}>
               {d}
             </Typography>
           </Box>
@@ -235,19 +231,38 @@ const MainCalendar = () => {
               sx={{
                 minHeight: 130,
                 p: 0.75,
-                borderRight: "1px solid #e0e0e0",
-                borderBottom: "1px solid #e0e0e0",
+                borderRight:
+                  mode === "dark" ? "1px solid #2a3441" : "1px solid #e0e0e0",
+                borderBottom:
+                  mode === "dark" ? "1px solid #2a3441" : "1px solid #e0e0e0",
                 outline: selected ? "2px solid #4db6ac" : "none",
                 outlineOffset: "-1px",
+
                 bgcolor: selected
-                  ? "#e8f4f8"
+                  ? mode === "dark"
+                    ? "#1f3a44"
+                    : "#e8f4f8"
                   : cell.currentMonth
-                    ? "#fff"
-                    : "#fafafa",
+                    ? mode === "dark"
+                      ? "#18212F"
+                      : "#fff"
+                    : mode === "dark"
+                      ? "#121821"
+                      : "#fafafa",
+
                 cursor: cell.currentMonth ? "pointer" : "default",
                 transition: "background 0.15s",
+
                 "&:hover": cell.currentMonth
-                  ? { bgcolor: selected ? "#dceef5" : "#f9f9f9" }
+                  ? {
+                      bgcolor: selected
+                        ? mode === "dark"
+                          ? "#274a55"
+                          : "#dceef5"
+                        : mode === "dark"
+                          ? "#1f2937"
+                          : "#f9f9f9",
+                    }
                   : {},
               }}
             >
@@ -259,7 +274,7 @@ const MainCalendar = () => {
                       mb: 0.5,
                       fontSize: "13px",
                       fontWeight: today_ ? 700 : 400,
-                      color: today_ ? "#1a2e4a" : "#333",
+                      // color: today_ ? "#1a2e4a" : "",
                     }}
                   >
                     {cell.day}
@@ -316,7 +331,7 @@ const MainCalendar = () => {
             flexWrap: "wrap",
           }}
         >
-          <Typography sx={{ fontSize: "12px", fontWeight: 700, color: "#555" }}>
+          <Typography sx={{ fontSize: "12px", fontWeight: 700 }}>
             Conditional characters:
           </Typography>
           {LEGEND_STATIC.map((type) => {
@@ -334,9 +349,7 @@ const MainCalendar = () => {
                     bgcolor: s.dot,
                   }}
                 />
-                <Typography sx={{ fontSize: "12px", color: "#555" }}>
-                  {s.label}
-                </Typography>
+                <Typography sx={{ fontSize: "12px" }}>{s.label}</Typography>
               </Box>
             );
           })}
@@ -367,9 +380,7 @@ const MainCalendar = () => {
                       bgcolor: s.dot,
                     }}
                   />
-                  <Typography sx={{ fontSize: "12px", color: "#555" }}>
-                    {s.label}
-                  </Typography>
+                  <Typography sx={{ fontSize: "12px" }}>{s.label}</Typography>
                 </Box>
               );
             })}
@@ -403,7 +414,7 @@ const MainCalendar = () => {
                     flexShrink: 0,
                   }}
                 />
-                <Typography sx={{ fontSize: "13px", color: "#333" }}>
+                <Typography sx={{ fontSize: "13px" }}>
                   {event.event_title}
                 </Typography>
               </Box>

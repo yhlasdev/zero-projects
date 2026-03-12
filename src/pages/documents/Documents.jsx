@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, Divider, Grid, Paper, Typography } from "@mui/material";
+import { Box, Divider, Paper, Typography } from "@mui/material";
 
 import { PageTitle } from "../../components/pageTitle/pageTitle";
 import { CustomDivider } from "../../components/customDivider";
@@ -10,7 +10,6 @@ import HeaderAppBar from "../../components/appBar/AppBar";
 import HeaderSearch from "../../components/textField/HeaderSearch";
 import DebounceSelect from "../../components/select/DebounceSelect";
 
-import { Wrapper } from "../../components/wrapper";
 import { DocumentCard } from "./components/documentCard";
 import GlobalModal from "../../components/modal/GlobalModal";
 import { useOpenCloseDrawer } from "../../hooks/useOpenCloseDrawer";
@@ -64,22 +63,15 @@ const DocumentsPage = () => {
         <HeaderAppBar>
           <form className="flex gap-3 w-1/2">
             <HeaderSearch onSearch={setFilter} />
-            <DebounceSelect />
+            <DebounceSelect  width="297px"/>
           </form>
         </HeaderAppBar>
 
         <Divider />
-
-        <Wrapper
-          sx={{
-            p: 3,
-            borderBottomLeftRadius: "8px",
-            borderBottomRightRadius: "8px",
-          }}
-        >
-          <Grid container spacing={3}>
-            {data?.length > 0 ? data?.map((doc) => (
-              <Grid key={doc.id} size={{ xs: 12, sm: 6, md: 4 }}>
+        <Paper sx={{ height: "calc(100vh - 320px)", overflowY: "auto", p: 3 }}>
+          {data?.length > 0 ? (
+            data?.map((doc) => (
+              <Box sx={{ display: "flex", flex: "wrap", gap: 3 }} key={doc.id}>
                 <DocumentCard
                   title={doc.title}
                   description={doc.description}
@@ -90,8 +82,9 @@ const DocumentsPage = () => {
                   onEdit={() => console.log("edit", doc.id)}
                   onDelete={() => console.log("delete", doc.id)}
                 />
-              </Grid>
-            )): 
+              </Box>
+            ))
+          ) : (
             <Typography
               sx={{
                 p: 3,
@@ -99,14 +92,13 @@ const DocumentsPage = () => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                height: 'calc(100vh - 370px)',
+                height: "calc(100vh - 370px)",
               }}
             >
               No documents found.
             </Typography>
-            }
-          </Grid>
-        </Wrapper>
+          )}
+        </Paper>
       </Box>
     </>
   );

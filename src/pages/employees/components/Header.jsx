@@ -7,6 +7,7 @@ import { getAllDepartment, getAllJobs } from "../../../api/queries/getters";
 import JobSelect from "./JobSelect";
 
 const Header = ({ onAddClick, setFilter, filters }) => {
+
   const { data, isLoading } = useQuery({
     queryKey: ["departments"],
     queryFn: getAllDepartment,

@@ -29,12 +29,13 @@ export default function GlobalTable({
     >
       <Table stickyHeader>
         <TableHead
-          sx={{
-            "& .MuiTableCell-stickyHeader": {
-              backgroundColor: "#F4F4F4",
-              fontWeight: 600
+          sx={(theme) => ({
+            ".css-1rkr5we-MuiTableHead-root": {
+              backgroundColor:
+                theme.palette.mode == "dark" ? "#18212F" : "#F4F4F4",
+              fontWeight: 600,
             },
-          }}
+          })}
         >
           <TableRow>
             {columns.map((col) => (
@@ -62,8 +63,8 @@ export default function GlobalTable({
           ) : isError ? (
             <TableRow>
               <TableCell colSpan={columns.length}>
-                <Typography color="error" textAlign="center" py={2}>
-                  Error loading data
+                <Typography textAlign="center" py={2}>
+                  Not found data
                 </Typography>
               </TableCell>
             </TableRow>

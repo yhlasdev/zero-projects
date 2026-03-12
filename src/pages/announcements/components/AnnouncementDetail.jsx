@@ -6,6 +6,7 @@ import {
   Grid,
   Chip,
   LinearProgress,
+  useColorScheme,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
@@ -22,7 +23,7 @@ const AnnouncementDetail = ({ onClose, id }) => {
     queryFn: () => getAnnouncementById(id),
     enabled: !!id,
   });
-
+  const { mode } = useColorScheme();
   const val = data?.data?.data;
 
   const readCount = val?.ReadCount || 0;
@@ -86,7 +87,7 @@ const AnnouncementDetail = ({ onClose, id }) => {
           {/* Description Box */}
           <Box
             sx={{
-              backgroundColor: "#F5F5F5",
+              backgroundColor: mode == "dark" ? "#1F2937" : "#F4F4F4",
               borderRadius: "10px",
               padding: 3,
               mb: 4,
@@ -119,9 +120,7 @@ const AnnouncementDetail = ({ onClose, id }) => {
           <Box mt={4}>
             <Box display="flex" justifyContent="space-between" mb={1}>
               <Typography fontSize={14}>Read Progress</Typography>
-              <Typography fontSize={14}>
-                {percentage}%
-              </Typography>
+              <Typography fontSize={14}>{percentage}%</Typography>
             </Box>
 
             <LinearProgress

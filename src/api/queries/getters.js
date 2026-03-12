@@ -21,17 +21,19 @@ import { api } from "../service/apiHelper";
 export const getAllEmployee = async ({
   page,
   limit,
-  department_id = 1773233729975,
+  department_id,
   job_id,
   search,
 }) => {
-  return await api.getPrivate("/company-service/employees/get-all", {
+  const params = {
     page,
     limit,
-    department_id,
-    job_id,
-    search,
-  });
+    ...(department_id && { department_id }),
+    ...(job_id && { job_id }),
+    ...(search && { search }),
+  };
+
+  return await api.getPrivate("/company-service/employees/get-all", params);
 };
 
 export const getAllDepartment = async () => {
@@ -194,6 +196,14 @@ export const getAllDepartments = async () => {
 export const getNewRequest = async (status) => {
   const response = await api.getPrivate(
     "/company-service/employees/join-requests",
+    status,
+  );
+  return response;
+};
+
+export const getTaskList = async (status) => {
+  const response = await api.getPrivate(
+    "/company-service/tasks/get-all",
     status,
   );
   return response;

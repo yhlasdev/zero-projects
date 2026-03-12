@@ -1,4 +1,4 @@
-import { Box, Typography, InputBase } from "@mui/material";
+import { Box, Typography, InputBase, Paper } from "@mui/material";
 import ListIcon from "@mui/icons-material/FormatListBulleted";
 import BoardIcon from "@mui/icons-material/ViewKanban";
 import WeekIcon from "@mui/icons-material/ViewWeek";
@@ -30,12 +30,17 @@ const VIEWS = [
 ];
 
 const TaskDetailView = ({ tasks = [] }) => {
-  const [activeTab, setActiveTab] = useState(1);
+  const [activeTab, setActiveTab] = useState(0);
   const ActiveView = VIEWS[activeTab].component;
 
   return (
-    <Box
-      sx={{ bgcolor: "background.paper", borderRadius: 2, overflow: "hidden" }}
+    <Paper
+      sx={{
+        borderRadius: 2,
+        overflow: "hidden",
+        // height: "calc(100vh - 208px)",
+        // overflowY: 'auto'
+      }}
     >
       <Box
         sx={{
@@ -66,7 +71,7 @@ const TaskDetailView = ({ tasks = [] }) => {
                     py: 1,
                     cursor: "pointer",
                     position: "relative",
-                    color: isActive ? "#1a2b4a" : "text.secondary",
+                    color: isActive ? "#1f4791" : "",
                     fontWeight: isActive ? 700 : 400,
                     "&::after": isActive
                       ? {
@@ -166,7 +171,7 @@ const TaskDetailView = ({ tasks = [] }) => {
       <Box sx={{ p: 2.5 }}>
         <ActiveView tasks={tasks} />
       </Box>
-    </Box>
+    </Paper>
   );
 };
 

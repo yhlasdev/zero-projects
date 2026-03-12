@@ -256,7 +256,7 @@ const NewRequestsPage = () => {
               textTransform: "none",
               fontWeight: 500,
               fontSize: "0.875rem",
-              color: "text.secondary",
+              color: "#615858",
               minHeight: 36,
               px: 2,
               py: 0.75,
@@ -265,8 +265,8 @@ const NewRequestsPage = () => {
             },
             "& .Mui-selected": {
               backgroundColor: "#1a2e44",
-              color: "#fff !important",
               fontWeight: 600,
+              color: "#fff",
               borderRadius: "8px",
             },
           }}
@@ -277,7 +277,7 @@ const NewRequestsPage = () => {
         </Tabs>
       </HeaderAppBar>
 
-      <Paper sx={{ p: 3 }}>
+      <Paper sx={{ height: "calc(100vh - 303px)", overflow: "auto", p: 3 }}>
         {isLoading && <GlobalLoader />}
 
         {isError && (

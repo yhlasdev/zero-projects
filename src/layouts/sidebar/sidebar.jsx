@@ -10,12 +10,14 @@ import Typography from "@mui/material/Typography";
 import { useSidebarItems } from "../../hooks/useSidebarItems";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import websiteLogo from '../../assets/logo/logo.png'
+import websiteLogo from "../../assets/logo/logo.png";
+import { useColorScheme } from "@mui/material";
 
 export const Sidebar = () => {
   const { sidebarItemsRoutes } = useSidebarItems();
   const location = useLocation();
   const navigate = useNavigate();
+  const { mode } = useColorScheme();
 
   return (
     <Drawer
@@ -30,13 +32,16 @@ export const Sidebar = () => {
           position: "fixed",
           height: "100vh",
         },
+        ".css-oc2eyy-MuiPaper-root-MuiDrawer-paper": {
+          backgroundColor: mode == "dark" ? "#1F2937" : "#F4F4F4",
+        },
       }}
     >
       <Box
         sx={{
           height: 80,
           display: "flex",
-          paddingLeft: '10px',
+          paddingLeft: "10px",
           alignItems: "center",
           justifyContent: "start",
           gap: 2,
@@ -45,7 +50,7 @@ export const Sidebar = () => {
         <Box>
           <img src={websiteLogo} />
         </Box>
-        <Typography variant="h5" className=" main-color-text" >
+        <Typography variant="h5" className=" main-color-text">
           Yerinde
         </Typography>
       </Box>
@@ -63,7 +68,7 @@ export const Sidebar = () => {
               onClick={() => navigate(`/${item.routeKey}`)}
               sx={{
                 mb: 1,
-                borderRadius: '8px',
+                borderRadius: "8px",
                 "&.Mui-selected": {
                   backgroundColor: "#1A4D7A",
                   color: "#fff",
@@ -74,7 +79,7 @@ export const Sidebar = () => {
               }}
             >
               <ListItemIcon>
-                <Icon className={`${isActive && 'text-[#eeeeee]'}`} />
+                <Icon className={`${isActive && "text-[#eeeeee]"}`} />
               </ListItemIcon>
 
               <ListItemText primary={item.name} />
@@ -82,6 +87,6 @@ export const Sidebar = () => {
           );
         })}
       </List>
-    </Drawer >
+    </Drawer>
   );
 };

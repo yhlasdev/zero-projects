@@ -144,7 +144,6 @@ const routes = createBrowserRouter(
       path: "*",
       element: (
         <PageWrapperNoAuth>
-          {" "}
           <NotFoundPage />
         </PageWrapperNoAuth>
       ),

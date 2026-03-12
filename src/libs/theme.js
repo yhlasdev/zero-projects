@@ -9,15 +9,15 @@ export const themeConfig = createTheme({
             palette: {
                 mode: "light",
                 primary: { main: "#0F3254" },
-                background: { default: "#ffffff", paper: "#ffffff", secondary: "#ffffff" },
+                background: { default: "#FFFFFF", paper: "#ffffff", secondary: "#ffffff" },
                 text: { primary: "#333333", secondary: "#555555" },
             }
         },
         dark: {
             palette: {
                 mode: "dark",
-                primary: { main: "#1F2937" },
-                background: { default: "#1F2937", paper: "#1F2937", secondary: "#516988" },
+                primary: { main: "#1d2c44" },
+                background: { default: "#18212F", paper: "#1F2937" },
                 text: { primary: "#ffffff", secondary: "#fff" },
             }
         }

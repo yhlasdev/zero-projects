@@ -34,6 +34,16 @@ const shiftColors = {
   day_off: { bg: "#EEEEEE", text: "#616161" },
 };
 
+const normalizeShiftKey = (raw = "") =>
+  raw.toLowerCase().replace(" shift", "").trim().replace(/\s+/g, "_");
+
+const formatTime = (val) => {
+  if (!val) return null;
+  if (typeof val === "string" && /^\d{2}:\d{2}$/.test(val)) return val;
+  const parsed = dayjs(val);
+  return parsed.isValid() ? parsed.format("HH:mm") : val;
+};
+
 export default function EmployeeView({ employee }) {
   const [currentDate, setCurrentDate] = useState(dayjs());
   const [openCreate, setCreate] = useState(false);
@@ -46,22 +56,17 @@ export default function EmployeeView({ employee }) {
   );
 
   const weekLabel = data
-    ? `${dayjs(data.weekStart).format("MMM DD")} - ${dayjs(data.weekEnd).format(
-        "DD, YYYY",
-      )}`
+    ? `${dayjs(data.week_start ?? data.weekStart).format("MMM DD")} - ${dayjs(
+        data.week_end ?? data.weekEnd,
+      ).format("DD, YYYY")}`
     : "";
 
   return (
     <Box p={3}>
-      {/* EMPLOYEE HEADER */}
+      {/* ── Employee Info ── */}
       <Paper
         elevation={0}
-        sx={{
-          p: 2,
-          mb: 3,
-          borderRadius: 3,
-          border: "1px solid #eee",
-        }}
+        sx={{ p: 2, mb: 3, borderRadius: 3, border: "1px solid #eee" }}
       >
         <Stack direction="row" spacing={2} alignItems="center">
           <Avatar src={employee?.avatar} sx={{ width: 56, height: 56 }} />
@@ -99,7 +104,7 @@ export default function EmployeeView({ employee }) {
         </Stack>
       </Paper>
 
-      {/* WEEKLY HEADER */}
+      {/* ── Weekly Header ── */}
       <Stack
         direction="row"
         justifyContent="space-between"
@@ -138,15 +143,10 @@ export default function EmployeeView({ employee }) {
         </Stack>
       </Stack>
 
-      {/* NAVIGATION */}
+      {/* ── Navigation ── */}
       <Paper
         elevation={0}
-        sx={{
-          p: 2,
-          mb: 2,
-          borderRadius: 3,
-          border: "1px solid #eee",
-        }}
+        sx={{ p: 2, mb: 2, borderRadius: 3, border: "1px solid #eee" }}
       >
         <Stack direction="row" justifyContent="space-between">
           <Stack direction="row" spacing={1} alignItems="center">
@@ -193,14 +193,8 @@ export default function EmployeeView({ employee }) {
         </Stack>
       </Paper>
 
-      {/* TABLE */}
-      <Paper
-        elevation={0}
-        sx={{
-          borderRadius: 3,
-          border: "1px solid #eee",
-        }}
-      >
+      {/* ── Schedule Table ── */}
+      <Paper elevation={0} sx={{ borderRadius: 3, border: "1px solid #eee" }}>
         <Stack direction="row" p={2} fontWeight={600} color="text.secondary">
           <Box flex={2}>Day</Box>
           <Box flex={2}>Shift</Box>
@@ -214,12 +208,38 @@ export default function EmployeeView({ employee }) {
           <Box p={3} textAlign="center">
             <CircularProgress size={24} />
           </Box>
+        ) : !data?.days?.length ? (
+          <Box p={3} textAlign="center">
+            <Typography color="text.secondary">
+              No schedule found for this week.
+            </Typography>
+          </Box>
         ) : (
-          data?.days?.map((item) => {
-            const color = shiftColors[item.shiftType] || shiftColors.day_off;
+          data.days.map((item) => {
+            const shiftKey = normalizeShiftKey(
+              item.shiftType ?? item.shift_type,
+            );
+            const color = shiftColors[shiftKey] || shiftColors.day_off;
+
+            const startFmt = formatTime(item.startTime ?? item.start_time);
+            const endFmt = formatTime(item.endTime ?? item.end_time);
+
+            const shiftLabel = (item.shiftType ?? item.shift_type ?? "")
+              .replace(/_/g, " ")
+              .replace(/\b\w/g, (c) => c.toUpperCase());
+
+            const hours =
+              typeof item.hours === "number"
+                ? item.hours.toFixed(1)
+                : (item.hours ?? "—");
 
             return (
-              <Stack key={item.id} direction="row" p={2} alignItems="center">
+              <Stack
+                key={item.id ?? item.date}
+                direction="row"
+                p={2}
+                alignItems="center"
+              >
                 <Box flex={2}>
                   <Typography fontWeight={500}>
                     {dayjs(item.date).format("dddd")}
@@ -231,52 +251,57 @@ export default function EmployeeView({ employee }) {
 
                 <Box flex={2}>
                   <Chip
-                    label={item.shiftType
-                      .replace(/_/g, " ")
-                      .replace(/\b\w/g, (c) => c.toUpperCase())}
-                    sx={{
-                      backgroundColor: color.bg,
-                      color: color.text,
-                    }}
+                    label={shiftLabel}
+                    sx={{ backgroundColor: color.bg, color: color.text }}
                   />
                 </Box>
 
                 <Box flex={2}>
-                  {item.startTime && item.endTime
-                    ? `${dayjs(item.startTime).format("HH:mm")} - ${dayjs(
-                        item.endTime,
-                      ).format("HH:mm")}`
-                    : "—"}
+                  {startFmt && endFmt ? `${startFmt} - ${endFmt}` : "—"}
                 </Box>
 
-                <Box flex={1}>{item.hours.toFixed(1)}</Box>
+                <Box flex={1}>{hours}</Box>
               </Stack>
             );
           })
         )}
       </Paper>
 
-      {/* SUMMARY */}
+      {/* ── Week Summary ── */}
       <Paper sx={{ padding: 3, borderRadius: 3, mt: 3 }}>
         <Box sx={{ fontWeight: 700 }}>Week Summary</Box>
 
         <Stack direction="row" spacing={2} mt={3}>
           <SummaryCard
-            title={data?.total_hours?.toFixed(1)}
+            title={
+              data?.total_hours != null
+                ? Number(data.total_hours).toFixed(1)
+                : "—"
+            }
             subtitle="Total Hours"
           />
-          <SummaryCard title={data?.work_day} subtitle="Work Days" />
-          <SummaryCard title={data?.day_off} subtitle="Days Off" />
+          <SummaryCard
+            title={data?.work_day ?? data?.workDay ?? "—"}
+            subtitle="Work Days"
+          />
+          <SummaryCard
+            title={data?.day_off ?? data?.dayOff ?? "—"}
+            subtitle="Days Off"
+          />
         </Stack>
       </Paper>
 
+      {/* ── Create Schedule Modal ── */}
       <GlobalModal
         open={openCreate}
         onClose={() => setCreate(false)}
         maxWidth="md"
         fullWidth
       >
-        <CreateScheduleModalContent onClose={() => setCreate(false)} />
+        <CreateScheduleModalContent
+          onClose={() => setCreate(false)}
+          employeeId={employee?.employee_id}
+        />
       </GlobalModal>
     </Box>
   );

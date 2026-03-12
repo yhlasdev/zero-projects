@@ -1,96 +1,116 @@
-import { Box, Typography, Chip, Avatar, AvatarGroup } from "@mui/material";
+import { Box, Typography, Avatar, Chip, Tooltip } from "@mui/material";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
-import { getStatusConfig } from "./TaskViewUtils";
+import { getStatusConfig, parseDateBlock } from "./TaskViewUtils";
 
-// ── StatusChip ───────────────────────────────────────────────────────────────
+// ─── Status Chip ──────────────────────────────────────────────────────────────
 export const StatusChip = ({ status }) => {
   const cfg = getStatusConfig(status);
   return (
     <Chip
-      label={status?.toUpperCase() || "TO DO"}
-      size="small"
+      label={
+        <Box sx={{ display: "flex", alignItems: "center", gap: 0.75 }}>
+          <Box
+            sx={{
+              width: 7,
+              height: 7,
+              borderRadius: "50%",
+              bgcolor: cfg.dot,
+              flexShrink: 0,
+            }}
+          />
+          <Typography
+            sx={{ fontSize: "11px", fontWeight: 700, letterSpacing: 0.5 }}
+          >
+            {status?.toUpperCase()}
+          </Typography>
+        </Box>
+      }
       sx={{
         bgcolor: cfg.bg,
         color: cfg.color,
-        fontWeight: 600,
-        fontSize: "10px",
-        height: 22,
+        height: 26,
         borderRadius: "6px",
         "& .MuiChip-label": { px: 1 },
       }}
-      icon={
-        <Box
-          component="span"
-          sx={{
-            width: 6,
-            height: 6,
-            borderRadius: "50%",
-            bgcolor: cfg.dot,
-            ml: "6px !important",
-            mr: "-2px !important",
-          }}
-        />
-      }
     />
   );
 };
 
-// ── AssigneeAvatar ───────────────────────────────────────────────────────────
+// ─── Assignee Avatar ──────────────────────────────────────────────────────────
 export const AssigneeAvatar = ({ assignee }) => (
   <Avatar
-    sx={{ width: 28, height: 28, bgcolor: "#1a2b4a", fontSize: "11px", fontWeight: 700 }}
+    sx={{
+      width: 34,
+      height: 34,
+      // bgcolor: "#0A2540",
+      fontSize: "12px",
+      fontWeight: 700,
+    }}
   >
-    {assignee
-      ?.split(" ")
-      .map((n) => n[0])
-      .join("")
-      .slice(0, 2)}
+    {assignee?.length > 0 ? assignee?.slice(0, 2)?.toUpperCase() : ''}
   </Avatar>
 );
 
-// ── TeamAvatars ──────────────────────────────────────────────────────────────
-export const TeamAvatars = ({ team = [] }) => (
-  <AvatarGroup
-    max={4}
-    sx={{
-      "& .MuiAvatar-root": {
-        width: 22,
-        height: 22,
-        fontSize: "9px",
-        border: "1.5px solid white",
-      },
-    }}
-  >
-    {team.map((member, i) => (
-      <Avatar
-        key={i}
-        sx={{
-          bgcolor: ["#5C6BC0", "#26A69A", "#EF5350", "#FFA726"][i % 4],
-          fontSize: "9px",
-        }}
-      >
-        {typeof member === "string" ? member : member.initials}
-      </Avatar>
-    ))}
-  </AvatarGroup>
-);
+// ─── Team Avatars ─────────────────────────────────────────────────────────────
+export const TeamAvatars = ({ team = [] }) => {
+  const visible = team.slice(0, 3);
+  const extra = team.length - visible.length;
 
-// ── DateRange ────────────────────────────────────────────────────────────────
+  return (
+    <Box sx={{ display: "flex", alignItems: "center" }}>
+      {visible.map((member, i) => (
+        <Tooltip key={i} title={member}>
+          <Avatar
+            sx={{
+              width: 28,
+              height: 28,
+              fontSize: "10px",
+              fontWeight: 600,
+              ml: i === 0 ? 0 : "-8px",
+              border: "2px solid #fff",
+              bgcolor: ["#90CAF9", "#A5D6A7", "#FFCC80"][i % 3],
+              color: "#333",
+              zIndex: visible.length - i,
+            }}
+          >
+            {member?.slice(0, 2).toUpperCase()}
+          </Avatar>
+        </Tooltip>
+      ))}
+      {extra > 0 && (
+        <Avatar
+          sx={{
+            width: 28,
+            height: 28,
+            fontSize: "10px",
+            fontWeight: 700,
+            ml: "-8px",
+            border: "2px solid #fff",
+            bgcolor: "#0A2540",
+            color: "#fff",
+            zIndex: 0,
+          }}
+        >
+          {extra}+
+        </Avatar>
+      )}
+    </Box>
+  );
+};
+
+// ─── Date Range ───────────────────────────────────────────────────────────────
 export const DateRange = ({ startDate, endDate }) => (
-  <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-    <CalendarTodayIcon sx={{ fontSize: 12, color: "text.secondary" }} />
-    <Typography sx={{ fontSize: "11px", color: "text.secondary" }}>
-      {startDate || "11.01.2026"} – {endDate || "20.01.2026"}
+  <Box sx={{ display: "flex", alignItems: "center", gap: 0.75 }}>
+    <CalendarTodayIcon sx={{ fontSize: 13, color: "text.secondary" }} />
+    <Typography sx={{ fontSize: "12px", color: "text.secondary" }}>
+      {startDate} – {endDate}
     </Typography>
   </Box>
 );
 
-// ── DateBlock (timeline left column) ────────────────────────────────────────
+// ─── Date Block (timeline left side) ─────────────────────────────────────────
 export const DateBlock = ({ date, isActive, statusDot }) => {
-  const d = new Date(date);
-  const day = d.getDate();
-  const month = d.toLocaleString("en", { month: "short" }).toUpperCase();
-  const year = d.getFullYear();
+  const { day, month, year } = parseDateBlock(date);
 
   return (
     <Box
@@ -98,34 +118,44 @@ export const DateBlock = ({ date, isActive, statusDot }) => {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        minWidth: 44,
+        minWidth: 48,
+        pt: 0.5,
       }}
     >
-      <Typography
-        sx={{
-          fontSize: "20px",
-          fontWeight: 700,
-          lineHeight: 1,
-          color: isActive ? "#1a2b4a" : "#bdbdbd",
-        }}
-      >
+      {/* Date text */}
+      <Typography sx={{ fontSize: "18px", fontWeight: 700, lineHeight: 1.1 }}>
         {day}
       </Typography>
-      <Typography sx={{ fontSize: "10px", color: "#9e9e9e", lineHeight: 1.2 }}>
+      <Typography
+        sx={{ fontSize: "11px", color: "text.secondary", fontWeight: 500 }}
+      >
         {month}
       </Typography>
-      <Typography sx={{ fontSize: "10px", color: "#9e9e9e", lineHeight: 1.2 }}>
+      <Typography sx={{ fontSize: "11px", color: "text.secondary" }}>
         {year}
       </Typography>
+
+      {/* Timeline dot */}
       <Box
         sx={{
-          width: 10,
-          height: 10,
+          mt: 1,
+          width: 14,
+          height: 14,
           borderRadius: "50%",
-          bgcolor: statusDot,
-          border: "2px solid white",
-          boxShadow: `0 0 0 2px ${statusDot}33`,
-          mt: 0.8,
+          border: `2px solid ${statusDot}`,
+          bgcolor: isActive ? statusDot : "transparent",
+          flexShrink: 0,
+        }}
+      />
+
+      {/* Timeline line */}
+      <Box
+        sx={{
+          flex: 1,
+          width: 2,
+          bgcolor: "#e0e0e0",
+          mt: 0.5,
+          minHeight: 40,
         }}
       />
     </Box>

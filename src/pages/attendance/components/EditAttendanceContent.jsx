@@ -8,6 +8,7 @@ import {
   IconButton,
   TextField,
   Divider,
+  useColorScheme,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useForm, Controller } from "react-hook-form";
@@ -23,6 +24,7 @@ import CustomTimePicker from "./CustomDateSelect";
 
 const EditAttendance = ({ data, onClose }) => {
   const { AttendanceValid } = useValidSchema();
+  const { mode } = useColorScheme();
   const {
     control,
     handleSubmit,
@@ -89,7 +91,7 @@ const EditAttendance = ({ data, onClose }) => {
             display="flex"
             alignItems="center"
             sx={{
-              backgroundColor: "#F4F4F4",
+              backgroundColor: mode == "dark" ? "#1F2937" : "#F4F4F4",
               borderRadius: "8px",
               padding: 2,
               my: 2,

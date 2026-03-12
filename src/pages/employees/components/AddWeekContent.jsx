@@ -8,216 +8,349 @@ import {
   MenuItem,
   TextField,
   Divider,
+  CircularProgress,
 } from "@mui/material";
-
 import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { createWeaklySchedule } from "../../../api/queries/post";
 
-const days = [
-  { day: "Monday", date: "Feb 17" },
-  { day: "Tuesday", date: "Feb 18" },
-  { day: "Wednesday", date: "Feb 19" },
-  { day: "Thursday", date: "Feb 20" },
-  { day: "Friday", date: "Feb 21" },
-  { day: "Saturday", date: "Feb 22" },
-  { day: "Sunday", date: "Feb 23" },
+// ─── Week options (generate current + next 4 weeks) ──────────────────────────
+const generateWeeks = () => {
+  const weeks = [];
+  const today = new Date();
+  // start from most recent Monday
+  const monday = new Date(today);
+  monday.setDate(today.getDate() - ((today.getDay() + 6) % 7));
+
+  for (let i = 0; i < 5; i++) {
+    const start = new Date(monday);
+    start.setDate(monday.getDate() + i * 7);
+    const end = new Date(start);
+    end.setDate(start.getDate() + 6);
+
+    const fmt = (d) =>
+      d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    const isoDate = (d) => d.toISOString().slice(0, 10);
+
+    weeks.push({
+      label: `${fmt(start)} - ${fmt(end)}, ${start.getFullYear()}`,
+      start: isoDate(start),
+      end: isoDate(end),
+      monday: new Date(start),
+    });
+  }
+  return weeks;
+};
+
+const WEEK_OPTIONS = generateWeeks();
+
+const DAY_NAMES = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
 ];
 
-const shiftTypes = [
+const SHIFT_TYPES = [
   "Day Off",
   "Morning Shift",
   "Afternoon Shift",
   "Night Shift",
 ];
 
-export default function CreateScheduleModalContent({ onClose }) {
-  const [schedule, setSchedule] = useState(
-    days.map((d) => ({
-      ...d,
+// day_of_week: Monday=1 ... Sunday=7
+const buildDays = (mondayDate) =>
+  DAY_NAMES.map((day, i) => {
+    const date = new Date(mondayDate);
+    date.setDate(mondayDate.getDate() + i);
+    return {
+      day,
+      date: date.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+      }),
+      isoDate: date.toISOString().slice(0, 10),
+      day_of_week: i + 1,
       shift: "Day Off",
       start: "08:00",
       end: "16:00",
       hours: "0.0",
-    }))
+    };
+  });
+
+// ─── Component ────────────────────────────────────────────────────────────────
+export default function CreateScheduleModalContent({ onClose, employeeId }) {
+  const [selectedWeekIdx, setSelectedWeekIdx] = useState(0);
+  const [schedule, setSchedule] = useState(() =>
+    buildDays(WEEK_OPTIONS[0].monday),
   );
 
+  // Rebuild rows when week changes
+  const handleWeekChange = (idx) => {
+    setSelectedWeekIdx(idx);
+    setSchedule(buildDays(WEEK_OPTIONS[idx].monday));
+  };
+
   const handleShiftChange = (index, value) => {
-    const updated = [...schedule];
-    updated[index].shift = value;
-
-    if (value === "Day Off") {
-      updated[index].hours = "0.0";
-    } else {
-      updated[index].hours = "8.0";
-    }
-
-    setSchedule(updated);
+    setSchedule((prev) =>
+      prev.map((row, i) =>
+        i === index
+          ? { ...row, shift: value, hours: value === "Day Off" ? "0.0" : "8.0" }
+          : row,
+      ),
+    );
   };
 
   const handleTimeChange = (index, field, value) => {
-    const updated = [...schedule];
-    updated[index][field] = value;
-    setSchedule(updated);
+    setSchedule((prev) =>
+      prev.map((row, i) => (i === index ? { ...row, [field]: value } : row)),
+    );
+  };
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: createWeaklySchedule,
+    onSuccess: () => {
+      onClose?.();
+    },
+    onError: (err) => {
+      console.error("Create schedule error:", err);
+    },
+  });
+
+  const handleSubmit = () => {
+    const week = WEEK_OPTIONS[selectedWeekIdx];
+
+    const payload = {
+      employee_id: employeeId ?? 0,
+      week_start: week.start,
+      week_end: week.end,
+      days: schedule.map((row) => ({
+        date: row.isoDate,
+        day_of_week: row.day_of_week,
+        shift_type: row.shift,
+        start_time: row.start,
+        end_time: row.end,
+      })),
+    };
+
+    mutate(payload);
   };
 
   return (
     <Box p={3}>
-
-      {/* TITLE */}
-      <Typography fontSize={20} fontWeight={600} mb={3}>
+      {/* Title */}
+      <Typography fontSize={20} fontWeight={700} mb={3}>
         Create New Weekly Schedule
       </Typography>
 
-      {/* SELECT WEEK */}
+      {/* Select Week */}
       <Box mb={3}>
-        <Typography mb={1}>Select Week</Typography>
-
+        <Typography fontSize="0.875rem" fontWeight={500} mb={1}>
+          Select Week
+        </Typography>
         <Select
           fullWidth
-          defaultValue="Feb 17-23, 2026"
-          sx={{ borderRadius: 2 }}
           size="small"
+          value={selectedWeekIdx}
+          onChange={(e) => handleWeekChange(e.target.value)}
+          sx={{ borderRadius: 2 }}
         >
-          <MenuItem value="Feb 17-23, 2026">
-            Feb 17-23, 2026
-          </MenuItem>
+          {WEEK_OPTIONS.map((w, i) => (
+            <MenuItem key={w.label} value={i}>
+              {w.label}
+            </MenuItem>
+          ))}
         </Select>
       </Box>
 
-      {/* TABLE */}
+      {/* Table */}
       <Paper
         elevation={0}
         sx={{
           borderRadius: 3,
-          border: "1px solid #e0e0e0",
+          border: "1px solid #E5E7EB",
+          overflow: "hidden",
         }}
       >
-        {/* HEADER */}
+        {/* Header */}
         <Stack
           direction="row"
-          p={1}
-          fontWeight={600}
-          color="text.secondary"
+          alignItems="center"
+          px={2}
+          py={1.25}
+          sx={{ bgcolor: "#FAFAFA" }}
         >
-          <Box flex={2}>Day</Box>
-          <Box flex={2}>Shift Type</Box>
-          <Box flex={3}>Work Time</Box>
-          <Box flex={1}>Hours</Box>
+          <Box flex={2}>
+            <Typography
+              fontSize="0.8rem"
+              fontWeight={600}
+              color="text.secondary"
+            >
+              Day
+            </Typography>
+          </Box>
+          <Box flex={2}>
+            <Typography
+              fontSize="0.8rem"
+              fontWeight={600}
+              color="text.secondary"
+            >
+              Shift Type
+            </Typography>
+          </Box>
+          <Box flex={3}>
+            <Typography
+              fontSize="0.8rem"
+              fontWeight={600}
+              color="text.secondary"
+            >
+              Work Time
+            </Typography>
+          </Box>
+          <Box flex={1} textAlign="right">
+            <Typography
+              fontSize="0.8rem"
+              fontWeight={600}
+              color="text.secondary"
+            >
+              Hours
+            </Typography>
+          </Box>
         </Stack>
 
         <Divider />
 
-        {/* ROWS */}
+        {/* Rows */}
         {schedule.map((item, index) => (
-          <Stack
-            key={index}
-            direction="row"
-            alignItems="center"
-            p={1}
-            spacing={1}
-          >
-            {/* DAY */}
-            <Box flex={2}>
-              <Typography fontWeight={500}>
-                {item.day}
-              </Typography>
-
-              <Typography
-                variant="body2"
-                color="text.secondary"
-              >
-                {item.date}
-              </Typography>
-            </Box>
-
-            {/* SHIFT */}
-            <Box flex={2}>
-              <Select
-                fullWidth
-                size="small"
-                value={item.shift}
-                onChange={(e) =>
-                  handleShiftChange(index, e.target.value)
-                }
-              >
-                {shiftTypes.map((shift) => (
-                  <MenuItem size='small' key={shift} value={shift}>
-                    {shift}
-                  </MenuItem>
-                ))}
-              </Select>
-            </Box>
-
-            {/* TIME */}
-            <Box flex={3}>
-              <Stack direction="row" spacing={1}>
-                <TextField
-                  type="time"
-                  size="small"
-                  value={item.start}
-                  onChange={(e) =>
-                    handleTimeChange(
-                      index,
-                      "start",
-                      e.target.value
-                    )
-                  }
-                />
-
-                <Typography alignSelf="center">
-                  -
+          <Box key={item.day}>
+            <Stack
+              direction="row"
+              alignItems="center"
+              px={2}
+              py={1.25}
+              spacing={1}
+            >
+              {/* Day */}
+              <Box flex={2}>
+                <Typography fontWeight={600} fontSize="0.875rem">
+                  {item.day}
                 </Typography>
+                <Typography variant="caption" color="text.secondary">
+                  {item.date}
+                </Typography>
+              </Box>
 
-                <TextField
-                  type="time"
+              {/* Shift */}
+              <Box flex={2}>
+                <Select
+                  fullWidth
                   size="small"
-                  value={item.end}
-                  onChange={(e) =>
-                    handleTimeChange(
-                      index,
-                      "end",
-                      e.target.value
-                    )
-                  }
-                />
-              </Stack>
-            </Box>
+                  value={item.shift}
+                  onChange={(e) => handleShiftChange(index, e.target.value)}
+                  sx={{ borderRadius: 1.5, fontSize: "0.8rem" }}
+                >
+                  {SHIFT_TYPES.map((shift) => (
+                    <MenuItem
+                      key={shift}
+                      value={shift}
+                      sx={{ fontSize: "0.8rem" }}
+                    >
+                      {shift}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </Box>
 
-            {/* HOURS */}
-            <Box flex={1}>
-              <Typography>
-                {item.hours}
-              </Typography>
-            </Box>
+              {/* Work Time */}
+              <Box flex={3}>
+                <Stack direction="row" alignItems="center" spacing={1}>
+                  <TextField
+                    type="time"
+                    size="small"
+                    value={item.start}
+                    onChange={(e) =>
+                      handleTimeChange(index, "start", e.target.value)
+                    }
+                    inputProps={{
+                      style: { fontSize: "0.8rem", padding: "6px 10px" },
+                    }}
+                    sx={{
+                      "& .MuiOutlinedInput-root": { borderRadius: 1.5 },
+                      width: 110,
+                    }}
+                  />
+                  <Typography fontSize="0.875rem" color="text.secondary">
+                    -
+                  </Typography>
+                  <TextField
+                    type="time"
+                    size="small"
+                    value={item.end}
+                    onChange={(e) =>
+                      handleTimeChange(index, "end", e.target.value)
+                    }
+                    inputProps={{
+                      style: { fontSize: "0.8rem", padding: "6px 10px" },
+                    }}
+                    sx={{
+                      "& .MuiOutlinedInput-root": { borderRadius: 1.5 },
+                      width: 110,
+                    }}
+                  />
+                </Stack>
+              </Box>
 
-          </Stack>
+              {/* Hours */}
+              <Box flex={1} textAlign="right">
+                <Typography fontSize="0.875rem" fontWeight={500}>
+                  {item.hours}
+                </Typography>
+              </Box>
+            </Stack>
+
+            {index < schedule.length - 1 && <Divider />}
+          </Box>
         ))}
       </Paper>
 
-      {/* FOOTER */}
-      <Stack
-        direction="row"
-        justifyContent="flex-end"
-        spacing={2}
-        mt={3}
-      >
+      {/* Footer */}
+      <Stack direction="row" justifyContent="flex-end" spacing={1.5} mt={3}>
         <Button
           variant="outlined"
           onClick={onClose}
-          sx={{ textTransform: "none" }}
+          disabled={isPending}
+          sx={{
+            textTransform: "none",
+            borderRadius: 1.5,
+            fontWeight: 500,
+            color: "text.primary",
+            borderColor: "grey.300",
+          }}
         >
           Cancel
         </Button>
-
         <Button
           variant="contained"
+          onClick={handleSubmit}
+          disabled={isPending}
+          startIcon={
+            isPending ? <CircularProgress size={14} color="inherit" /> : null
+          }
           sx={{
             textTransform: "none",
+            borderRadius: 1.5,
+            fontWeight: 600,
+            bgcolor: "#1a2e44",
+            "&:hover": { bgcolor: "#243d58" },
+            px: 3,
           }}
         >
-          Create Schedule
+          {isPending ? "Creating..." : "Create Schedule"}
         </Button>
       </Stack>
-
     </Box>
   );
 }

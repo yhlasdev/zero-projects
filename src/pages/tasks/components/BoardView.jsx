@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
   Box,
@@ -20,7 +20,6 @@ import {
 } from "@mui/icons-material";
 import { getAllBoardTask } from "../../../api/queries/getters";
 
-// ─── TanStack Query Hook (inline) ──────────────────────────────────────────
 const useBoardTasks = ({ page = 1, limit = 50 } = {}) => {
   return useQuery({
     queryKey: ["boardTasks", page, limit],
@@ -35,7 +34,6 @@ const useBoardTasks = ({ page = 1, limit = 50 } = {}) => {
   });
 };
 
-// ─── Kolon Konfigürasyonu ───────────────────────────────────────────────────
 const COLUMNS = [
   {
     key: "todo",
@@ -66,7 +64,6 @@ const COLUMNS = [
   },
 ];
 
-// ─── Yardımcı Fonksiyonlar ──────────────────────────────────────────────────
 const getPriorityStyle = (priority = "") => {
   const p = priority.toLowerCase();
   if (p === "urgent") return { color: "#dc2626", bg: "#fef2f2" };
@@ -113,7 +110,6 @@ const formatDate = (dateStr) => {
   }
 };
 
-// ─── Katılımcı Avatarları ───────────────────────────────────────────────────
 const ParticipantAvatars = ({ participants = [] }) => {
   const visible = participants.slice(0, 4);
   const extra = participants.length - 4;
@@ -158,7 +154,6 @@ const ParticipantAvatars = ({ participants = [] }) => {
   );
 };
 
-// ─── Skeleton ───────────────────────────────────────────────────────────────
 const CardSkeleton = () => (
   <Paper
     elevation={0}
@@ -179,7 +174,6 @@ const CardSkeleton = () => (
   </Paper>
 );
 
-// ─── Task Kartı ─────────────────────────────────────────────────────────────
 const BoardCard = ({ task }) => {
   const priorityStyle = getPriorityStyle(task.priority);
   const startFmt = formatDate(task.start_date);
@@ -193,7 +187,7 @@ const BoardCard = ({ task }) => {
         borderRadius: "12px",
         p: "12px 14px",
         mb: 1.5,
-        bgcolor: "#ffffff",
+        // bgcolor: "#ffffff",
         boxShadow: "0 1px 4px rgba(0,0,0,0.05)",
         cursor: "pointer",
         transition: "box-shadow 0.2s, transform 0.15s",
@@ -203,7 +197,6 @@ const BoardCard = ({ task }) => {
         },
       }}
     >
-      {/* Başlık + Owner */}
       <Box
         sx={{
           display: "flex",
@@ -216,7 +209,7 @@ const BoardCard = ({ task }) => {
           sx={{
             fontWeight: 600,
             fontSize: "13px",
-            color: "#111827",
+            // color: "#111827",
             lineHeight: 1.4,
             pr: 1,
           }}
@@ -240,7 +233,6 @@ const BoardCard = ({ task }) => {
         )}
       </Box>
 
-      {/* Açıklama */}
       {task.description && task.description !== "string" && (
         <Typography
           sx={{
@@ -258,7 +250,6 @@ const BoardCard = ({ task }) => {
         </Typography>
       )}
 
-      {/* Alt Satır */}
       <Box
         sx={{
           display: "flex",
@@ -334,7 +325,6 @@ const BoardCard = ({ task }) => {
   );
 };
 
-// ─── Kolon Başlığı ──────────────────────────────────────────────────────────
 const ColumnHeader = ({ col, count }) => (
   <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1.5, px: 0.5 }}>
     <Box
@@ -381,7 +371,7 @@ const ColumnHeader = ({ col, count }) => (
           justifyContent: "center",
         }}
       >
-        <Typography sx={{ fontSize: "10px", color: "#fff", fontWeight: 700 }}>
+        <Typography sx={{ fontSize: "10px", fontWeight: 700 }}>
           {count}
         </Typography>
       </Box>
@@ -395,7 +385,6 @@ const ColumnHeader = ({ col, count }) => (
   </Box>
 );
 
-// ─── Ana Bileşen ────────────────────────────────────────────────────────────
 const SHOW_MORE_LIMIT = 2;
 
 const BoardView = ({ page = 1, limit = 50 }) => {
@@ -413,10 +402,10 @@ const BoardView = ({ page = 1, limit = 50 }) => {
     return (
       <Box sx={{ p: 4, textAlign: "center" }}>
         <Typography color="error" sx={{ mb: 1 }}>
-          Hata: {error?.message}
+          Error: {error?.message}
         </Typography>
         <Button variant="outlined" size="small" onClick={() => refetch()}>
-          Tekrar Dene
+          Retry
         </Button>
       </Box>
     );
@@ -434,6 +423,7 @@ const BoardView = ({ page = 1, limit = 50 }) => {
         "&::-webkit-scrollbar": { height: 6 },
         "&::-webkit-scrollbar-track": { bgcolor: "#f1f5f9" },
         "&::-webkit-scrollbar-thumb": { bgcolor: "#cbd5e1", borderRadius: 3 },
+        height: "calc(100vh - 300px)",
       }}
     >
       {COLUMNS.map((col) => {
@@ -473,7 +463,7 @@ const BoardView = ({ page = 1, limit = 50 }) => {
                     py: 3,
                   }}
                 >
-                  Görev yok
+                  Not added task
                 </Typography>
               ) : (
                 visibleTasks.map((task) => (
@@ -481,7 +471,6 @@ const BoardView = ({ page = 1, limit = 50 }) => {
                 ))
               )}
 
-              {/* Show more */}
               {!isLoading && hasMore && (
                 <Box
                   onClick={() => toggleShowMore(col.key)}
@@ -510,7 +499,6 @@ const BoardView = ({ page = 1, limit = 50 }) => {
                 </Box>
               )}
 
-              {/* Add Task */}
               <Box
                 sx={{
                   display: "flex",

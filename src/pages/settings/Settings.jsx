@@ -36,7 +36,6 @@ const SettingsPage = () => {
               textTransform: "none",
               fontWeight: 500,
               fontSize: "0.875rem",
-              color: "#0F3254",
               minHeight: 36,
               px: 2.5,
               py: 2,

@@ -66,7 +66,6 @@ const getFriendlyError = (error) => {
   return "Registration failed. Please try again.";
 };
 
-// ─── Component ────────────────────────────────────────────────────────────────
 export const RightSide = () => {
   const [type, setType] = useState("phone");
   const [token, setToken] = useState(null);
@@ -77,7 +76,8 @@ export const RightSide = () => {
   const [apiError, setApiError] = useState("");
   const navigate = useNavigate();
 
-  const FCM_TOKEN ="sdfhsdDJdfjf.sdhfjksdfsdfsdfhsdkjhfkdhJKHKJHDkjhfjkdhfjhdfjkhdjfk.dfdfhdg";
+  const FCM_TOKEN =
+    "sdfhsdDJdfjf.sdhfjksdfsdfsdfhsdkjhfkdhJKHKJHDkjhfjkdhfjhdfjkhdjfk.dfdfhdg";
 
   const [form, setForm] = useState({
     company_name: "",
@@ -219,7 +219,8 @@ export const RightSide = () => {
             color: "#9F9F9F",
             transition: "all 0.2s",
             "&.Mui-selected": {
-              backgroundColor: '#FFFFFF',
+              backgroundColor: "#FFFFFF",
+              color: "#9F9F9F",
               "&:hover": { backgroundColor: "#FFFFFF" },
             },
           },
@@ -341,7 +342,7 @@ export const RightSide = () => {
           href="/login"
           fontSize={13}
           fontWeight={600}
-          onClick={() => navigate('/login')}
+          onClick={() => navigate("/login")}
           color={NAVY}
           sx={{
             textDecoration: "none",
@@ -349,7 +350,7 @@ export const RightSide = () => {
           }}
         >
           Sign in
-        </Typography>   
+        </Typography>
       </Typography>
     </Box>
   );

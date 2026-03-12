@@ -17,7 +17,7 @@ const Welcome = () => {
   const navigate = useNavigate();
 
   return (
-    <>
+    <Paper sx={{bgcolor: '#fff'}}>
       {/* HEADER */}
       <AppBar
         position="static"
@@ -346,7 +346,7 @@ const Welcome = () => {
       </Box>
 
       <Footer />
-    </>
+    </Paper>
   );
 };
 

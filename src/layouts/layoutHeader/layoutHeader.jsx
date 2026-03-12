@@ -1,4 +1,4 @@
-import { Box, useTheme } from "@mui/material";
+import { Box, Paper, useTheme } from "@mui/material";
 import { ThemeChange } from '../../features/theme/theme';
 import { NotificationBtn } from "./components/notificationBtn";
 import { HeaderAvatar } from "./components/headerAvatar";
@@ -9,7 +9,7 @@ export const LayoutHeader = () => {
 
     return (
         <Wrapper>
-            <Box
+            <Paper
                 sx={{
                     display: 'flex',
                     justifyContent: 'flex-end',
@@ -30,7 +30,7 @@ export const LayoutHeader = () => {
                     <NotificationBtn />
                     <HeaderAvatar />
                 </Box>
-            </Box>
+            </Paper>
         </Wrapper>
     );
 };

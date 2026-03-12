@@ -5,6 +5,7 @@ import {
   Chip,
   Avatar,
   CircularProgress,
+  useColorScheme,
 } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
@@ -38,7 +39,12 @@ const STATUS_CONFIG = {
     border: "#2563eb",
   },
   to_do: { label: "To do", color: "#6b7280", bg: "#f9fafb", border: "#9ca3af" },
-  done: { label: "Complete", color: "#16a34a", bg: "#f0fdf4", border: "#16a34a" },
+  done: {
+    label: "Complete",
+    color: "#16a34a",
+    bg: "#f0fdf4",
+    border: "#16a34a",
+  },
 };
 
 const normalizeStatus = (s = "") => s.toLowerCase().replace(/\s+/g, "_");
@@ -114,9 +120,7 @@ const DayPanel = ({ dateKey, tasks }) => {
   return (
     <Box sx={{ mt: 2, borderTop: "1px solid #e5e7eb", pt: 2 }}>
       {/* Date heading */}
-      <Typography
-        sx={{ fontWeight: 700, fontSize: "13px", color: "#1a2b4a", mb: 1.5 }}
-      >
+      <Typography sx={{ fontWeight: 700, fontSize: "13px", mb: 1.5 }}>
         {dateLabel}
         <Typography
           component="span"
@@ -329,11 +333,13 @@ const CalendarView = () => {
     setSelectedKey(fmtKey(year, month, cell.day));
   };
 
+  const { mode } = useColorScheme();
+
   return (
     <Box
       sx={{
         p: 3,
-        bgcolor: "#fff",
+        // bgcolor: "#fff",
         borderRadius: 2,
         position: "relative",
         height: "calc(100vh - 305px)",
@@ -364,7 +370,7 @@ const CalendarView = () => {
           sx={{
             position: "absolute",
             inset: 0,
-            bgcolor: "rgba(255,255,255,0.7)",
+            // bgcolor: "rgba(255,255,255,0.7)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -390,7 +396,6 @@ const CalendarView = () => {
             sx={{
               textAlign: "center",
               fontSize: "14px",
-              color: "text.secondary",
               fontWeight: 500,
               py: 0.5,
             }}
@@ -433,17 +438,43 @@ const CalendarView = () => {
                 borderWidth: selected || today_ ? "2px" : "1px",
                 p: "6px",
                 boxSizing: "border-box",
-                bgcolor: selected ? "#e8f5f0" : today_ ? "#f0f4ff" : "#fff",
+                // bgcolor: selected ? "#e8f5f0" : today_ ? "#f0f4ff" : "",
+                bgcolor:
+                  mode === "dark"
+                    ? selected
+                      ? "#0f2a1f"
+                      : today_
+                        ? "#0a172c"
+                        : "#111827"
+                    : selected
+                      ? "#e8f5f0"
+                      : today_
+                        ? "#f0f4ff"
+                        : "",
                 cursor: cell.currentMonth ? "pointer" : "default",
                 transition: "background 0.15s",
                 overflow: "hidden",
                 "&:hover": cell.currentMonth
-                  ? {
-                      bgcolor: selected
-                        ? "#ddf0e8"
-                        : today_
-                          ? "#e8eeff"
-                          : "#f8fafc",
+                  ? // ? {
+                    //     bgcolor: selected
+                    //       ? "#ddf0e8"
+                    //       : today_
+                    //         ? "#e8eeff"
+                    //         : "#f8fafc",
+                    //   }
+                    {
+                      bgcolor:
+                        mode === "dark"
+                          ? selected
+                            ? "#133528"
+                            : today_
+                              ? "#26324a"
+                              : "#1f2937"
+                          : selected
+                            ? "#ddf0e8"
+                            : today_
+                              ? "#e8eeff"
+                              : "#f8fafc",
                     }
                   : {},
               }}
