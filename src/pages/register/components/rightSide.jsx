@@ -17,6 +17,7 @@ import { registerEmail, registerPhone } from "../../../api/queries/post";
 import { OtpSection } from "./otpSection";
 import FieldLabel from "../../../components/textField/LabelInput";
 import FieldLabelPasswordInput from "../../../components/textField/passwordTextField";
+import { useLocale } from "../../../hooks/useLocale";
 
 // ─── Validation helpers ───────────────────────────────────────────────────────
 const validateCompanyName = (v) => {
@@ -67,6 +68,7 @@ const getFriendlyError = (error) => {
 };
 
 export const RightSide = () => {
+  const { t } = useLocale();
   const [type, setType] = useState("phone");
   const [token, setToken] = useState(null);
   const [otpSection, setOtpSection] = useState(false);
@@ -175,12 +177,12 @@ export const RightSide = () => {
       {/* Heading */}
       <Typography
         fontSize={42}
-        color={NAVY}
+        color="primary.main"
         textAlign="center"
         fontWeight={700}
         mb={1}
       >
-        Create an account
+        {t('register.title')}
       </Typography>
 
       <Typography
@@ -190,7 +192,7 @@ export const RightSide = () => {
         textAlign="center"
         mb={4}
       >
-        Join now to streamline your experience from day one
+        {t('register.subtitle')}
       </Typography>
 
       {/* Toggle */}
@@ -226,8 +228,8 @@ export const RightSide = () => {
           },
         }}
       >
-        <ToggleButton value="phone">Phone number</ToggleButton>
-        <ToggleButton value="email">E-mail</ToggleButton>
+        <ToggleButton value="phone">{t('common.phone')}</ToggleButton>
+        <ToggleButton value="email">{t('common.email')}</ToggleButton>
       </ToggleButtonGroup>
 
       {/* API error */}
@@ -244,7 +246,7 @@ export const RightSide = () => {
       <Box className="flex flex-col gap-3">
         {/* Company name */}
         <FieldLabel
-          label="Company name"
+          label={t('settings.companyName')}
           value={form.company_name}
           height={46}
           onChange={(e) => handleChange("company_name", e.target.value)}
@@ -255,7 +257,7 @@ export const RightSide = () => {
         {/* Phone or Email */}
         {type === "phone" ? (
           <FieldLabel
-            label="Phone number"
+            label={t('common.phone')}
             value={form.phone_number}
             onChange={(e) => handleChange("phone_number", e.target.value)}
             error={!!errors.phone_number}
@@ -265,7 +267,7 @@ export const RightSide = () => {
         ) : (
           <FieldLabel
             type="email"
-            label="Email"
+            label={t('common.email')}
             value={form.email}
             onChange={(e) => handleChange("email", e.target.value)}
             error={!!errors.email}
@@ -276,7 +278,7 @@ export const RightSide = () => {
 
         {/* Password */}
         <FieldLabelPasswordInput
-          label="Password"
+          label={t('common.password')}
           pasType={showPassword ? "text" : "password"}
           value={form.password}
           onChange={(e) => handleChange("password", e.target.value)}
@@ -291,7 +293,7 @@ export const RightSide = () => {
 
         {/* Confirm Password */}
         <FieldLabelPasswordInput
-          label="Confirm Password"
+          label={t('common.confirmPassword')}
           pasType={showPasswordConfirm ? "text" : "password"}
           value={form.confirm_password}
           onChange={(e) => handleChange("confirm_password", e.target.value)}
@@ -329,28 +331,32 @@ export const RightSide = () => {
           {loading ? (
             <CircularProgress size={22} color="inherit" />
           ) : (
-            "Register"
+            t('register.submit')
           )}
         </Button>
       </Box>
 
       {/* Sign in link */}
       <Typography fontSize={13} color="#9F9F9F" textAlign="center" mt={2}>
-        Already have an account?{" "}
-        <Typography
-          component="a"
-          href="/login"
-          fontSize={13}
-          fontWeight={600}
+        {t('register.haveAccount')}{" "}
+        <Button
           onClick={() => navigate("/login")}
-          color={NAVY}
           sx={{
-            textDecoration: "none",
-            "&:hover": { textDecoration: "underline" },
+            py: 1,
+            borderRadius: "10px",
+            textTransform: "none",
+            fontWeight: 600,
+            color: "primary.main",
+            "&:hover": {
+              backgroundColor: (theme) =>
+                theme.palette.mode === "dark"
+                  ? "rgba(255,255,255,0.05)"
+                  : "rgba(0,0,0,0.05)",
+            },
           }}
         >
-          Sign in
-        </Typography>
+          {t('register.signIn')}
+        </Button>
       </Typography>
     </Box>
   );

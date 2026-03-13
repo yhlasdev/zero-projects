@@ -38,24 +38,24 @@
   }
 
   .wrapper-component {
-    @apply bg-[#ffffff] dark:bg-[#2F4B71];
+    @apply bg-[var(--mui-palette-background-paper)] dark:bg-[var(--mui-palette-background-paper)];
   }
 
   .wrapper-pg-bg {
-    @apply bg-[#eeeeee] dark:bg-[#2F4B53]
+    @apply bg-[var(--mui-palette-background-default)] dark:bg-[var(--mui-palette-background-default)];
   }
 
   .main-color-text {
-    @apply text-[#1A4D7A] dark:text-white
+    @apply text-[var(--mui-palette-primary-main)] dark:text-[var(--mui-palette-common-white)];
   }
 
 
   .main-color-text-custom {
-    @apply text-[#265d8d] dark:text-white
+    @apply text-[var(--mui-palette-primary-main)] dark:text-[var(--mui-palette-common-white)];
   }
 
   .main-color-bg {
-    @apply bg-[#1A4D7A]
+    @apply bg-[var(--mui-palette-primary-main)];
   }
 
 }

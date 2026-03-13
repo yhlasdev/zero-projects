@@ -12,9 +12,11 @@ import Header from './components/Header';
 import { useInfiniteGet } from "../../hooks/useInfiniteList";
 import { getAllEmployee } from "../../api/queries/getters";
 import EditEmployeeContent from "./components/EditEmployee";
+import { useLocale } from "../../hooks/useLocale";
 
 
 const EmployeesPage = () => {
+  const { t } = useLocale();
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openViewModal, setOpenViewModal] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
@@ -36,12 +38,12 @@ const EmployeesPage = () => {
   const columns = [
     {
       key: "employee_id",
-      label: "ID",
+      label: t('common.id'),
       render: (row) => row.employee_id,
     },
     {
       key: "employee",
-      label: "Employee",
+      label: t('common.employee'),
       render: (row) => (
         <EmployeeCell
           name={`${row.user?.first_name} ${row.user?.last_name}`}
@@ -51,27 +53,27 @@ const EmployeesPage = () => {
     },
     {
       key: "title",
-      label: "Title",
+      label: t('common.title'),
       render: (row) => row.job?.title,
     },
     {
       key: "department",
-      label: "Department",
+      label: t('common.department'),
       render: (row) => row.department?.name,
     },
     {
       key: "nationality",
-      label: "Nationality",
+      label: t('common.nationality'),
       render: (row) => row.user?.nationality,
     },
     {
       key: "status",
-      label: "Status",
+      label: t('common.status'),
       render: (row) => <StatusChip status={row.is_active ? "active" : "inactive"} />,
     },
     {
       key: "actions",
-      label: "Actions",
+      label: t('common.actions'),
       render: (row) => (
         <TableActions
           onCalendar={() => {
@@ -94,8 +96,8 @@ const EmployeesPage = () => {
       ) : (
         <>
           <PageTitle
-            title="Employee"
-            subTitle="Manage employee information and profiles"
+            title={t('employees.title')}
+            subTitle={t('employees.subtitle')}
           />
           <Header
             onAddClick={() => setOpenAddModal(true)}
@@ -109,7 +111,7 @@ const EmployeesPage = () => {
             isLoading={employeeQuery.isLoading}
             isFetchingNextPage={employeeQuery.isFetchingNextPage}
             isError={employeeQuery.isError}
-            emptyMessage="No attendance records found"
+            emptyMessage={t('employees.noRecords')}
           />
 
           {/* <TablePaginationInfo

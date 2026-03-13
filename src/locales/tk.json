@@ -1,1 +1,131 @@
-{}
+{
+  "sidebar": {
+    "dashboard": "Dolandyryş paneli",
+    "employees": "Işgärler",
+    "attendance": "Gatnaşyk",
+    "tasks": "Wezipeler",
+    "leaveRequests": "Rugsat sorag lary",
+    "newRequests": "Täze soraglar",
+    "announcements": "Bildirişler",
+    "documents": "Resminamalar",
+    "calendar": "Senişenbe",
+    "settings": "Sazlamalar"
+  },
+  "common": {
+    "logout": "Ulgamdan çykmak",
+    "admin": "Admin ulanyjy",
+    "administrator": "Administrator",
+    "loading": "Ýüklenýär...",
+    "error": "Ýalňyşlyk",
+    "save": "Üýtgeşmeleri ýatda sakla",
+    "cancel": "Yza dön",
+    "id": "ID",
+    "status": "Ýagdaýy",
+    "actions": "Amallar",
+    "active": "Aktiw",
+    "inactive": "Aktiw däl",
+    "phone": "Telefon belgisi",
+    "email": "E-poçta",
+    "password": "Parol",
+    "confirmPassword": "Paroly tassykla",
+    "department": "Bölüm",
+    "title": "Wezipe",
+    "nationality": "Milleti",
+    "employee": "Işgär"
+  },
+  "dashboard": {
+    "title": "Dolandyryş paneli",
+    "subtitle": "Hoş geldiňiz! Ine, şu günki bolup geçýän zatlar",
+    "stats": {
+      "totalEmployees": "Umumy işgärler",
+      "presentToday": "Şu gün gelenler",
+      "absentToday": "Şu gün gelmedikler",
+      "lateToday": "Gijä galanlar",
+      "totalHoursMonth": "Aýlyk umumy sagat"
+    },
+    "workingHoursStats": "Iş sagatlarynyň statistikasy",
+    "attendanceStats": "Gatnaşyk statistikasy",
+    "topPerformers": "Iň gowy netijeliler - Şu gün",
+    "rank": "Reýting",
+    "hours": "Sagat",
+    "noData30Days": "Soňky 30 güne maglumat tapylmady",
+    "currentMonth": "Şu aý (jikme-jik)",
+    "lastMonth": "Geçen aý (jikme-jik)"
+  },
+  "employees": {
+    "title": "Işgär",
+    "subtitle": "Işgärleriň maglumatlaryny we profillerini dolandyryň",
+    "addEmployee": "Täze işgär goşmak",
+    "editEmployee": "Işgäri üýtgetmek",
+    "uploadPhoto": "Surat ýükläň",
+    "uploadHint": "Ýüklemek üçin basyň ýa-da süýräp getiriň",
+    "fileInfo": "jpg, png (maks. 10MB)",
+    "employeeId": "Işgäriň ID-si",
+    "hiringDate": "Iş başlan senesi",
+    "reportsTo": "Hasabat berýän adamy",
+    "probation end date": "Synag möhletiniň gutarýan senesi",
+    "workingTiming": "Iş wagty",
+    "office": "Ofis",
+    "noRecords": "Gatnaşyk ýazgysy tapylmady"
+  },
+  "tasks": {
+    "title": "Wezipeler",
+    "subtitle": "Işgärleriň wezipelerini dolandyryň we yzarlaň",
+    "createTask": "Wezipe döret",
+    "taskTitle": "Wezipäniň ady",
+    "description": "Düşündiriş",
+    "comment": "Teswir",
+    "assignee": "Jogapkär",
+    "dueDate": "Möhleti",
+    "priority": "Möhümliligi",
+    "todo": "EDILMELI",
+    "inProgress": "DOWAM EDÝÄR",
+    "done": "TAMAMLANDY",
+    "notStarted": "Başlanmadyk",
+    "priorityLevels": {
+      "urgent": "Gyssagly",
+      "high": "Ýokary",
+      "normal": "Normal",
+      "low": "Pes",
+      "clear": "Arassala"
+    }
+  },
+  "settings": {
+    "title": "Kompaniýanyň sazlamalary",
+    "subtitle": "Kompaniýanyň maglumatlaryny we gurluşyny dolandyryň",
+    "tabs": {
+      "overview": "Kompaniýa barada syn",
+      "structure": "Kompaniýanyň gurluşy",
+      "contact": "Habarlaşmak üçin maglumatlar"
+    },
+    "companyLogo": "Kompaniýanyň logotibi",
+    "logoHint": "Kompaniýanyňyzyň logotibini ýükläň (PNG, JPG, maks 2MB)",
+    "changeLogo": "Logony üýtget",
+    "companyId": "Kompaniýanyň ID-si",
+    "companyName": "Kompaniýanyň ady",
+    "managerName": "Menejeriň ady",
+    "workingYears": "Işleýän ýyllary",
+    "managerPhone": "Menejeriň telefon belgisi",
+    "managerEmail": "Menejeriň e-poçtasy",
+    "managerBirth": "Menejeriň doglan senesi",
+    "officeLocation": "Ofis ýerleşýän ýeri (lat, lng)",
+    "notSet": "Heniz bellenmedi",
+    "mapTitle": "Ofis ýerleşýän ýeri kartada"
+  },
+  "login": {
+    "welcome": "Hoş geldiňiz",
+    "subtitle": "Hasabyňyza girmek üçin maglumatlaryňyzy giriziň",
+    "rememberMe": "Meni ýatda sakla",
+    "forgot": "Paroly ýatdan çykardyňyzmy?",
+    "submit": "Giriş",
+    "noAccount": "Hasabyňyz ýokmy?",
+    "register": "Hasap açyň"
+  },
+  "register": {
+    "title": "Hasap açyň",
+    "subtitle": "Kompaniýaňyzy sanlylaşdyrmak üçin şu wagt goşulyň",
+    "submit": "Hasap aç",
+    "haveAccount": "Hasabyňyz barmy?",
+    "signIn": "Giriş"
+  }
+}

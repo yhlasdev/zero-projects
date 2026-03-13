@@ -10,36 +10,48 @@ import { useState } from "react";
 import ListView from "./ListView";
 import BoardView from "./BoardView";
 import CalendarView from "./CalendarView";
-
-const VIEWS = [
-  {
-    label: "List",
-    icon: <ListIcon sx={{ fontSize: 15 }} />,
-    component: ListView,
-  },
-  {
-    label: "Board",
-    icon: <BoardIcon sx={{ fontSize: 15 }} />,
-    component: BoardView,
-  },
-  {
-    label: "Calendar",
-    icon: <CalendarTodayIcon sx={{ fontSize: 15 }} />,
-    component: CalendarView,
-  },
-];
+import FilterPopover from "./FilterPopover";
+import { useLocale } from "../../../hooks/useLocale";
 
 const TaskDetailView = ({ tasks = [] }) => {
+  const { t } = useLocale();
+  const [filterAnchorEl, setFilterAnchorEl] = useState(null);
+  const [filters, setFilters] = useState({});
+
+  const VIEWS = [
+    {
+      label: "List",
+      icon: <ListIcon sx={{ fontSize: 15 }} />,
+      component: ListView,
+    },
+    {
+      label: "Board",
+      icon: <BoardIcon sx={{ fontSize: 15 }} />,
+      component: BoardView,
+    },
+    {
+      label: "Calendar",
+      icon: <CalendarTodayIcon sx={{ fontSize: 15 }} />,
+      component: CalendarView,
+    },
+  ];
+
   const [activeTab, setActiveTab] = useState(0);
   const ActiveView = VIEWS[activeTab].component;
+
+  const handleFilterClick = (event) => {
+    setFilterAnchorEl(event.currentTarget);
+  };
+
+  const handleFilterClose = () => {
+    setFilterAnchorEl(null);
+  };
 
   return (
     <Paper
       sx={{
         borderRadius: 2,
         overflow: "hidden",
-        // height: "calc(100vh - 208px)",
-        // overflowY: 'auto'
       }}
     >
       <Box
@@ -126,6 +138,7 @@ const TaskDetailView = ({ tasks = [] }) => {
 
         <Box sx={{ display: "flex", alignItems: "center", gap: 1, py: 1 }}>
           <Box
+            onClick={handleFilterClick}
             sx={{
               display: "flex",
               alignItems: "center",
@@ -135,6 +148,7 @@ const TaskDetailView = ({ tasks = [] }) => {
               border: "1px solid #e0e0e0",
               borderRadius: 1.5,
               cursor: "pointer",
+              bgcolor: filterAnchorEl ? "grey.100" : "transparent",
               "&:hover": { bgcolor: "grey.50" },
             }}
           >
@@ -143,6 +157,14 @@ const TaskDetailView = ({ tasks = [] }) => {
               Filter
             </Typography>
           </Box>
+
+          <FilterPopover
+            anchorEl={filterAnchorEl}
+            open={Boolean(filterAnchorEl)}
+            onClose={handleFilterClose}
+            filters={filters}
+            setFilters={setFilters}
+          />
 
           <Box
             sx={{
@@ -160,6 +182,8 @@ const TaskDetailView = ({ tasks = [] }) => {
             />
             <InputBase
               placeholder="Search..."
+              value={filters.search || ""}
+              onChange={(e) => setFilters(prev => ({...prev, search: e.target.value}))}
               sx={{ fontSize: "13px", flex: 1 }}
               inputProps={{ style: { padding: 0 } }}
             />
@@ -169,7 +193,7 @@ const TaskDetailView = ({ tasks = [] }) => {
 
       {/* ── Content ── */}
       <Box sx={{ p: 2.5 }}>
-        <ActiveView tasks={tasks} />
+        <ActiveView tasks={tasks} filters={filters} />
       </Box>
     </Paper>
   );

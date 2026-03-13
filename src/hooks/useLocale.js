@@ -16,6 +16,8 @@ export function useLocale() {
             return 'Türkmençe'
         } else if (currentLanguage === 'ru') {
             return 'Rusça'
+        } else if (currentLanguage === 'en') {
+            return 'English'
         }
     }
 
@@ -25,6 +27,9 @@ export function useLocale() {
         }
         if (currentLanguage === 'ru') {
             return text?.ru
+        }
+        if (currentLanguage === 'en') {
+            return text?.en
         }
     }, [currentLanguage]);
 

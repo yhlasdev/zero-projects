@@ -98,7 +98,7 @@ const ListView = ({ filters = {} }) => {
       getTaskList({
         ...(status && { status }),
         ...(priority && { priority }),
-        ...(task_name !== undefined && { task_name }),
+        ...(task_name && { task_name }),
         ...(is_closed !== undefined && { is_closed }),
         ...(search && { search }),
         page,

@@ -1,8 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { Card, Box, Typography, Stack, Divider, Skeleton } from "@mui/material";
 import { getAttendanceStatistic } from "../../../../../api/queries/getters";
+import { useLocale } from "../../../../../hooks/useLocale";
 
 export default function AttendanceStats() {
+  const { t } = useLocale();
   const {
     data: response,
     isLoading,
@@ -25,22 +27,22 @@ export default function AttendanceStats() {
   }
 
   if (isError || !stats) {
-    return <Typography color="error">Statistikler yüklenemedi.</Typography>;
+    return <Typography color="error">{t('common.error')}</Typography>;
   }
 
   const chartData = [
     {
-      label: "Present",
+      label: t('tasks.done'),
       value: Math.round(stats?.presents_last_30 || 0),
       color: "#27ae60",
     },
     {
-      label: "Late",
+      label: t('dashboard.stats.lateToday').split(' ')[0], // Late
       value: Math.round(stats.lates_last_30 || 0),
       color: "#f1c40f",
     },
     {
-      label: "Absent",
+      label: t('dashboard.stats.absentToday').split(' ')[0], // Absent
       value: Math.round(stats.absents_last_30 || 0),
       color: "#e74c3c",
     },
@@ -56,7 +58,7 @@ export default function AttendanceStats() {
       }}
     >
       <Typography fontSize={20} fontWeight={700} mb={4}>
-        Attendance Statistics
+        {t('dashboard.attendanceStats')}
       </Typography>
 
       <Stack spacing={3}>
@@ -121,7 +123,7 @@ export default function AttendanceStats() {
           color="text.disabled"
           sx={{ mt: 2, display: "block", textAlign: "center" }}
         >
-          Son 30 güne maglumat tapylmady
+          {t('dashboard.noData30Days')}
         </Typography>
       )}
     </Card>

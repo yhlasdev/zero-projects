@@ -5,8 +5,10 @@ import HeaderSearch from "../../../components/textField/HeaderSearch";
 import { useQuery } from "@tanstack/react-query";
 import { getAllDepartment, getAllJobs } from "../../../api/queries/getters";
 import JobSelect from "./JobSelect";
+import { useLocale } from "../../../hooks/useLocale";
 
 const Header = ({ onAddClick, setFilter, filters }) => {
+  const { t } = useLocale();
 
   const { data, isLoading } = useQuery({
     queryKey: ["departments"],
@@ -40,12 +42,12 @@ const Header = ({ onAddClick, setFilter, filters }) => {
       <DebounceSelect
         value={filters.department_id || ""}
         onChange={handleDepartmentChange}
-        placeholder="All department"
+        placeholder={t('common.department')}
         width="297px"
         onClear={() => setFilter((prev) => ({ ...prev, department_id: "" }))}
       >
         {isLoading ? (
-          <MenuItem disabled>Loading...</MenuItem>
+          <MenuItem disabled>{t('common.loading')}</MenuItem>
         ) : (
           departments.map((dept) => (
             <MenuItem key={dept.id} value={dept.id}>
@@ -60,7 +62,7 @@ const Header = ({ onAddClick, setFilter, filters }) => {
           setFilter((prev) => ({ ...prev, job_id: e.target.value }))
         }
         onClear={() => setFilter((prev) => ({ ...prev, job_id: "" }))}
-        placeholder="All Jobs"
+        placeholder={t('common.title')}
         options={allJobs}
         loading={jobsLoading}
         disabled={!filters.department_id}

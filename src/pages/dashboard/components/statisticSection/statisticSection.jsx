@@ -8,8 +8,10 @@ import CancelIcon from "@mui/icons-material/HighlightOff";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import TimerIcon from "@mui/icons-material/TimerOutlined";
 import { getAttendanceDetailHour } from "../../../../api/queries/getters";
+import { useLocale } from "../../../../hooks/useLocale";
 
 export const StatisticSection = () => {
+  const { t } = useLocale();
   const { data: response, isLoading } = useQuery({
     queryKey: ["baseStats"],
     queryFn: getAttendanceDetailHour,
@@ -34,38 +36,38 @@ export const StatisticSection = () => {
 
   const cards = [
     {
-      text: "Total Employees",
+      text: t('dashboard.stats.totalEmployees'),
       count: stats?.total_employees || 0,
       icon: PeopleIcon,
-      bgColor: "#E7F4EE",
-      iconColor: "#065F46",
-    },
-    {
-      text: "Present Today",
-      count: stats?.present_today || 0,
-      icon: CheckCircleIcon,
-      bgColor: "#D1FAE5",
+      bgColor: "rgba(231, 244, 238, 0.1)",
       iconColor: "#10B981",
     },
     {
-      text: "Absent Today",
+      text: t('dashboard.stats.presentToday'),
+      count: stats?.present_today || 0,
+      icon: CheckCircleIcon,
+      bgColor: "rgba(209, 250, 229, 0.1)",
+      iconColor: "#10B981",
+    },
+    {
+      text: t('dashboard.stats.absentToday'),
       count: stats?.absent_today || 0,
       icon: CancelIcon,
-      bgColor: "#FEE2E2",
+      bgColor: "rgba(254, 226, 226, 0.1)",
       iconColor: "#EF4444",
     },
     {
-      text: "Late Today",
+      text: t('dashboard.stats.lateToday'),
       count: stats?.late_today || 0,
       icon: AccessTimeIcon,
-      bgColor: "#FEF3C7",
+      bgColor: "rgba(254, 243, 199, 0.1)",
       iconColor: "#F59E0B",
     },
     {
-      text: "Total Hours Month",
+      text: t('dashboard.stats.totalHoursMonth'),
       count: Math.floor(stats?.total_hours_month) || 0,
       icon: TimerIcon,
-      bgColor: "#E0E7FF",
+      bgColor: "rgba(224, 231, 255, 0.1)",
       iconColor: "#6366F1",
     },
   ];

@@ -4,12 +4,15 @@ import { StatisticSection } from "./components/statisticSection/statisticSection
 import { TimeStaticSection } from "./components/timeStatisticSection/timeStaticSection"
 import { CustomDivider } from "../../components/customDivider"
 import { FooterSection } from "./components/footerSection/footerSection"
+import { useLocale } from "../../hooks/useLocale"
 
 
 export const DashBoardPage = () => {
+    const { t } = useLocale();
+
     return (
         <Box className=' dashboard'>
-            <PageTitle title={'Dashboard'} subTitle={"Welcomde back! Here's what's happening today "} />
+            <PageTitle title={t('dashboard.title')} subTitle={t('dashboard.subtitle')} />
             <CustomDivider sx={{ mb: 5 }} />
             <StatisticSection />
             <CustomDivider sx={{ mb: 5 }} />

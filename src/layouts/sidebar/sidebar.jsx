@@ -31,9 +31,8 @@ export const Sidebar = () => {
           boxSizing: "border-box",
           position: "fixed",
           height: "100vh",
-        },
-        ".css-oc2eyy-MuiPaper-root-MuiDrawer-paper": {
-          backgroundColor: mode == "dark" ? "#1F2937" : "#F4F4F4",
+          backgroundColor: mode === "dark" ? "background.paper" : "#F4F4F4",
+          borderRight: (theme) => `1px solid ${theme.palette.divider}`,
         },
       }}
     >
@@ -70,11 +69,11 @@ export const Sidebar = () => {
                 mb: 1,
                 borderRadius: "8px",
                 "&.Mui-selected": {
-                  backgroundColor: "#1A4D7A",
-                  color: "#fff",
+                  backgroundColor: "primary.main",
+                  color: "primary.contrastText",
                 },
                 "&.Mui-selected:hover": {
-                  backgroundColor: "#265d8d",
+                  backgroundColor: mode === "dark" ? "primary.light" : "primary.dark",
                 },
               }}
             >

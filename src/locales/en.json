@@ -1,0 +1,131 @@
+{
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "employees": "Employees",
+    "attendance": "Attendance",
+    "tasks": "Tasks",
+    "leaveRequests": "Leave Requests",
+    "newRequests": "New Requests",
+    "announcements": "Announcements",
+    "documents": "Documents",
+    "calendar": "Calendar",
+    "settings": "Settings"
+  },
+  "common": {
+    "logout": "Logout",
+    "admin": "Admin User",
+    "administrator": "Administrator",
+    "loading": "Loading...",
+    "error": "Error",
+    "save": "Save Changes",
+    "cancel": "Cancel",
+    "id": "ID",
+    "status": "Status",
+    "actions": "Actions",
+    "active": "Active",
+    "inactive": "Inactive",
+    "phone": "Phone number",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "department": "Department",
+    "title": "Title",
+    "nationality": "Nationality",
+    "employee": "Employee"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "Welcome back! Here's what's happening today",
+    "stats": {
+      "totalEmployees": "Total Employees",
+      "presentToday": "Present Today",
+      "absentToday": "Absent Today",
+      "lateToday": "Late Today",
+      "totalHoursMonth": "Total Hours Month"
+    },
+    "workingHoursStats": "Working Hours Statistics",
+    "attendanceStats": "Attendance Statistics",
+    "topPerformers": "Top Performers - Today",
+    "rank": "Rank",
+    "hours": "Hours",
+    "noData30Days": "No data found for the last 30 days",
+    "currentMonth": "Current Month (Details)",
+    "lastMonth": "Last Month (Details)"
+  },
+  "employees": {
+    "title": "Employee",
+    "subtitle": "Manage employee information and profiles",
+    "addEmployee": "Add New Employee",
+    "editEmployee": "Edit Employee",
+    "uploadPhoto": "Upload photo",
+    "uploadHint": "Click to upload or drag and drop",
+    "fileInfo": "jpg, png (max. 10MB)",
+    "employeeId": "Employee ID",
+    "hiringDate": "Hiring date",
+    "reportsTo": "Reports to",
+    "probationEnd": "Probation end date",
+    "workingTiming": "Working timing",
+    "office": "Office",
+    "noRecords": "No attendance records found"
+  },
+  "tasks": {
+    "title": "Task",
+    "subtitle": "Manage and track employee tasks",
+    "createTask": "Create Task",
+    "taskTitle": "Task Title",
+    "description": "Description",
+    "comment": "Comment",
+    "assignee": "Assignee",
+    "dueDate": "Due date",
+    "priority": "Priority",
+    "todo": "TO DO",
+    "inProgress": "IN PROGRESS",
+    "done": "COMPLETE",
+    "notStarted": "Not started",
+    "priorityLevels": {
+      "urgent": "Urgent",
+      "high": "High",
+      "normal": "Normal",
+      "low": "Low",
+      "clear": "Clear"
+    }
+  },
+  "settings": {
+    "title": "Company Settings",
+    "subtitle": "Manage company information and structure",
+    "tabs": {
+      "overview": "Company Overview",
+      "structure": "Company Structure",
+      "contact": "Contact Information"
+    },
+    "companyLogo": "Company Logo",
+    "logoHint": "Upload your company logo (PNG, JPG, max 2MB)",
+    "changeLogo": "Change Logo",
+    "companyId": "Company ID",
+    "companyName": "Company Name",
+    "managerName": "Manager Name",
+    "workingYears": "Working Years",
+    "managerPhone": "Manager Phone Number",
+    "managerEmail": "Manager Email",
+    "managerBirth": "Manager Birth Date",
+    "officeLocation": "Office Location (lat, lng)",
+    "notSet": "Not set yet",
+    "mapTitle": "Office Location on Map"
+  },
+  "login": {
+    "welcome": "Welcome back",
+    "subtitle": "Enter your credentials to access your account",
+    "rememberMe": "Remember me",
+    "forgot": "Forgot your password?",
+    "submit": "Log in",
+    "noAccount": "Don't have an account?",
+    "register": "Register now"
+  },
+  "register": {
+    "title": "Create an account",
+    "subtitle": "Join now to streamline your experience from day one",
+    "submit": "Register",
+    "haveAccount": "Already have an account?",
+    "signIn": "Sign in"
+  }
+}

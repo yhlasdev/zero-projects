@@ -7,8 +7,10 @@ import CreateTask from "./components/CreateTaskContent";
 import TaskDetailView from "./components/TaskDetail";
 import GlobalModal from "../../components/modal/GlobalModal";
 import { useState } from "react";
+import { useLocale } from "../../hooks/useLocale";
 
 const TasksPage = () => {
+  const { t } = useLocale();
   const [openModal, setOpenModal] = useState(false);
 
   return (
@@ -23,7 +25,7 @@ const TasksPage = () => {
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-          <PageTitle title="Task" subTitle="Manage and track employee tasks" />
+          <PageTitle title={t('tasks.title')} subTitle={t('tasks.subtitle')} />
         </Box>
 
         <HeaderButton
@@ -31,7 +33,7 @@ const TasksPage = () => {
           onClick={() => setOpenModal(true)}
           icon={<AddIcon />}
         >
-          Create task
+          {t('tasks.createTask')}
         </HeaderButton>
       </Box>
 

@@ -11,8 +11,10 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import FieldLabel from "../../../components/textField/LabelInput";
+import { useLocale } from "../../../hooks/useLocale";
 
 export default function AddEmployeeContent({ onClose }) {
+  const { t } = useLocale();
   return (
     <Box>
       {/* HEADER */}
@@ -26,7 +28,7 @@ export default function AddEmployeeContent({ onClose }) {
           alignItems: "center",
         }}
       >
-        <Typography sx={{ fontWeight: "bold", fontSize: 20 }}>Add New Employee</Typography>
+        <Typography sx={{ fontWeight: "bold", fontSize: 20 }}>{t('employees.addEmployee')}</Typography>
         <IconButton onClick={onClose}>
           <CloseIcon />
         </IconButton>
@@ -37,7 +39,7 @@ export default function AddEmployeeContent({ onClose }) {
           <Grid size={6}>
             <Box sx={{ height: 200 }}>
               <Typography fontSize={14} mb={1}>
-                Upload photo
+                {t('employees.uploadPhoto')}
               </Typography>
 
               <Box
@@ -55,50 +57,50 @@ export default function AddEmployeeContent({ onClose }) {
               >
                 <CloudUploadOutlinedIcon fontSize="large" />
                 <Typography fontSize={13}>
-                  Click to upload or drag and drop
+                  {t('employees.uploadHint')}
                 </Typography>
                 <Typography fontSize={11} color="text.secondary">
-                  jpg, png (max. 10MB)
+                  {t('employees.fileInfo')}
                 </Typography>
               </Box>
             </Box>
-            <FieldLabel label="Department" />
+            <FieldLabel label={t('common.department')} />
 
-            <FieldLabel label="Employee ID" />
+            <FieldLabel label={t('employees.employeeId')} />
 
-            <FieldLabel label="Nationality" />
+            <FieldLabel label={t('common.nationality')} />
 
-            <FieldLabel label="Hiring date" />
+            <FieldLabel label={t('employees.hiringDate')} />
 
-            <FieldLabel label="Reports to" />
+            <FieldLabel label={t('employees.reportsTo')} />
           </Grid>
 
           <Grid size={6}>
             <Box sx={{ height: 200 }}>
               <Typography fontSize={14} mb={1}>
-                Status
+                {t('common.status')}
               </Typography>
               <RadioGroup row defaultValue="inactive">
                 <FormControlLabel
                   value="active"
                   control={<Radio />}
-                  label="Active"
+                  label={t('common.active')}
                 />
                 <FormControlLabel
                   value="inactive"
                   control={<Radio />}
-                  label="Inactive"
+                  label={t('common.inactive')}
                 />
               </RadioGroup>
             </Box>
             {/* Title */}
-            <FieldLabel label="Title" />
+            <FieldLabel label={t('common.title')} />
 
-            <FieldLabel label="Probation end date" />
+            <FieldLabel label={t('employees.probationEnd')} />
 
-            <FieldLabel label="Working timing" />
+            <FieldLabel label={t('employees.workingTiming')} />
 
-            <FieldLabel label="Office" />
+            <FieldLabel label={t('employees.office')} />
           </Grid>
         </Grid>
       </Box>
@@ -114,9 +116,9 @@ export default function AddEmployeeContent({ onClose }) {
         }}
       >
         <Button variant="outlined" onClick={onClose}>
-          Cancel
+          {t('common.cancel')}
         </Button>
-        <Button variant="contained">Add Employee</Button>
+        <Button variant="contained">{t('employees.addEmployee')}</Button>
       </Box>
     </Box>
   );

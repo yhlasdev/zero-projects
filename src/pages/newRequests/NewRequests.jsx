@@ -256,7 +256,6 @@ const NewRequestsPage = () => {
               textTransform: "none",
               fontWeight: 500,
               fontSize: "0.875rem",
-              color: "#615858",
               minHeight: 36,
               px: 2,
               py: 0.75,
@@ -269,6 +268,12 @@ const NewRequestsPage = () => {
               color: "#fff",
               borderRadius: "8px",
             },
+            ".css-n6e6a9-MuiButtonBase-root-MuiTab-root.Mui-selected": {
+              backgroundColor: "#1a2e44",
+              fontWeight: 600,
+              color: "#fff",
+              borderRadius: "8px",
+            }
           }}
         >
           {TABS.map((t) => (

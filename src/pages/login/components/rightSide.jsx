@@ -21,6 +21,7 @@ import FieldLabelPasswordInput from "../../../components/textField/passwordTextF
 import FieldLabel from "../../../components/textField/LabelInput";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { useLocale } from "../../../hooks/useLocale";
 
 const loginPhone = async ({ phone, password }) => {
   const response = await axios.post(
@@ -73,14 +74,15 @@ const getFriendlyError = (error) => {
 };
 
 export const RightSide = () => {
-  const [type, setType] = useState("phone");
+  const { t } = useLocale();
+  const [type, setType] = useState(localStorage.getItem("remembered_email") ? "email" : "phone");
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
+  const [rememberMe, setRememberMe] = useState(!!(localStorage.getItem("remembered_phone") || localStorage.getItem("remembered_email")));
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
-    phone: "",
-    email: "",
+    phone: localStorage.getItem("remembered_phone") || "",
+    email: localStorage.getItem("remembered_email") || "",
     password: "",
   });
 
@@ -116,8 +118,21 @@ export const RightSide = () => {
     onSuccess: (data) => {
       const token = data.data?.token;
       if (token) {
+        if (rememberMe) {
+          if (type === "phone") {
+            localStorage.setItem("remembered_phone", form.phone);
+            localStorage.removeItem("remembered_email");
+          } else {
+            localStorage.setItem("remembered_email", form.email);
+            localStorage.removeItem("remembered_phone");
+          }
+        } else {
+          localStorage.removeItem("remembered_phone");
+          localStorage.removeItem("remembered_email");
+        }
+
         Cookies.set("auth_token", token, {
-          expires: rememberMe ? 30 : 1,
+          expires: 30,
           secure: true,
           sameSite: "Strict",
         });
@@ -148,12 +163,12 @@ export const RightSide = () => {
       {/* Heading */}
       <Typography
         fontSize={42}
-        color="#0F3254"
+        color="primary.main"
         textAlign="center"
         fontWeight={700}
         mb={1}
       >
-        Welcome back
+        {t('login.welcome')}
       </Typography>
 
       <Typography
@@ -163,7 +178,7 @@ export const RightSide = () => {
         textAlign="center"
         mb={4}
       >
-        Enter your credentials to access your account
+        {t('login.subtitle')}
       </Typography>
 
       {/* Toggle */}
@@ -181,7 +196,8 @@ export const RightSide = () => {
         sx={{
           mb: 3,
           borderRadius: "30px",
-          backgroundColor: "#F3F4F6",
+          backgroundColor: (theme) =>
+            theme.palette.mode === "dark" ? "rgba(255,255,255,0.05)" : "#F3F4F6",
           p: 0.5,
           "& .MuiToggleButton-root": {
             border: "none",
@@ -192,15 +208,15 @@ export const RightSide = () => {
             color: "#9F9F9F",
             transition: "all 0.2s",
             "&.Mui-selected": {
-              backgroundColor: "#FFFFFF",
-              color: "#9F9F9F",
-              // "&:hover": { backgroundColor: "#0a2540" },
+              backgroundColor: (theme) =>
+                theme.palette.mode === "dark" ? "rgba(255,255,255,0.1)" : "#FFFFFF",
+              color: "text.primary",
             },
           },
         }}
       >
-        <ToggleButton value="phone">Phone number</ToggleButton>
-        <ToggleButton value="email">E-mail</ToggleButton>
+        <ToggleButton value="phone">{t('common.phone')}</ToggleButton>
+        <ToggleButton value="email">{t('common.email')}</ToggleButton>
       </ToggleButtonGroup>
 
       {/* API error */}
@@ -217,7 +233,7 @@ export const RightSide = () => {
       <form onSubmit={handleSubmit} className="flex flex-col gap-3" noValidate>
         {type === "phone" ? (
           <FieldLabel
-            label="Phone number"
+            label={t('common.phone')}
             value={form.phone}
             onChange={(e) => handleChange("phone", e.target.value)}
             error={!!errors.phone}
@@ -228,7 +244,7 @@ export const RightSide = () => {
         ) : (
           <FieldLabel
             type="email"
-            label="Email"
+            label={t('common.email')}
             value={form.email}
             onChange={(e) => handleChange("email", e.target.value)}
             error={!!errors.email}
@@ -238,7 +254,7 @@ export const RightSide = () => {
         )}
 
         <FieldLabelPasswordInput
-          label="Password"
+          label={t('common.password')}
           pasType={showPassword ? "text" : "password"}
           value={form.password}
           onChange={(e) => handleChange("password", e.target.value)}
@@ -270,14 +286,14 @@ export const RightSide = () => {
                 onChange={(e) => setRememberMe(e.target.checked)}
                 size="small"
                 sx={{
-                  color: "#0F3254",
-                  "&.Mui-checked": { color: "#0F3254" },
+                  color: "primary.main",
+                  "&.Mui-checked": { color: "primary.main" },
                 }}
               />
             }
             label={
               <Typography fontSize={13} color="#374151">
-                Remember me
+                {t('login.rememberMe')}
               </Typography>
             }
           />
@@ -293,7 +309,7 @@ export const RightSide = () => {
               "&:hover": { textDecoration: "underline" },
             }}
           >
-            Forgot your password?
+            {t('login.forgot')}
           </Typography>
         </Box>
 
@@ -311,22 +327,22 @@ export const RightSide = () => {
             fontSize: 15,
             fontWeight: 700,
             height: "48px",
-            backgroundColor: "#0F3254",
+            backgroundColor: "primary.main",
             boxShadow: "none",
-            "&:hover": { backgroundColor: "#0a2540", boxShadow: "none" },
+            "&:hover": { backgroundColor: "primary.dark", boxShadow: "none" },
             "&:active": { transform: "scale(0.98)" },
           }}
         >
           {mutation.isLoading ? (
             <CircularProgress size={22} color="inherit" />
           ) : (
-            "Log in"
+            t('login.submit')
           )}
         </Button>
 
         {/* Register link */}
         <Typography fontSize={13} color="#9F9F9F" textAlign="center" mt={1}>
-          Don't have an account?
+          {t('login.noAccount')}
           <Typography
             component="a"
             href="/register"
@@ -338,7 +354,7 @@ export const RightSide = () => {
               "&:hover": { textDecoration: "underline" },
             }}
           >
-            Register now
+            {t('login.register')}
           </Typography>
         </Typography>
       </form>

@@ -17,6 +17,7 @@ import FieldLabel from "../../../components/textField/LabelInput";
 import { getSettingsOverview } from "../../../api/queries/getters";
 import { updateContactOverview } from "../../../api/queries/post";
 import toast from "react-hot-toast";
+import { useLocale } from "../../../hooks/useLocale";
 
 const OfficeMap = ({ latitude, longitude }) => {
   if (!latitude || !longitude) return null;
@@ -56,6 +57,7 @@ const DEFAULT_VALUES = {
 };
 
 const CompanyOverview = () => {
+  const { t } = useLocale();
   const queryClient = useQueryClient();
   const [logoPreview, setLogoPreview] = useState(null);
 
@@ -174,10 +176,10 @@ const CompanyOverview = () => {
         </Box>
         <Box>
           <Typography variant="subtitle2" fontWeight={600} gutterBottom>
-            Company Logo
+            {t('settings.companyLogo')}
           </Typography>
           <Typography variant="body2" color="text.secondary" mb={1.5}>
-            Upload your company logo (PNG, JPG, max 2MB)
+            {t('settings.logoHint')}
           </Typography>
           <Button
             component="label"
@@ -186,7 +188,7 @@ const CompanyOverview = () => {
             startIcon={<UploadIcon />}
             sx={{ textTransform: "none", borderRadius: 1.5 }}
           >
-            Change Logo
+            {t('settings.changeLogo')}
             <input
               type="file"
               accept="image/png,image/jpeg"
@@ -202,7 +204,7 @@ const CompanyOverview = () => {
         {/* Read-only: ID */}
         <Grid size={6}>
           <FieldLabel
-            label="Company ID"
+            label={t('settings.companyId')}
             value={data?.id ?? ""}
             disabled
             sx={{
@@ -221,7 +223,7 @@ const CompanyOverview = () => {
             render={({ field, fieldState }) => (
               <FieldLabel
                 {...field}
-                label="Company Name"
+                label={t('settings.companyName')}
                 error={!!fieldState.error}
                 helperText={fieldState.error?.message}
               />
@@ -236,7 +238,7 @@ const CompanyOverview = () => {
             render={({ field, fieldState }) => (
               <FieldLabel
                 {...field}
-                label="Manager Name"
+                label={t('settings.managerName')}
                 error={!!fieldState.error}
                 helperText={fieldState.error?.message}
               />
@@ -251,7 +253,7 @@ const CompanyOverview = () => {
             render={({ field, fieldState }) => (
               <FieldLabel
                 {...field}
-                label="Working Years"
+                label={t('settings.workingYears')}
                 error={!!fieldState.error}
                 helperText={fieldState.error?.message}
               />
@@ -266,7 +268,7 @@ const CompanyOverview = () => {
             render={({ field, fieldState }) => (
               <FieldLabel
                 {...field}
-                label="Manager Phone Number"
+                label={t('settings.managerPhone')}
                 error={!!fieldState.error}
                 helperText={fieldState.error?.message}
               />
@@ -281,7 +283,7 @@ const CompanyOverview = () => {
             render={({ field, fieldState }) => (
               <FieldLabel
                 {...field}
-                label="Manager Email"
+                label={t('settings.managerEmail')}
                 error={!!fieldState.error}
                 helperText={fieldState.error?.message}
               />
@@ -313,9 +315,9 @@ const CompanyOverview = () => {
           return (
             <Grid size={6}>
               <FieldLabel
-                label="Office Location (lat, lng)"
+                label={t('settings.officeLocation')}
                 value={hasLocation ? `${lat}, ${lng}` : ""}
-                placeholder="Not set yet"
+                placeholder={t('settings.notSet')}
                 disabled
                 sx={{
                   "& .MuiInputBase-input.Mui-disabled": {
@@ -352,14 +354,14 @@ const CompanyOverview = () => {
             >
               <LocationOnIcon sx={{ color: "text.disabled", fontSize: 36 }} />
               <Typography variant="body2" color="text.disabled">
-                Office location not set yet
+                {t('settings.notSet')}
               </Typography>
             </Box>
           );
         return (
           <Box mb={3}>
             <Typography variant="subtitle2" fontWeight={600} mb={1.5}>
-              Office Location on Map
+              {t('settings.mapTitle')}
             </Typography>
             <OfficeMap latitude={lat} longitude={lng} />
           </Box>
@@ -387,7 +389,7 @@ const CompanyOverview = () => {
           {mutation.isPending ? (
             <CircularProgress size={20} color="inherit" />
           ) : (
-            "Save Changes"
+            t('common.save')
           )}
         </Button>
       </Box>

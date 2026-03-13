@@ -4,8 +4,10 @@ import { CustomDivider } from "../../../../components/customDivider";
 import CurrentLastMonthSection from "../currentLastMonthSection/currentLastMonthSection";
 import { getDahsboardHourStat } from "../../../../api/queries/getters";
 import { useQuery } from "@tanstack/react-query";
+import { useLocale } from "../../../../hooks/useLocale";
 
 export const TimeStaticSection = () => {
+  const { t } = useLocale();
   const {
     data: response,
   } = useQuery({
@@ -21,7 +23,7 @@ export const TimeStaticSection = () => {
         flexDirection: "column",
       }}
     >
-      <Typography variant="h3"> Işlenen sagatlaryň statistikasy</Typography>
+      <Typography variant="h3"> {t('dashboard.workingHoursStats')}</Typography>
       <CustomDivider sx={{ mb: 2 }} />
       <DiagramSection />
       <CustomDivider sx={{ mb: 2 }} />

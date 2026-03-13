@@ -2,8 +2,10 @@ import { Box } from "@mui/material";
 import { MonthStatistic } from "./components/monthStatistic";
 import { useQuery } from "@tanstack/react-query";
 import { getDahsboardDayHour } from "../../../../api/queries/getters";
+import { useLocale } from "../../../../hooks/useLocale";
 
 const CurrentLastMonthSection = () => {
+  const { t } = useLocale();
 
   const { data: response } = useQuery({
     queryKey: ["dahsboardHourStatistic"],
@@ -50,8 +52,8 @@ const CurrentLastMonthSection = () => {
           gap: 2,
         }}
       >
-        <MonthStatistic titleColor={'#1D61E7'} title={"Su ay (jikme-jik)"} data={currentlyMonth} />
-        <MonthStatistic titleColor={'#D93B2D'} title={"Gecen ay (jikme-jik)"} data={lastMonth} />
+        <MonthStatistic titleColor={'#1D61E7'} title={t('dashboard.currentMonth')} data={currentlyMonth} />
+        <MonthStatistic titleColor={'#D93B2D'} title={t('dashboard.lastMonth')} data={lastMonth} />
       </Box>
     </Box>
   );

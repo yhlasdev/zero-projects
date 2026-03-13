@@ -13,9 +13,13 @@ export const StatisticCard = ({
       sx={{
         flex: 1,
         borderRadius: "12px",
-        boxShadow: "0px 2px 10px rgba(0,0,0,0.05)",
+        boxShadow: (theme) =>
+          theme.palette.mode === "dark"
+            ? "0px 2px 10px rgba(0,0,0,0.4)"
+            : "0px 2px 10px rgba(0,0,0,0.05)",
         width: 208,
         height: 170,
+        backgroundColor: "background.paper",
       }}
     >
       <CardContent

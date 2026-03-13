@@ -20,67 +20,61 @@ export const useSidebarItems = () => {
         const allItems = [
             {
                 id: 'Dashboard',
-                name: 'Dashboard',
+                name: t('sidebar.dashboard'),
                 routeKey: 'dashboard',
                 icon: DashboardIcon
             },
             {
                 id: 'Employees',
-                name: 'Employees',
+                name: t('sidebar.employees'),
                 routeKey: 'employees',
                 icon: Diversity3Icon
             },
             {
                 id: 'Attendance',
-                name: 'Attendance',
+                name: t('sidebar.attendance'),
                 routeKey: 'attendance',
                 icon: EventAvailableIcon
             },
             {
                 id: 'Tasks',
-                name: 'Tasks',
+                name: t('sidebar.tasks'),
                 routeKey: 'tasks',
                 icon: AssignmentTurnedInIcon
             },
             {
                 id: 'LeaveRequests',
-                name: 'LeaveRequests',
+                name: t('sidebar.leaveRequests'),
                 routeKey: 'leaveRequests',
                 icon: EventIcon
             },
             {
                 id: 'NewRequest',
-                name: 'NewRequest',
+                name: t('sidebar.newRequests'),
                 routeKey: 'newRequests',
                 icon: PersonAddAlt1Icon
             },
-            // {
-            //     id: 'LetterRequests',
-            //     name: 'LetterRequests',
-            //     routeKey: 'letterRequests',
-            //     icon: EmailIcon
-            // },
             {
                 id: 'Announcements',
-                name: 'Announcements',
+                name: t('sidebar.announcements'),
                 routeKey: 'announcements',
                 icon: CampaignIcon
             },
             {
                 id: 'Documents',
-                name: 'Documents',
+                name: t('sidebar.documents'),
                 routeKey: 'documents',
                 icon: ArticleIcon
             },
             {
                 id: 'Calendar',
-                name: 'Calendar',
+                name: t('sidebar.calendar'),
                 routeKey: 'calendar',
                 icon: CalendarTodayIcon
             },
             {
                 id: 'Settings',
-                name: 'Settings',
+                name: t('sidebar.settings'),
                 routeKey: 'settings',
                 icon: SettingsIcon
             },

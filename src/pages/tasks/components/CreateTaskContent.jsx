@@ -78,9 +78,9 @@ const STATUS_OPTIONS = [
   },
 ];
 const STATUS_STYLE = {
-  todo: { bgcolor: "#e2e8f0", color: "#475569" },
-  in_progress: { bgcolor: "#dbeafe", color: "#1d4ed8" },
-  done: { bgcolor: "#dcfce7", color: "#15803d" },
+  todo: { bgcolor: "action.selected", color: "text.secondary" },
+  in_progress: { bgcolor: "primary.light", color: "primary.contrastText" },
+  done: { bgcolor: "success.light", color: "success.contrastText" },
 };
 
 const PRIORITY_OPTIONS = [
@@ -273,7 +273,7 @@ export default function CreateTaskModal({ onClose, onSuccess }) {
           pb: 1,
         }}
       >
-        <Typography sx={{ fontWeight: 700, fontSize: 18, color: "#0f172a" }}>
+        <Typography sx={{ fontWeight: 700, fontSize: 18, color: "text.primary" }}>
           Create New Task
         </Typography>
         <IconButton
@@ -338,7 +338,7 @@ export default function CreateTaskModal({ onClose, onSuccess }) {
           sx={fieldSx}
         />
         {file && (
-          <Typography sx={{ fontSize: 11, color: "#64748b", mt: 0.5 }}>
+          <Typography sx={{ fontSize: 11, color: "text.secondary", mt: 0.5 }}>
             📎 {file.name}
           </Typography>
         )}
@@ -461,8 +461,8 @@ export default function CreateTaskModal({ onClose, onSuccess }) {
           onClick={handleClose}
           variant="outlined"
           sx={{
-            borderColor: "#e2e8f0",
-            color: "#475569",
+            borderColor: "divider",
+            color: "text.secondary",
             borderRadius: "10px",
             textTransform: "none",
             fontWeight: 600,
@@ -476,13 +476,13 @@ export default function CreateTaskModal({ onClose, onSuccess }) {
           disabled={!title.trim() || mutation.isPending}
           variant="contained"
           sx={{
-            bgcolor: "#0d2540",
+            bgcolor: "primary.main",
             borderRadius: "10px",
             textTransform: "none",
             fontWeight: 600,
             px: 3,
-            "&:hover": { bgcolor: "#1e3a5f" },
-            "&.Mui-disabled": { bgcolor: "#94a3b8" },
+            "&:hover": { bgcolor: "primary.dark" },
+            "&.Mui-disabled": { bgcolor: "action.disabledBackground" },
           }}
         >
           {mutation.isPending ? "Creating…" : "Create Task"}
@@ -504,7 +504,7 @@ export default function CreateTaskModal({ onClose, onSuccess }) {
           sx: {
             borderRadius: "12px",
             mt: 0.5,
-            boxShadow: "0 4px 24px rgba(0,0,0,0.14)",
+            boxShadow: (theme) => theme.shadows[8],
             minWidth: 180,
             p: 1,
           },
@@ -599,7 +599,7 @@ export default function CreateTaskModal({ onClose, onSuccess }) {
               "& .MuiOutlinedInput-root": {
                 borderRadius: "8px",
                 fontSize: 13,
-                "& fieldset": { borderColor: "#e2e8f0" },
+                "& fieldset": { borderColor: "divider" },
               },
             }}
           />
@@ -640,8 +640,8 @@ export default function CreateTaskModal({ onClose, onSuccess }) {
                     px: 1.5,
                     py: 0.9,
                     cursor: "pointer",
-                    bgcolor: isSelected ? "#f0f4ff" : "transparent",
-                    "&:hover": { bgcolor: isSelected ? "#e8eeff" : "#f8fafc" },
+                    bgcolor: isSelected ? "action.selected" : "transparent",
+                    "&:hover": { bgcolor: "action.hover" },
                     transition: "background 0.1s",
                   }}
                 >
@@ -661,7 +661,7 @@ export default function CreateTaskModal({ onClose, onSuccess }) {
                     sx={{
                       fontSize: 13,
                       fontWeight: isSelected ? 600 : 400,
-                      color: "#0f172a",
+                      color: "text.primary",
                       flex: 1,
                     }}
                   >
@@ -687,7 +687,7 @@ export default function CreateTaskModal({ onClose, onSuccess }) {
           sx: {
             borderRadius: "12px",
             mt: 0.5,
-            boxShadow: "0 4px 24px rgba(0,0,0,0.14)",
+            boxShadow: (theme) => theme.shadows[8],
             minWidth: 160,
             p: 1,
           },
@@ -739,7 +739,7 @@ export default function CreateTaskModal({ onClose, onSuccess }) {
             <Typography
               sx={{
                 fontSize: 13,
-                color: p.value === "clear" ? "#94a3b8" : "#0f172a",
+                color: p.value === "clear" ? "text.secondary" : "text.primary",
                 fontWeight: priority === p.value ? 600 : 400,
               }}
             >
@@ -762,7 +762,7 @@ export default function CreateTaskModal({ onClose, onSuccess }) {
           sx: {
             borderRadius: "16px",
             mt: 0.5,
-            boxShadow: "0 8px 32px rgba(0,0,0,0.16)",
+            boxShadow: (theme) => theme.shadows[10],
             overflow: "hidden",
             width: 580,
           },
@@ -776,7 +776,8 @@ export default function CreateTaskModal({ onClose, onSuccess }) {
             px: 2.5,
             pt: 2.5,
             pb: 2,
-            borderBottom: "1px solid #f0f3f8",
+            borderBottom: "1px solid",
+            borderColor: "divider",
           }}
         >
           {/* Left — start date, filled grey, active border when picking start */}
@@ -788,10 +789,10 @@ export default function CreateTaskModal({ onClose, onSuccess }) {
               alignItems: "center",
               gap: 1.2,
               cursor: "pointer",
-              bgcolor: "#efefef",
+              bgcolor: "action.hover",
               border:
                 pickingDate === "start"
-                  ? "2px solid #0d2540"
+                  ? "2px solid var(--mui-palette-primary-main)"
                   : "2px solid transparent",
               borderRadius: "10px",
               px: 1.5,
@@ -832,11 +833,11 @@ export default function CreateTaskModal({ onClose, onSuccess }) {
               alignItems: "center",
               gap: 1.2,
               cursor: "pointer",
-              bgcolor: "#fff",
+              bgcolor: "background.paper",
               border:
                 pickingDate === "end"
-                  ? "2px solid #0d2540"
-                  : "2px solid #d0d0d0",
+                  ? "2px solid var(--mui-palette-primary-main)"
+                  : "2px solid var(--mui-palette-divider)",
               borderRadius: "10px",
               px: 1.5,
               py: 1.2,
@@ -908,15 +909,15 @@ export default function CreateTaskModal({ onClose, onSuccess }) {
                     px: 3,
                     py: 1.1,
                     cursor: "pointer",
-                    bgcolor: isSelected ? "#f0f4ff" : "transparent",
-                    "&:hover": { bgcolor: "#f5f7ff" },
+                    bgcolor: isSelected ? "action.selected" : "transparent",
+                    "&:hover": { bgcolor: "action.hover" },
                     transition: "background 0.1s",
                   }}
                 >
                   <Typography
                     sx={{
                       fontSize: 14,
-                      color: "#111827",
+                      color: "text.primary",
                       fontWeight: isSelected ? 600 : 400,
                     }}
                   >
@@ -1038,14 +1039,14 @@ export default function CreateTaskModal({ onClose, onSuccess }) {
                       justifyContent: "center",
                       cursor: "pointer",
                       mx: "auto",
-                      bgcolor: isMarked ? "#0d2540" : "transparent",
-                      color: isMarked ? "#fff" : "#111827",
+                      bgcolor: isMarked ? "primary.main" : "transparent",
+                      color: isMarked ? "primary.contrastText" : "text.primary",
                       fontWeight: isMarked || isToday ? 700 : 400,
                       fontSize: 14,
                       outline:
-                        isToday && !isMarked ? "2px solid #0d2540" : "none",
+                        isToday && !isMarked ? (theme) => `2px solid ${theme.palette.primary.main}` : "none",
                       outlineOffset: "-2px",
-                      "&:hover": { bgcolor: isMarked ? "#1e3a5f" : "#e8eeff" },
+                      "&:hover": { bgcolor: isMarked ? "primary.dark" : "action.hover" },
                       transition: "all 0.1s",
                     }}
                   >
@@ -1074,7 +1075,7 @@ function StatusItem({ opt, selected, onClick }) {
         py: 0.8,
         borderRadius: "6px",
         cursor: "pointer",
-        "&:hover": { bgcolor: "#f8fafc" },
+        "&:hover": { bgcolor: "action.hover" },
       }}
     >
       <Stack direction="row" alignItems="center" spacing={1}>
@@ -1083,7 +1084,7 @@ function StatusItem({ opt, selected, onClick }) {
           sx={{
             fontSize: 13,
             fontWeight: selected ? 700 : 400,
-            color: "#0f172a",
+            color: "text.primary",
           }}
         >
           {opt.label}
@@ -1106,12 +1107,13 @@ function PillButton({ icon, label, active, color, onClick }) {
         py: 0.6,
         borderRadius: "6px",
         cursor: "pointer",
-        border: "1px solid #e2e8f0",
-        color: color || (active ? "#0d2540" : "#64748b"),
+        border: "1px solid",
+        borderColor: "divider",
+        color: color || (active ? "primary.main" : "text.secondary"),
         fontSize: 12,
         fontWeight: active ? 600 : 400,
-        bgcolor: active ? "#f0f4ff" : "#fff",
-        "&:hover": { bgcolor: "#f8fafc", borderColor: "#cbd5e1" },
+        bgcolor: active ? "action.selected" : "background.paper",
+        "&:hover": { bgcolor: "action.hover", borderColor: "primary.light" },
         transition: "all 0.15s",
         whiteSpace: "nowrap",
       }}
@@ -1123,14 +1125,14 @@ function PillButton({ icon, label, active, color, onClick }) {
 }
 
 // ── Shared styles ─────────────────────────────────────────────────────────────
-const labelSx = { fontSize: 13, fontWeight: 500, color: "#374151", mb: 0.8 };
+const labelSx = { fontSize: 13, fontWeight: 500, color: "text.primary", mb: 0.8 };
 const fieldSx = {
   "& .MuiOutlinedInput-root": {
     borderRadius: "8px",
-    bgcolor: "#f8fafc",
-    "& fieldset": { borderColor: "#e2e8f0" },
-    "&:hover fieldset": { borderColor: "#cbd5e1" },
-    "&.Mui-focused fieldset": { borderColor: "#0d2540", borderWidth: 1.5 },
+    bgcolor: "background.default",
+    "& fieldset": { borderColor: "divider" },
+    "&:hover fieldset": { borderColor: "primary.light" },
+    "&.Mui-focused fieldset": { borderColor: "primary.main", borderWidth: 1.5 },
   },
-  "& .MuiInputBase-input": { fontSize: 14, color: "#0f172a" },
+  "& .MuiInputBase-input": { fontSize: 14, color: "text.primary" },
 };

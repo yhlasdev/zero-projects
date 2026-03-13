@@ -6,20 +6,23 @@ import CompanyOverview from "./components/CompanyOverview";
 import ContactInformation from "./components/ContactInformation";
 import CompanyStructure from "./components/Structure";
 
-const TABS = [
-  { label: "Company Overview", component: <CompanyOverview /> },
-  { label: "Company Structure", component: <CompanyStructure /> },
-  { label: "Contact Information", component: <ContactInformation /> },
-];
+import { useLocale } from "../../hooks/useLocale";
 
 const SettingsPage = () => {
+  const { t } = useLocale();
+  const TABS = [
+    { label: t('settings.tabs.overview'), component: <CompanyOverview /> },
+    { label: t('settings.tabs.structure'), component: <CompanyStructure /> },
+    { label: t('settings.tabs.contact'), component: <ContactInformation /> },
+  ];
+
   const [tab, setTab] = useState(0);
 
   return (
     <Box>
       <PageTitle
-        title="Company Settings"
-        subTitle="Manage company information and structure"
+        title={t('settings.title')}
+        subTitle={t('settings.subtitle')}
       />
 
       <HeaderAppBar>

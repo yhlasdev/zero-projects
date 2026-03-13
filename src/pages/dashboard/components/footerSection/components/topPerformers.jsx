@@ -21,7 +21,10 @@ const getRankColor = (rank) => {
     return "transparent";
 };
 
+import { useLocale } from "../../../../../hooks/useLocale";
+
 export const TopPerformers = () => {
+    const { t } = useLocale();
 
     const { data: topPerformers = [], isLoading, isError } = useQuery({
         queryKey: ['topPerformers'],
@@ -40,25 +43,25 @@ export const TopPerformers = () => {
     return (
         <Card sx={{ p: 3, borderRadius: '8px' }}>
             <Typography variant="h5" mb={2}>
-                Top Performers - Today
+                {t('dashboard.topPerformers')}
             </Typography>
 
             <TableContainer>
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Rank</TableCell>
-                            <TableCell>Employee</TableCell>
-                            <TableCell>Department</TableCell>
-                            <TableCell>Position</TableCell>
-                            <TableCell align="right">Hours</TableCell>
+                            <TableCell>{t('dashboard.rank')}</TableCell>
+                            <TableCell>{t('common.employee')}</TableCell>
+                            <TableCell>{t('common.department')}</TableCell>
+                            <TableCell>{t('common.title')}</TableCell>
+                            <TableCell align="right">{t('dashboard.hours')}</TableCell>
                         </TableRow>
                     </TableHead>
 
                     {isLoading ? (
-                        <Box>Yuklenyar</Box>
+                        <Box>{t('common.loading')}</Box>
                     ) : isError ? (
-                        <Box>Yanlyslyk</Box>
+                        <Box>{t('common.error')}</Box>
                     ) : null}
 
                     <TableBody>
