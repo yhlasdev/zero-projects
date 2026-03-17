@@ -205,13 +205,15 @@ export const RightSide = () => {
             textTransform: "none",
             fontWeight: 600,
             fontSize: 14,
-            color: "#9F9F9F",
+            color: "#4e4e4eff",
             transition: "all 0.2s",
             "&.Mui-selected": {
               backgroundColor: (theme) =>
                 theme.palette.mode === "dark" ? "rgba(255,255,255,0.1)" : "#FFFFFF",
-              color: "text.primary",
             },
+            // ".css-1ov0pa-MuiToggleButtonGroup-root .MuiToggleButton-root.Mui-selected": {
+            //   color: "#eeeeee",
+            // }
           },
         }}
       >

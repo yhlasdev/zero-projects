@@ -13,6 +13,7 @@ import DownloadIcon from "@mui/icons-material/Download";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import dayjs from "dayjs";
 import { formatTime } from "../../../utils/formatTime";
+import StatusChip from "../../../components/table/StatusChip";
 
 export default function ExportModal({
   open,
@@ -333,7 +334,9 @@ export default function ExportModal({
           alignItems="flex-start"
         >
           <Box>
-            <Typography sx={{ color: "#FFFFFF", fontWeight: 700, fontSize: 20 }}>
+            <Typography
+              sx={{ color: "#FFFFFF", fontWeight: 700, fontSize: 20 }}
+            >
               {employee?.name}
             </Typography>
             <Typography sx={{ color: "#FFFFFF", fontSize: 13, mt: 0.3 }}>
@@ -351,7 +354,9 @@ export default function ExportModal({
             size="small"
             sx={{
               bgcolor: "#FFFFFF",
-              "&:hover": { bgcolor: "rgba(255,255,255,0.2)" },
+              color: "#494848",
+              borderRadius: "8px",
+              "&:hover": { bgcolor: "rgba(255,255,255,0.2)",color: '#e5e5e5' },
             }}
           >
             <CloseIcon fontSize="small" />
@@ -359,7 +364,7 @@ export default function ExportModal({
         </Stack>
       </Box>
 
-      <DialogContent sx={{ p: 0 }}>
+      <DialogContent sx={{ p: 0, bgcolor: "#f8fafc" }}>
         {/* Stats row */}
         <Box
           sx={{
@@ -413,7 +418,7 @@ export default function ExportModal({
         <Box
           sx={{
             display: "grid",
-            gridTemplateColumns: "222px 1fr 1fr 1fr 1fr 100px",
+            gridTemplateColumns: "200px 100px 100px 100px auto",
             px: 3,
             py: 1,
             bgcolor: "#f8fafc",
@@ -440,7 +445,7 @@ export default function ExportModal({
         {/* Records */}
         <Box sx={{ maxHeight: 380, overflowY: "auto" }}>
           {records.map((item) => {
-            const isPresent = item.status === "Present";
+            // const isPresent = item.status === "Present";
             const isWeekend = item.status === "Weekend";
             const dayNum = dayjs(item.work_date).format("DD");
 
@@ -449,7 +454,7 @@ export default function ExportModal({
                 key={item.attendance_id}
                 sx={{
                   display: "grid",
-                  gridTemplateColumns: "222px 1fr 1fr 1fr 1fr 100px",
+                  gridTemplateColumns: "200px 100px 100px 100px auto",
                   px: 3,
                   py: 1.5,
                   alignItems: "center",
@@ -522,7 +527,7 @@ export default function ExportModal({
                   {item.hours ? item.hours.toFixed(1) + "h" : "-"}
                 </Typography>
 
-                <Chip
+                {/* <Chip
                   label={item.status}
                   size="small"
                   sx={{
@@ -536,7 +541,8 @@ export default function ExportModal({
                     border: "none",
                     textTransform: "capitalize",
                   }}
-                />
+                /> */}
+                <StatusChip status={item.status} />
                 <Box />
               </Box>
             );

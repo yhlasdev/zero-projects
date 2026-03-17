@@ -55,7 +55,7 @@ export const getAllAttendance = async ({
   return await api.getPrivate("/company-service/attendances/get-by-date", {
     date,
     department_ids,
-    status,
+    status: status?.join(","),
     search,
   });
 };
@@ -100,6 +100,10 @@ export const getAllEmployeeForTask = async ({ search }) => {
   return await api.getPrivate("/company-service/tasks/employees", {
     search,
   });
+};
+
+export const getEmployeeById = async (employee_id) => {
+  return await api.getPrivate(`/company-service/employees/get/${employee_id}`);
 };
 
 export const getAllAnnouncement = async ({ page, limit, status }) => {

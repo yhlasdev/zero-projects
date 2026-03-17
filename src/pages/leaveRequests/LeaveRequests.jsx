@@ -10,9 +10,13 @@ import { formatTimeYear } from "../../utils/formatTime";
 import GlobalTable from "../../components/table/Table";
 import StatusChip from "../../components/table/StatusChip";
 import TableActions from "../../components/table/TableActions";
+import { useLocale } from "../../hooks/useLocale";
+
 
 const LeaveRequestsPage = () => {
+  const { t } = useLocale();
   const [selectedRow, setSelectedRow] = useState(null);
+
   const [filters, setFilters] = useState({
     status: "",
     type: "",
@@ -38,24 +42,24 @@ const LeaveRequestsPage = () => {
   }));
 
   const columns = [
-    { key: "employee", label: "Employee" },
-    { key: "department", label: "Department" },
+    { key: "employee", label: t('common.employee') },
+    { key: "department", label: t('common.department') },
     {
       key: "type",
-      label: "Type",
+      label: t('leaveRequests.leaveType'),
       render: (row) => <StatusChip status={row.type} />,
     },
-    { key: "start_date", label: "Start Date" },
-    { key: "end_date", label: "End Date" },
-    { key: "total_days", label: "Days" },
+    { key: "start_date", label: t('leaveRequests.startDate') },
+    { key: "end_date", label: t('leaveRequests.endDate') },
+    { key: "total_days", label: t('leaveRequests.days') },
     {
       key: "status",
-      label: "Status",
+      label: t('common.status'),
       render: (row) => <StatusChip status={row.status} />,
     },
     {
       key: "actions",
-      label: "Actions",
+      label: t('common.actions'),
       render: (row) => (
         <TableActions
           onView={() => {
@@ -68,9 +72,10 @@ const LeaveRequestsPage = () => {
   return (
     <Box className=" leaveRequest">
       <PageTitle
-        title="Leave Requests"
-        subTitle="Review and manage employee leave requets"
+        title={t('leaveRequests.title')}
+        subTitle={t('leaveRequests.subtitle')}
       />
+
       <Header setFilter={setFilters} filters={filters} />
       <GlobalTable
         columns={columns}
@@ -79,8 +84,9 @@ const LeaveRequestsPage = () => {
         isLoading={leavesQuery.isLoading}
         isFetchingNextPage={leavesQuery.isFetchingNextPage}
         isError={leavesQuery.isError}
-        emptyMessage="No Request records found"
+        emptyMessage={t('employees.noRecords')}
       />
+
 
       <GlobalModal
         open={Boolean(selectedRow)}

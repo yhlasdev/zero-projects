@@ -1,5 +1,6 @@
 {
   "sidebar": {
+    "title": "Yerinde",
     "dashboard": "Панель управления",
     "employees": "Сотрудники",
     "attendance": "Посещаемость",
@@ -31,7 +32,14 @@
     "department": "Отдел",
     "title": "Должность",
     "nationality": "Национальность",
-    "employee": "Сотрудник"
+    "employee": "Сотрудник",
+    "allDepartments": "Все отделы",
+    "allStatus": "Все статусы",
+    "allTypes": "Все типы",
+    "checkIn": "Приход",
+    "checkOut": "Уход",
+    "position": "Должность",
+    "viewDetails": "Подробнее"
   },
   "dashboard": {
     "title": "Панель управления",
@@ -50,7 +58,9 @@
     "hours": "Часы",
     "noData30Days": "Данные за последние 30 дней не найдены",
     "currentMonth": "Текущий месяц (Детально)",
-    "lastMonth": "Прошлый месяц (Детально)"
+    "lastMonth": "Прошлый месяц (Детально)",
+    "reportTitle": "Отчет о посещаемости",
+    "reportSubtitle": "Отслеживайте и управляйте записями о посещаемости сотрудников"
   },
   "employees": {
     "title": "Сотрудник",
@@ -66,7 +76,13 @@
     "probationEnd": "Дата окончания испытательного срока",
     "workingTiming": "Рабочее время",
     "office": "Офис",
-    "noRecords": "Записи о посещаемости не найдены"
+    "noRecords": "Записи о посещаемости не найдены",
+    "weeklySchedules": "Еженедельные расписания",
+    "day": "День",
+    "shift": "Смена",
+    "workTime": "Рабочее время",
+    "hours": "Часы",
+    "weekSummary": "Итоги недели"
   },
   "tasks": {
     "title": "Задачи",
@@ -87,7 +103,8 @@
       "high": "Высокий",
       "normal": "Нормальный",
       "low": "Низкий",
-      "clear": "Очистить"
+      "clear": "Очистить",
+      "none": "Нет"
     }
   },
   "settings": {
@@ -127,5 +144,33 @@
     "submit": "Зарегистрироваться",
     "haveAccount": "Уже есть аккаунт?",
     "signIn": "Войти"
+  },
+  "welcome": {
+    "sponsors": "Наши партнеры",
+    "getStarted": "Начать →",
+    "contact": "Связаться с нами",
+    "send": "Отправить"
+  },
+  "attendance": {
+    "present": "Присутствует",
+    "absent": "Отсутствует",
+    "onLeave": "В отпуске",
+    "dayOff": "Выходной"
+  },
+  "leaveRequests": {
+    "title": "Запросы на отпуск",
+    "subtitle": "Просматривайте и управляйте запросами сотрудников на отпуск",
+    "leaveType": "Тип отпуска",
+    "startDate": "Дата начала",
+    "endDate": "Дата окончания",
+    "days": "Дней"
+  },
+  "letterRequests": {
+    "attachment": "Вложение"
+  },
+  "documents": {
+    "uploadDocument": "Загрузить документ",
+    "documentTitle": "Название документа",
+    "description": "Описание"
   }
 }

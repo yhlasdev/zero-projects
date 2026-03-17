@@ -17,6 +17,7 @@ import ExportModal from "./components/EmportModalDetail";
 import CloseIcon from "@mui/icons-material/Close";
 import DownloadIcon from "@mui/icons-material/Download";
 import { formatTime } from "../../utils/formatTime";
+import StatusChip from "../../components/table/StatusChip";
 
 export default function AttendanceDetailsContent({ employee, onClose }) {
   const [dateRange, setDateRange] = useState([
@@ -142,7 +143,7 @@ export default function AttendanceDetailsContent({ employee, onClose }) {
           display={"flex"}
           alignItems={"center"}
           justifyContent={"space-between"}
-          sx={{ position: "relative", zIndex: 100 }}
+          sx={{ position: "relative", zIndex: 100 , marginTop: 3}}
         >
           <Typography
             fontSize={"14px"}
@@ -156,16 +157,18 @@ export default function AttendanceDetailsContent({ employee, onClose }) {
               onClick={() => setExportOpen(true)}
               variant="outlined"
               size="small"
-              startIcon={<DownloadIcon sx={{ width: '16px', height: '16px' }} />}
+              startIcon={<DownloadIcon sx={{ width: '14px', height: '14px' }} />}
               sx={{
                 borderRadius: "8px",
                 width: '88px',
                 height: '32px',
                 textTransform: "none",
-                fontWeight: 600,
+                fontWeight: 400,
                 fontSize: '14px',
+                color: "#333333",
+                border: "1px solid #e0e0e0",
+                bgcolor: "#fff",
                 whiteSpace: "nowrap",
-                color: '#33333',
                 "&:hover": { bgcolor: "#1e3a5f", color: '#fff' },
               }}
             >
@@ -249,18 +252,8 @@ export default function AttendanceDetailsContent({ employee, onClose }) {
                   />
 
                   <Box ml="auto">
-                    <Chip
-                      sx={{
-                        width: "63px",
-                        height: "26px",
-                        borderRadius: "12px",
-                        fontSize: "12px",
-                        textTransform: "capitalize",
-                      }}
-                      label={item.status}
-                      color={item.status === "Present" ? "success" : "default"}
-                    />
-                  </Box>
+                    <StatusChip status={item.status} />
+                      </Box>
                 </Stack>
               </Paper>
             );

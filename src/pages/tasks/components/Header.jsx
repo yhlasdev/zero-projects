@@ -2,9 +2,13 @@ import { useState } from "react";
 import { Box, MenuItem } from "@mui/material";
 import DebounceSelect from "../../../components/select/DebounceSelect";
 import HeaderAppBar from "../../../components/appBar/AppBar";
+import { useLocale } from "../../../hooks/useLocale";
+
 
 const Header = () => {
+  const { t } = useLocale();
   const [department, setDepartment] = useState("");
+
   const [employee, setEmployee] = useState("");
 
   return (
@@ -16,7 +20,7 @@ const Header = () => {
           displayEmpty
         >
           <MenuItem value="" disabled>
-            All department
+            {t('common.allDepartments')}
           </MenuItem>
           <MenuItem value={1}>IT</MenuItem>
           <MenuItem value={2}>HR</MenuItem>
@@ -28,7 +32,7 @@ const Header = () => {
           displayEmpty
         >
           <MenuItem value="" disabled>
-            All status
+            {t('common.allStatus')}
           </MenuItem>
           <MenuItem value={1}>John</MenuItem>
           <MenuItem value={2}>Jane</MenuItem>

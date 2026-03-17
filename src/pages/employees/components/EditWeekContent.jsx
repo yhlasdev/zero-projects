@@ -12,36 +12,34 @@ import {
   IconButton,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { useState } from "react";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import { useState, useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { createWeaklySchedule } from "../../../api/queries/post";
+import dayjs from "dayjs";
+import { updateSchedule } from "../../../api/queries/put";
 
 const SHIFT_DEFAULTS = {
-  "Morning Shift": { start: "08:00", end: "16:00" },
-  "Afternoon Shift": { start: "12:00", end: "20:00" },
-  "Night Shift": { start: "16:00", end: "00:00" },
-  "Day Off": { start: "00:00", end: "00:00" },
+  MORNING: { start: "08:00", end: "16:00" },
+  AFTERNOON: { start: "12:00", end: "20:00" },
+  NIGHT: { start: "16:00", end: "00:00" },
+  DAY_OFF: { start: "00:00", end: "00:00" },
+  ON_LEAVE: { start: "00:00", end: "00:00" },
 };
-
-const DAY_NAMES = [
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-  "Sunday",
-];
 
 const formatTimeForAPI = (time) => {
   if (!time) return null;
   return `${time}:00.000000`;
 };
 
+const formatTimeFromAPI = (time) => {
+  if (!time) return "00:00";
+  return time.slice(0, 5);
+};
+
 const calculateHours = (start, end) => {
   if (!start || !end) return "0.0";
-
+  if (start === "00:00" && end === "00:00") return "0.0";
   const [sh, sm] = start.split(":").map(Number);
   const [eh, em] = end.split(":").map(Number);
 
@@ -55,66 +53,36 @@ const calculateHours = (start, end) => {
   return ((endMin - startMin) / 60).toFixed(1);
 };
 
-const generateWeeks = () => {
-  const weeks = [];
-  const today = new Date();
+export default function EditWeekContent({ onClose, scheduleData, onDelete }) {
+  const [schedule, setSchedule] = useState([]);
 
-  const monday = new Date(today);
-  monday.setDate(today.getDate() - ((today.getDay() + 6) % 7));
+  useEffect(() => {
+    if (scheduleData?.days) {
+      const formattedDays = scheduleData.days.map((day) => {
+        const rawShift = (day.shift_type || day.shiftType).toUpperCase();
 
-  for (let i = 0; i < 5; i++) {
-    const start = new Date(monday);
-    start.setDate(monday.getDate() + i * 7);
+        const startTime = formatTimeFromAPI(
+          day.start_time || day.startTime || "00:00",
+        );
+        const endTime = formatTimeFromAPI(
+          day.end_time || day.endTime || "00:00",
+        );
 
-    const end = new Date(start);
-    end.setDate(start.getDate() + 6);
-
-    const fmt = (d) =>
-      d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-
-    weeks.push({
-      label: `${fmt(start)} - ${fmt(end)}, ${start.getFullYear()}`,
-      start: start.toISOString().slice(0, 10),
-      end: end.toISOString().slice(0, 10),
-      monday: new Date(start),
-    });
-  }
-
-  return weeks;
-};
-
-const WEEK_OPTIONS = generateWeeks();
-
-const buildDays = (mondayDate) =>
-  DAY_NAMES.map((day, i) => {
-    const date = new Date(mondayDate);
-    date.setDate(mondayDate.getDate() + i);
-
-    return {
-      day,
-      date: date.toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-      }),
-      isoDate: date.toISOString().slice(0, 10),
-      day_of_week: i + 1,
-      shift: "Day Off",
-      start: "00:00",
-      end: "00:00",
-      hours: "0.0",
-    };
-  });
-
-export default function CreateScheduleModalContent({ onClose, employeeId }) {
-  const [selectedWeekIdx, setSelectedWeekIdx] = useState(0);
-  const [schedule, setSchedule] = useState(() =>
-    buildDays(WEEK_OPTIONS[0].monday),
-  );
-
-  const handleWeekChange = (idx) => {
-    setSelectedWeekIdx(idx);
-    setSchedule(buildDays(WEEK_OPTIONS[idx].monday));
-  };
+        return {
+          day: dayjs(day.date).format("dddd"),
+          date: dayjs(day.date).format("MMM DD"),
+          isoDate: day.date,
+          day_of_week: day.day_of_week || day.dayOfWeek,
+          shift: rawShift,
+          start: startTime,
+          end: endTime,
+          hours: day.hours,
+        };
+      });
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setSchedule(formattedDays);
+    }
+  }, [scheduleData]);
 
   const handleShiftChange = (index, value) => {
     setSchedule((prev) =>
@@ -149,28 +117,27 @@ export default function CreateScheduleModalContent({ onClose, employeeId }) {
   };
 
   const { mutate, isPending } = useMutation({
-    mutationFn: createWeaklySchedule,
+    mutationFn: updateSchedule,
     onSuccess: () => {
-      toast.success("Schedule created successfully!");
+      toast.success("Schedule updated successfully!");
       onClose?.();
     },
     onError: (err) => {
-      const errorMessage = err?.response?.data?.message || "Schedule already exists or invalid!";
+      const errorMessage =
+        err?.response?.data?.message || "Failed to update schedule!";
       toast.error(errorMessage);
     },
   });
 
   const handleSubmit = () => {
-    const week = WEEK_OPTIONS[selectedWeekIdx];
-
     const payload = {
-      employee_id: employeeId ?? 0,
-      week_start: week.start,
-      week_end: week.end,
+      schedule_id: scheduleData?.id || scheduleData?.schedule_id,
       days: schedule.map((row) => ({
-        date: row.isoDate,
         day_of_week: row.day_of_week,
-        shift_type: row.shift,
+        shift_type: row.shift
+          .toLowerCase()
+          .replace(/ /g, "_")
+          .replace("_shift", ""),
         start_time:
           row.shift === "Day Off" ? null : formatTimeForAPI(row.start),
         end_time: row.shift === "Day Off" ? null : formatTimeForAPI(row.end),
@@ -179,6 +146,13 @@ export default function CreateScheduleModalContent({ onClose, employeeId }) {
 
     mutate(payload);
   };
+
+  const weekLabel =
+    scheduleData?.week_start && scheduleData?.week_end
+      ? `${dayjs(scheduleData.week_start).format("MMM DD")}-${dayjs(scheduleData.week_end).format("DD, YYYY")}`
+      : scheduleData?.weekStart && scheduleData?.weekEnd
+        ? `${dayjs(scheduleData.weekStart).format("MMM DD")}-${dayjs(scheduleData.weekEnd).format("DD, YYYY")}`
+        : "Loading...";
 
   return (
     <>
@@ -192,7 +166,7 @@ export default function CreateScheduleModalContent({ onClose, employeeId }) {
           alignItems="flex-start"
         >
           <Typography fontSize={20} fontWeight={700} mb={3}>
-            Create New Weekly Schedule
+            Edit Weekly Schedule
           </Typography>
           <IconButton
             onClick={onClose}
@@ -210,34 +184,27 @@ export default function CreateScheduleModalContent({ onClose, employeeId }) {
             <CloseIcon sx={{ fontSize: 18 }} />
           </IconButton>
         </Box>
-        <Divider sx={{ mb: 2 }} />
+
         <Box px={3}>
-          {/* WEEK SELECT */}
+          {/* CURRENT WEEK */}
           <Box mb={3}>
             <Typography mb={1} fontSize={14} fontWeight={500}>
-              Select Week
+              Current Week
             </Typography>
-            <Select
-              fullWidth
-              size="small"
-              value={selectedWeekIdx}
-              onChange={(e) => handleWeekChange(e.target.value)}
+            <Box
               sx={{
+                p: 1.5,
                 borderRadius: 2,
-                "& .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#E5E7EB",
-                },
+                // bgcolor: "#F9FAFB",
+                border: "1px solid #E5E7EB",
               }}
             >
-              {WEEK_OPTIONS.map((w, i) => (
-                <MenuItem key={w.label} value={i}>
-                  {w.label}
-                </MenuItem>
-              ))}
-            </Select>
+              <Typography fontSize={14} color="text.primary">
+                {weekLabel}
+              </Typography>
+            </Box>
           </Box>
 
-          {/* TABLE */}
           <Paper
             sx={{
               borderRadius: 3,
@@ -250,7 +217,7 @@ export default function CreateScheduleModalContent({ onClose, employeeId }) {
               direction="row"
               px={2}
               py={1.5}
-              // bgcolor="#F9FAFB"
+              //   bgcolor="#F9FAFB"
               sx={{ borderBottom: "1px solid #E5E7EB" }}
             >
               <Box flex={2}>
@@ -288,7 +255,6 @@ export default function CreateScheduleModalContent({ onClose, employeeId }) {
                     transition: "background-color 0.2s",
                   }}
                 >
-                  {/* DAY */}
                   <Box flex={2}>
                     <Typography fontWeight={600} fontSize={14}>
                       {item.day}
@@ -299,7 +265,7 @@ export default function CreateScheduleModalContent({ onClose, employeeId }) {
                   </Box>
 
                   {/* SHIFT */}
-                  <Box flex={2} mr={1}>
+                  <Box flex={2} mr={2}>
                     <Select
                       fullWidth
                       size="small"
@@ -336,6 +302,8 @@ export default function CreateScheduleModalContent({ onClose, employeeId }) {
                           width: 110,
                           "& .MuiOutlinedInput-root": {
                             borderRadius: 2,
+                            // backgroundColor:
+                            //   item.shift === "Day Off" ? "#F3F4F6" : "#F9FAFB",
                             fontSize: 14,
                             "& .MuiOutlinedInput-notchedOutline": {
                               borderColor: "#E5E7EB",
@@ -386,46 +354,59 @@ export default function CreateScheduleModalContent({ onClose, employeeId }) {
           </Paper>
 
           {/* FOOTER */}
-          <Stack
-            direction="row"
-            justifyContent="flex-end"
-            mt={3}
-            pb={3}
-            spacing={2}
-          >
+          <Stack direction="row" justifyContent="space-between" mt={3} pb={3}>
             <Button
-              onClick={onClose}
-              variant="outlined"
+              startIcon={<DeleteOutlineIcon />}
+              onClick={onDelete}
               sx={{
                 textTransform: "none",
-                color: "#6B7280",
+                color: "#EF4444",
                 fontWeight: 500,
-                borderRadius: "8px",
-                px: 3,
-                "&:hover": { bgcolor: "#F3F4F6" },
+                px: 2,
+                border: "1px solid #FEE2E2",
+                "&:hover": {
+                  bgcolor: "#FEF2F2",
+                  borderColor: "#FECACA",
+                },
               }}
             >
-              Cancel
+              Delete
             </Button>
 
-            <Button
-              variant="contained"
-              onClick={handleSubmit}
-              disabled={isPending}
-              startIcon={isPending ? <CircularProgress size={16} /> : null}
-              sx={{
-                bgcolor: "#1E3A5F",
-                textTransform: "none",
-                fontWeight: 500,
-                px: 3,
-                borderRadius: "8px",
-                boxShadow: "0 1px 3px 0 rgba(0, 0, 0, 0.1)",
-                "&:hover": { bgcolor: "#2C4E73" },
-                "&:disabled": { bgcolor: "#9CA3AF" },
-              }}
-            >
-              {isPending ? "Creating..." : "Create Schedule"}
-            </Button>
+            <Stack direction="row" spacing={2}>
+              <Button
+                variant="outlined"
+                onClick={onClose}
+                sx={{
+                  textTransform: "none",
+                  color: "#6B7280",
+                  fontWeight: 500,
+                  px: 3,
+                  "&:hover": { bgcolor: "#F3F4F6" },
+                }}
+              >
+                Cancel
+              </Button>
+
+              <Button
+                variant="contained"
+                onClick={handleSubmit}
+                disabled={isPending}
+                startIcon={isPending ? <CircularProgress size={16} /> : null}
+                sx={{
+                  bgcolor: "#1E3A5F",
+                  textTransform: "none",
+                  fontWeight: 500,
+                  px: 3,
+                  borderRadius: 2,
+                  boxShadow: "0 1px 3px 0 rgba(0, 0, 0, 0.1)",
+                  "&:hover": { bgcolor: "#2C4E73" },
+                  "&:disabled": { bgcolor: "#9CA3AF" },
+                }}
+              >
+                {isPending ? "Updating..." : "Update Schedule"}
+              </Button>
+            </Stack>
           </Stack>
         </Box>
       </Box>

@@ -1,10 +1,14 @@
 import { Box, Typography } from "@mui/material"
 import { SponsorItem } from "./sponsorItem";
+import { useLocale } from "../../../hooks/useLocale";
+
 
 import sponsorImage from '../../../assets/images/sponsor_image.png'
 
 export const Sponsors = () => {
+  const { t } = useLocale();
   return (
+
     <Box sx={{ width: '100%', height: '670px' }}>
       <Typography
         sx={{
@@ -13,7 +17,8 @@ export const Sponsors = () => {
           textAlign: 'center',
           paddingTop: '60px',
           paddingBottom: '80px'
-        }} className=" main-color-text">Biziň hyzmatdaşlarymyz</Typography>
+        }} className=" main-color-text">{t('welcome.sponsors')}</Typography>
+
 
       <Box
         className=' -p-2 mt-5'

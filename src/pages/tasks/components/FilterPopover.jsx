@@ -28,7 +28,7 @@ const FilterPopover = ({ anchorEl, open, onClose, filters, setFilters }) => {
     { id: "status", label: t("common.status") || "Status" },
     { id: "priority", label: t("tasks.priority") || "Priority" },
     { id: "task_name", label: t("tasks.taskTitle") || "Task name" },
-    { id: "is_closed", label: "Date closed" }, // User specifically asked for this
+    { id: "is_closed", label: t('tasks.dateClosed', { defaultValue: 'Date closed' }) },
   ];
 
   return (
@@ -62,7 +62,7 @@ const FilterPopover = ({ anchorEl, open, onClose, filters, setFilters }) => {
           variant="caption"
           sx={{ color: "text.secondary", fontWeight: 600, px: 2, mb: 1, display: "block" }}
         >
-          Filters
+          {t('tasks.filters', { defaultValue: 'Filters' })}
         </Typography>
 
         <List sx={{ p: 0 }}>
@@ -79,10 +79,10 @@ const FilterPopover = ({ anchorEl, open, onClose, filters, setFilters }) => {
               fullWidth
               sx={{ borderRadius: "8px" }}
             >
-              <MenuItem value=""><em>None</em></MenuItem>
-              <MenuItem value="todo">To Do</MenuItem>
-              <MenuItem value="in_progress">In Progress</MenuItem>
-              <MenuItem value="done">Done</MenuItem>
+              <MenuItem value=""><em>{t('common.none', { defaultValue: 'None' })}</em></MenuItem>
+              <MenuItem value="todo">{t('tasks.todo')}</MenuItem>
+              <MenuItem value="in_progress">{t('tasks.inProgress')}</MenuItem>
+              <MenuItem value="done">{t('tasks.done')}</MenuItem>
             </Select>
           </ListItem>
 
@@ -99,11 +99,11 @@ const FilterPopover = ({ anchorEl, open, onClose, filters, setFilters }) => {
               fullWidth
               sx={{ borderRadius: "8px" }}
             >
-              <MenuItem value=""><em>None</em></MenuItem>
-              <MenuItem value="low">Low</MenuItem>
-              <MenuItem value="normal">Normal</MenuItem>
-              <MenuItem value="high">High</MenuItem>
-              <MenuItem value="urgent">Urgent</MenuItem>
+              <MenuItem value=""><em>{t('common.none', { defaultValue: 'None' })}</em></MenuItem>
+              <MenuItem value="low">{t('tasks.priorityLevels.low')}</MenuItem>
+              <MenuItem value="normal">{t('tasks.priorityLevels.normal')}</MenuItem>
+              <MenuItem value="high">{t('tasks.priorityLevels.high')}</MenuItem>
+              <MenuItem value="urgent">{t('tasks.priorityLevels.urgent')}</MenuItem>
             </Select>
           </ListItem>
 
@@ -135,7 +135,7 @@ const FilterPopover = ({ anchorEl, open, onClose, filters, setFilters }) => {
               }
               label={
                 <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                  Date closed
+                  {t('tasks.dateClosed', { defaultValue: 'Date closed' })}
                 </Typography>
               }
             />

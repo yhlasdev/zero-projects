@@ -1,5 +1,6 @@
 {
   "sidebar": {
+    "title": "Yerinde",
     "dashboard": "Dashboard",
     "employees": "Employees",
     "attendance": "Attendance",
@@ -31,7 +32,14 @@
     "department": "Department",
     "title": "Title",
     "nationality": "Nationality",
-    "employee": "Employee"
+    "employee": "Employee",
+    "allDepartments": "All Departments",
+    "allStatus": "All Status",
+    "allTypes": "All Types",
+    "checkIn": "Check In",
+    "checkOut": "Check Out",
+    "position": "Position",
+    "viewDetails": "View Details"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -50,7 +58,9 @@
     "hours": "Hours",
     "noData30Days": "No data found for the last 30 days",
     "currentMonth": "Current Month (Details)",
-    "lastMonth": "Last Month (Details)"
+    "lastMonth": "Last Month (Details)",
+    "reportTitle": "Attendance Report",
+    "reportSubtitle": "Track and manage employee attendance records"
   },
   "employees": {
     "title": "Employee",
@@ -66,7 +76,13 @@
     "probationEnd": "Probation end date",
     "workingTiming": "Working timing",
     "office": "Office",
-    "noRecords": "No attendance records found"
+    "noRecords": "No attendance records found",
+    "weeklySchedules": "Weekly Schedules",
+    "day": "Day",
+    "shift": "Shift",
+    "workTime": "Work Time",
+    "hours": "Hours",
+    "weekSummary": "Week Summary"
   },
   "tasks": {
     "title": "Task",
@@ -87,7 +103,8 @@
       "high": "High",
       "normal": "Normal",
       "low": "Low",
-      "clear": "Clear"
+      "clear": "Clear",
+      "none": "None"
     }
   },
   "settings": {
@@ -127,5 +144,33 @@
     "submit": "Register",
     "haveAccount": "Already have an account?",
     "signIn": "Sign in"
+  },
+  "welcome": {
+    "sponsors": "Our Sponsors",
+    "getStarted": "Get Started →",
+    "contact": "Contact",
+    "send": "Send"
+  },
+  "attendance": {
+    "present": "Present",
+    "absent": "Absent",
+    "onLeave": "On leave",
+    "dayOff": "Day off"
+  },
+  "leaveRequests": {
+    "title": "Leave Requests",
+    "subtitle": "Review and manage employee leave requests",
+    "leaveType": "Leave Type",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "days": "Days"
+  },
+  "letterRequests": {
+    "attachment": "Attachment"
+  },
+  "documents": {
+    "uploadDocument": "Upload Document",
+    "documentTitle": "Document Title",
+    "description": "Description"
   }
 }

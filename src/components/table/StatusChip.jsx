@@ -3,7 +3,7 @@ import { Chip } from "@mui/material";
 export default function StatusChip({ status = "default" }) {
   const statusStyles = {
     approve: { bg: "#D1FAE5", text: "#299764" },
-    present: { bg: "#D1FAE5", text: "#299764" },
+    present: { bg: "var(--complete-20, #29976433)", text: "#299764" },
     active: { bg: "#D1FAE5", text: "#299764" },
     absent: { bg: "#D93B2D33", text: "#D93B2D" },
     publish: { bg: "#29976433", text: "#24693d" },

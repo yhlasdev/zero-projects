@@ -28,15 +28,7 @@ export default function GlobalTable({
       onScroll={onScroll}
     >
       <Table stickyHeader>
-        <TableHead
-          sx={(theme) => ({
-            ".css-1rkr5we-MuiTableHead-root": {
-              backgroundColor:
-                theme.palette.mode == "dark" ? "#18212F" : "#F4F4F4",
-              fontWeight: 600,
-            },
-          })}
-        >
+        <TableHead>
           <TableRow>
             {columns.map((col) => (
               <TableCell key={col.key}>{col.label}</TableCell>

@@ -47,3 +47,19 @@ export const updateNewRequest = async (objectData) => {
   );
   return response;
 };
+
+export const updateEmployee = async (objectData) => {
+  const response = await api.putPrivate(
+    `/company-service/employees/update`,
+    objectData,
+  );
+  return response;
+};
+
+export const updateSchedule = async (objectData) => {
+  const response = await api.putPrivate(
+    `/company-service/schedules/update-weekly`,
+    objectData,
+  );
+  return response;
+};

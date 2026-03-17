@@ -313,9 +313,10 @@ export default function BulkExportModal({ open, onClose, rows = [], date }) {
             onClick={onClose}
             size="small"
             sx={{
-              bgcolor: "rgba(255,255,255,0.12)",
-              color: "#fff",
-              "&:hover": { bgcolor: "rgba(255,255,255,0.2)" },
+              color: "#3f3f3f",
+              borderRadius: "8px",
+              bgcolor: "#fff",
+              "&:hover": { bgcolor: "rgba(255,255,255,0.2)", color: '#fff' },
             }}
           >
             <CloseIcon fontSize="small" />
@@ -323,13 +324,14 @@ export default function BulkExportModal({ open, onClose, rows = [], date }) {
         </Stack>
       </Box>
 
-      <DialogContent sx={{ p: 0 }}>
+      <DialogContent sx={{ p: 0, bgcolor: "#f8fafc" }}>
         {/* Stats */}
         <Box
           sx={{
             display: "grid",
             gridTemplateColumns: "repeat(6, 1fr)",
             borderBottom: "1px solid #e5e9f0",
+            bgcolor: "#F8FAFC"
           }}
         >
           {[
@@ -412,8 +414,9 @@ export default function BulkExportModal({ open, onClose, rows = [], date }) {
             gridTemplateColumns: GRID,
             px: 2,
             py: 1,
-            bgcolor: "#f8fafc",
+            // bgcolor: "#f8fafc",
             borderBottom: "1px solid #e5e9f0",
+            bgcolor: "#F4F7FA"
           }}
         >
           <Box />

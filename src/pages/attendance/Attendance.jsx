@@ -13,9 +13,13 @@ import BulkExportModal from "./components/BulkeExport";
 import { useInfiniteGet } from "../../hooks/useInfiniteList";
 import { getAllAttendance } from "../../api/queries/getters";
 import dayjs from "dayjs";
+import { useLocale } from "../../hooks/useLocale";
+import { useCallback } from "react";
 
 const AttendancePage = () => {
+  const { t } = useLocale();
   const [openEditModal, setOpenEditModal] = useState(false);
+
   const [selectedRow, setSelectedRow] = useState(null);
   const [openViewModal, setOpenViewModal] = useState(false);
   const [openExportModal, setOpenExportModal] = useState(false);
@@ -58,10 +62,10 @@ const AttendancePage = () => {
   }));
 
   const columns = [
-    { key: "employee_id", label: "ID" },
+    { key: "employee_id", label: t("common.id") },
     {
       key: "employee",
-      label: "Employee",
+      label: t("common.employee"),
       render: (row) => (
         <EmployeeCell
           name={row.name}
@@ -70,19 +74,19 @@ const AttendancePage = () => {
         />
       ),
     },
-    { key: "department", label: "Department" },
-    { key: "position", label: "Position" },
-    { key: "checkIn", label: "Check In" },
-    { key: "checkOut", label: "Check Out" },
-    { key: "hours", label: "Hours" },
+    { key: "department", label: t("common.department") },
+    { key: "position", label: t("common.position") },
+    { key: "checkIn", label: t("common.checkIn") },
+    { key: "checkOut", label: t("common.checkOut") },
+    { key: "hours", label: t("dashboard.hours") },
     {
       key: "status",
-      label: "Status",
+      label: t("common.status"),
       render: (row) => <StatusChip status={row.status} />,
     },
     {
       key: "actions",
-      label: "Actions",
+      label: t("common.actions"),
       render: (row) => (
         <TableActions
           onView={() => {
@@ -97,6 +101,10 @@ const AttendancePage = () => {
       ),
     },
   ];
+
+  const handleSearch = useCallback((val) => {
+    setFilters((prev) => ({ ...prev, search: val }));
+  }, []);
 
   return (
     <Box className="attendance">
@@ -115,12 +123,17 @@ const AttendancePage = () => {
             }}
           >
             <PageTitle
-              title="Attendance Report"
-              subTitle="Track and manage employee attendance records"
+              title={t("dashboard.reportTitle")}
+              subTitle={t("dashboard.reportSubtitle")}
             />
           </Box>
 
-          <Header filters={filters} setFilters={setFilters} setOpenExportModal={setOpenExportModal} />
+          <Header
+            filters={filters}
+            setFilters={setFilters}
+            setOpenExportModal={setOpenExportModal}
+            handleSearch={handleSearch}
+          />
           <GlobalTable
             columns={columns}
             rows={rows}
@@ -128,7 +141,7 @@ const AttendancePage = () => {
             isLoading={attendanceQuery.isLoading}
             isFetchingNextPage={attendanceQuery.isFetchingNextPage}
             isError={attendanceQuery.isError}
-            emptyMessage="No attendance records found"
+            emptyMessage={t("employees.noRecords")}
           />
         </>
       )}

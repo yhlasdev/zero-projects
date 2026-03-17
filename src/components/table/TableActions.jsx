@@ -19,7 +19,7 @@ export default function TableActions({
       )}
       {onCalendar && (
         <IconButton size="small" onClick={onCalendar} sx={{fontSize: 18}}>
-          <CalendarMonthSharpIcon />
+          <CalendarMonthSharpIcon sx={{fontSize: 18}}/>
         </IconButton>
       )}
       {onEdit && (

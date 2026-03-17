@@ -14,12 +14,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
-function InlineCalendar({
-  value,
-  rangeStart,
-  rangeEnd,
-  onSelect,
-}) {
+function InlineCalendar({ value, rangeStart, rangeEnd, onSelect }) {
   const [viewDate, setViewDate] = useState(value || dayjs());
 
   const startOfMonth = viewDate.startOf("month");
@@ -74,17 +69,17 @@ function InlineCalendar({
           sx={{
             fontWeight: 700,
             fontSize: 16,
-            color: "#1a1a2e",
+            // color: "#1a1a2e",
             letterSpacing: 1,
           }}
         >
           {viewDate.format("MMMM YYYY").toUpperCase()}
         </Typography>
         <Box>
-          <IconButton size="small" onClick={prevMonth} sx={{ color: "#555" }}>
+          <IconButton size="small" onClick={prevMonth} >
             <ChevronLeftIcon fontSize="small" />
           </IconButton>
-          <IconButton size="small" onClick={nextMonth} sx={{ color: "#555" }}>
+          <IconButton size="small" onClick={nextMonth} >
             <ChevronRightIcon fontSize="small" />
           </IconButton>
         </Box>
@@ -151,7 +146,7 @@ function InlineCalendar({
                         ? "#fff"
                         : inRange
                           ? "#1a1a2e"
-                          : "#1a1a2e",
+                          : "",
                       fontWeight: startOrEnd ? 700 : 400,
                       fontSize: 14,
                       "&:hover": {
@@ -254,9 +249,7 @@ export default function DateRangeSelect({ value, onChange }) {
           >
             {displayStart}
           </Typography>
-          <Typography
-            sx={{ color: "#555", fontSize: 14, fontWeight: 300 }}
-          >
+          <Typography sx={{ color: "#555", fontSize: 14, fontWeight: 300 }}>
             -
           </Typography>
           <Typography
@@ -287,7 +280,7 @@ export default function DateRangeSelect({ value, onChange }) {
                 border: "1.5px solid #1565c0",
                 borderRadius: "16px",
                 overflow: "hidden",
-                bgcolor: "#fff",
+                // bgcolor: "#fff",
               }}
             >
               <InlineCalendar

@@ -27,6 +27,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { getAllEmployeeForTask } from "../../../api/queries/getters";
 import { createDocument } from "../../../api/queries/post";
+import { useLocale } from "../../../hooks/useLocale";
+
 
 // ── Constants ────────────────────────────────────────────────────────────────
 const STATUS_OPTIONS = [
@@ -153,6 +155,8 @@ const getInitials = (first = "", last = "") =>
 // ── Main component ────────────────────────────────────────────────────────────
 export default function CreateTaskModal({ onClose, onSuccess }) {
   const queryClient = useQueryClient();
+  const { t } = useLocale();
+
 
   // form state
   const [title, setTitle] = useState("");
@@ -258,7 +262,16 @@ export default function CreateTaskModal({ onClose, onSuccess }) {
     return cells;
   }, [calView]);
 
-  const WEEK_DAYS = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
+const WEEK_DAYS = [
+    t('calendar.mon', { defaultValue: 'Пн' }),
+    t('calendar.tue', { defaultValue: 'Вт' }),
+    t('calendar.wed', { defaultValue: 'Ср' }),
+    t('calendar.thu', { defaultValue: 'Чт' }),
+    t('calendar.fri', { defaultValue: 'Пт' }),
+    t('calendar.sat', { defaultValue: 'Сб' }),
+    t('calendar.sun', { defaultValue: 'Вс' }),
+  ];
+
 
   return (
     <>
@@ -274,7 +287,7 @@ export default function CreateTaskModal({ onClose, onSuccess }) {
         }}
       >
         <Typography sx={{ fontWeight: 700, fontSize: 18, color: "text.primary" }}>
-          Create New Task
+          {t('tasks.createTask')}
         </Typography>
         <IconButton
           size="small"
@@ -287,7 +300,7 @@ export default function CreateTaskModal({ onClose, onSuccess }) {
 
       <DialogContent sx={{ px: 3, pt: 2, pb: 1 }}>
         {/* Task Title */}
-        <Typography sx={labelSx}>Task Title</Typography>
+        <Typography sx={labelSx}>{t('tasks.taskTitle')}</Typography>
         <TextField
           fullWidth
           size="small"
@@ -297,7 +310,7 @@ export default function CreateTaskModal({ onClose, onSuccess }) {
         />
 
         {/* Description */}
-        <Typography sx={{ ...labelSx, mt: 2 }}>Description</Typography>
+        <Typography sx={{ ...labelSx, mt: 2 }}>{t('tasks.description')}</Typography>
         <TextField
           fullWidth
           multiline
@@ -308,7 +321,7 @@ export default function CreateTaskModal({ onClose, onSuccess }) {
         />
 
         {/* Comment */}
-        <Typography sx={{ ...labelSx, mt: 2 }}>Comment</Typography>
+        <Typography sx={{ ...labelSx, mt: 2 }}>{t('tasks.comment')}</Typography>
         <TextField
           fullWidth
           size="small"
@@ -399,8 +412,8 @@ export default function CreateTaskModal({ onClose, onSuccess }) {
               assignees.length > 0
                 ? assignees.length === 1
                   ? `${assignees[0].user?.first_name} ${assignees[0].user?.last_name}`
-                  : `${assignees.length} assignees`
-                : "Assignee"
+                  : t('tasks.multipleAssignees', { count: assignees.length, defaultValue: `${assignees.length} assignees` })
+                : t('tasks.assignee')
             }
             active={assignees.length > 0}
             onClick={(e) => {
@@ -419,7 +432,7 @@ export default function CreateTaskModal({ onClose, onSuccess }) {
                   endDate.format("DD MMM YYYY")
                 : startDate
                   ? startDate.format("DD MMM YYYY")
-                  : "Due date"
+                  : t('tasks.dueDate')
             }
             active={!!(startDate || endDate)}
             onClick={(e) => {
@@ -439,7 +452,7 @@ export default function CreateTaskModal({ onClose, onSuccess }) {
                 }}
               />
             }
-            label={priorityOpt?.label || "Priority"}
+            label={priorityOpt?.label ? t(`tasks.priorityLevels.${priorityOpt.value}`) : t('tasks.priority')}
             active={!!priority}
             color={priorityOpt?.color}
             onClick={(e) => setPriorityAnchor(e.currentTarget)}
@@ -469,7 +482,7 @@ export default function CreateTaskModal({ onClose, onSuccess }) {
             px: 3,
           }}
         >
-          Cancel
+          {t('common.cancel')}
         </Button>
         <Button
           onClick={handleSubmit}
@@ -485,7 +498,7 @@ export default function CreateTaskModal({ onClose, onSuccess }) {
             "&.Mui-disabled": { bgcolor: "action.disabledBackground" },
           }}
         >
-          {mutation.isPending ? "Creating…" : "Create Task"}
+          {mutation.isPending ? t('tasks.creating', { defaultValue: 'Creating…' }) : t('tasks.createTask')}
         </Button>
       </Box>
       {mutation.isError && (
@@ -522,7 +535,7 @@ export default function CreateTaskModal({ onClose, onSuccess }) {
             pb: 0.3,
           }}
         >
-          Not started
+          {t('tasks.notStarted')}
         </Typography>
         <StatusItem
           opt={STATUS_OPTIONS[0]}
@@ -544,7 +557,7 @@ export default function CreateTaskModal({ onClose, onSuccess }) {
             pb: 0.3,
           }}
         >
-          Active
+          {t('common.active')}
         </Typography>
         <StatusItem
           opt={STATUS_OPTIONS[1]}
@@ -584,7 +597,7 @@ export default function CreateTaskModal({ onClose, onSuccess }) {
           <TextField
             fullWidth
             size="small"
-            placeholder="Search or enter email..."
+            placeholder={t('common.searchPlaceholder', { defaultValue: 'Search or enter email...' })}
             value={empSearch}
             onChange={(e) => setEmpSearch(e.target.value)}
             autoFocus
@@ -620,7 +633,7 @@ export default function CreateTaskModal({ onClose, onSuccess }) {
                 py: 2,
               }}
             >
-              No employees found
+              {t('tasks.noEmployees', { defaultValue: 'No employees found' })}
             </Typography>
           ) : (
             employees.map((emp) => {

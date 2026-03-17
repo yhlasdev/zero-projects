@@ -8,12 +8,11 @@ import TableActions from "../../components/table/TableActions";
 import GlobalModal from "../../components/modal/GlobalModal";
 import AddEmployeeContent from "./components/AddEmployeeContent";
 import ViewEmployeeWeek from "./components/EmployeeDetailWeek";
-import Header from './components/Header';
+import Header from "./components/Header";
 import { useInfiniteGet } from "../../hooks/useInfiniteList";
 import { getAllEmployee } from "../../api/queries/getters";
 import EditEmployeeContent from "./components/EditEmployee";
 import { useLocale } from "../../hooks/useLocale";
-
 
 const EmployeesPage = () => {
   const { t } = useLocale();
@@ -24,7 +23,7 @@ const EmployeesPage = () => {
   const [filters, setFilter] = useState({
     department_id: "",
     job_id: "",
-    search: ""
+    search: "",
   });
 
   const employeeQuery = useInfiniteGet({
@@ -38,12 +37,12 @@ const EmployeesPage = () => {
   const columns = [
     {
       key: "employee_id",
-      label: t('common.id'),
+      label: t("common.id"),
       render: (row) => row.employee_id,
     },
     {
       key: "employee",
-      label: t('common.employee'),
+      label: t("common.employee"),
       render: (row) => (
         <EmployeeCell
           name={`${row.user?.first_name} ${row.user?.last_name}`}
@@ -53,36 +52,40 @@ const EmployeesPage = () => {
     },
     {
       key: "title",
-      label: t('common.title'),
+      label: t("common.title"),
       render: (row) => row.job?.title,
     },
     {
       key: "department",
-      label: t('common.department'),
+      label: t("common.department"),
       render: (row) => row.department?.name,
     },
     {
       key: "nationality",
-      label: t('common.nationality'),
+      label: t("common.nationality"),
       render: (row) => row.user?.nationality,
     },
     {
       key: "status",
-      label: t('common.status'),
-      render: (row) => <StatusChip status={row.is_active ? "active" : "inactive"} />,
+      label: t("common.status"),
+      render: (row) => (
+        <StatusChip status={row.is_active ? "active" : "inactive"} />
+      ),
     },
     {
       key: "actions",
-      label: t('common.actions'),
+      label: t("common.actions"),
       render: (row) => (
         <TableActions
           onCalendar={() => {
             setSelectedEmployee(row);
             setOpenViewModal(true);
           }}
-          onDelete={() => console.log('del')}
+          onDelete={() => console.log("del")}
           onEdit={() => {
+            setSelectedEmployee(row);
             setOpenEditModal(true);
+            console.log(row, "selected employee for edit")
           }}
         />
       ),
@@ -92,12 +95,12 @@ const EmployeesPage = () => {
   return (
     <Box className="employees">
       {openViewModal ? (
-        <ViewEmployeeWeek employee={selectedEmployee} />
+        <ViewEmployeeWeek employee={selectedEmployee} onClose={() => setOpenViewModal(false)} />
       ) : (
         <>
           <PageTitle
-            title={t('employees.title')}
-            subTitle={t('employees.subtitle')}
+            title={t("employees.title")}
+            subTitle={t("employees.subtitle")}
           />
           <Header
             onAddClick={() => setOpenAddModal(true)}
@@ -111,7 +114,7 @@ const EmployeesPage = () => {
             isLoading={employeeQuery.isLoading}
             isFetchingNextPage={employeeQuery.isFetchingNextPage}
             isError={employeeQuery.isError}
-            emptyMessage={t('employees.noRecords')}
+            emptyMessage={t("employees.noRecords")}
           />
 
           {/* <TablePaginationInfo
@@ -126,10 +129,7 @@ const EmployeesPage = () => {
         maxWidth="md"
         fullWidth
       >
-        <AddEmployeeContent
-          onClose={() => setOpenAddModal(false)}
-        />
-
+        <AddEmployeeContent onClose={() => setOpenAddModal(false)} />
       </GlobalModal>
 
       <GlobalModal
@@ -139,9 +139,9 @@ const EmployeesPage = () => {
         fullWidth
       >
         <EditEmployeeContent
+          employeeId={selectedEmployee?.employee_id}
           onClose={() => setOpenEditModal(false)}
         />
-
       </GlobalModal>
     </Box>
   );

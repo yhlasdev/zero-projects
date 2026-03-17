@@ -12,9 +12,13 @@ import FieldLabel from "../../components/textField/WelcomeLabel";
 import Footer from "./components/Footer";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineArrowRightAlt } from "react-icons/md";
+import { useLocale } from "../../hooks/useLocale";
+
 
 const Welcome = () => {
   const navigate = useNavigate();
+  const { t } = useLocale();
+
 
   return (
     <Paper sx={{bgcolor: '#fff'}}>
@@ -57,7 +61,7 @@ const Welcome = () => {
                 },
               }}
             >
-              Giriş
+              {t('login.submit')}
             </Button>
             <Button
               onClick={() => navigate("/register")}
@@ -79,7 +83,7 @@ const Welcome = () => {
                 },
               }}
             >
-              Registrasiýa
+              {t('register.submit')}
             </Button>
           </Box>
         </Toolbar>
@@ -169,8 +173,7 @@ const Welcome = () => {
                  WebkitTextFillColor: 'transparent',
               }}
             >
-              Ýerinde bilen <br />
-              işiňizi hasaba alyň
+              {t('welcome.heroTitle', { defaultValue: 'Ýerinde bilen işiňizi hasaba alyň' })}
             </Typography>
 
             <Box height={20} />
@@ -183,10 +186,7 @@ const Welcome = () => {
                 color: "#4a5568",
               }}
             >
-              Häzirki zaman çözgütler bilen işiňizi aňsatlykda dolandyryň.
-              <br />
-              Yerinde siziň işgäriňiziň haýsydyr bir ýerinde bolsun, size kömek
-              edýär.
+              {t('welcome.heroSubtitle', { defaultValue: 'Häzirki zaman çözgütler bilen işiňizi aňsatlykda dolandyryň. Yerinde siziň işgäriňiziň haýsydyr bir ýerinde bolsun, size kömek edýär.' })}
             </Typography>
 
             <Button
@@ -209,7 +209,7 @@ const Welcome = () => {
               }}
               endIcon={<MdOutlineArrowRightAlt />}
             >
-              Başlamak
+              {t('welcome.getStarted')}
             </Button>
           </Box>
 
@@ -242,9 +242,9 @@ const Welcome = () => {
               letterSpacing: "3px",
               fontSize: "14px",
             }}
-          >
-            BIZ BARADA
-          </Typography>
+            >
+              {t('welcome.aboutUs', { defaultValue: 'BIZ BARADA' })}
+            </Typography>
         </Box>
         <About />
         <MobileDownload />
@@ -257,9 +257,9 @@ const Welcome = () => {
             fontSize={52}
             color="#0F3254"
             ml={"17%"}
-          >
-            Mobil programmany nädip ulanmalydygyny öwreniň
-          </Typography>
+            >
+              {t('welcome.videoTitle', { defaultValue: 'Mobil programmany nädip ulanmalydygyny öwreniň' })}
+            </Typography>
         </Box>
         <Box textAlign={"center"} ml={"23%"} mt={3} mb={8}>
           <Typography
@@ -267,10 +267,9 @@ const Welcome = () => {
             fontSize={20}
             width={750}
             textAlign={"center"}
-          >
-            Aşakdaky wideo sapaklar arkaly programmamyzy ädimme-ädim öwreniň we
-            iş tertibiňizi şu gün gowulandyryp başlaň.
-          </Typography>
+            >
+              {t('welcome.videoSubtitle', { defaultValue: 'Aşakdaky wideo sapaklar arkaly programmamyzy ädimme-ädim öwreniň we iş tertibiňizi şu gün gowulandyryp başlaň.' })}
+            </Typography>
         </Box>
         <VideoSection />
         <Box mb={15}></Box>
@@ -293,7 +292,7 @@ const Welcome = () => {
           gutterBottom
           paddingTop={"60px"}
         >
-          Habarlaşmak
+          {t('welcome.contact')}
         </Typography>
 
         <Typography
@@ -337,9 +336,9 @@ const Welcome = () => {
                   fontSize: 17,
                   mt: 12,
                 }}
-              >
-                Ibermek
-              </Button>
+                >
+                  {t('welcome.send')}
+                </Button>
             </form>
           </Box>
         </Paper>

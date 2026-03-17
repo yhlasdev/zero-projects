@@ -17,6 +17,7 @@ export default function HeaderAppBar({ children }) {
         sx={{
           display: "flex",
           gap: 2,
+          flexWrap: "wrap",
         }}
       >
         {children}

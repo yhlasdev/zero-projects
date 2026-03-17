@@ -1,18 +1,19 @@
 {
   "sidebar": {
+    "title": "Yerinde",
     "dashboard": "Dolandyryş paneli",
     "employees": "Işgärler",
     "attendance": "Gatnaşyk",
     "tasks": "Wezipeler",
-    "leaveRequests": "Rugsat sorag lary",
+    "leaveRequests": "Rugsat soraglary",
     "newRequests": "Täze soraglar",
     "announcements": "Bildirişler",
     "documents": "Resminamalar",
-    "calendar": "Senişenbe",
+    "calendar": "Senentnama",
     "settings": "Sazlamalar"
   },
   "common": {
-    "logout": "Ulgamdan çykmak",
+    "logout": "Ulgamdan çyk",
     "admin": "Admin ulanyjy",
     "administrator": "Administrator",
     "loading": "Ýüklenýär...",
@@ -31,7 +32,14 @@
     "department": "Bölüm",
     "title": "Wezipe",
     "nationality": "Milleti",
-    "employee": "Işgär"
+    "employee": "Işgär",
+    "allDepartments": "Ähli bölümler",
+    "allStatus": "Ähli ýagdaýlar",
+    "allTypes": "Ähli görnüşler",
+    "checkIn": "Gelen wagty",
+    "checkOut": "Giden wagty",
+    "position": "Wezipe",
+    "viewDetails": "Jikme-jik gör"
   },
   "dashboard": {
     "title": "Dolandyryş paneli",
@@ -50,7 +58,9 @@
     "hours": "Sagat",
     "noData30Days": "Soňky 30 güne maglumat tapylmady",
     "currentMonth": "Şu aý (jikme-jik)",
-    "lastMonth": "Geçen aý (jikme-jik)"
+    "lastMonth": "Geçen aý (jikme-jik)",
+    "reportTitle": "Gatnaşyk hasabaty",
+    "reportSubtitle": "Işgärleriň gatnaşyk ýazgylaryna gözegçilik ediň we dolandyryň"
   },
   "employees": {
     "title": "Işgär",
@@ -66,7 +76,13 @@
     "probation end date": "Synag möhletiniň gutarýan senesi",
     "workingTiming": "Iş wagty",
     "office": "Ofis",
-    "noRecords": "Gatnaşyk ýazgysy tapylmady"
+    "noRecords": "Gatnaşyk ýazgysy tapylmady",
+    "weeklySchedules": "Hepdelik tertipler",
+    "day": "Gün",
+    "shift": "Smena",
+    "workTime": "Iş wagty",
+    "hours": "Sagat",
+    "weekSummary": "Hepdelik jem"
   },
   "tasks": {
     "title": "Wezipeler",
@@ -87,7 +103,8 @@
       "high": "Ýokary",
       "normal": "Normal",
       "low": "Pes",
-      "clear": "Arassala"
+      "clear": "Arassala",
+      "none": "Ýok"
     }
   },
   "settings": {
@@ -127,5 +144,33 @@
     "submit": "Hasap aç",
     "haveAccount": "Hasabyňyz barmy?",
     "signIn": "Giriş"
+  },
+  "welcome": {
+    "sponsors": "Biziň hyzmatdaşlarymyz",
+    "getStarted": "Başlamak →",
+    "contact": "Habarlaşmak",
+    "send": "Ibermek"
+  },
+  "attendance": {
+    "present": "Geldi",
+    "absent": "Gelmedi",
+    "onLeave": "Rugsada çykan",
+    "dayOff": "Döwlet dynç alyş güni"
+  },
+  "leaveRequests": {
+    "title": "Rugsat soraglary",
+    "subtitle": "Işgärleriň rugsat soraglaryna serediň we dolandyryň",
+    "leaveType": "Rugsat görnüşi",
+    "startDate": "Başlaýan senesi",
+    "endDate": "Gutarýan senesi",
+    "days": "Günler"
+  },
+  "letterRequests": {
+    "attachment": "Gerkebnama"
+  },
+  "documents": {
+    "uploadDocument": "Resminama ýükle",
+    "documentTitle": "Resminamanyň ady",
+    "description": "Düşündiriş"
   }
 }

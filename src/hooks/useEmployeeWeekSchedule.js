@@ -7,30 +7,36 @@ export const useEmployeeWeekSchedule = (employee_id, week_start) => {
     queryFn: async () => {
       const res = await getSchedule({ employee_id, week_start });
 
-      const raw = res.data?.data?.schedule;
-      const raw2 = res.data?.data;
+      const mainData = res.data?.data; 
+      const schedule = mainData?.schedule; 
+      const daysArray = schedule?.days || [];
+
       return {
-        id: raw.ID,
-        employeeId: raw.EmployeeId,
-        weekStart: raw.WeekStart,
-        weekEnd: raw.WeekEnd,
-        work_day: raw2?.work_day,
-        day_off: raw2?.day_off,
-        total_hours: raw2?.total_hours,
-        days: raw.Days?.map((d) => ({
-          id: d.ID,
-          weeklyScheduleID: d.WeeklyScheduleID,
-          dayOfWeek: d.DayOfWeek,
-          date: d.Date,
-          shiftType: d.ShiftType,
-          startTime: d.StartTime,
-          endTime: d.EndTime,
-          hours: d.Hours,
-          crossesMidnight: d.CrossesMidnight,
+        work_day: mainData?.work_day,
+        day_off: mainData?.day_off,
+        total_hours: mainData?.total_hours,
+
+        id: schedule?.id,
+        employeeId: schedule?.employee_id,
+        weekStart: schedule?.week_start,
+        weekEnd: schedule?.week_end,
+
+        days: daysArray.map((d) => ({
+          id: d.id,
+          weeklyScheduleID: d.weekly_schedule_id,
+          dayOfWeek: d.day_of_week,
+          date: d.date,
+          shiftType: d.shift_type,
+          startTime: d.start_time,
+          endTime: d.end_time,
+          hours: d.hours,
+          crossesMidnight: d.crosses_midnight,
         })),
       };
     },
     enabled: !!employee_id && !!week_start,
-    keepPreviousData: true,
+    staleTime: 0,
+    gcTime: 0,
+    refetchOnWindowFocus: true,
   });
 };

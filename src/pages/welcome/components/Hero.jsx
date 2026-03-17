@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+import { useLocale } from "../../../hooks/useLocale";
 
 const slides = [
+
     {
         title: "Yerinde bilen işiňizi hasaba alyň",
         text: "Häzirki zaman çözgütler bilen işiňizi aňsatlykda dolandyryň.",
@@ -10,7 +12,18 @@ const slides = [
 ];
 
 const Hero = () => {
+    const { t } = useLocale();
     const [index, setIndex] = useState(0);
+
+    const slidesTranslated = [
+        {
+            title: t('welcome.heroTitle', { defaultValue: "Yerinde bilen işiňizi hasaba alyň" }),
+            text: t('welcome.heroSubtitle', { defaultValue: "Häzirki zaman çözgütler bilen işiňizi aňsatlykda dolandyryň." }),
+            image:
+                "https://images.unsplash.com/photo-1552664730-d307ca884978?w=700",
+        },
+    ];
+
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -24,16 +37,17 @@ const Hero = () => {
         <section className="hero">
             <div className="container hero-flex">
                 <div className="hero-text">
-                    <h1>{slides[index].title}</h1>
-                    <p>{slides[index].text}</p>
-                    <button className="btn-primary big">Başlamak →</button>
+                    <h1>{slidesTranslated[index].title}</h1>
+                    <p>{slidesTranslated[index].text}</p>
+                    <button className="btn-primary big">{t('welcome.getStarted')}</button>
                 </div>
 
                 <div className="hero-image">
-                    <img src={slides[index].image} alt="hero" />
+                    <img src={slidesTranslated[index].image} alt="hero" />
                 </div>
             </div>
         </section>
+
     );
 };
 

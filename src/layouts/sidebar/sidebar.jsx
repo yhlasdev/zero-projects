@@ -31,7 +31,6 @@ export const Sidebar = () => {
           boxSizing: "border-box",
           position: "fixed",
           height: "100vh",
-          backgroundColor: mode === "dark" ? "background.paper" : "#F4F4F4",
           borderRight: (theme) => `1px solid ${theme.palette.divider}`,
         },
       }}

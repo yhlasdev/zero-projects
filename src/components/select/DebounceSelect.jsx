@@ -4,6 +4,7 @@ import {
   IconButton,
   InputAdornment,
   InputLabel,
+  useColorScheme,
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -20,10 +21,18 @@ export default function DebounceSelect({
 }) {
   const hasValue = value !== "" && value !== null && value !== undefined;
   const labelId = `select-label-${label?.replace(/\s/g, "")}`;
-
+  const { mode } = useColorScheme();
   return (
     <FormControl size="small" sx={{ width: width }} variant="outlined">
-      <InputLabel id={labelId} shrink={hasValue || props.displayEmpty}>
+      <InputLabel
+        sx={{
+          "&.Mui-focused": {
+            color: mode === "dark" ? "#fff" : "",
+          },
+        }}
+        id={labelId}
+        shrink={hasValue || props.displayEmpty}
+      >
         {label}
       </InputLabel>
 
