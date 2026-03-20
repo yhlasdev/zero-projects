@@ -76,7 +76,7 @@ export default function AreaChartSection() {
                     },
                 ]}
                 yAxis={[{ id: 'price', scaleType: 'linear', min: 0, max: 340 }]}
-                margin={{ left: 40, right: 0, top: 40, bottom: 60 }}
+                margin={{ right: 0, top: 40, bottom: 60 }}
                 grid={{ vertical: true, horizontal: true }}
                 sx={{
                     [`& .${lineElementClasses.root}`]: {
