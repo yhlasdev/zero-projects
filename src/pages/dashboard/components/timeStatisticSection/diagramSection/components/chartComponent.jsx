@@ -1,31 +1,71 @@
 import Box from '@mui/material/Box';
 import { LineChart, lineElementClasses, areaElementClasses } from '@mui/x-charts/LineChart';
 
-const alphabetStock = [
-    { "date": "2024-10-20", "low": 100, "high": 110 },
-    { "date": "2024-10-21", "low": 110, "high": 120 },
-    { "date": "2024-10-22", "low": 280, "high": 150 },
-    { "date": "2024-10-23", "low": 120, "high": 170 },
-    { "date": "2024-10-24", "low": 100, "high": 85 },
-    { "date": "2024-10-25", "low": 240, "high": 250 },
-    { "date": "2024-10-26", "low": 200, "high": 270 },
-    { "date": "2024-10-27", "low": 140, "high": 210 },
-    { "date": "2024-10-28", "low": 160, "high": 110 },
-    { "date": "2024-10-29", "low": 140, "high": 180 },
-    { "date": "2024-10-30", "low": 130, "high": 190 },
-    { "date": "2024-10-31", "low": 120, "high": 200 },
-    { "date": "2024-11-01", "low": 110, "high": 210 },
-    { "date": "2024-11-02", "low": 100, "high": 220 },
-    { "date": "2024-11-03", "low": 90, "high": 230 },
-    { "date": "2024-11-04", "low": 80, "high": 240 },
-    { "date": "2024-11-05", "low": 150, "high": 250 },
-    { "date": "2024-11-06", "low": 200, "high": 260 },
-    { "date": "2024-11-07", "low": 250, "high": 270 },
-    { "date": "2024-11-10", "low": 200, "high": 280 },
-    { "date": "2024-11-12", "low": 150, "high": 290 },
-    { "date": "2024-11-15", "low": 100, "high": 300 },
-    { "date": "2024-11-20", "low": 50, "high": 310 },
-    { "date": "2024-11-22", "low": 20, "high": 320 },
+const daily_hours_last_30 = [
+    { "day": "2026-02-19T00:00:00Z", "hours": 7 },
+    { "day": "2026-02-20T00:00:00Z", "hours": 5 },
+    { "day": "2026-02-21T00:00:00Z", "hours": 2 },
+    { "day": "2026-02-22T00:00:00Z", "hours": 4 },
+    { "day": "2026-02-23T00:00:00Z", "hours": 4 },
+    { "day": "2026-02-24T00:00:00Z", "hours": 5 },
+    { "day": "2026-02-25T00:00:00Z", "hours": 6 },
+    { "day": "2026-02-26T00:00:00Z", "hours": 6 },
+    { "day": "2026-02-27T00:00:00Z", "hours": 3 },
+    { "day": "2026-02-28T00:00:00Z", "hours": 2 },
+    { "day": "2026-03-01T00:00:00Z", "hours": 2 },
+    { "day": "2026-03-02T00:00:00Z", "hours": 7 },
+    { "day": "2026-03-03T00:00:00Z", "hours": 2 },
+    { "day": "2026-03-04T00:00:00Z", "hours": 7 },
+    { "day": "2026-03-05T00:00:00Z", "hours": 8 },
+    { "day": "2026-03-06T00:00:00Z", "hours": 4 },
+    { "day": "2026-03-07T00:00:00Z", "hours": 6 },
+    { "day": "2026-03-08T00:00:00Z", "hours": 8 },
+    { "day": "2026-03-09T00:00:00Z", "hours": 4 },
+    { "day": "2026-03-10T00:00:00Z", "hours": 4 },
+    { "day": "2026-03-11T00:00:00Z", "hours": 5 },
+    { "day": "2026-03-12T00:00:00Z", "hours": 2 },
+    { "day": "2026-03-13T00:00:00Z", "hours": 2 },
+    { "day": "2026-03-14T00:00:00Z", "hours": 4 },
+    { "day": "2026-03-15T00:00:00Z", "hours": 8 },
+    { "day": "2026-03-16T00:00:00Z", "hours": 7 },
+    { "day": "2026-03-17T00:00:00Z", "hours": 2 },
+    { "day": "2026-03-18T00:00:00Z", "hours": 8 },
+    { "day": "2026-03-19T00:00:00Z", "hours": 7 },
+    { "day": "2026-03-20T00:00:00Z", "hours": 6 }
+];
+
+const daily_hours_30_to_60 = [
+    { "day": "2026-01-19T00:00:00Z", "hours": 7 },
+    { "day": "2026-01-20T00:00:00Z", "hours": 3 },
+    { "day": "2026-01-21T00:00:00Z", "hours": 8 },
+    { "day": "2026-01-22T00:00:00Z", "hours": 8 },
+    { "day": "2026-01-23T00:00:00Z", "hours": 6 },
+    { "day": "2026-01-24T00:00:00Z", "hours": 5 },
+    { "day": "2026-01-25T00:00:00Z", "hours": 8 },
+    { "day": "2026-01-26T00:00:00Z", "hours": 7 },
+    { "day": "2026-01-27T00:00:00Z", "hours": 2 },
+    { "day": "2026-01-28T00:00:00Z", "hours": 6 },
+    { "day": "2026-01-29T00:00:00Z", "hours": 8 },
+    { "day": "2026-01-30T00:00:00Z", "hours": 2 },
+    { "day": "2026-01-31T00:00:00Z", "hours": 6 },
+    { "day": "2026-02-01T00:00:00Z", "hours": 8 },
+    { "day": "2026-02-02T00:00:00Z", "hours": 6 },
+    { "day": "2026-02-03T00:00:00Z", "hours": 4 },
+    { "day": "2026-02-04T00:00:00Z", "hours": 7 },
+    { "day": "2026-02-05T00:00:00Z", "hours": 3 },
+    { "day": "2026-02-06T00:00:00Z", "hours": 5 },
+    { "day": "2026-02-07T00:00:00Z", "hours": 2 },
+    { "day": "2026-02-08T00:00:00Z", "hours": 7 },
+    { "day": "2026-02-09T00:00:00Z", "hours": 3 },
+    { "day": "2026-02-10T00:00:00Z", "hours": 7 },
+    { "day": "2026-02-11T00:00:00Z", "hours": 6 },
+    { "day": "2026-02-12T00:00:00Z", "hours": 8 },
+    { "day": "2026-02-13T00:00:00Z", "hours": 5 },
+    { "day": "2026-02-14T00:00:00Z", "hours": 8 },
+    { "day": "2026-02-15T00:00:00Z", "hours": 8 },
+    { "day": "2026-02-16T00:00:00Z", "hours": 6 },
+    { "day": "2026-02-17T00:00:00Z", "hours": 4 },
+    { "day": "2026-02-18T00:00:00Z", "hours": 2 }
 ];
 
 export default function AreaChartSection() {
@@ -47,16 +87,16 @@ export default function AreaChartSection() {
                 series={[
                     {
                         id: 'current-month',
-                        data: alphabetStock.map((day) => day.high),
+                        data: daily_hours_last_30.map((d) => d.hours),
                         label: 'Şu aý',
-                        color: '#1976d2',
+                        color: '#1D61E7',
                         area: true,
                         showMark: false,
                         curve: 'monotoneX',
                     },
                     {
                         id: 'last-month',
-                        data: alphabetStock.map((day) => day.low),
+                        data: daily_hours_30_to_60.slice(0, 30).map((d) => d.hours),
                         label: 'Geçen aý',
                         color: '#EF444499',
                         area: true,
@@ -67,7 +107,7 @@ export default function AreaChartSection() {
                 xAxis={[
                     {
                         id: 'date',
-                        data: alphabetStock.map((day) => new Date(day.date)),
+                        data: daily_hours_last_30.map((d) => new Date(d.day)),
                         scaleType: 'point',
                         valueFormatter: (value) => {
                             const months = ['ýan.', 'few.', 'mart', 'apr.', 'maý', 'iyun', 'iyul', 'awg.', 'sent.', 'okt.', 'noy.', 'dek.'];
@@ -75,7 +115,7 @@ export default function AreaChartSection() {
                         },
                     },
                 ]}
-                yAxis={[{ id: 'price', scaleType: 'linear', min: 0, max: 340 }]}
+                yAxis={[{ id: 'price', scaleType: 'linear', min: 0 }]}
                 margin={{ right: 0, top: 40, bottom: 60 }}
                 grid={{ vertical: true, horizontal: true }}
                 sx={{
