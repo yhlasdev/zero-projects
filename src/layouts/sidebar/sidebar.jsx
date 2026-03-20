@@ -5,12 +5,14 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
-import Typography from "@mui/material/Typography";
 
 import { useSidebarItems } from "../../hooks/useSidebarItems";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import websiteLogo from "../../assets/logo/logo.png";
+import websiteLogo from "../../assets/logo/last_logo.png";
+
+import websiteLogoDarkMode from '../../assets/logo/logo_dark_mode.png'
+
 import { useColorScheme } from "@mui/material";
 
 export const Sidebar = () => {
@@ -37,20 +39,17 @@ export const Sidebar = () => {
     >
       <Box
         sx={{
-          height: 80,
+          height: 100,
           display: "flex",
-          paddingLeft: "10px",
+          paddingLeft: "30px",
           alignItems: "center",
           justifyContent: "start",
           gap: 2,
         }}
       >
-        <Box>
-          <img src={websiteLogo} />
-        </Box>
-        <Typography variant="h5" className=" main-color-text">
-          Yerinde
-        </Typography>
+        {
+          mode === 'dark' ? <img style={{ width: '96px', height: '71px' }} src={websiteLogoDarkMode} /> : <img style={{ width: '96px', height: '71px' }} src={websiteLogo} />
+        }
       </Box>
 
       <Divider />
