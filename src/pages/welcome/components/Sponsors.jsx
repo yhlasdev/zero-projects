@@ -13,11 +13,13 @@ export const Sponsors = () => {
       <Typography
         sx={{
           fontSize: '52px',
+          fontFamily: 'Poppins',
           fontWeight: 800,
           textAlign: 'center',
           paddingTop: '60px',
-          paddingBottom: '80px'
-        }} className=" main-color-text">{t('welcome.sponsors')}</Typography>
+          paddingBottom: '80px',
+          color: '#0F3254'
+        }}>{t('welcome.sponsors')}</Typography>
 
 
       <Box

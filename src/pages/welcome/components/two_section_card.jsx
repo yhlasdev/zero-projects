@@ -19,6 +19,7 @@ export const TwoSectionCard = ({ icon, title, description }) => {
         border: "1px solid #0F32541A",
         boxShadow: "0px 10px 40px rgba(0,0,0,0.08)",
         backdropFilter: "blur(10px)",
+        fontFamily: "'Poppins', sans-serif",
       }}
     >
       {/* Icon Box */}
@@ -45,6 +46,7 @@ export const TwoSectionCard = ({ icon, title, description }) => {
           fontWeight: 700,
           fontSize: "24px",
           color: "#0F3254",
+          fontFamily: "inherit",
         }}
       >
         {title}
@@ -54,8 +56,8 @@ export const TwoSectionCard = ({ icon, title, description }) => {
       <Typography
         sx={{
           fontWeight: 400,
-          fontSize: "16px",
-          lineHeight: "27px",
+          fontSize: "17px",
+          lineHeight: "28px",
           color: "#666666",
         }}
       >

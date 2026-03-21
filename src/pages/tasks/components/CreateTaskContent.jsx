@@ -28,9 +28,9 @@ import dayjs from "dayjs";
 import { getAllEmployeeForTask } from "../../../api/queries/getters";
 import { createDocument } from "../../../api/queries/post";
 import { useLocale } from "../../../hooks/useLocale";
+import toast from "react-hot-toast";
 
 
-// ── Constants ────────────────────────────────────────────────────────────────
 const STATUS_OPTIONS = [
   {
     value: "todo",
@@ -152,13 +152,11 @@ const avatarColor = (id) =>
 const getInitials = (first = "", last = "") =>
   `${first[0] || ""}${last[0] || ""}`.toUpperCase();
 
-// ── Main component ────────────────────────────────────────────────────────────
-export default function CreateTaskModal({ onClose, onSuccess }) {
+export default function CreateTaskModal({ onClose }) {
   const queryClient = useQueryClient();
   const { t } = useLocale();
 
 
-  // form state
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [comment, setComment] = useState("");
@@ -170,21 +168,17 @@ export default function CreateTaskModal({ onClose, onSuccess }) {
   const [pickingDate, setPickingDate] = useState("start"); // 'start' | 'end'
   const [file, setFile] = useState(null);
 
-  // popover anchors
   const [statusAnchor, setStatusAnchor] = useState(null);
   const [assigneeAnchor, setAssigneeAnchor] = useState(null);
   const [priorityAnchor, setPriorityAnchor] = useState(null);
   const [dateAnchor, setDateAnchor] = useState(null);
 
-  // assignee search
   const [empSearch, setEmpSearch] = useState("");
 
-  // calendar state
   const [calView, setCalView] = useState(dayjs());
 
   const fileRef = useRef();
 
-  // ── employees query ─────────────────────────────────────────────────────
   const { data: empData, isLoading: empLoading } = useQuery({
     queryKey: ["task-employees", empSearch],
     queryFn: () => getAllEmployeeForTask({ search: empSearch }),
@@ -192,14 +186,12 @@ export default function CreateTaskModal({ onClose, onSuccess }) {
     staleTime: 30_000,
   });
   const employees = empData?.data?.data?.length ? empData?.data?.data : [];
-
-  // ── mutation ─────────────────────────────────────────────────────────────
   const mutation = useMutation({
     mutationFn: (payload) => createDocument(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
+      toast.success('Successfuly created task')
       handleClose();
-      if (onSuccess) onSuccess();
     },
   });
 
@@ -233,7 +225,7 @@ export default function CreateTaskModal({ onClose, onSuccess }) {
         : startDate
           ? startDate.add(7, "day").endOf("day").toISOString()
           : dayjs().add(7, "day").endOf("day").toISOString(),
-      participant_ids: assignees.map((a) => a.employee_id),
+      participant_ids: assignees.map((a) => a.user_id),
       file: file ? file.name : undefined,
     };
     mutation.mutate(payload);
@@ -241,20 +233,18 @@ export default function CreateTaskModal({ onClose, onSuccess }) {
 
   const toggleAssignee = (emp) => {
     setAssignees((prev) =>
-      prev.find((a) => a.employee_id === emp.employee_id)
-        ? prev.filter((a) => a.employee_id !== emp.employee_id)
+      prev.find((a) => a.user_id === emp.user_id)
+        ? prev.filter((a) => a.user_id !== emp.user_id)
         : [...prev, emp],
     );
   };
 
   const st = STATUS_STYLE[status];
-  // const statusOpt = STATUS_OPTIONS.find((s) => s.value === status);
   const priorityOpt = PRIORITY_OPTIONS.find((p) => p.value === priority);
 
-  // ── Calendar helpers ─────────────────────────────────────────────────────
   const calDays = useMemo(() => {
     const start = calView.startOf("month");
-    const offset = (start.day() + 6) % 7; // Mon=0
+    const offset = (start.day() + 6) % 7;
     const total = start.daysInMonth();
     const cells = [];
     for (let i = 0; i < offset; i++) cells.push(null);
@@ -275,7 +265,6 @@ const WEEK_DAYS = [
 
   return (
     <>
-      {/* Header */}
       <Box
         sx={{
           display: "flex",
@@ -299,7 +288,6 @@ const WEEK_DAYS = [
       </Box>
 
       <DialogContent sx={{ px: 3, pt: 2, pb: 1 }}>
-        {/* Task Title */}
         <Typography sx={labelSx}>{t('tasks.taskTitle')}</Typography>
         <TextField
           fullWidth
@@ -309,7 +297,6 @@ const WEEK_DAYS = [
           sx={fieldSx}
         />
 
-        {/* Description */}
         <Typography sx={{ ...labelSx, mt: 2 }}>{t('tasks.description')}</Typography>
         <TextField
           fullWidth
@@ -320,7 +307,6 @@ const WEEK_DAYS = [
           sx={fieldSx}
         />
 
-        {/* Comment */}
         <Typography sx={{ ...labelSx, mt: 2 }}>{t('tasks.comment')}</Typography>
         <TextField
           fullWidth
@@ -356,7 +342,6 @@ const WEEK_DAYS = [
           </Typography>
         )}
 
-        {/* Pill row */}
         <Stack
           direction="row"
           spacing={1}
@@ -365,7 +350,6 @@ const WEEK_DAYS = [
           flexWrap="wrap"
           useFlexGap
         >
-          {/* Status */}
           <Box
             onClick={(e) => setStatusAnchor(e.currentTarget)}
             sx={{
@@ -383,24 +367,23 @@ const WEEK_DAYS = [
             {STATUS_OPTIONS.find((s) => s.value === status)?.label}
           </Box>
 
-          {/* Assignee */}
           <PillButton
             icon={
               assignees.length > 0 ? (
                 <Stack direction="row" spacing={-0.5}>
                   {assignees.slice(0, 2).map((a) => (
                     <Avatar
-                      key={a.employee_id}
+                      key={a.user_id}
                       sx={{
                         width: 18,
                         height: 18,
                         fontSize: 9,
                         fontWeight: 700,
-                        bgcolor: avatarColor(a.employee_id),
+                        bgcolor: avatarColor(a.user_id),
                         color: "#fff",
                       }}
                     >
-                      {getInitials(a.user?.first_name, a.user?.last_name)}
+                      {getInitials(a?.first_name, a?.last_name)}
                     </Avatar>
                   ))}
                 </Stack>
@@ -411,7 +394,7 @@ const WEEK_DAYS = [
             label={
               assignees.length > 0
                 ? assignees.length === 1
-                  ? `${assignees[0].user?.first_name} ${assignees[0].user?.last_name}`
+                  ? `${assignees[0]?.first_name} ${assignees[0]?.last_name}`
                   : t('tasks.multipleAssignees', { count: assignees.length, defaultValue: `${assignees.length} assignees` })
                 : t('tasks.assignee')
             }
@@ -422,7 +405,6 @@ const WEEK_DAYS = [
             }}
           />
 
-          {/* Due date */}
           <PillButton
             icon={<CalendarTodayIcon sx={{ fontSize: 13 }} />}
             label={
@@ -442,7 +424,6 @@ const WEEK_DAYS = [
             }}
           />
 
-          {/* Priority */}
           <PillButton
             icon={
               <FlagOutlinedIcon
@@ -460,7 +441,6 @@ const WEEK_DAYS = [
         </Stack>
       </DialogContent>
 
-      {/* Footer */}
       <Box
         sx={{
           display: "flex",
@@ -507,7 +487,6 @@ const WEEK_DAYS = [
         </Typography>
       )}
 
-      {/* ── STATUS POPOVER ───────────────────────────────────────────────────── */}
       <Popover
         open={Boolean(statusAnchor)}
         anchorEl={statusAnchor}
@@ -523,7 +502,6 @@ const WEEK_DAYS = [
           },
         }}
       >
-        {/* Not started section */}
         <Typography
           sx={{
             fontSize: 10,
@@ -577,7 +555,6 @@ const WEEK_DAYS = [
         />
       </Popover>
 
-      {/* ── ASSIGNEE POPOVER ─────────────────────────────────────────────────── */}
       <Popover
         open={Boolean(assigneeAnchor)}
         anchorEl={assigneeAnchor}
@@ -592,7 +569,6 @@ const WEEK_DAYS = [
           },
         }}
       >
-        {/* Search */}
         <Box sx={{ px: 1.5, pt: 1.5, pb: 1 }}>
           <TextField
             fullWidth
@@ -618,7 +594,6 @@ const WEEK_DAYS = [
           />
         </Box>
 
-        {/* Employee list */}
         <Box sx={{ maxHeight: 260, overflowY: "auto", pb: 1 }}>
           {empLoading ? (
             <Box sx={{ display: "flex", justifyContent: "center", py: 3 }}>
@@ -638,13 +613,13 @@ const WEEK_DAYS = [
           ) : (
             employees.map((emp) => {
               const isSelected = assignees.some(
-                (a) => a.employee_id === emp.employee_id,
+                (a) => a.user_id === emp.user_id,
               );
               const name =
-                `${emp.user?.first_name || ""} ${emp.user?.last_name || ""}`.trim();
+                `${emp?.first_name || ""} ${emp?.last_name || ""}`.trim();
               return (
                 <Box
-                  key={emp.employee_id}
+                  key={emp.user_id}
                   onClick={() => toggleAssignee(emp)}
                   sx={{
                     display: "flex",
@@ -664,11 +639,11 @@ const WEEK_DAYS = [
                       height: 30,
                       fontSize: 11,
                       fontWeight: 700,
-                      bgcolor: avatarColor(emp.employee_id),
+                      bgcolor: avatarColor(emp.user_id),
                       color: "#fff",
                     }}
                   >
-                    {getInitials(emp.user?.first_name, emp.user?.last_name)}
+                    {getInitials(emp?.first_name, emp?.last_name)}
                   </Avatar>
                   <Typography
                     sx={{
@@ -690,7 +665,6 @@ const WEEK_DAYS = [
         </Box>
       </Popover>
 
-      {/* ── PRIORITY POPOVER ─────────────────────────────────────────────────── */}
       <Popover
         open={Boolean(priorityAnchor)}
         anchorEl={priorityAnchor}
@@ -765,7 +739,6 @@ const WEEK_DAYS = [
         ))}
       </Popover>
 
-      {/* ── DATE POPOVER ─────────────────────────────────────────────────────── */}
       <Popover
         open={Boolean(dateAnchor)}
         anchorEl={dateAnchor}
@@ -781,7 +754,6 @@ const WEEK_DAYS = [
           },
         }}
       >
-        {/* Top: two Due date inputs — left filled grey, right outlined */}
         <Box
           sx={{
             display: "flex",
@@ -793,7 +765,6 @@ const WEEK_DAYS = [
             borderColor: "divider",
           }}
         >
-          {/* Left — start date, filled grey, active border when picking start */}
           <Box
             onClick={() => setPickingDate("start")}
             sx={{
@@ -837,7 +808,6 @@ const WEEK_DAYS = [
             </Typography>
           </Box>
 
-          {/* Right — end date, outlined, active border when picking end */}
           <Box
             onClick={() => setPickingDate("end")}
             sx={{
@@ -882,9 +852,7 @@ const WEEK_DAYS = [
           </Box>
         </Box>
 
-        {/* Bottom: shortcuts + calendar */}
         <Box sx={{ display: "flex" }}>
-          {/* Left: shortcuts */}
           <Box sx={{ width: 210, borderRight: "1px solid #f0f3f8", py: 1 }}>
             {DATE_SHORTCUTS.map((s) => {
               const targetDate = s.fn

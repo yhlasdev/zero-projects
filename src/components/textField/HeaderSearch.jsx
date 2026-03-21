@@ -54,7 +54,7 @@ export default function HeaderSearch({ value, onSearch, debounceTime = 500 }) {
       InputProps={{
         startAdornment: (
           <InputAdornment position="start">
-            <SearchIcon />
+            <SearchIcon  sx={{marginLeft: 1, fontSize: 19}}/>
           </InputAdornment>
         ),
         endAdornment: inputValue ? (

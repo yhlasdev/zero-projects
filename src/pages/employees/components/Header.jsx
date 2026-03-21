@@ -7,7 +7,7 @@ import { getAllDepartment, getAllJobs } from "../../../api/queries/getters";
 import JobSelect from "./JobSelect";
 import { useLocale } from "../../../hooks/useLocale";
 
-const Header = ({ onAddClick, setFilter, filters }) => {
+const Header = ({ setFilter, filters }) => {
   const { t } = useLocale();
 
   const { data, isLoading } = useQuery({

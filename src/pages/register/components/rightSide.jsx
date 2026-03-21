@@ -18,6 +18,7 @@ import { OtpSection } from "./otpSection";
 import FieldLabel from "../../../components/textField/LabelInput";
 import FieldLabelPasswordInput from "../../../components/textField/passwordTextField";
 import { useLocale } from "../../../hooks/useLocale";
+import { EyeClosedIcon, EyeOpenIcon } from "../../../utils/Icon";
 
 // ─── Validation helpers ───────────────────────────────────────────────────────
 const validateCompanyName = (v) => {
@@ -232,7 +233,6 @@ export const RightSide = () => {
         <ToggleButton value="email">{t('common.email')}</ToggleButton>
       </ToggleButtonGroup>
 
-      {/* API error */}
       {apiError && (
         <Alert
           severity="error"
@@ -242,9 +242,7 @@ export const RightSide = () => {
         </Alert>
       )}
 
-      {/* Form fields */}
       <Box className="flex flex-col gap-3">
-        {/* Company name */}
         <FieldLabel
           label={t('settings.companyName')}
           value={form.company_name}
@@ -254,7 +252,6 @@ export const RightSide = () => {
           helperText={errors.company_name}
         />
 
-        {/* Phone or Email */}
         {type === "phone" ? (
           <FieldLabel
             label={t('common.phone')}
@@ -276,7 +273,6 @@ export const RightSide = () => {
           />
         )}
 
-        {/* Password */}
         <FieldLabelPasswordInput
           label={t('common.password')}
           pasType={showPassword ? "text" : "password"}
@@ -286,7 +282,7 @@ export const RightSide = () => {
           helperText={errors.password}
           icon={
             <IconButton onClick={() => setShowPassword((p) => !p)} edge="end">
-              {showPassword ? <VisibilityOff /> : <Visibility />}
+              {showPassword ? <EyeClosedIcon /> : <EyeOpenIcon />}
             </IconButton>
           }
         />
@@ -304,7 +300,7 @@ export const RightSide = () => {
               onClick={() => setShowPasswordConfirm((p) => !p)}
               edge="end"
             >
-              {showPasswordConfirm ? <VisibilityOff /> : <Visibility />}
+              {showPasswordConfirm ? <EyeClosedIcon /> : <EyeOpenIcon />}
             </IconButton>
           }
         />

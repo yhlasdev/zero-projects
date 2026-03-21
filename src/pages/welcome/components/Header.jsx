@@ -1,5 +1,4 @@
 import { Box } from "@mui/material";
-import logo from '../../../assets/logo/logo.png'
 
 const Header = () => {
   return (

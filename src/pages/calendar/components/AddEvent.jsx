@@ -1,6 +1,5 @@
 import { Box, Typography, IconButton, Grid, Button } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import FieldLabel from "../../../components/textField/LabelInput";
 import CustomFormSelect from "../../../components/select/CustomFormSelect";
 import { useForm } from "react-hook-form";
 import { CustomForm } from "../../../components/form/CustomForm";
@@ -35,7 +34,7 @@ export default function AddEvent({ onClose }) {
 
   const mutation = useAppMutation({
     mutationFn: calendarAdd,
-    queryKey: ["calendars"],
+    queryKey: ["mainCalendar"],
     onSuccess: () => {
       onClose();
     },
@@ -132,10 +131,10 @@ export default function AddEvent({ onClose }) {
             gap: 1,
           }}
         >
-          <Button variant="outlined" onClick={onClose}>
+          <Button variant="outlined" onClick={onClose} disabled={mutation.isLoading}>
             Cancel
           </Button>
-          <Button variant="contained" type="submit">
+          <Button variant="contained" type="submit" loading={mutation.isLoading}>
             Add Event
           </Button>
         </Box>

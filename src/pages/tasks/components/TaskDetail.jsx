@@ -1,7 +1,6 @@
 import { Box, Typography, InputBase, Paper } from "@mui/material";
 import ListIcon from "@mui/icons-material/FormatListBulleted";
 import BoardIcon from "@mui/icons-material/ViewKanban";
-import WeekIcon from "@mui/icons-material/ViewWeek";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import SearchIcon from "@mui/icons-material/Search";
@@ -11,10 +10,8 @@ import ListView from "./ListView";
 import BoardView from "./BoardView";
 import CalendarView from "./CalendarView";
 import FilterPopover from "./FilterPopover";
-import { useLocale } from "../../../hooks/useLocale";
 
 const TaskDetailView = ({ tasks = [] }) => {
-  const { t } = useLocale();
   const [filterAnchorEl, setFilterAnchorEl] = useState(null);
   const [filters, setFilters] = useState({});
 

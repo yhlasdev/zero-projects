@@ -91,7 +91,8 @@ export const VideoSection = () => {
                       height: 32,
                       fontSize: '14px',
                       fontWeight: 'bold',
-                      borderRadius: '10px'
+                      borderRadius: '10px',
+                      color: '#fff'
                     }}
                   >
                     {video.id}

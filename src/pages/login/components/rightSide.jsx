@@ -11,8 +11,6 @@ import {
   Alert,
 } from "@mui/material";
 import { useState } from "react";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Cookies from "js-cookie";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
@@ -22,6 +20,7 @@ import FieldLabel from "../../../components/textField/LabelInput";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useLocale } from "../../../hooks/useLocale";
+import { EyeClosedIcon, EyeOpenIcon } from "../../../utils/Icon";
 
 const loginPhone = async ({ phone, password }) => {
   const response = await axios.post(
@@ -75,9 +74,16 @@ const getFriendlyError = (error) => {
 
 export const RightSide = () => {
   const { t } = useLocale();
-  const [type, setType] = useState(localStorage.getItem("remembered_email") ? "email" : "phone");
+  const [type, setType] = useState(
+    localStorage.getItem("remembered_email") ? "email" : "phone",
+  );
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(!!(localStorage.getItem("remembered_phone") || localStorage.getItem("remembered_email")));
+  const [rememberMe, setRememberMe] = useState(
+    !!(
+      localStorage.getItem("remembered_phone") ||
+      localStorage.getItem("remembered_email")
+    ),
+  );
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
@@ -168,7 +174,7 @@ export const RightSide = () => {
         fontWeight={700}
         mb={1}
       >
-        {t('login.welcome')}
+        {t("login.welcome")}
       </Typography>
 
       <Typography
@@ -178,7 +184,7 @@ export const RightSide = () => {
         textAlign="center"
         mb={4}
       >
-        {t('login.subtitle')}
+        {t("login.subtitle")}
       </Typography>
 
       {/* Toggle */}
@@ -197,7 +203,9 @@ export const RightSide = () => {
           mb: 3,
           borderRadius: "30px",
           backgroundColor: (theme) =>
-            theme.palette.mode === "dark" ? "rgba(255,255,255,0.05)" : "#F3F4F6",
+            theme.palette.mode === "dark"
+              ? "rgba(255,255,255,0.05)"
+              : "#F3F4F6",
           p: 0.5,
           "& .MuiToggleButton-root": {
             border: "none",
@@ -209,7 +217,10 @@ export const RightSide = () => {
             transition: "all 0.2s",
             "&.Mui-selected": {
               backgroundColor: (theme) =>
-                theme.palette.mode === "dark" ? "rgba(255,255,255,0.1)" : "#FFFFFF",
+                theme.palette.mode === "dark"
+                  ? "rgba(255,255,255,0.1)"
+                  : "#FFFFFF",
+              color: "#4e4e4eff",
             },
             // ".css-1ov0pa-MuiToggleButtonGroup-root .MuiToggleButton-root.Mui-selected": {
             //   color: "#eeeeee",
@@ -217,8 +228,8 @@ export const RightSide = () => {
           },
         }}
       >
-        <ToggleButton value="phone">{t('common.phone')}</ToggleButton>
-        <ToggleButton value="email">{t('common.email')}</ToggleButton>
+        <ToggleButton value="phone">{t("common.phone")}</ToggleButton>
+        <ToggleButton value="email">{t("common.email")}</ToggleButton>
       </ToggleButtonGroup>
 
       {/* API error */}
@@ -235,18 +246,19 @@ export const RightSide = () => {
       <form onSubmit={handleSubmit} className="flex flex-col gap-3" noValidate>
         {type === "phone" ? (
           <FieldLabel
-            label={t('common.phone')}
+            label={t("common.phone")}
             value={form.phone}
             onChange={(e) => handleChange("phone", e.target.value)}
             error={!!errors.phone}
             helperText={errors.phone}
             width={420}
             height={46}
+            startIcon={'+'}
           />
         ) : (
           <FieldLabel
             type="email"
-            label={t('common.email')}
+            label={t("common.email")}
             value={form.email}
             onChange={(e) => handleChange("email", e.target.value)}
             error={!!errors.email}
@@ -256,7 +268,7 @@ export const RightSide = () => {
         )}
 
         <FieldLabelPasswordInput
-          label={t('common.password')}
+          label={t("common.password")}
           pasType={showPassword ? "text" : "password"}
           value={form.password}
           onChange={(e) => handleChange("password", e.target.value)}
@@ -267,7 +279,7 @@ export const RightSide = () => {
               onClick={() => setShowPassword(!showPassword)}
               edge="end"
             >
-              {showPassword ? <VisibilityOff /> : <Visibility />}
+              {showPassword ? <EyeClosedIcon /> : <EyeOpenIcon />}
             </IconButton>
           }
         />
@@ -295,7 +307,7 @@ export const RightSide = () => {
             }
             label={
               <Typography fontSize={13} color="#374151">
-                {t('login.rememberMe')}
+                {t("login.rememberMe")}
               </Typography>
             }
           />
@@ -311,7 +323,7 @@ export const RightSide = () => {
               "&:hover": { textDecoration: "underline" },
             }}
           >
-            {t('login.forgot')}
+            {t("login.forgot")}
           </Typography>
         </Box>
 
@@ -338,13 +350,13 @@ export const RightSide = () => {
           {mutation.isLoading ? (
             <CircularProgress size={22} color="inherit" />
           ) : (
-            t('login.submit')
+            t("login.submit")
           )}
         </Button>
 
         {/* Register link */}
         <Typography fontSize={13} color="#9F9F9F" textAlign="center" mt={1}>
-          {t('login.noAccount')}
+          {t("login.noAccount")}
           <Typography
             component="a"
             href="/register"
@@ -356,7 +368,7 @@ export const RightSide = () => {
               "&:hover": { textDecoration: "underline" },
             }}
           >
-            {t('login.register')}
+            {t("login.register")}
           </Typography>
         </Typography>
       </form>

@@ -103,7 +103,7 @@ const EmployeesPage = () => {
             subTitle={t("employees.subtitle")}
           />
           <Header
-            onAddClick={() => setOpenAddModal(true)}
+            // onAddClick={() => setOpenAddModal(true)}
             setFilter={setFilter}
             filters={filters}
           />

@@ -1,7 +1,6 @@
 import { AppBar, Toolbar, Typography, Button, Box, Paper } from "@mui/material";
 import { Banner } from "./components/Banner";
 
-import logo from "../../assets/logo/logo.png";
 import Features from "./components/Features";
 
 import { About } from "./components/About";
@@ -13,16 +12,14 @@ import Footer from "./components/Footer";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineArrowRightAlt } from "react-icons/md";
 import { useLocale } from "../../hooks/useLocale";
-
+import { BrandLogo } from "../../utils/Icon";
 
 const Welcome = () => {
   const navigate = useNavigate();
   const { t } = useLocale();
 
-
   return (
-    <Paper sx={{bgcolor: '#fff'}}>
-      {/* HEADER */}
+    <Paper sx={{ bgcolor: "#fff", fontFamily: "'Poppins', sans-serif" }}>
       <AppBar
         position="static"
         color="transparent"
@@ -38,7 +35,7 @@ const Welcome = () => {
           }}
         >
           <Typography variant="h6" fontWeight={700}>
-            <img src={logo} />
+            <BrandLogo />
           </Typography>
 
           <Box>
@@ -61,7 +58,7 @@ const Welcome = () => {
                 },
               }}
             >
-              {t('login.submit')}
+              {t("login.submit")}
             </Button>
             <Button
               onClick={() => navigate("/register")}
@@ -83,7 +80,7 @@ const Welcome = () => {
                 },
               }}
             >
-              {t('register.submit')}
+              {t("register.submit")}
             </Button>
           </Box>
         </Toolbar>
@@ -119,7 +116,7 @@ const Welcome = () => {
             position: "absolute",
             width: "250px",
             height: "250px",
-            top: "430px",
+            top: "490px",
             left: "281px",
             opacity: 0.1,
             transform: "rotate(-2.15deg)",
@@ -146,47 +143,56 @@ const Welcome = () => {
           }}
         />
 
-        {/* Content */}
         <Box
           sx={{
             maxWidth: "1500px",
             mx: "auto",
             display: "flex",
-            alignItems: "center",
+            flexDirection: { xs: "column", md: "row" },
+            alignItems: "start",
             justifyContent: "space-between",
             width: "100%",
-            px: 3,
+            px: { xs: 2, md: 6 },
+            py: 0,
             position: "relative",
             zIndex: 2,
           }}
         >
-          {/* Left Side */}
-          <Box className="w-full md:w-1/2">
+          <Box sx={{ width: { xs: "100%", md: "50%" }, textAlign: "left" }}>
             <Typography
-              fontWeight={800}
               sx={{
+                fontFamily: "'Poppins', sans-serif",
+                fontWeight: 800,
                 fontSize: "64px",
-                lineHeight: 1.1,
-                color: 'linear-gradient(102.79deg, #0F3254 0%, #1A4D7A 100%)',
-                 background: 'linear-gradient(102.79deg, #0F3254 0%, #1A4D7A 100%)',
-                 WebkitBackgroundClip: 'text',
-                 WebkitTextFillColor: 'transparent',
+                lineHeight: "70.4px", 
+                letterSpacing: "0%",
+                background:
+                  "linear-gradient(102.79deg, #0F3254 0%, #1A4D7A 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                mb: 3,
               }}
             >
-              {t('welcome.heroTitle', { defaultValue: 'Ýerinde bilen işiňizi hasaba alyň' })}
+              {t("welcome.heroTitle", {
+                defaultValue: "Ýerinde bilen işiňizi hasaba alyň",
+              })}
             </Typography>
 
-            <Box height={20} />
-
             <Typography
-              variant="body1"
               sx={{
-                mb: 4,
-                maxWidth: "500px",
-                color: "#4a5568",
+                fontFamily: "'Poppins', sans-serif",
+                fontWeight: 400,
+                fontSize: "20px",
+                lineHeight: "34px", 
+                color: "#333333",
+                maxWidth: "540px",
+                mb: 5,
               }}
             >
-              {t('welcome.heroSubtitle', { defaultValue: 'Häzirki zaman çözgütler bilen işiňizi aňsatlykda dolandyryň. Yerinde siziň işgäriňiziň haýsydyr bir ýerinde bolsun, size kömek edýär.' })}
+              {t("welcome.heroSubtitle", {
+                defaultValue:
+                  "Häzirki zaman çözgütler bilen işiňizi aňsatlykda dolandyryň. Yerinde siziň işgäriňiziň haýsydyr bir ýerinde bolsun, size kömek edýär.",
+              })}
             </Typography>
 
             <Button
@@ -198,24 +204,45 @@ const Welcome = () => {
                 textTransform: "none",
                 fontSize: "16px",
                 fontWeight: 600,
+                fontFamily: "'Poppins', sans-serif",
                 background:
                   "linear-gradient(107.36deg, #0F3254 0%, #1A4D7A 100%)",
-                boxShadow: "0px 10px 40px rgba(15,50,84,0.3)",
+                boxShadow: "0px 10px 30px rgba(15,50,84,0.3)",
                 "&:hover": {
                   background:
                     "linear-gradient(107.36deg, #0F3254 0%, #1A4D7A 100%)",
-                  boxShadow: "0px 12px 45px rgba(15,50,84,0.35)",
+                  boxShadow: "0px 12px 40px rgba(15,50,84,0.4)",
                 },
               }}
-              endIcon={<MdOutlineArrowRightAlt />}
+              endIcon={<MdOutlineArrowRightAlt style={{ fontSize: 24 }} />}
             >
-              {t('welcome.getStarted')}
+              {t("welcome.getStarted", { defaultValue: "Başlamak" })}
             </Button>
           </Box>
 
-          {/* Right Side */}
-          <Box className="w-full md:w-1/2 flex justify-center">
-            <Banner />
+          <Box
+            sx={{
+              width: { xs: "100%", md: "50%" },
+              display: "flex",
+              justifyContent: "center",
+              mt: { xs: 8, md: 0 },
+            }}
+          >
+            <Box
+              sx={{
+                width: "607px",
+                height: "438px",
+                borderRadius: "30px",
+                overflow: "hidden",
+                boxShadow: "0px 20px 50px rgba(0,0,0,0.1)",
+              }}
+            >
+              <img
+                src="/banner.jpg"
+                alt="Hero"
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              />
+            </Box>
           </Box>
         </Box>
       </Box>
@@ -242,9 +269,9 @@ const Welcome = () => {
               letterSpacing: "3px",
               fontSize: "14px",
             }}
-            >
-              {t('welcome.aboutUs', { defaultValue: 'BIZ BARADA' })}
-            </Typography>
+          >
+            {t("welcome.aboutUs", { defaultValue: "BIZ BARADA" })}
+          </Typography>
         </Box>
         <About />
         <MobileDownload />
@@ -257,9 +284,11 @@ const Welcome = () => {
             fontSize={52}
             color="#0F3254"
             ml={"17%"}
-            >
-              {t('welcome.videoTitle', { defaultValue: 'Mobil programmany nädip ulanmalydygyny öwreniň' })}
-            </Typography>
+          >
+            {t("welcome.videoTitle", {
+              defaultValue: "Mobil programmany nädip ulanmalydygyny öwreniň",
+            })}
+          </Typography>
         </Box>
         <Box textAlign={"center"} ml={"23%"} mt={3} mb={8}>
           <Typography
@@ -267,9 +296,12 @@ const Welcome = () => {
             fontSize={20}
             width={750}
             textAlign={"center"}
-            >
-              {t('welcome.videoSubtitle', { defaultValue: 'Aşakdaky wideo sapaklar arkaly programmamyzy ädimme-ädim öwreniň we iş tertibiňizi şu gün gowulandyryp başlaň.' })}
-            </Typography>
+          >
+            {t("welcome.videoSubtitle", {
+              defaultValue:
+                "Aşakdaky wideo sapaklar arkaly programmamyzy ädimme-ädim öwreniň we iş tertibiňizi şu gün gowulandyryp başlaň.",
+            })}
+          </Typography>
         </Box>
         <VideoSection />
         <Box mb={15}></Box>
@@ -292,7 +324,7 @@ const Welcome = () => {
           gutterBottom
           paddingTop={"60px"}
         >
-          {t('welcome.contact')}
+          {t("welcome.contact")}
         </Typography>
 
         <Typography
@@ -310,19 +342,20 @@ const Welcome = () => {
             borderRadius: "30px",
             width: "900px",
             height: "800px",
-            bgcolor: "#FFFFFFF",
+            bgcolor: "#FFFFFFFA",
+            opacity: '98%',
             display: "flex",
             alignItems: "center",
             mx: "auto",
           }}
         >
-          <Box mx={"auto"}>
+          <Box mx={"auto"} marginBottom={3}>
             <form>
               <FieldLabel label={"Adyňyz"} />
               <FieldLabel label={"Email"} />
               <FieldLabel label={"Telefon belgi"} />
               <FieldLabel label={"Tema"} />
-              <FieldLabel label={"Habar"} multiline rows={4} />
+              <FieldLabel label={"Habar"} multiline maxRows={4} />
 
               <Button
                 variant="contained"
@@ -334,11 +367,11 @@ const Welcome = () => {
                   background: "linear-gradient(90deg, #0F3254, #1A4D7A)",
                   fontWeight: 700,
                   fontSize: 17,
-                  mt: 12,
+                  mt: 4,
                 }}
-                >
-                  {t('welcome.send')}
-                </Button>
+              >
+                {t("welcome.send")}
+              </Button>
             </form>
           </Box>
         </Paper>

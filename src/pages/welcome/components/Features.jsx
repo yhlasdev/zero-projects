@@ -1,8 +1,6 @@
-import AlarmIcon from "@mui/icons-material/Alarm";
 import { Box } from "@mui/material";
 import { TwoSectionCard } from "./two_section_card";
-import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
-import AssessmentOutlinedIcon from "@mui/icons-material/AssessmentOutlined";
+import { BriefcaseIcon, ChartIcon, GaugeIcon } from "../../../utils/Icon";
 
 const Features = () => {
   return (
@@ -16,13 +14,13 @@ const Features = () => {
       }}
     >
       <TwoSectionCard
-        icon={BusinessCenterIcon}
+        icon={BriefcaseIcon}
         title="HR dolandyryş"
         description="Işgärleriň ähli maglumatlaryny bir ýerde saklaň we dolandyryň. Çalt we aňsat gözleg."
       />
 
       <TwoSectionCard
-        icon={AlarmIcon}
+        icon={GaugeIcon}
         title="Iş tertibi we gatnaşyk"
         description="Işgärleriň iş tertibini we gatnaşygyny
 yzarlaň. Awtomatiki hasabat ulgamy
@@ -30,7 +28,7 @@ bilen wagtyň dolandyryşy."
       />
 
       <TwoSectionCard
-        icon={AssessmentOutlinedIcon}
+        icon={ChartIcon}
         title="Hasabatlar"
         description="Jikme-jik hasabatlar we statistika.
 Kararlary maglumat esasynda kabul
