@@ -1,78 +1,137 @@
 import Box from '@mui/material/Box';
-import { LineHighlightPlot, LinePlot } from '@mui/x-charts/LineChart';
-import { ChartContainer } from '@mui/x-charts/ChartContainer';
-import { ChartsXAxis } from '@mui/x-charts/ChartsXAxis';
-import { ChartsYAxis } from '@mui/x-charts/ChartsYAxis';
-import { ChartsTooltip } from '@mui/x-charts/ChartsTooltip';
-import { ChartsAxisHighlight } from '@mui/x-charts/ChartsAxisHighlight';
-import { ChartsGrid } from '@mui/x-charts/ChartsGrid';
+import { LineChart, lineElementClasses, areaElementClasses } from '@mui/x-charts/LineChart';
 
-const alphabetStock = [
-    { "date": "2024-01-01", "low": 100, "high": 110 },
-    { "date": "2024-01-02", "low": 280, "high": 150 },
-    { "date": "2024-01-03", "low": 120, "high": 170 },
-    { "date": "2024-01-04", "low": 100, "high": 85 },
-    { "date": "2024-01-05", "low": 240, "high": 250 },
-    { "date": "2024-01-06", "low": 200, "high": 270 },
-    { "date": "2024-01-07", "low": 10, "high": 210 },
-    { "date": "2024-01-08", "low": 160, "high": 10 },
-    { "date": "2024-01-09", "low": 140, "high": 180 },
+const daily_hours_last_30 = [
+    { "day": "2026-02-19T00:00:00Z", "hours": 7 },
+    { "day": "2026-02-20T00:00:00Z", "hours": 5 },
+    { "day": "2026-02-21T00:00:00Z", "hours": 2 },
+    { "day": "2026-02-22T00:00:00Z", "hours": 4 },
+    { "day": "2026-02-23T00:00:00Z", "hours": 4 },
+    { "day": "2026-02-24T00:00:00Z", "hours": 5 },
+    { "day": "2026-02-25T00:00:00Z", "hours": 6 },
+    { "day": "2026-02-26T00:00:00Z", "hours": 6 },
+    { "day": "2026-02-27T00:00:00Z", "hours": 3 },
+    { "day": "2026-02-28T00:00:00Z", "hours": 2 },
+    { "day": "2026-03-01T00:00:00Z", "hours": 2 },
+    { "day": "2026-03-02T00:00:00Z", "hours": 7 },
+    { "day": "2026-03-03T00:00:00Z", "hours": 2 },
+    { "day": "2026-03-04T00:00:00Z", "hours": 7 },
+    { "day": "2026-03-05T00:00:00Z", "hours": 8 },
+    { "day": "2026-03-06T00:00:00Z", "hours": 4 },
+    { "day": "2026-03-07T00:00:00Z", "hours": 6 },
+    { "day": "2026-03-08T00:00:00Z", "hours": 8 },
+    { "day": "2026-03-09T00:00:00Z", "hours": 4 },
+    { "day": "2026-03-10T00:00:00Z", "hours": 4 },
+    { "day": "2026-03-11T00:00:00Z", "hours": 5 },
+    { "day": "2026-03-12T00:00:00Z", "hours": 2 },
+    { "day": "2026-03-13T00:00:00Z", "hours": 2 },
+    { "day": "2026-03-14T00:00:00Z", "hours": 4 },
+    { "day": "2026-03-15T00:00:00Z", "hours": 8 },
+    { "day": "2026-03-16T00:00:00Z", "hours": 7 },
+    { "day": "2026-03-17T00:00:00Z", "hours": 2 },
+    { "day": "2026-03-18T00:00:00Z", "hours": 8 },
+    { "day": "2026-03-19T00:00:00Z", "hours": 7 },
+    { "day": "2026-03-20T00:00:00Z", "hours": 6 }
 ];
 
-const series = [
-    {
-        type: 'line',
-        data: alphabetStock.map((day) => day.high),
-        label: 'Şu aý',
-        color: '#1976d2',
-        area: true,
-        curve: 'monotoneX',
-        highlightScope: { faded: 'global', highlighted: 'item' },
-    },
-    {
-        type: 'line',
-        data: alphabetStock.map((day) => day.low),
-        label: 'Geçen aý',
-        color: '#d32f2f',
-        area: true,
-        curve: 'monotoneX',
-        highlightScope: { faded: 'global', highlighted: 'item' },
-    },
+const daily_hours_30_to_60 = [
+    { "day": "2026-01-19T00:00:00Z", "hours": 7 },
+    { "day": "2026-01-20T00:00:00Z", "hours": 3 },
+    { "day": "2026-01-21T00:00:00Z", "hours": 8 },
+    { "day": "2026-01-22T00:00:00Z", "hours": 8 },
+    { "day": "2026-01-23T00:00:00Z", "hours": 6 },
+    { "day": "2026-01-24T00:00:00Z", "hours": 5 },
+    { "day": "2026-01-25T00:00:00Z", "hours": 8 },
+    { "day": "2026-01-26T00:00:00Z", "hours": 7 },
+    { "day": "2026-01-27T00:00:00Z", "hours": 2 },
+    { "day": "2026-01-28T00:00:00Z", "hours": 6 },
+    { "day": "2026-01-29T00:00:00Z", "hours": 8 },
+    { "day": "2026-01-30T00:00:00Z", "hours": 2 },
+    { "day": "2026-01-31T00:00:00Z", "hours": 6 },
+    { "day": "2026-02-01T00:00:00Z", "hours": 8 },
+    { "day": "2026-02-02T00:00:00Z", "hours": 6 },
+    { "day": "2026-02-03T00:00:00Z", "hours": 4 },
+    { "day": "2026-02-04T00:00:00Z", "hours": 7 },
+    { "day": "2026-02-05T00:00:00Z", "hours": 3 },
+    { "day": "2026-02-06T00:00:00Z", "hours": 5 },
+    { "day": "2026-02-07T00:00:00Z", "hours": 2 },
+    { "day": "2026-02-08T00:00:00Z", "hours": 7 },
+    { "day": "2026-02-09T00:00:00Z", "hours": 3 },
+    { "day": "2026-02-10T00:00:00Z", "hours": 7 },
+    { "day": "2026-02-11T00:00:00Z", "hours": 6 },
+    { "day": "2026-02-12T00:00:00Z", "hours": 8 },
+    { "day": "2026-02-13T00:00:00Z", "hours": 5 },
+    { "day": "2026-02-14T00:00:00Z", "hours": 8 },
+    { "day": "2026-02-15T00:00:00Z", "hours": 8 },
+    { "day": "2026-02-16T00:00:00Z", "hours": 6 },
+    { "day": "2026-02-17T00:00:00Z", "hours": 4 },
+    { "day": "2026-02-18T00:00:00Z", "hours": 2 }
 ];
 
 export default function AreaChartSection() {
     return (
-        <Box sx={{ width: '100%', height: 400, p: 2 }}>
-            <ChartContainer
-                series={series}
+        <Box sx={{ width: '100%', height: 400 }}>
+            <svg style={{ position: 'absolute', width: 0, height: 0, visibility: 'hidden' }}>
+                <defs>
+                    <linearGradient id="gradient-blue" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#1D61E7" stopOpacity={0.8} />
+                        <stop offset="100%" stopColor="#3B82F6CC" stopOpacity={0} />
+                    </linearGradient>
+                    <linearGradient id="gradient-red" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#D93B2D" stopOpacity={0.8} />
+                        <stop offset="100%" stopColor="#EF444499" stopOpacity={0} />
+                    </linearGradient>
+                </defs>
+            </svg>
+            <LineChart
+                series={[
+                    {
+                        id: 'current-month',
+                        data: daily_hours_last_30.map((d) => d.hours),
+                        label: 'Şu aý',
+                        color: '#1D61E7',
+                        area: true,
+                        showMark: false,
+                        curve: 'monotoneX',
+                    },
+                    {
+                        id: 'last-month',
+                        data: daily_hours_30_to_60.slice(0, 30).map((d) => d.hours),
+                        label: 'Geçen aý',
+                        color: '#EF444499',
+                        area: true,
+                        showMark: false,
+                        curve: 'monotoneX',
+                    },
+                ]}
                 xAxis={[
                     {
                         id: 'date',
-                        data: alphabetStock.map((day) => new Date(day.date)),
-                        scaleType: 'band',
-                        valueFormatter: (value) =>
-                            value.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' }),
+                        data: daily_hours_last_30.map((d) => new Date(d.day)),
+                        scaleType: 'point',
+                        valueFormatter: (value) => {
+                            const months = ['ýan.', 'few.', 'mart', 'apr.', 'maý', 'iyun', 'iyul', 'awg.', 'sent.', 'okt.', 'noy.', 'dek.'];
+                            return `${value.getDate()} ${months[value.getMonth()]}`;
+                        },
                     },
                 ]}
-                yAxis={[{ id: 'price', scaleType: 'linear' }]}
+                yAxis={[{ id: 'price', scaleType: 'linear', min: 0 }]}
+                margin={{ right: 0, top: 40, bottom: 60 }}
+                grid={{ vertical: true, horizontal: true }}
                 sx={{
-                    '.MuiLineElement-root': { strokeWidth: 2 },
-                    '.MuiAreaElement-root': { fillOpacity: 0.3 },
+                    [`& .${lineElementClasses.root}`]: {
+                        strokeWidth: 4,
+                    },
+                    [`& .${areaElementClasses.root}.current-month`]: {
+                        fill: "url(#gradient-blue) !important",
+                        fillOpacity: "1 !important"
+                    },
+                    [`& .${areaElementClasses.root}.last-month`]: {
+                        fill: "url(#gradient-red) !important",
+                        fillOpacity: "1 !important"
+                    },
                 }}
-            >
-                <ChartsGrid vertical strokeDasharray="3 3" />
-                <ChartsGrid horizontal strokeDasharray="3 3" />
-
-                <ChartsAxisHighlight x="line" />
-
-                <LinePlot />
-                <LineHighlightPlot />
-
-                <ChartsXAxis axisId="date" disableLine disableTicks />
-                <ChartsYAxis disableLine disableTicks />
-
-                <ChartsTooltip />
-            </ChartContainer>
+            />
         </Box>
     );
 }
