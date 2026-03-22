@@ -55,6 +55,9 @@ const DEFAULT_VALUES = {
   manager_mail: "",
   manager_birth_date: "",
   open_year: "",
+  latitude: 0,
+  longitude: 0,
+  radius: 100,
 };
 
 const CompanyOverview = () => {
@@ -72,6 +75,8 @@ const CompanyOverview = () => {
     control,
     handleSubmit,
     reset,
+    setValue,
+    watch,
     formState: { isDirty },
   } = useForm({
     defaultValues: DEFAULT_VALUES,
@@ -87,6 +92,9 @@ const CompanyOverview = () => {
           manager_mail: data.manager_mail ?? "",
           manager_birth_date: data.manager_birth_date ?? "",
           open_year: data.open_year ?? "",
+          latitude: data?.location?.latitude ?? 0,
+          longitude: data?.location?.longitude ?? 0,
+          radius: data?.location?.radius ?? 100,
         },
         { keepDefaultValues: false },
       );
@@ -364,7 +372,16 @@ const CompanyOverview = () => {
             <Typography variant="subtitle2" fontWeight={600} mb={1.5}>
               {t('settings.mapTitle')}
             </Typography>
-            <CustomCarto latitude={lat} longitude={lng} />
+            <CustomCarto
+              latitude={watch('latitude')}
+              longitude={watch('longitude')}
+              radius={watch('radius')}
+              onChange={(val) => {
+                setValue('latitude', val.latitude, { shouldDirty: true });
+                setValue('longitude', val.longitude, { shouldDirty: true });
+                setValue('radius', val.radius, { shouldDirty: true });
+              }}
+            />
           </Box>
         );
       })()}
