@@ -96,7 +96,7 @@ const MainCalendar = () => {
     staleTime: 5 * 60 * 1000,
     select: (res) => {
       const raw = Array.isArray(res?.data?.data)
-        ? res?.data?.data
+        ? res.data.data
         : (res?.data ?? []);
       const map = {};
       raw.forEach(({ date, events }) => {
@@ -130,7 +130,6 @@ const MainCalendar = () => {
 
   const handlePrev = () => setCurrentDate(new Date(year, month - 1, 1));
   const handleNext = () => setCurrentDate(new Date(year, month + 1, 1));
-
   const handleDayClick = (cell) => {
     if (!cell.currentMonth) return;
     setSelectedKey(fmtKey(year, month, cell.day));
@@ -144,10 +143,17 @@ const MainCalendar = () => {
     ),
   ].filter((t) => !LEGEND_STATIC.includes(t));
 
+  const isDark = mode === "dark";
+
   return (
     <Paper
       elevation={1}
-      sx={{ p: 3, borderRadius: 2, position: "relative", maxWidth: "100%" }}
+      sx={{
+        borderRadius: 2,
+        position: "relative",
+        maxWidth: "100%",
+        overflow: "hidden",
+      }}
     >
       {isLoading && (
         <Box
@@ -165,40 +171,45 @@ const MainCalendar = () => {
         </Box>
       )}
 
+      {/* ── Navigation header — arrows flush to card edges ── */}
       <Box
         sx={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          mb: 2,
+          px: 1,
+          py: 1.5,
         }}
       >
         <IconButton onClick={handlePrev} size="small">
           <ChevronLeft fontSize="small" />
         </IconButton>
+
         <Typography sx={{ fontWeight: 700, fontSize: "16px" }}>
           {MONTHS[month]} {year}
         </Typography>
+
         <IconButton onClick={handleNext} size="small">
           <ChevronRight fontSize="small" />
         </IconButton>
       </Box>
 
+      {/* ── Weekday header row ── */}
       <Box sx={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)" }}>
-        {WEEKDAYS.map((d) => (
+        {WEEKDAYS.map((d, i) => (
           <Box
             key={d}
             sx={{
               py: 1,
               textAlign: "center",
+              borderTop: "1px solid #e0e0e0",
               borderBottom: "1px solid #e0e0e0",
               borderRight: "1px solid #e0e0e0",
-              borderTop: "1px solid #e0e0e0",
-              "&:first-of-type": {
+              ...(i === 0 && {
                 borderLeft: "1px solid #e0e0e0",
                 borderRadius: "8px 0 0 0",
-              },
-              "&:last-of-type": { borderRadius: "0 8px 0 0" },
+              }),
+              ...(i === 6 && { borderRadius: "0 8px 0 0" }),
             }}
           >
             <Typography sx={{ fontWeight: 500, fontSize: "12px" }}>
@@ -208,6 +219,7 @@ const MainCalendar = () => {
         ))}
       </Box>
 
+      {/* ── Day cells ── */}
       <Box
         sx={{
           display: "grid",
@@ -231,35 +243,32 @@ const MainCalendar = () => {
               sx={{
                 minHeight: 130,
                 p: 0.75,
-                borderRight:
-                  mode === "dark" ? "1px solid #2a3441" : "1px solid #e0e0e0",
-                borderBottom:
-                  mode === "dark" ? "1px solid #2a3441" : "1px solid #e0e0e0",
+                borderRight: isDark ? "1px solid #2a3441" : "1px solid #e0e0e0",
+                borderBottom: isDark
+                  ? "1px solid #2a3441"
+                  : "1px solid #e0e0e0",
                 outline: selected ? "2px solid #4db6ac" : "none",
                 outlineOffset: "-1px",
-
                 bgcolor: selected
-                  ? mode === "dark"
+                  ? isDark
                     ? "#1f3a44"
                     : "#e8f4f8"
                   : cell.currentMonth
-                    ? mode === "dark"
+                    ? isDark
                       ? "#18212F"
                       : "#fff"
-                    : mode === "dark"
+                    : isDark
                       ? "#121821"
                       : "#fafafa",
-
                 cursor: cell.currentMonth ? "pointer" : "default",
                 transition: "background 0.15s",
-
                 "&:hover": cell.currentMonth
                   ? {
                       bgcolor: selected
-                        ? mode === "dark"
+                        ? isDark
                           ? "#274a55"
                           : "#dceef5"
-                        : mode === "dark"
+                        : isDark
                           ? "#1f2937"
                           : "#f9f9f9",
                     }
@@ -274,7 +283,6 @@ const MainCalendar = () => {
                       mb: 0.5,
                       fontSize: "13px",
                       fontWeight: today_ ? 700 : 400,
-                      // color: today_ ? "#1a2e4a" : "",
                     }}
                   >
                     {cell.day}
@@ -322,7 +330,8 @@ const MainCalendar = () => {
         })}
       </Box>
 
-      <Box sx={{ mt: 3 }}>
+      {/* ── Legend ── */}
+      <Box sx={{ px: 3, pt: 3, pb: 2 }}>
         <Box
           sx={{
             display: "flex",
@@ -388,14 +397,17 @@ const MainCalendar = () => {
         )}
       </Box>
 
+      {/* ── Selected day events ── */}
       {selectedKey && (eventMap[selectedKey] ?? []).length > 0 && (
         <Box
           sx={{
-            mt: 2,
+            mx: 3,
+            mb: 2,
             pt: 2,
             borderTop: "1px solid #e0e0e0",
             display: "flex",
             gap: 2,
+            flexWrap: "wrap",
           }}
         >
           {(eventMap[selectedKey] ?? []).map((event) => {

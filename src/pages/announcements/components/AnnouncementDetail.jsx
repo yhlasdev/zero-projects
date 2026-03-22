@@ -4,9 +4,10 @@ import {
   Divider,
   IconButton,
   Grid,
-  Chip,
   LinearProgress,
   useColorScheme,
+  CircularProgress,
+  Skeleton,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
@@ -14,9 +15,23 @@ import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { getAnnouncementById } from "../../../api/queries/getters";
-import GlobalLoader from "../../../components/Loading";
 import StatusChip from "../../../components/table/StatusChip";
 
+const DetailSkeleton = () => (
+  <Box px={3} pb={5}>
+    <Skeleton variant="text" width="60%" height={40} sx={{ mb: 2 }} />
+    <Box display="flex" gap={3} mb={3}>
+      <Skeleton variant="rectangular" width={80} height={24} sx={{ borderRadius: 1 }} />
+      <Skeleton variant="rectangular" width={120} height={24} sx={{ borderRadius: 1 }} />
+      <Skeleton variant="rectangular" width={60} height={24} sx={{ borderRadius: 4 }} />
+    </Box>
+    <Skeleton variant="rounded" height={150} sx={{ mb: 4 }} />
+    <Grid container spacing={4}>
+      <Grid size={6}><Skeleton variant="text" width="40%" /><Skeleton variant="text" width="80%" /></Grid>
+      <Grid size={6}><Skeleton variant="text" width="40%" /><Skeleton variant="text" width="80%" /></Grid>
+    </Grid>
+  </Box>
+);
 const AnnouncementDetail = ({ onClose, id }) => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["announcement", id],
@@ -57,7 +72,7 @@ const AnnouncementDetail = ({ onClose, id }) => {
       <Divider sx={{ mb: 2, mt: 1 }} />
 
       {isLoading ? (
-        <GlobalLoader />
+        <DetailSkeleton />
       ) : isError ? (
         <Box>Something went wrong</Box>
       ) : (

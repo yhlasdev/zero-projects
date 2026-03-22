@@ -52,9 +52,9 @@ const CustomFieldLabel = ({ label, ...props }) => (
   </Box>
 );
 
-export default function EditEmployeeContent({ onClose, employeeId }) {
+export default function EditEmployeeContent({employeeId, onClose }) {
   const queryClient = useQueryClient();
-
+  console.log(employeeId,'emplyee')
   const MODAL_WIDTH = "896px";
   const MODAL_HEIGHT = "725px";
   const RADIUS_8 = "8px";
@@ -66,7 +66,6 @@ export default function EditEmployeeContent({ onClose, employeeId }) {
     enabled: !!employeeId,
     refetchOnMount: true,
   });
-
   const { data: departmentsData } = useQuery({
     queryKey: ["departments"],
     queryFn: getAllDepartment,

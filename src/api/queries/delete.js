@@ -18,7 +18,12 @@ export const deleteDepartment = async (id) => {
 export const deleteSchedule = async ({ schedule_id }) => {
   const response = await api.deletePrivate(
     "/company-service/schedules/delete-weekly",
-    { schedule_id: schedule_id },
+    { schedule_id },
   );
+  return response;
+};
+
+export const deleteAnnouncement = async (id) => {
+  const response = await api.deletePrivate(`/company-service/announcements/delete/${id}`);
   return response;
 };
