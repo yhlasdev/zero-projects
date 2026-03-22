@@ -282,7 +282,7 @@ const NewRequestsPage = () => {
         </Tabs>
       </HeaderAppBar>
 
-      <Paper sx={{ height: "calc(100vh - 303px)", overflow: "auto", p: 3 }}>
+      <Box sx={{ height: "calc(100vh - 303px)", overflow: "auto", p: 3, background: 'white',borderTop:'1px solid #eeeeee' }}>
         {isLoading && <GlobalLoader />}
 
         {isError && (
@@ -312,7 +312,7 @@ const NewRequestsPage = () => {
             ))}
           </Box>
         )}
-      </Paper>
+      </Box>
     </Box>
   );
 };

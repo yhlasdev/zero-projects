@@ -18,6 +18,7 @@ import { getSettingsOverview } from "../../../api/queries/getters";
 import { updateContactOverview } from "../../../api/queries/post";
 import toast from "react-hot-toast";
 import { useLocale } from "../../../hooks/useLocale";
+import CustomCarto from "../../../components/customCarto/CustomCarto";
 
 const OfficeMap = ({ latitude, longitude }) => {
   if (!latitude || !longitude) return null;
@@ -363,7 +364,7 @@ const CompanyOverview = () => {
             <Typography variant="subtitle2" fontWeight={600} mb={1.5}>
               {t('settings.mapTitle')}
             </Typography>
-            <OfficeMap latitude={lat} longitude={lng} />
+            <CustomCarto latitude={lat} longitude={lng} />
           </Box>
         );
       })()}

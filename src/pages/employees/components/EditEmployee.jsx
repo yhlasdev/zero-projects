@@ -136,7 +136,7 @@ export default function EditEmployeeContent({employeeId, onClose }) {
           alignItems: "center",
         }}
       >
-        Yükleniyor...
+        Ýüklenýär...
       </Box>
     );
 
@@ -149,7 +149,7 @@ export default function EditEmployeeContent({employeeId, onClose }) {
         borderRadius: MODAL_RADIUS,
         display: "flex",
         flexDirection: "column",
-        overflow: "hidden",
+        overflow: "scroll",
         boxShadow: "0px 8px 30px rgba(0,0,0,0.08)",
       }}
     >
