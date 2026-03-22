@@ -4,7 +4,6 @@ import { NotFoundPage } from "../pages/others/notfound";
 
 import PageWrapper from "./PageWrapper";
 import { DashBoardPage } from "../pages/dashboard/Dashboard";
-import NotificationsPage from "../pages/notifications/Notifications";
 import NewRequestsPage from "../pages/newRequests/NewRequests";
 import EmployeesPage from "../pages/employees/Employees";
 import AttendancePage from "../pages/attendance/Attendance";
@@ -129,14 +128,6 @@ const routes = createBrowserRouter(
       element: (
         <PageWrapper>
           <SettingsPage />
-        </PageWrapper>
-      ),
-    },
-    {
-      path: "/notifications",
-      element: (
-        <PageWrapper>
-          <NotificationsPage />
         </PageWrapper>
       ),
     },
