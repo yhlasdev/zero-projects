@@ -6,13 +6,13 @@ export const useDeleteSchedule = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id) => deleteSchedule(id),
+    mutationFn: (id) => deleteSchedule({ schedule_id: id }),
 
     onSuccess: () => {
       toast.success("Schedule deleted successfully ✅");
 
       queryClient.invalidateQueries({
-        queryKey: ["employee-week-schedule"],
+        queryKey: ["weekly-schedule"],
       });
     },
 

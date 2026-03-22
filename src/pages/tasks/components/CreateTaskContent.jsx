@@ -11,6 +11,7 @@ import {
   Avatar,
   InputAdornment,
   CircularProgress,
+  Divider,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
@@ -29,7 +30,6 @@ import { getAllEmployeeForTask } from "../../../api/queries/getters";
 import { createDocument } from "../../../api/queries/post";
 import { useLocale } from "../../../hooks/useLocale";
 import toast from "react-hot-toast";
-
 
 const STATUS_OPTIONS = [
   {
@@ -156,7 +156,6 @@ export default function CreateTaskModal({ onClose }) {
   const queryClient = useQueryClient();
   const { t } = useLocale();
 
-
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [comment, setComment] = useState("");
@@ -190,13 +189,13 @@ export default function CreateTaskModal({ onClose }) {
     mutationFn: (payload) => createDocument(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
-      toast.success('Successfuly created task')
+      toast.success("Successfuly created task");
       handleClose();
     },
   });
 
   const handleClose = () => {
-    setTitle(""); 
+    setTitle("");
     setDescription("");
     setComment("");
     setStatus("todo");
@@ -252,16 +251,15 @@ export default function CreateTaskModal({ onClose }) {
     return cells;
   }, [calView]);
 
-const WEEK_DAYS = [
-    t('calendar.mon', { defaultValue: 'Пн' }),
-    t('calendar.tue', { defaultValue: 'Вт' }),
-    t('calendar.wed', { defaultValue: 'Ср' }),
-    t('calendar.thu', { defaultValue: 'Чт' }),
-    t('calendar.fri', { defaultValue: 'Пт' }),
-    t('calendar.sat', { defaultValue: 'Сб' }),
-    t('calendar.sun', { defaultValue: 'Вс' }),
+  const WEEK_DAYS = [
+    t("calendar.mon", { defaultValue: "Пн" }),
+    t("calendar.tue", { defaultValue: "Вт" }),
+    t("calendar.wed", { defaultValue: "Ср" }),
+    t("calendar.thu", { defaultValue: "Чт" }),
+    t("calendar.fri", { defaultValue: "Пт" }),
+    t("calendar.sat", { defaultValue: "Сб" }),
+    t("calendar.sun", { defaultValue: "Вс" }),
   ];
-
 
   return (
     <>
@@ -275,8 +273,10 @@ const WEEK_DAYS = [
           pb: 1,
         }}
       >
-        <Typography sx={{ fontWeight: 700, fontSize: 18, color: "text.primary" }}>
-          {t('tasks.createTask')}
+        <Typography
+          sx={{ fontWeight: 700, fontSize: 18, color: "text.primary" }}
+        >
+          {t("tasks.createTask")}
         </Typography>
         <IconButton
           size="small"
@@ -286,9 +286,9 @@ const WEEK_DAYS = [
           <CloseIcon fontSize="small" />
         </IconButton>
       </Box>
-
+      <Divider />
       <DialogContent sx={{ px: 3, pt: 2, pb: 1 }}>
-        <Typography sx={labelSx}>{t('tasks.taskTitle')}</Typography>
+        <Typography sx={labelSx}>{t("tasks.taskTitle")}</Typography>
         <TextField
           fullWidth
           size="small"
@@ -297,7 +297,9 @@ const WEEK_DAYS = [
           sx={fieldSx}
         />
 
-        <Typography sx={{ ...labelSx, mt: 2 }}>{t('tasks.description')}</Typography>
+        <Typography sx={{ ...labelSx, mt: 2 }}>
+          {t("tasks.description")}
+        </Typography>
         <TextField
           fullWidth
           multiline
@@ -307,7 +309,7 @@ const WEEK_DAYS = [
           sx={fieldSx}
         />
 
-        <Typography sx={{ ...labelSx, mt: 2 }}>{t('tasks.comment')}</Typography>
+        <Typography sx={{ ...labelSx, mt: 2 }}>{t("tasks.comment")}</Typography>
         <TextField
           fullWidth
           size="small"
@@ -395,8 +397,11 @@ const WEEK_DAYS = [
               assignees.length > 0
                 ? assignees.length === 1
                   ? `${assignees[0]?.first_name} ${assignees[0]?.last_name}`
-                  : t('tasks.multipleAssignees', { count: assignees.length, defaultValue: `${assignees.length} assignees` })
-                : t('tasks.assignee')
+                  : t("tasks.multipleAssignees", {
+                      count: assignees.length,
+                      defaultValue: `${assignees.length} assignees`,
+                    })
+                : t("tasks.assignee")
             }
             active={assignees.length > 0}
             onClick={(e) => {
@@ -414,7 +419,7 @@ const WEEK_DAYS = [
                   endDate.format("DD MMM YYYY")
                 : startDate
                   ? startDate.format("DD MMM YYYY")
-                  : t('tasks.dueDate')
+                  : t("tasks.dueDate")
             }
             active={!!(startDate || endDate)}
             onClick={(e) => {
@@ -433,7 +438,11 @@ const WEEK_DAYS = [
                 }}
               />
             }
-            label={priorityOpt?.label ? t(`tasks.priorityLevels.${priorityOpt.value}`) : t('tasks.priority')}
+            label={
+              priorityOpt?.label
+                ? t(`tasks.priorityLevels.${priorityOpt.value}`)
+                : t("tasks.priority")
+            }
             active={!!priority}
             color={priorityOpt?.color}
             onClick={(e) => setPriorityAnchor(e.currentTarget)}
@@ -462,14 +471,14 @@ const WEEK_DAYS = [
             px: 3,
           }}
         >
-          {t('common.cancel')}
+          {t("common.cancel")}
         </Button>
         <Button
           onClick={handleSubmit}
-          disabled={!title.trim() || mutation.isPending}
+          disabled={mutation.isPending}
           variant="contained"
           sx={{
-            bgcolor: "primary.main",
+            // bgcolor: "primary.main",
             borderRadius: "10px",
             textTransform: "none",
             fontWeight: 600,
@@ -478,7 +487,9 @@ const WEEK_DAYS = [
             "&.Mui-disabled": { bgcolor: "action.disabledBackground" },
           }}
         >
-          {mutation.isPending ? t('tasks.creating', { defaultValue: 'Creating…' }) : t('tasks.createTask')}
+          {mutation.isPending
+            ? t("tasks.creating", { defaultValue: "Creating…" })
+            : t("tasks.createTask")}
         </Button>
       </Box>
       {mutation.isError && (
@@ -513,7 +524,7 @@ const WEEK_DAYS = [
             pb: 0.3,
           }}
         >
-          {t('tasks.notStarted')}
+          {t("tasks.notStarted")}
         </Typography>
         <StatusItem
           opt={STATUS_OPTIONS[0]}
@@ -535,7 +546,7 @@ const WEEK_DAYS = [
             pb: 0.3,
           }}
         >
-          {t('common.active')}
+          {t("common.active")}
         </Typography>
         <StatusItem
           opt={STATUS_OPTIONS[1]}
@@ -573,7 +584,9 @@ const WEEK_DAYS = [
           <TextField
             fullWidth
             size="small"
-            placeholder={t('common.searchPlaceholder', { defaultValue: 'Search or enter email...' })}
+            placeholder={t("common.searchPlaceholder", {
+              defaultValue: "Search or enter email...",
+            })}
             value={empSearch}
             onChange={(e) => setEmpSearch(e.target.value)}
             autoFocus
@@ -608,7 +621,7 @@ const WEEK_DAYS = [
                 py: 2,
               }}
             >
-              {t('tasks.noEmployees', { defaultValue: 'No employees found' })}
+              {t("tasks.noEmployees", { defaultValue: "No employees found" })}
             </Typography>
           ) : (
             employees.map((emp) => {
@@ -984,7 +997,6 @@ const WEEK_DAYS = [
               ))}
             </Box>
 
-            {/* Days grid — two independent dots, no range strip */}
             <Box
               sx={{
                 display: "grid",
@@ -1025,9 +1037,13 @@ const WEEK_DAYS = [
                       fontWeight: isMarked || isToday ? 700 : 400,
                       fontSize: 14,
                       outline:
-                        isToday && !isMarked ? (theme) => `2px solid ${theme.palette.primary.main}` : "none",
+                        isToday && !isMarked
+                          ? (theme) => `2px solid ${theme.palette.primary.main}`
+                          : "none",
                       outlineOffset: "-2px",
-                      "&:hover": { bgcolor: isMarked ? "primary.dark" : "action.hover" },
+                      "&:hover": {
+                        bgcolor: isMarked ? "primary.dark" : "action.hover",
+                      },
                       transition: "all 0.1s",
                     }}
                   >
@@ -1105,12 +1121,16 @@ function PillButton({ icon, label, active, color, onClick }) {
   );
 }
 
-// ── Shared styles ─────────────────────────────────────────────────────────────
-const labelSx = { fontSize: 13, fontWeight: 500, color: "text.primary", mb: 0.8 };
+const labelSx = {
+  fontSize: 13,
+  fontWeight: 500,
+  color: "text.primary",
+  mb: 0.8,
+};
 const fieldSx = {
   "& .MuiOutlinedInput-root": {
     borderRadius: "8px",
-    bgcolor: "background.default",
+    // bgcolor: "background.default",
     "& fieldset": { borderColor: "divider" },
     "&:hover fieldset": { borderColor: "primary.light" },
     "&.Mui-focused fieldset": { borderColor: "primary.main", borderWidth: 1.5 },

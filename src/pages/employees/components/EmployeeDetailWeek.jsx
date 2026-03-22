@@ -41,8 +41,14 @@ const normalizeShiftKey = (raw = "") =>
 
 const formatTime = (val) => {
   if (!val) return null;
-  if (typeof val === "string" && /^\d{2}:\d{2}$/.test(val)) return val;
-  const parsed = dayjs(val);
+  if (typeof val === "string" && /^\d{2}:\d{2}:\d{2}$/.test(val)) {
+    return val.substring(0, 5);
+  }
+  if (typeof val === "string" && /^\d{2}:\d{2}$/.test(val)) {
+    return val;
+  }
+
+  const parsed = dayjs(val, "HH:mm:ss", true);
   return parsed.isValid() ? parsed.format("HH:mm") : val;
 };
 
@@ -60,7 +66,6 @@ export default function EmployeeView({ employee, onClose }) {
 
   const handleDeleteSchedule = () => {
     if (!data?.id) return;
-
     deleteScheduleMutate(data.id, {
       onSuccess: () => {
         setEdit(false);
@@ -350,7 +355,12 @@ export default function EmployeeView({ employee, onClose }) {
                 <Box flex={2}>
                   <Chip
                     label={shiftLabel}
-                    sx={{ backgroundColor: color.bg, color: color.text }}
+                    sx={{
+                      backgroundColor: color.bg,
+                      color: color.text,
+                      borderRadius: "5px",
+                      fontSize: "11px",
+                    }}
                   />
                 </Box>
 
@@ -426,6 +436,7 @@ function SummaryCard({ title, subtitle }) {
         borderRadius: 3,
         border: "1px solid #eee",
         textAlign: "center",
+        bgcolor: "#F4F4F4",
       }}
     >
       <Typography fontSize={22} fontWeight={600}>

@@ -33,7 +33,6 @@ const EmployeesPage = () => {
     filters,
     dataKey: "employees",
   });
-
   const columns = [
     {
       key: "employee_id",
@@ -85,7 +84,6 @@ const EmployeesPage = () => {
           onEdit={() => {
             setSelectedEmployee(row);
             setOpenEditModal(true);
-            console.log(row, "selected employee for edit")
           }}
         />
       ),

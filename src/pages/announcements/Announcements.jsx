@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, Tabs, Tab, Typography } from "@mui/material";
+import { Box, Tabs, Tab, Typography, Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
 import { PageTitle } from "../../components/pageTitle/pageTitle";
@@ -12,7 +12,9 @@ import GlobalTable from "../../components/table/Table";
 import TableActions from "../../components/table/TableActions";
 
 import { useInfiniteGet } from "../../hooks/useInfiniteList";
+import { useAppMutation } from "../../hooks/useMutation";
 import { getAllAnnouncement } from "../../api/queries/getters";
+import { deleteAnnouncement } from "../../api/queries/delete";
 import { formatTimeYear } from "../../utils/formatTime";
 import AnnouncementDetail from "./components/AnnouncementDetail";
 
@@ -25,10 +27,24 @@ const AnnouncementsPage = () => {
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
   const [selectedId, setSelectedDetail] = useState(null);
   const [isDetailModal, setIsDetailModal] = useState(false);
+  
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
+
   const announcementsQuery = useInfiniteGet({
     key: ["announcements"],
     apiFn: getAllAnnouncement,
     filters,
+  });
+
+  const deleteMutation = useAppMutation({
+    mutationFn: deleteAnnouncement,
+    queryKey: ["announcements"],
+    onSuccess: () => {
+      setDeleteModal(false);
+      setDeleteId(null);
+      announcementsQuery.refetch();
+    },
   });
 
   const handleTabChange = (event, newValue) => {
@@ -49,6 +65,17 @@ const AnnouncementsPage = () => {
     setModal(false);
     setSelectedAnnouncement(null);
     announcementsQuery.refetch();
+  };
+
+  const handleDeleteOpen = (id) => {
+    setDeleteId(id);
+    setDeleteModal(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (deleteId) {
+      await deleteMutation.mutateAsync(deleteId);
+    }
   };
 
   const columns = [
@@ -95,9 +122,7 @@ const AnnouncementsPage = () => {
             setSelectedDetail(row);
             setIsDetailModal(true);
           }}
-          onDelete={() => {
-            console.log("Delete ID:", row.ID);
-          }}
+          onDelete={() => handleDeleteOpen(row.ID)}
         />
       ),
     },
@@ -218,6 +243,39 @@ const AnnouncementsPage = () => {
           id={selectedId?.ID}
           onClose={() => setIsDetailModal(false)}
         />
+      </GlobalModal>
+
+      <GlobalModal
+        open={deleteModal}
+        onClose={() => setDeleteModal(false)}
+        width={400}
+      >
+        <Box p={3}>
+          <Typography variant="h6" mb={2}>
+            Delete Announcement
+          </Typography>
+          <Typography mb={3} color="text.secondary">
+            Are you sure you want to delete this announcement? This action cannot be undone.
+          </Typography>
+          <Box display="flex" justifyContent="flex-end" gap={2}>
+            <Button
+              variant="outlined"
+              onClick={() => setDeleteModal(false)}
+              sx={{ borderRadius: "8px" }}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={handleDeleteConfirm}
+              disabled={deleteMutation.isPending}
+              sx={{ borderRadius: "8px" }}
+            >
+              {deleteMutation.isPending ? "Deleting..." : "Delete"}
+            </Button>
+          </Box>
+        </Box>
       </GlobalModal>
     </Box>
   );

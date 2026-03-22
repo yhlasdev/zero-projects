@@ -108,43 +108,47 @@ const AttendancePage = () => {
 
   return (
     <Box className="attendance">
-      {openViewModal ? (
+      <GlobalModal
+        open={openViewModal}
+        onClose={() => setOpenViewModal(false)}
+        width={820}
+      >
         <AttendanceDetailsContent
           employee={selectedRow}
           onClose={setOpenViewModal}
         />
-      ) : (
-        <>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "flex-start",
-              justifyContent: "space-between",
-            }}
-          >
-            <PageTitle
-              title={t("dashboard.reportTitle")}
-              subTitle={t("dashboard.reportSubtitle")}
-            />
-          </Box>
+      </GlobalModal>
 
-          <Header
-            filters={filters}
-            setFilters={setFilters}
-            setOpenExportModal={setOpenExportModal}
-            handleSearch={handleSearch}
+      <>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "flex-start",
+            justifyContent: "space-between",
+          }}
+        >
+          <PageTitle
+            title={t("dashboard.reportTitle")}
+            subTitle={t("dashboard.reportSubtitle")}
           />
-          <GlobalTable
-            columns={columns}
-            rows={rows}
-            onScroll={attendanceQuery.handleScroll}
-            isLoading={attendanceQuery.isLoading}
-            isFetchingNextPage={attendanceQuery.isFetchingNextPage}
-            isError={attendanceQuery.isError}
-            emptyMessage={t("employees.noRecords")}
-          />
-        </>
-      )}
+        </Box>
+
+        <Header
+          filters={filters}
+          setFilters={setFilters}
+          setOpenExportModal={setOpenExportModal}
+          handleSearch={handleSearch}
+        />
+        <GlobalTable
+          columns={columns}
+          rows={rows}
+          onScroll={attendanceQuery.handleScroll}
+          isLoading={attendanceQuery.isLoading}
+          isFetchingNextPage={attendanceQuery.isFetchingNextPage}
+          isError={attendanceQuery.isError}
+          emptyMessage={t("employees.noRecords")}
+        />
+      </>
 
       {/* Edit modal */}
       <GlobalModal

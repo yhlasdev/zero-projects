@@ -217,8 +217,11 @@ export default function EditWeekContent({ onClose, scheduleData, onDelete }) {
               direction="row"
               px={2}
               py={1.5}
-              //   bgcolor="#F9FAFB"
-              sx={{ borderBottom: "1px solid #E5E7EB" }}
+              sx={{
+                borderBottom: "1px solid #E5E7EB",
+                bgcolor: (theme) =>
+                  theme.palette.mode === "light" ? "#F4F4F4" : "#1A1A1A",
+              }}
             >
               <Box flex={2}>
                 <Typography fontSize={14} fontWeight={600} color="#6B7280">

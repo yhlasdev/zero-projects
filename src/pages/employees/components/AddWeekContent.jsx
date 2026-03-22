@@ -250,7 +250,9 @@ export default function CreateScheduleModalContent({ onClose, employeeId }) {
               direction="row"
               px={2}
               py={1.5}
-              // bgcolor="#F9FAFB"
+              bgcolor={(theme) =>
+                theme.palette.mode === "light" ? "#F4F4F4" : "#1A1A1A"
+              }
               sx={{ borderBottom: "1px solid #E5E7EB" }}
             >
               <Box flex={2}>

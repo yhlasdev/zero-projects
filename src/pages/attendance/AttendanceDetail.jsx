@@ -61,14 +61,17 @@ export default function AttendanceDetailsContent({ employee, onClose }) {
 
   return (
     <>
-      <Paper
-        sx={{
-          padding: 3,
-          position: "relative",
-          borderRadius: "12px",
-          width: '788px'
-        }}
-      >
+    <Box
+      sx={{
+        padding: 3,
+        position: "relative",
+        minHeight: "80vh",
+        maxHeight: '90vh',
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden",
+      }}
+    >
         {/* LOADING OVERLAY */}
         {isFetching && (
           <Box
@@ -183,7 +186,7 @@ export default function AttendanceDetailsContent({ employee, onClose }) {
           sx={{
             flex: 1,
             overflowY: "auto",
-            height: "calc(100vh - 420px)",
+            minHeight: 0, // Crucial for flex box scrolling
             display: "flex",
             flexDirection: "column",
             gap: 1.5,
@@ -259,7 +262,7 @@ export default function AttendanceDetailsContent({ employee, onClose }) {
             );
           })}
         </Box>
-      </Paper>
+      </Box>
 
       {/* EXPORT MODAL */}
       <ExportModal
