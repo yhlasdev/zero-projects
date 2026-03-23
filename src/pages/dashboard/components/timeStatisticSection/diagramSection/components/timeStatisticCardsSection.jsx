@@ -3,7 +3,6 @@ import { TimeStatisticCard } from "./timeStatisticCard"
 
 
 export const TimeStatisticCardsSection = ({ firstData, secondData, thirdData, fourthData, fiveData }) => {
-    console.log('qqqqqqq-', firstData)
     return (
         <Box
             sx={{

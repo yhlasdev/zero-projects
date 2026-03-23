@@ -17,7 +17,7 @@ export const TimeStatisticCard = ({ text, count, subText, countColor, index }) =
                     alignItems: 'flex-end'
                 }}>
                     <Box sx={{ fontWeight: '700', fontSize: '21.3px', color: countColor }} > {count} </Box>
-                    <Typography variant="body1" sx={{ color: '#9F9F9F', fontSize: '10.65px', color: countColor }} > {index == 4 ? `+${subText}%` : subText} </Typography>
+                    <Typography variant="body1" sx={{ color: countColor ? countColor : '#9F9F9F', fontSize: '10.65px' }} > {index == 4 ? `+${subText}%` : subText} </Typography>
                 </Box>
             </CardContent>
         </Card>
