@@ -26,8 +26,6 @@ export const DiagramSection = () => {
 
     const TimeStatisticCardsSectionForData = responseData?.data?.data;
 
-    console.log('this-------------------', TimeStatisticCardsSectionForData);
-
     return (
         <Wrapper sx={{
             borderRadius: '8px',
