@@ -2,7 +2,8 @@ import { Box } from "@mui/material"
 import { TimeStatisticCard } from "./timeStatisticCard"
 
 
-export const TimeStatisticCardsSection = () => {
+export const TimeStatisticCardsSection = ({ firstData, secondData, thirdData, fourthData, fiveData }) => {
+    console.log('qqqqqqq-', firstData)
     return (
         <Box
             sx={{
@@ -14,24 +15,26 @@ export const TimeStatisticCardsSection = () => {
 
             <TimeStatisticCard
                 text={'Jemi (şu aý)'}
-                count={'5840'}
+                count={Math.ceil(firstData) || 0}
                 subText={'sagat'}
             />
 
             <TimeStatisticCard
-                text={'Jemi (şu aý)'}
-                count={'5840'}
+                text={'Jemi (geçen aý)'}
+                count={Math.ceil(secondData) || 0}
                 subText={'sagat'}
             />
             <TimeStatisticCard
-                text={'Jemi (şu aý)'}
-                count={'5840'}
-                subText={'sagat'}
+                text={'Ortaça (şu aý)'}
+                count={Math.ceil(thirdData) || 0}
+                subText={'sagat/gün'}
             />
             <TimeStatisticCard
-                text={'Jemi (şu aý)'}
-                count={'5840'}
-                subText={'sagat'}
+                text={'Üýtgeşme'}
+                count={`+${Math.ceil(fourthData) || 0}`}
+                subText={Math.ceil(fiveData) || 0}
+                countColor={'#299764'}
+                index={4}
             />
 
         </Box>
