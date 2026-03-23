@@ -17,6 +17,7 @@ const UploadContent = ({ closeSet }) => {
 
   const fileInputRef = useRef(null);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   const mutation = useAppMutation({
     mutationFn: documentAdd,
@@ -40,7 +41,7 @@ const UploadContent = ({ closeSet }) => {
       "doc",
       "docx",
     ];
-    const fileExtension = file.name.split(".").pop().toUpperCase();
+    const fileExtension = file.name.split(".").pop().toLowerCase();
 
     if (!allowedExtensions.includes(fileExtension)) {
       alert("Unsupported file format");
@@ -63,13 +64,44 @@ const UploadContent = ({ closeSet }) => {
 
     const fileExtension = selectedFile.name.split(".").pop().toLowerCase();
 
-    const formData = new FormData();
-    formData.append("title", data.title);
-    formData.append("description", data.description);
-    formData.append("file", selectedFile);
-    formData.append("file_type", fileExtension.toUpperCase()); 
+    try {
+      setIsUploading(true);
+      const formData = new FormData();
+      formData.append("files", selectedFile);
 
-    mutation.mutate(formData);
+      const response = await fetch("http://194.156.117.223:8004/yerinde/storage-service/documents/upload-file", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("File upload failed");
+      }
+
+      const resData = await response.json();
+
+      if (!resData.status || !resData.data?.content?.length) {
+        throw new Error(resData.message || "Invalid response from server");
+      }
+
+      const uploadedFile = resData.data.content[0];
+
+      const payload = {
+        title: data.title,
+        description: data.description,
+        file: uploadedFile.path,
+        file_type: fileExtension.toUpperCase(),
+      };
+
+      console.log('this is payload', payload);
+
+      mutation.mutate(payload);
+    } catch (error) {
+      console.error("Upload error:", error);
+      alert("An error occurred during file upload: " + error.message);
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   return (
@@ -178,9 +210,9 @@ const UploadContent = ({ closeSet }) => {
           <Button
             type="submit"
             variant="contained"
-            disabled={mutation.isPending}
+            disabled={mutation.isPending || isUploading}
           >
-            Upload Document
+            {isUploading ? "Uploading..." : "Upload Document"}
           </Button>
         </Box>
       </form>

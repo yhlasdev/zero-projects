@@ -63,7 +63,7 @@ const DocumentsPage = () => {
         <HeaderAppBar>
           <form className="flex gap-3 w-1/2">
             <HeaderSearch onSearch={setFilter} />
-            <DebounceSelect  width="297px"/>
+            <DebounceSelect width="297px" />
           </form>
         </HeaderAppBar>
 
