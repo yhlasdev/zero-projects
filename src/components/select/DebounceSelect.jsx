@@ -19,7 +19,7 @@ export default function DebounceSelect({
   width = "100%",
   ...props
 }) {
-  const hasValue = value !== "" && value !== null && value !== undefined;
+  const hasValue = Array.isArray(value) ? value.length > 0 : (value !== "" && value !== null && value !== undefined);
   const labelId = `select-label-${label?.replace(/\s/g, "")}`;
   const { mode } = useColorScheme();
   return (
@@ -40,20 +40,24 @@ export default function DebounceSelect({
         sx={{ borderRadius: 2.5 }}
         IconComponent={KeyboardArrowDownIcon}
         labelId={labelId}
-        value={value ?? ""}
+        value={value ?? (props.multiple ? [] : "")}
         onChange={onChange}
         label={label}
         displayEmpty={!!placeholder}
-        renderValue={(selectedId) => {
+        renderValue={(selected) => {
           if (!hasValue && placeholder) {
             return <span style={{ color: "#9e9e9e" }}>{placeholder}</span>;
           }
 
+          if (props.multiple) {
+            return selected.join(', ');
+          }
+
           const selectedItem = React.Children.toArray(children).find(
-            (child) => child.props.value === selectedId,
+            (child) => child.props.value === selected,
           );
 
-          return selectedItem ? selectedItem.props.children : selectedId;
+          return selectedItem ? selectedItem.props.children : selected;
         }}
         endAdornment={
           hasValue ? (
