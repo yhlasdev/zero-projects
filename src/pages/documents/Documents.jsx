@@ -15,6 +15,7 @@ import GlobalModal from "../../components/modal/GlobalModal";
 import { useOpenCloseDrawer } from "../../hooks/useOpenCloseDrawer";
 import { useInfiniteGet } from "../../hooks/useInfiniteList";
 import { getAllDocuments } from "../../api/queries/getters";
+import { useQueryClient } from "@tanstack/react-query";
 import UploadContent from "./components/UploadContent";
 
 const allowedExtensions = [
@@ -31,6 +32,7 @@ const allowedExtensions = [
 
 const DocumentsPage = () => {
   const { open, openSet, closeSet } = useOpenCloseDrawer();
+  const queryClient = useQueryClient();
   const [filters, setFilter] = useState({
     search: "",
     fileTypes: [],
@@ -42,6 +44,19 @@ const DocumentsPage = () => {
     fileTypes: typeof e.target.value === 'string' ? e.target.value.split(',') : e.target.value
   }));
   const handleClearType = () => setFilter((prev) => ({ ...prev, fileTypes: [] }));
+
+  const handleDelete = async (id) => {
+    try {
+      const response = await fetch(`http://194.156.117.223:8007/yerinde/company-service/documents/delete/${id}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) {
+        throw new Error("Failed to delete document");
+      }
+      queryClient.invalidateQueries({ queryKey: ["documents"] });
+    } catch (error) {
+    }
+  };
 
   const { data } = useInfiniteGet({
     key: "documents",
@@ -130,7 +145,7 @@ const DocumentsPage = () => {
                     manager_name={doc.manager_name}
                     onDownload={() => window.open(downloadUrl, "_blank")}
                     onEdit={() => console.log("edit", doc.id)}
-                    onDelete={() => console.log("delete", doc.id)}
+                    onDelete={() => handleDelete(doc.id)}
                   />
                 );
               })}
