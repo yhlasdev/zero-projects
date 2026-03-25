@@ -111,3 +111,8 @@ export const createWeaklySchedule = async (objectData) => {
   return response;
 };
 
+export const sendContactMessage = async (objectData) => {
+  const response = await api.postPrivate("company-service/settings/send-message", objectData);
+  return response;
+};
+

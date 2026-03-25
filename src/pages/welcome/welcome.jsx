@@ -1,5 +1,4 @@
 import { AppBar, Toolbar, Typography, Button, Box, Paper } from "@mui/material";
-import { Banner } from "./components/Banner";
 
 import Features from "./components/Features";
 
@@ -13,10 +12,54 @@ import { useNavigate } from "react-router-dom";
 import { MdOutlineArrowRightAlt } from "react-icons/md";
 import { useLocale } from "../../hooks/useLocale";
 import { BrandLogo } from "../../utils/Icon";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { useMutation } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import { sendContactMessage } from "../../api/queries/post";
+
+const schema = yup.object().shape({
+  name: yup.string().required("Adyňyz hökmany"),
+  email: yup.string().email("Nädogry e-poçta").required("E-poçta hökmany"),
+  number: yup.string().optional(),
+  text: yup.string().required("Habar hökmany"),
+});
 
 const Welcome = () => {
   const navigate = useNavigate();
   const { t } = useLocale();
+
+  const {
+    control,
+    handleSubmit,
+    reset,
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      name: "",
+      email: "",
+      number: "",
+      text: "",
+    },
+  });
+
+  const mutation = useMutation({
+    mutationFn: sendContactMessage,
+    onSuccess: () => {
+      toast.success(t("welcome.contactAlert", { defaultValue: "Habaryňyz iberildi!" }));
+      reset();
+    },
+    onError: (error) => {
+      const message = error?.response?.data?.message || "Näsazlyk ýüze çykdy.";
+      toast.error(message);
+    },
+  });
+
+  const onSubmit = (data) => {
+    console.log('this-data-----', data);
+    mutation.mutate(data);
+  };
 
   return (
     <Paper sx={{ bgcolor: "#fff", fontFamily: "'Poppins', sans-serif" }}>
@@ -164,7 +207,7 @@ const Welcome = () => {
                 fontFamily: "'Poppins', sans-serif",
                 fontWeight: 800,
                 fontSize: "64px",
-                lineHeight: "70.4px", 
+                lineHeight: "70.4px",
                 letterSpacing: "0%",
                 background:
                   "linear-gradient(102.79deg, #0F3254 0%, #1A4D7A 100%)",
@@ -183,7 +226,7 @@ const Welcome = () => {
                 fontFamily: "'Poppins', sans-serif",
                 fontWeight: 400,
                 fontSize: "20px",
-                lineHeight: "34px", 
+                lineHeight: "34px",
                 color: "#333333",
                 maxWidth: "540px",
                 mb: 5,
@@ -350,15 +393,74 @@ const Welcome = () => {
           }}
         >
           <Box mx={"auto"} marginBottom={3}>
-            <form>
-              <FieldLabel label={"Adyňyz"} />
-              <FieldLabel label={"Email"} />
-              <FieldLabel label={"Telefon belgi"} />
-              <FieldLabel label={"Tema"} />
-              <FieldLabel label={"Habar"} multiline maxRows={4} />
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <Controller
+                name="name"
+                control={control}
+                render={({ field, fieldState }) => (
+                  <FieldLabel
+                    {...field}
+                    label={t("register.name", { defaultValue: "Adyňyz" })}
+                    error={!!fieldState.error}
+                    helperText={fieldState.error?.message}
+                  />
+                )}
+              />
+              <Controller
+                name="email"
+                control={control}
+                render={({ field, fieldState }) => (
+                  <FieldLabel
+                    {...field}
+                    label="Email"
+                    error={!!fieldState.error}
+                    helperText={fieldState.error?.message}
+                  />
+                )}
+              />
+              <Controller
+                name="number"
+                control={control}
+                render={({ field, fieldState }) => (
+                  <FieldLabel
+                    {...field}
+                    label="Telefon belgi"
+                    error={!!fieldState.error}
+                    helperText={fieldState.error?.message}
+                  />
+                )}
+              />
+              {/*   <Controller
+                name="subject"
+                control={control}
+                render={({ field, fieldState }) => (
+                  <FieldLabel
+                    {...field}
+                    label="Tema"
+                    error={!!fieldState.error}
+                    helperText={fieldState.error?.message}
+                  />
+                )}
+              /> */}
+              <Controller
+                name="text"
+                control={control}
+                render={({ field, fieldState }) => (
+                  <FieldLabel
+                    {...field}
+                    label="Habar"
+                    multiline
+                    maxRows={4}
+                    error={!!fieldState.error}
+                    helperText={fieldState.error?.message}
+                  />
+                )}
+              />
 
               <Button
+                type="submit"
                 variant="contained"
+                disabled={mutation.isPending}
                 sx={{
                   textTransform: "none",
                   width: "800px",
@@ -370,7 +472,7 @@ const Welcome = () => {
                   mt: 4,
                 }}
               >
-                {t("welcome.send")}
+                {mutation.isPending ? "..." : t("welcome.send")}
               </Button>
             </form>
           </Box>
