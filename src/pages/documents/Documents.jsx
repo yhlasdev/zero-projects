@@ -71,7 +71,7 @@ const DocumentsPage = () => {
         <Paper sx={{ height: "calc(100vh - 320px)", overflowY: "auto", p: 3 }}>
           {data?.length > 0 ? (
             data?.map((doc) => (
-              <Box sx={{ display: "flex", flex: "wrap", gap: 3 }} key={doc.id}>
+              <Box sx={{ display: "flex", flexDirection: 'column', gap: 3 }} key={doc.id}>
                 <DocumentCard
                   title={doc.title}
                   description={doc.description}
