@@ -1,3 +1,4 @@
+import { Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import { LineChart, lineElementClasses, areaElementClasses } from '@mui/x-charts/LineChart';
 
@@ -70,7 +71,7 @@ const daily_hours_30_to_60 = [
 
 export default function AreaChartSection() {
     return (
-        <Box sx={{ width: '100%', height: 400 }}>
+        <Box sx={{ width: '100%', height: 400, mt: 5, pb: 3 }}>
             <svg style={{ position: 'absolute', width: 0, height: 0, visibility: 'hidden' }}>
                 <defs>
                     <linearGradient id="gradient-blue" x1="0" y1="0" x2="0" y2="1">
@@ -88,7 +89,6 @@ export default function AreaChartSection() {
                     {
                         id: 'current-month',
                         data: daily_hours_last_30.map((d) => d.hours),
-                        label: 'Şu aý',
                         color: '#1D61E7',
                         area: true,
                         showMark: false,
@@ -97,7 +97,6 @@ export default function AreaChartSection() {
                     {
                         id: 'last-month',
                         data: daily_hours_30_to_60.slice(0, 30).map((d) => d.hours),
-                        label: 'Geçen aý',
                         color: '#EF444499',
                         area: true,
                         showMark: false,
@@ -116,11 +115,20 @@ export default function AreaChartSection() {
                     },
                 ]}
                 yAxis={[{ id: 'price', scaleType: 'linear', min: 0 }]}
-                margin={{ right: 0, top: 40, bottom: 60 }}
+                slotProps={{
+                    legend: {
+                        direction: 'row',
+                        position: { vertical: 'bottom', horizontal: 'middle' },
+                        itemMarkWidth: 12,
+                        itemMarkHeight: 12,
+                        markGap: 5,
+                    }
+                }}
+                margin={{ right: 0, top: 20, bottom: 80 }}
                 grid={{ vertical: true, horizontal: true }}
                 sx={{
                     [`& .${lineElementClasses.root}`]: {
-                        strokeWidth: 4,
+                        strokeWidth: 2,
                     },
                     [`& .${areaElementClasses.root}.current-month`]: {
                         fill: "url(#gradient-blue) !important",
@@ -130,8 +138,23 @@ export default function AreaChartSection() {
                         fill: "url(#gradient-red) !important",
                         fillOpacity: "1 !important"
                     },
+                    '& .MuiChartsLegend-mark': {
+                        ry: 10,
+                        rx: 10,
+                    }
                 }}
             />
+            <Box className=' flex justify-center gap-5'>
+
+                <Box className=' flex items-center gap-2'>
+                    <Box className=' w-5 h-5 rounded-full bg-[#1D61E7]'></Box>
+                    <Typography sx={{ fontSize: '12.43px', color: '#1D61E7' }}>Şu aý</Typography>
+                </Box>
+                <Box className=' flex items-center gap-2'>
+                    <Box className=' w-5 h-5 rounded-full bg-[#D93B2D]'></Box>
+                    <Typography sx={{ fontSize: '12.43px', color: '#D93B2D' }}>Geçen aý</Typography>
+                </Box>
+            </Box>
         </Box>
     );
 }

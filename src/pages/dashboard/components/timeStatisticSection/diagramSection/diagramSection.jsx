@@ -4,7 +4,7 @@ import { Wrapper } from "../../../../../components/wrapper"
 import ChartSection from "./components/chartComponent"
 import DebounceSelect from "../../../../../components/select/DebounceSelect"
 import { useQuery } from "@tanstack/react-query"
-import { getAllDepartments } from "../../../../../api/queries/getters"
+import { getAllDepartments, getDahsboardHourStat } from "../../../../../api/queries/getters"
 import { useState } from "react"
 
 
@@ -15,8 +15,16 @@ export const DiagramSection = () => {
         queryKey: ["departmentsForSelect"],
         queryFn: getAllDepartments
     });
-
     const allDepartments = response?.data?.data || [];
+
+    const {
+        data: responseData,
+    } = useQuery({
+        queryKey: ["dahsboardHourStatistic", selectedDepartment],
+        queryFn: () => getDahsboardHourStat(selectedDepartment),
+    });
+
+    const TimeStatisticCardsSectionForData = responseData?.data?.data;
 
     return (
         <Wrapper sx={{
@@ -46,7 +54,13 @@ export const DiagramSection = () => {
                     </Box>
                 </Box>
                 <Box className='mb-2' />
-                <TimeStatisticCardsSection />
+                <TimeStatisticCardsSection
+                    firstData={TimeStatisticCardsSectionForData?.total_hours_30_to_60}
+                    secondData={TimeStatisticCardsSectionForData?.total_hours_last_30}
+                    thirdData={TimeStatisticCardsSectionForData?.avg_hours_last_30}
+                    fourthData={TimeStatisticCardsSectionForData?.change_hours}
+                    fiveData={TimeStatisticCardsSectionForData?.change_procent}
+                />
                 <Box className='mb-2' />
                 <ChartSection />
             </Box>

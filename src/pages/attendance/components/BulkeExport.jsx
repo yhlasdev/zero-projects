@@ -114,8 +114,8 @@ export default function BulkExportModal({ open, onClose, rows = [], date }) {
       doc.setFillColor(13, 37, 64);
       doc.rect(0, 0, pageW, 28, "F");
       doc.setTextColor(255, 255, 255);
-      doc.setFontSize(9);
-      doc.setFont("helvetica", "normal");
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "bold");
       doc.text("Yerinde", margin, 9);
       doc.setFontSize(7);
       doc.text("Workforce Management", margin, 14);
