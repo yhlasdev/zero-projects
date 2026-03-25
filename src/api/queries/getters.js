@@ -178,9 +178,9 @@ export const getDahsboardDayHour = async () => {
   return response;
 };
 
-export const getDahsboardHourStat = async () => {
+export const getDahsboardHourStat = async (id) => {
   const response = await api.getPrivate(
-    "/company-service/dashboard/hours-statistics",
+    `/company-service/dashboard/hours-statistics?departmentId=${isNaN(id) ? "" : id}`,
   );
   return response;
 };
