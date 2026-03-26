@@ -12,90 +12,48 @@ import {
   Divider,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateDepartments } from "../../../api/queries/put";
+import { addJobs } from "../../../api/queries/post";
 import { useLocale } from "../../../hooks/useLocale";
 import toast from "react-hot-toast";
 
-const EditDepartmentModal = ({ open, onClose, department }) => {
+const AddPositionModal = ({ open, onClose, departmentId, departmentName }) => {
   const { t } = useLocale();
   const queryClient = useQueryClient();
-
-  const [form, setForm] = useState({
-    name: "",
-    head_of_departments: "",
-  });
-
-  const [errors, setErrors] = useState({});
-
-  // ✅ sadece modal açıldığında set et
-  useEffect(() => {
-    if (open && department) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setForm({
-        name: department.name ?? "",
-        head_of_departments: department.head_of_departments ?? "",
-      });
-      setErrors({});
-    }
-  }, [open, department]);
+  const [jobTitle, setJobTitle] = useState("");
+  const [error, setError] = useState("");
 
   const { mutate, isPending } = useMutation({
-    mutationFn: updateDepartments,
+    mutationFn: addJobs,
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["jobs", departmentId] });
       queryClient.invalidateQueries({ queryKey: ["departments"] });
-
-      toast.success(t("settings.modal.deptUpdated"));
-
+      toast.success(t("settings.modal.posAdded"));
       handleClose();
     },
     onError: (err) => {
-      console.error("Update department error:", err);
-      toast.error(t("settings.modal.deptUpdatedErr"));
+      console.error("Add position error:", err);
+      toast.error(t("settings.modal.posAddedErr") || "Failed to add position");
     },
   });
 
-  const validate = () => {
-    const newErrors = {};
-
-    if (!form.name.trim()) {
-      newErrors.name = t("settings.modal.deptNameReq");
-    }
-
-    if (!form.head_of_departments.trim()) {
-      newErrors.head_of_departments = t("settings.modal.deptHeadReq");
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
   const handleSubmit = (e) => {
     if (e) e.preventDefault();
-    if (!validate()) return;
-
+    if (!jobTitle.trim()) {
+      setError(t("settings.modal.posTitleReq"));
+      return;
+    }
     mutate({
-      id: String(department?.id),
-      name: form.name.trim(),
-      head_of_departments: form.head_of_departments.trim(),
+      department_id: departmentId,
+      job_title: jobTitle.trim(),
     });
   };
 
   const handleClose = () => {
-    setErrors({});
+    setJobTitle("");
+    setError("");
     onClose();
-  };
-
-  const handleChange = (field) => (e) => {
-    setForm((prev) => ({
-      ...prev,
-      [field]: e.target.value,
-    }));
-
-    if (errors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: undefined }));
-    }
   };
 
   return (
@@ -105,9 +63,9 @@ const EditDepartmentModal = ({ open, onClose, department }) => {
       PaperProps={{
         sx: {
           width: 672,
-          minHeight: 337,
+          height: 340,
           borderRadius: "12px",
-          boxShadow: "0px 25px 50px -12px #00000040",
+          boxShadow: (theme) => theme.palette.mode === 'dark' ? "0px 25px 50px -12px rgba(0,0,0,0.7)" : "0px 25px 50px -12px rgba(0,0,0,0.25)",
           p: 0,
         },
       }}
@@ -124,7 +82,7 @@ const EditDepartmentModal = ({ open, onClose, department }) => {
         }}
       >
         <Typography fontSize="16px" fontWeight={600}>
-          {t("settings.modal.editDept")}
+          {t("settings.modal.addPos")}
         </Typography>
 
         <IconButton onClick={handleClose} size="small">
@@ -132,44 +90,47 @@ const EditDepartmentModal = ({ open, onClose, department }) => {
         </IconButton>
       </DialogTitle>
       <Divider />
+
       <Box component="form" onSubmit={handleSubmit}>
         {/* Content */}
         <DialogContent sx={{ px: 3, py: 1, mt: 2 }}>
-          {/* Department Name */}
-          <Box mb={3}>
-            <Typography fontSize="13px" mb={1}>
-              {t("settings.modal.deptName")}
+          {/* Department */}
+          <Box
+            mb={3}
+            sx={{
+              minHeight: 67,
+              borderRadius: "8px",
+              bgcolor: "action.hover",
+              p: 2,
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <Typography fontSize="12px" color="text.secondary" mb={0.5}>
+              {t("common.department")}
             </Typography>
 
-            <TextField
-              fullWidth
-              size="small"
-              value={form.name}
-              onChange={handleChange("name")}
-              error={!!errors.name}
-              helperText={errors.name}
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  borderRadius: "8px",
-                  height: "42px",
-                },
-              }}
-            />
+            <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+              {departmentName}
+            </Typography>
           </Box>
 
-          {/* Head */}
+          {/* Position title */}
           <Box>
             <Typography fontSize="13px" mb={1}>
-              {t("settings.modal.deptHead")}
+              {t("settings.modal.posTitle")}
             </Typography>
 
             <TextField
               fullWidth
               size="small"
-              value={form.head_of_departments}
-              onChange={handleChange("head_of_departments")}
-              error={!!errors.head_of_departments}
-              helperText={errors.head_of_departments}
+              value={jobTitle}
+              onChange={(e) => {
+                setJobTitle(e.target.value);
+                if (error) setError("");
+              }}
+              error={!!error}
+              helperText={error}
               sx={{
                 "& .MuiOutlinedInput-root": {
                   borderRadius: "8px",
@@ -199,8 +160,8 @@ const EditDepartmentModal = ({ open, onClose, department }) => {
               borderRadius: "8px",
               px: 3,
               height: "36px",
-              color: "#111827",
-              borderColor: "#D1D5DB",
+              color: "text.primary",
+              borderColor: "divider",
             }}
           >
             {t("common.cancel")}
@@ -218,11 +179,11 @@ const EditDepartmentModal = ({ open, onClose, department }) => {
               borderRadius: "8px",
               px: 3,
               height: "36px",
-              bgcolor: "#1E3A5F",
-              "&:hover": { bgcolor: "#2A4A73" },
+              bgcolor: "primary.main",
+              "&:hover": { bgcolor: "primary.dark" },
             }}
           >
-            {isPending ? t("common.deleting").replace('...', '') + '...' : t("common.save")}
+            {isPending ? t("common.deleting").replace('...', '') + '...' : t("settings.modal.addPos")}
           </Button>
         </DialogActions>
       </Box>
@@ -230,4 +191,4 @@ const EditDepartmentModal = ({ open, onClose, department }) => {
   );
 };
 
-export default EditDepartmentModal;
+export default AddPositionModal;

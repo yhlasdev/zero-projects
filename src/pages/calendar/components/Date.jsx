@@ -10,57 +10,42 @@ import {
 } from "@mui/material";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import { getMainCalendar } from "../../../api/queries/getters";
+import { useLocale } from "../../../hooks/useLocale";
 
-const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-const MONTHS = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
-
-const EVENT_STYLES = {
+const getEventStyles = (t) => ({
   public_holiday: {
     bg: "#fce4ec",
     color: "#c62828",
     dot: "#e53935",
-    label: "Public Holiday",
+    label: t("calendar.types.public_holiday"),
   },
   company_event: {
     bg: "#e8f5e9",
     color: "#2e7d32",
     dot: "#43a047",
-    label: "Company Event",
+    label: t("calendar.types.company_event"),
   },
   department_event: {
     bg: "#e3f2fd",
     color: "#1565c0",
     dot: "#1e88e5",
-    label: "Department Event",
+    label: t("calendar.types.department_event"),
   },
-  note: { bg: "#fffde7", color: "#f57f17", dot: "#fdd835", label: "Note" },
+  note: { bg: "#fffde7", color: "#f57f17", dot: "#fdd835", label: t("calendar.types.note") },
   engineering_team: {
     bg: "#e3f2fd",
     color: "#1565c0",
     dot: "#1e88e5",
-    label: "Engineering Team",
+    label: t("calendar.types.engineering_team"),
   },
   all_hands: {
     bg: "#e8f5e9",
     color: "#2e7d32",
     dot: "#43a047",
-    label: "All Hands Meeting",
+    label: t("calendar.types.all_hands"),
   },
-  default: { bg: "#f3f4f6", color: "#374151", dot: "#9ca3af", label: "Event" },
-};
+  default: { bg: "#f3f4f6", color: "#374151", dot: "#9ca3af", label: t("calendar.types.event") },
+});
 
 const LEGEND_STATIC = [
   "public_holiday",
@@ -69,8 +54,8 @@ const LEGEND_STATIC = [
   "note",
 ];
 
-const getStyle = (event_type = "") =>
-  EVENT_STYLES[event_type.toLowerCase()] ?? EVENT_STYLES.default;
+const getStyle = (event_type = "", styles) =>
+  styles[event_type.toLowerCase()] ?? styles.default;
 
 const getDaysInMonth = (y, m) => new Date(y, m + 1, 0).getDate();
 const getFirstDayOfMonth = (y, m) => new Date(y, m, 1).getDay();
@@ -78,8 +63,38 @@ const fmtKey = (y, m, d) =>
   `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
 
 const MainCalendar = () => {
+  const { t } = useLocale();
   const today = new Date();
   const { mode } = useColorScheme();
+  const isDark = mode === "dark";
+
+  const MONTHS = [
+    t("calendar.months.january"),
+    t("calendar.months.february"),
+    t("calendar.months.march"),
+    t("calendar.months.april"),
+    t("calendar.months.may"),
+    t("calendar.months.june"),
+    t("calendar.months.july"),
+    t("calendar.months.august"),
+    t("calendar.months.september"),
+    t("calendar.months.october"),
+    t("calendar.months.november"),
+    t("calendar.months.december"),
+  ];
+
+  const WEEKDAYS = [
+    t("calendar.weekdays.sun"),
+    t("calendar.weekdays.mon"),
+    t("calendar.weekdays.tue"),
+    t("calendar.weekdays.wed"),
+    t("calendar.weekdays.thu"),
+    t("calendar.weekdays.fri"),
+    t("calendar.weekdays.sat"),
+  ];
+
+  const EVENT_STYLES = getEventStyles(t);
+
   const [currentDate, setCurrentDate] = useState(
     new Date(today.getFullYear(), today.getMonth(), 1),
   );
@@ -143,239 +158,245 @@ const MainCalendar = () => {
     ),
   ].filter((t) => !LEGEND_STATIC.includes(t));
 
-  const isDark = mode === "dark";
+  /* ─── border / bg tokens (light / dark) ─── */
+  const borderColor = isDark ? "#2a3441" : "#e5e7eb";
+  const cellBg = isDark ? "#18212F" : "#ffffff";
+  const cellBgOther = isDark ? "#121821" : "#fafafa";
+  const cellBgSel = isDark ? "#1f3a44" : "#e8f6f5";
+  const cellBgSelHov = isDark ? "#274a55" : "#d5eeec";
+  const cellBgHov = isDark ? "#1f2937" : "#f5f5f5";
+  const tealAccent = "#4db6ac";
 
   return (
-    <Paper
-      elevation={1}
-      sx={{
-        borderRadius: 2,
-        position: "relative",
-        maxWidth: "100%",
-        overflow: "hidden",
-      }}
-    >
-      {isLoading && (
-        <Box
-          sx={{
-            position: "absolute",
-            inset: 0,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 10,
-            borderRadius: 2,
-          }}
-        >
-          <CircularProgress size={28} />
-        </Box>
-      )}
-
-      {/* ── Navigation header — arrows flush to card edges ── */}
-      <Box
+    /* ── Outer wrapper positions arrows at absolute edges ── */
+    <Box sx={{ position: "relative" }}>
+      {/* ── Left arrow — flush to the outer left edge ── */}
+      <IconButton
+        onClick={handlePrev}
+        size="small"
         sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          px: 1,
-          py: 1.5,
+          position: "absolute",
+          left: -8,
+          top: "50%",
+          transform: "translateY(-50%)",
+          zIndex: 2,
+          color: isDark ? "#9ca3af" : "#6b7280",
+          "&:hover": { color: isDark ? "#e5e7eb" : "#111827" },
         }}
       >
-        <IconButton onClick={handlePrev} size="small">
-          <ChevronLeft fontSize="small" />
-        </IconButton>
+        <ChevronLeft fontSize="small" />
+      </IconButton>
 
-        <Typography sx={{ fontWeight: 700, fontSize: "16px" }}>
-          {MONTHS[month]} {year}
-        </Typography>
+      {/* ── Right arrow — flush to the outer right edge ── */}
+      <IconButton
+        onClick={handleNext}
+        size="small"
+        sx={{
+          position: "absolute",
+          right: -8,
+          top: "50%",
+          transform: "translateY(-50%)",
+          zIndex: 2,
+          color: isDark ? "#9ca3af" : "#6b7280",
+          "&:hover": { color: isDark ? "#e5e7eb" : "#111827" },
+        }}
+      >
+        <ChevronRight fontSize="small" />
+      </IconButton>
 
-        <IconButton onClick={handleNext} size="small">
-          <ChevronRight fontSize="small" />
-        </IconButton>
-      </Box>
-
-      {/* ── Weekday header row ── */}
-      <Box sx={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)" }}>
-        {WEEKDAYS.map((d, i) => (
+      {/* ── Card ── */}
+      <Paper
+        elevation={0}
+        sx={{
+          borderRadius: 2,
+          border: `1px solid ${borderColor}`,
+          overflow: "hidden",
+          position: "relative",
+        }}
+      >
+        {/* Loading overlay */}
+        {isLoading && (
           <Box
-            key={d}
             sx={{
-              py: 1,
-              textAlign: "center",
-              borderTop: "1px solid #e0e0e0",
-              borderBottom: "1px solid #e0e0e0",
-              borderRight: "1px solid #e0e0e0",
-              ...(i === 0 && {
-                borderLeft: "1px solid #e0e0e0",
-                borderRadius: "8px 0 0 0",
-              }),
-              ...(i === 6 && { borderRadius: "0 8px 0 0" }),
+              position: "absolute",
+              inset: 0,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              zIndex: 10,
+              bgcolor: isDark ? "rgba(18,24,33,0.6)" : "rgba(255,255,255,0.6)",
+              borderRadius: 2,
             }}
           >
-            <Typography sx={{ fontWeight: 500, fontSize: "12px" }}>
-              {d}
-            </Typography>
+            <CircularProgress size={28} />
           </Box>
-        ))}
-      </Box>
+        )}
 
-      {/* ── Day cells ── */}
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: "repeat(7, 1fr)",
-          border: "1px solid #e0e0e0",
-          borderTop: "none",
-          borderRadius: "0 0 8px 8px",
-          overflow: "hidden",
-        }}
-      >
-        {cells.map((cell, idx) => {
-          const key = cell.currentMonth ? fmtKey(year, month, cell.day) : null;
-          const events = key ? (eventMap[key] ?? []) : [];
-          const today_ = isToday(cell);
-          const selected = isSelected(cell);
+        {/* ── Month / Year title ── */}
+        <Box sx={{ py: 2, textAlign: "center" }}>
+          <Typography
+            sx={{ fontWeight: 700, fontSize: "18px", letterSpacing: 0 }}
+          >
+            {MONTHS[month]} {year}
+          </Typography>
+        </Box>
 
-          return (
-            <Box
-              key={idx}
-              onClick={() => handleDayClick(cell)}
-              sx={{
-                minHeight: 130,
-                p: 0.75,
-                borderRight: isDark ? "1px solid #2a3441" : "1px solid #e0e0e0",
-                borderBottom: isDark
-                  ? "1px solid #2a3441"
-                  : "1px solid #e0e0e0",
-                outline: selected ? "2px solid #4db6ac" : "none",
-                outlineOffset: "-1px",
-                bgcolor: selected
-                  ? isDark
-                    ? "#1f3a44"
-                    : "#e8f4f8"
-                  : cell.currentMonth
-                    ? isDark
-                      ? "#18212F"
-                      : "#fff"
-                    : isDark
-                      ? "#121821"
-                      : "#fafafa",
-                cursor: cell.currentMonth ? "pointer" : "default",
-                transition: "background 0.15s",
-                "&:hover": cell.currentMonth
-                  ? {
-                      bgcolor: selected
-                        ? isDark
-                          ? "#274a55"
-                          : "#dceef5"
-                        : isDark
-                          ? "#1f2937"
-                          : "#f9f9f9",
-                    }
-                  : {},
-              }}
-            >
-              {cell.currentMonth && (
-                <>
-                  <Typography
-                    sx={{
-                      display: "block",
-                      mb: 0.5,
-                      fontSize: "13px",
-                      fontWeight: today_ ? 700 : 400,
-                    }}
-                  >
-                    {cell.day}
-                  </Typography>
-
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "3px",
-                    }}
-                  >
-                    {events.map((event) => {
-                      const s = getStyle(event.event_type);
-                      return (
-                        <Box
-                          key={event.id}
-                          sx={{
-                            bgcolor: s.bg,
-                            borderRadius: "4px",
-                            px: 0.75,
-                            py: "2px",
-                            overflow: "hidden",
-                          }}
-                        >
-                          <Typography
-                            noWrap
-                            sx={{
-                              fontSize: "10px",
-                              fontWeight: 500,
-                              color: s.color,
-                              lineHeight: 1.5,
-                            }}
-                          >
-                            {event.event_title}
-                          </Typography>
-                        </Box>
-                      );
-                    })}
-                  </Box>
-                </>
-              )}
-            </Box>
-          );
-        })}
-      </Box>
-
-      {/* ── Legend ── */}
-      <Box sx={{ px: 3, pt: 3, pb: 2 }}>
+        {/* ── Weekday header row ── */}
         <Box
           sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: 2,
-            flexWrap: "wrap",
+            display: "grid",
+            gridTemplateColumns: "repeat(7, 1fr)",
+            borderTop: `1px solid ${borderColor}`,
+            borderBottom: `1px solid ${borderColor}`,
           }}
         >
-          <Typography sx={{ fontSize: "12px", fontWeight: 700 }}>
-            Conditional characters:
-          </Typography>
-          {LEGEND_STATIC.map((type) => {
-            const s = getStyle(type);
+          {WEEKDAYS.map((d, i) => (
+            <Box
+              key={d}
+              sx={{
+                py: 1,
+                textAlign: "center",
+                borderRight: i < 6 ? `1px solid ${borderColor}` : "none",
+              }}
+            >
+              <Typography
+                sx={{
+                  fontWeight: 500,
+                  fontSize: "12px",
+                  color: isDark ? "#9ca3af" : "#6b7280",
+                }}
+              >
+                {d}
+              </Typography>
+            </Box>
+          ))}
+        </Box>
+
+        {/* ── Day cell grid ── */}
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: "repeat(7, 1fr)",
+          }}
+        >
+          {cells.map((cell, idx) => {
+            const key = cell.currentMonth
+              ? fmtKey(year, month, cell.day)
+              : null;
+            const events = key ? (eventMap[key] ?? []) : [];
+            const today_ = isToday(cell);
+            const sel = isSelected(cell);
+
+            /* column position (0-based) */
+            const col = idx % 7;
+            /* last row index */
+            const lastRowStart = totalCells - 7;
+            const isLastRow = idx >= lastRowStart;
+
             return (
               <Box
-                key={type}
-                sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
+                key={idx}
+                onClick={() => handleDayClick(cell)}
+                sx={{
+                  minHeight: 130,
+                  p: 0.75,
+                  /* borders: right for all except last col, bottom for all except last row */
+                  borderRight: col < 6 ? `1px solid ${borderColor}` : "none",
+                  borderBottom: !isLastRow
+                    ? `1px solid ${borderColor}`
+                    : "none",
+                  /* selected ring drawn with outline so it overlaps borders */
+                  outline: sel ? `2px solid ${tealAccent}` : "none",
+                  outlineOffset: "-1px",
+                  bgcolor: sel
+                    ? cellBgSel
+                    : cell.currentMonth
+                      ? cellBg
+                      : cellBgOther,
+                  cursor: cell.currentMonth ? "pointer" : "default",
+                  transition: "background 0.12s",
+                  "&:hover": cell.currentMonth
+                    ? { bgcolor: sel ? cellBgSelHov : cellBgHov }
+                    : {},
+                }}
               >
-                <Box
-                  sx={{
-                    width: 10,
-                    height: 10,
-                    borderRadius: "50%",
-                    bgcolor: s.dot,
-                  }}
-                />
-                <Typography sx={{ fontSize: "12px" }}>{s.label}</Typography>
+                {cell.currentMonth && (
+                  <>
+                    {/* Day number */}
+                    <Typography
+                      sx={{
+                        display: "block",
+                        mb: 0.5,
+                        fontSize: "13px",
+                        fontWeight: today_ ? 700 : 400,
+                        color: today_
+                          ? tealAccent
+                          : isDark
+                            ? "#e5e7eb"
+                            : "#111827",
+                      }}
+                    >
+                      {cell.day}
+                    </Typography>
+
+                    {/* Events */}
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "3px",
+                      }}
+                    >
+                      {events.map((event) => {
+                        const s = getStyle(event.event_type, EVENT_STYLES);
+                        return (
+                          <Box
+                            key={event.id}
+                            sx={{
+                              bgcolor: s.bg,
+                              borderRadius: "4px",
+                              px: 0.75,
+                              py: "2px",
+                              overflow: "hidden",
+                            }}
+                          >
+                            <Typography
+                              noWrap
+                              sx={{
+                                fontSize: "10px",
+                                fontWeight: 500,
+                                color: s.color,
+                                lineHeight: 1.5,
+                              }}
+                            >
+                              {event.event_title}
+                            </Typography>
+                          </Box>
+                        );
+                      })}
+                    </Box>
+                  </>
+                )}
               </Box>
             );
           })}
         </Box>
 
-        {dynamicTypes.length > 0 && (
+        {/* ── Legend ── */}
+        <Box sx={{ px: 3, pt: 2.5, pb: 2 }}>
           <Box
             sx={{
               display: "flex",
               alignItems: "center",
               gap: 2,
               flexWrap: "wrap",
-              mt: 1,
             }}
           >
-            {dynamicTypes.map((type) => {
-              const s = getStyle(type);
+            <Typography sx={{ fontSize: "12px", fontWeight: 700 }}>
+              {t("calendar.legendTitle")}
+            </Typography>
+            {LEGEND_STATIC.map((type) => {
+              const s = getStyle(type, EVENT_STYLES);
               return (
                 <Box
                   key={type}
@@ -389,52 +410,103 @@ const MainCalendar = () => {
                       bgcolor: s.dot,
                     }}
                   />
-                  <Typography sx={{ fontSize: "12px" }}>{s.label}</Typography>
+                  <Typography
+                    sx={{
+                      fontSize: "12px",
+                      color: isDark ? "#d1d5db" : "#374151",
+                    }}
+                  >
+                    {s.label}
+                  </Typography>
+                </Box>
+              );
+            })}
+          </Box>
+
+          {dynamicTypes.length > 0 && (
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 2,
+                flexWrap: "wrap",
+                mt: 1,
+              }}
+            >
+              {dynamicTypes.map((type) => {
+                const s = getStyle(type, EVENT_STYLES);
+                return (
+                  <Box
+                    key={type}
+                    sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
+                  >
+                    <Box
+                      sx={{
+                        width: 10,
+                        height: 10,
+                        borderRadius: "50%",
+                        bgcolor: s.dot,
+                      }}
+                    />
+                    <Typography
+                      sx={{
+                        fontSize: "12px",
+                        color: isDark ? "#d1d5db" : "#374151",
+                      }}
+                    >
+                      {s.label}
+                    </Typography>
+                  </Box>
+                );
+              })}
+            </Box>
+          )}
+        </Box>
+
+        {/* ── Selected day detail ── */}
+        {selectedKey && (eventMap[selectedKey] ?? []).length > 0 && (
+          <Box
+            sx={{
+              mx: 3,
+              mb: 2,
+              pt: 2,
+              borderTop: `1px solid ${borderColor}`,
+              display: "flex",
+              gap: 2,
+              flexWrap: "wrap",
+            }}
+          >
+            {(eventMap[selectedKey] ?? []).map((event) => {
+              const s = getStyle(event.event_type, EVENT_STYLES);
+              return (
+                <Box
+                  key={event.id}
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1,
+                    mb: 0.8,
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: 10,
+                      height: 10,
+                      borderRadius: "50%",
+                      bgcolor: s.dot,
+                      flexShrink: 0,
+                    }}
+                  />
+                  <Typography sx={{ fontSize: "13px" }}>
+                    {event.event_title}
+                  </Typography>
                 </Box>
               );
             })}
           </Box>
         )}
-      </Box>
-
-      {/* ── Selected day events ── */}
-      {selectedKey && (eventMap[selectedKey] ?? []).length > 0 && (
-        <Box
-          sx={{
-            mx: 3,
-            mb: 2,
-            pt: 2,
-            borderTop: "1px solid #e0e0e0",
-            display: "flex",
-            gap: 2,
-            flexWrap: "wrap",
-          }}
-        >
-          {(eventMap[selectedKey] ?? []).map((event) => {
-            const s = getStyle(event.event_type);
-            return (
-              <Box
-                key={event.id}
-                sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.8 }}
-              >
-                <Box
-                  sx={{
-                    width: 10,
-                    height: 10,
-                    borderRadius: "50%",
-                    bgcolor: s.dot,
-                    flexShrink: 0,
-                  }}
-                />
-                <Typography sx={{ fontSize: "13px" }}>
-                  {event.event_title}
-                </Typography>
-              </Box>
-            );
-          })}
-        </Box>
-      )}
-    </Paper>
+      </Paper>
+    </Box>
   );
 };
 

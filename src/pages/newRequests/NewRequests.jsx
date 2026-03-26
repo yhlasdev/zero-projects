@@ -23,22 +23,23 @@ import { getNewRequest } from "../../api/queries/getters";
 import { formatTimeYear } from "../../utils/formatTime";
 import { updateNewRequest } from "../../api/queries/put";
 import GlobalLoader from "../../components/Loading";
+import { useLocale } from "../../hooks/useLocale";
 import toast from "react-hot-toast";
 
-const TABS = [
-  { label: "All", status: null },
-  { label: "Pending", status: "pending" },
-  { label: "Approved", status: "approved" },
-  { label: "Rejected", status: "rejected" },
+const getTabs = (t) => [
+  { label: t("newRequests.all"), status: null },
+  { label: t("newRequests.pending"), status: "pending" },
+  { label: t("newRequests.approved"), status: "approved" },
+  { label: t("newRequests.rejected"), status: "rejected" },
 ];
 
-const statusStyles = {
-  pending: { label: "Pending", bgcolor: "#FEF9C3", color: "#854D0E" },
-  approved: { label: "Approved", bgcolor: "#DCFCE7", color: "#166534" },
-  rejected: { label: "Rejected", bgcolor: "#FFE4E6", color: "#9F1239" },
-};
+const getStatusStyles = (t) => ({
+  pending: { label: t("newRequests.pending"), bgcolor: "#FEF9C3", color: "#854D0E" },
+  approved: { label: t("newRequests.approved"), bgcolor: "#DCFCE7", color: "#166534" },
+  rejected: { label: t("newRequests.rejected"), bgcolor: "#FFE4E6", color: "#9F1239" },
+});
 
-const StatusChip = ({ status }) => {
+const StatusChip = ({ status, statusStyles }) => {
   const s = statusStyles[status?.toLowerCase()] ?? statusStyles.pending;
   return (
     <Chip
@@ -57,7 +58,7 @@ const StatusChip = ({ status }) => {
   );
 };
 
-const RequestCard = ({ request, isActive, onReject, onApprove, loadingId }) => {
+const RequestCard = ({ request, isActive, onReject, onApprove, loadingId, t, statusStyles }) => {
   const isUpdating = loadingId === request.id;
 
   return (
@@ -78,10 +79,10 @@ const RequestCard = ({ request, isActive, onReject, onApprove, loadingId }) => {
         />
 
         {[
-          ["First name:", request.first_name ?? ""],
-          ["Last name:", request.last_name ?? ""],
-          ["Prefered name:", request.preferred_name ?? ""],
-          ["Request date:", formatTimeYear(request.create_date)],
+          [t("newRequests.firstName"), request.first_name ?? ""],
+          [t("newRequests.lastName"), request.last_name ?? ""],
+          [t("newRequests.preferredName"), request.preferred_name ?? ""],
+          [t("newRequests.requestDate"), formatTimeYear(request.create_date)],
         ].map(([label, value]) => (
           <Box
             key={label}
@@ -100,7 +101,7 @@ const RequestCard = ({ request, isActive, onReject, onApprove, loadingId }) => {
         ))}
 
         <Box mt={1.5} mb={2}>
-          <StatusChip status={request.status} />
+          <StatusChip status={request.status} statusStyles={statusStyles} />
         </Box>
 
         <Box display="flex" gap={1.5}>
@@ -126,7 +127,7 @@ const RequestCard = ({ request, isActive, onReject, onApprove, loadingId }) => {
             {isUpdating ? (
               <CircularProgress size={14} sx={{ color: "#fff" }} />
             ) : (
-              "Reject"
+              t("newRequests.reject")
             )}
           </Button>
           <Button
@@ -150,7 +151,7 @@ const RequestCard = ({ request, isActive, onReject, onApprove, loadingId }) => {
             {isUpdating ? (
               <CircularProgress size={14} sx={{ color: "#fff" }} />
             ) : (
-              "Approved"
+              t("newRequests.approveBtn")
             )}
           </Button>
         </Box>
@@ -192,6 +193,10 @@ const CardSkeleton = () => (
 );
 
 const NewRequestsPage = () => {
+  const { t } = useLocale();
+  const TABS = getTabs(t);
+  const statusStyles = getStatusStyles(t);
+
   const [tab, setTab] = useState(0);
   const [activeCardId] = useState(null);
   const [loadingId, setLoadingId] = useState(null);
@@ -214,14 +219,14 @@ const NewRequestsPage = () => {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["join-requests"] });
       toast.success(
-        data?.data?.message || "Join request status successfully updated !",
+        data?.data?.message || t("newRequests.successUpdate"),
       );
     },
     onSettled: () => {
       setLoadingId(null);
     },
     onError: () => {
-      toast.error("Josin request status some problems");
+      toast.error(t("newRequests.errorUpdate"));
     },
   });
 
@@ -238,8 +243,8 @@ const NewRequestsPage = () => {
   return (
     <Box>
       <PageTitle
-        title="New Employee Requests"
-        subTitle="Review and process new employee applications"
+        title={t("newRequests.title")}
+        subTitle={t("newRequests.subTitle")}
       />
 
       <CustomDivider sx={{ mb: 3 }} />
@@ -287,13 +292,13 @@ const NewRequestsPage = () => {
 
         {isError && (
           <Alert severity="error">
-            Getting the data {error?.message ?? "Some problems server error"}
+            {t("newRequests.errorData")} {error?.message ?? t("newRequests.serverError")}
           </Alert>
         )}
 
         {!isLoading && !isError && data?.length === 0 && (
           <Typography color="text.secondary" py={4} textAlign="center">
-            Not found this status
+            {t("newRequests.notFound")}
           </Typography>
         )}
 
@@ -307,6 +312,8 @@ const NewRequestsPage = () => {
                   onReject={handleReject}
                   onApprove={handleApprove}
                   loadingId={loadingId}
+                  t={t}
+                  statusStyles={statusStyles}
                 />
               </Box>
             ))}

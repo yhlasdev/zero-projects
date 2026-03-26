@@ -14,6 +14,7 @@ import TableChartIcon from "@mui/icons-material/TableChart";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { RiEditLine } from "react-icons/ri";
 import { LiaDownloadSolid } from "react-icons/lia";
+import { useLocale } from "../../../hooks/useLocale";
 
 const getFileConfig = (type) => {
   const t = type?.toLowerCase() ?? "";
@@ -52,6 +53,7 @@ export const DocumentCard = ({
   onEdit,
   onDelete,
 }) => {
+  const { t } = useLocale();
   const { icon, bg } = getFileConfig(file_type);
   const formattedDate = formatDate(updated_at);
 
@@ -159,7 +161,7 @@ export const DocumentCard = ({
             },
           }}
         >
-          Download
+          {t("documents.card.download")}
         </Button>
 
         <IconButton

@@ -7,6 +7,7 @@ import {
   Paper,
   Avatar,
   CircularProgress,
+  useColorScheme,
 } from "@mui/material";
 import UploadIcon from "@mui/icons-material/Upload";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -64,7 +65,7 @@ const CompanyOverview = () => {
   const { t } = useLocale();
   const queryClient = useQueryClient();
   const [logoPreview, setLogoPreview] = useState(null);
-
+  const {mode} = useColorScheme()
   const { data, isLoading, isError } = useQuery({
     queryKey: ["overview-info"],
     queryFn: getSettingsOverview,
@@ -106,7 +107,7 @@ const CompanyOverview = () => {
     onSuccess: (_, variables) => {
       reset(variables, { keepDefaultValues: false });
       queryClient.invalidateQueries({ queryKey: ["overview-info"] });
-      toast.success("Company overview saved successfully.");
+      toast.success(t("settings.overview.success"));
     },
     onError: (error) => {
       const message =
@@ -195,7 +196,7 @@ const CompanyOverview = () => {
             variant="outlined"
             size="small"
             startIcon={<UploadIcon />}
-            sx={{ textTransform: "none", borderRadius: 1.5 }}
+            sx={{ textTransform: "none", borderRadius: 1.5, bgcolor: mode == 'dark' ? 'action.hover' : '', color: mode == 'dark' ? '#fff' : '' }}
           >
             {t('settings.changeLogo')}
             <input
@@ -307,7 +308,7 @@ const CompanyOverview = () => {
             render={({ field, fieldState }) => (
               <FieldLabel
                 {...field}
-                label="Manager Birth Date"
+                label={t("settings.overview.birthDate")}
                 placeholder="YYYY-MM-DD"
                 error={!!fieldState.error}
                 helperText={fieldState.error?.message}

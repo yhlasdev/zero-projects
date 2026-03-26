@@ -10,12 +10,14 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import { Controller } from "react-hook-form";
 import dayjs from "dayjs";
+import { useLocale } from "../../../hooks/useLocale";
 
 export default function AddEvent({ onClose }) {
+  const { t } = useLocale();
   const typeOptions = [
-    { value: "public_holiday", label: "Public holiday" },
-    { value: "company_event", label: "Company event" },
-    { value: "department_event", label: "Department event" },
+    { value: "public_holiday", label: t("calendar.types.public_holiday") },
+    { value: "company_event", label: t("calendar.types.company_event") },
+    { value: "department_event", label: t("calendar.types.department_event") },
   ];
 
   const {
@@ -62,7 +64,7 @@ export default function AddEvent({ onClose }) {
           }}
         >
           <Typography sx={{ fontWeight: "bold", fontSize: 20 }}>
-            Add Event
+            {t("calendar.addEvent")}
           </Typography>
           <IconButton onClick={onClose}>
             <CloseIcon />
@@ -73,20 +75,20 @@ export default function AddEvent({ onClose }) {
             control={control}
             errors={errors}
             name="title"
-            label="Event title"
+            label={t("calendar.eventTitle")}
             className="w-full"
           />
           <CustomFormTextField
             control={control}
             errors={errors}
             name="description"
-            label="Description"
+            label={t("tasks.description")}
             className="w-full"
             rowNum={3}
           />
           <Grid container spacing={2} alignItems="center" mt={3}>
             <Grid size={6}>
-              <Box>Date</Box>
+              <Box>{t("leaveRequests.startDate")}</Box>
               <Controller
                 name="date"
                 control={control}
@@ -114,7 +116,7 @@ export default function AddEvent({ onClose }) {
             <Grid size={6}>
               <CustomFormSelect
                 name="type"
-                label="Type"
+                label={t("calendar.type")}
                 control={control}
                 errors={errors}
                 options={typeOptions}
@@ -132,10 +134,10 @@ export default function AddEvent({ onClose }) {
           }}
         >
           <Button variant="outlined" onClick={onClose} disabled={mutation.isLoading}>
-            Cancel
+            {t("common.cancel")}
           </Button>
           <Button variant="contained" type="submit" loading={mutation.isLoading}>
-            Add Event
+            {t("calendar.addEvent")}
           </Button>
         </Box>
       </CustomForm>

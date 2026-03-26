@@ -6,7 +6,6 @@ import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import EventIcon from '@mui/icons-material/Event';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
-import EmailIcon from '@mui/icons-material/Email';
 import CampaignIcon from '@mui/icons-material/Campaign';
 import ArticleIcon from '@mui/icons-material/Article';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';

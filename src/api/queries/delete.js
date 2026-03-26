@@ -27,3 +27,8 @@ export const deleteAnnouncement = async (id) => {
   const response = await api.deletePrivate(`/company-service/announcements/delete/${id}`);
   return response;
 };
+
+export const deleteJobs = async (id) => {
+  const response = await api.deletePrivate('/company-service/jobs/delete', {id});
+  return response;
+};

@@ -6,14 +6,18 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import FieldLabel from "../../../components/textField/LabelInput";
 import { getSettingsContact } from "../../../api/queries/getters";
 import { updateContactCompanies } from "../../../api/queries/post";
+import { useLocale } from "../../../hooks/useLocale";
 import toast from "react-hot-toast";
 
-const FIELDS = [
-  { name: "web_site", label: "Website", size: 12 },
-  { name: "email", label: "Email", size: 6 },
-  { name: "phone", label: "Phone", size: 6 },
-  { name: "address", label: "Address", size: 12, maxRows: 3 },
-];
+const FIELDS = () => {
+  const { t } = useLocale();
+  return [
+    { name: "web_site", label: t("settings.contact.website"), size: 12 },
+    { name: "email", label: t("settings.contact.email"), size: 6 },
+    { name: "phone", label: t("settings.contact.phone"), size: 6 },
+    { name: "address", label: t("settings.contact.address"), size: 12, maxRows: 3 },
+  ];
+};
 
 const SOCIAL_FIELDS = [
   { name: "linked_in", label: "LinkedIn" },
@@ -40,7 +44,9 @@ const DEFAULT_VALUES = {
 };
 
 const ContactInformation = () => {
+  const { t } = useLocale();
   const queryClient = useQueryClient();
+  const fields = FIELDS();
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["contact-info"],
@@ -82,7 +88,7 @@ const ContactInformation = () => {
     onSuccess: (_, variables) => {
       reset(variables, { keepDefaultValues: false });
       queryClient.invalidateQueries({ queryKey: ["contact-info"] });
-      toast.success("Contact information saved successfully.");
+      toast.success(t("settings.contact.success"));
     },
     onError: (error) => {
       const message =
@@ -116,7 +122,7 @@ const ContactInformation = () => {
   return (
     <Box component="form" onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={2.5} mb={3}>
-        {FIELDS.map(({ name, label, size, maxRows = 1 }) => (
+        {fields.map(({ name, label, size, maxRows = 1 }) => (
           <Grid key={name} size={size}>
             <Controller
               name={name}
@@ -136,7 +142,7 @@ const ContactInformation = () => {
 
         <Grid size={12}>
           <Typography fontSize={14} fontWeight={600} color="#374151" mt={1}>
-            Social media links
+            {t("settings.contact.social")}
           </Typography>
         </Grid>
 
@@ -178,7 +184,7 @@ const ContactInformation = () => {
           {mutation.isPending ? (
             <CircularProgress size={20} color="inherit" />
           ) : (
-            "Save Changes"
+            t("common.save")
           )}
         </Button>
       </Box>

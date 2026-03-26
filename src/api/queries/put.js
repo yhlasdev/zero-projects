@@ -63,3 +63,11 @@ export const updateSchedule = async (objectData) => {
   );
   return response;
 };
+
+export const updateJobs = async (objectData) => {
+  const response = await api.putPrivate(
+    `/company-service/jobs/update`,
+    objectData,
+  );
+  return response;
+};

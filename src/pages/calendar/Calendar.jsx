@@ -7,7 +7,10 @@ import AddIcon from "@mui/icons-material/Add";
 import GlobalModal from "../../components/modal/GlobalModal";
 import AddEvent from "./components/AddEvent";
 
+import { useLocale } from "../../hooks/useLocale";
+
 function CalendarPage() {
+  const { t } = useLocale();
   const [openAddModal, setOpenAddModal] = useState(false);
 
   return (
@@ -21,12 +24,12 @@ function CalendarPage() {
         }}
       >
         <PageTitle
-          title="Company Calendar"
-          subTitle="Manage events holidays, and important dates"
+          title={t("calendar.title")}
+          subTitle={t("calendar.subTitle")}
         />
 
         <HeaderButton onClick={() => setOpenAddModal(true)} icon={<AddIcon />}>
-          Add event
+          {t("calendar.addEvent")}
         </HeaderButton>
       </Box>
       <DateSelect />

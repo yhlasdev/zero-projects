@@ -9,7 +9,7 @@
     "newRequests": "Täze soraglar",
     "announcements": "Bildirişler",
     "documents": "Resminamalar",
-    "calendar": "Senentnama",
+    "calendar": "Senenama",
     "settings": "Sazlamalar"
   },
   "common": {
@@ -20,6 +20,8 @@
     "error": "Ýalňyşlyk",
     "save": "Üýtgeşmeleri ýatda sakla",
     "cancel": "Yza dön",
+    "delete": "Poz",
+    "deleting": "Pozulýar...",
     "id": "ID",
     "status": "Ýagdaýy",
     "actions": "Amallar",
@@ -127,7 +129,55 @@
     "managerBirth": "Menejeriň doglan senesi",
     "officeLocation": "Ofis ýerleşýän ýeri (lat, lng)",
     "notSet": "Heniz bellenmedi",
-    "mapTitle": "Ofis ýerleşýän ýeri kartada"
+    "mapTitle": "Ofis ýerleşýän ýeri kartada",
+    "deleteConfirmTitle": "Pozmagy tassyklaň",
+    "deleteConfirmDescPrefix": "",
+    "deleteConfirmDescSuffix": " pozmak isleýäniňiz anykmy? Bu amaly yzyna gaýtaryp bolmaz.",
+    "deleteSuccess": "Üstünlikli pozuldy ✅",
+    "deleteFailed": "Pozmak başartmady ❌",
+    "structure": {
+      "title": "Bölümler we wezipeler",
+      "addDept": "Bölüm goş",
+      "addPos": "Wezipe goş",
+      "noDepts": "Heniz bölüm goşulmady",
+      "noPos": "Heniz wezipe ýok.",
+      "head": "Başlygy",
+      "employees": "işgär",
+      "errorDepts": "Bölümleri ýüklemekde ýalňyşlyk"
+    },
+    "contact": {
+      "social": "Sosial ulgam baglanyşyklary",
+      "website": "Web saýt",
+      "email": "E-poçta",
+      "phone": "Telefon",
+      "address": "Salgysy",
+      "success": "Habarlaşmak üçin maglumatlar ýatda saklandy."
+    },
+    "overview": {
+      "birthDate": "Menejeriň doglan senesi",
+      "success": "Kompaniýa barada syn ýatda saklandy."
+    },
+    "modal": {
+      "addDept": "Bölüm goş",
+      "editDept": "Bölümi üýtget",
+      "deptName": "Bölümiň ady",
+      "deptHead": "Bölümiň başlygy",
+      "deptNameReq": "Bölümiň ady gerek",
+      "deptHeadReq": "Bölümiň başlygy gerek",
+      "deptAdded": "Bölüm üstünlikli goşuldy ✅",
+      "deptAddedErr": "Bölüm goşmak başartmady ❌",
+      "deptUpdated": "Bölüm üstünlikli üýtgedildi ✅",
+      "deptUpdatedErr": "Bölümi üýtgetmek başartmady ❌",
+      "addPos": "Wezipe goş",
+      "editPos": "Wezipäni üýtget",
+      "posTitle": "Wezipe ady",
+      "posTitleReq": "Wezipe ady gerek",
+      "posAdded": "Wezipe üstünlikli goşuldy",
+      "posUpdated": "Wezipe üstünlikli üýtgedildi",
+      "posUpdatedErr": "Wezipäni üýtgetmek başartmady",
+      "deleteDeptTitle": "Bölümi poz",
+      "deletePosTitle": "Wezipäni poz"
+    }
   },
   "login": {
     "welcome": "Hoş geldiňiz",
@@ -169,8 +219,116 @@
     "attachment": "Gerkebnama"
   },
   "documents": {
-    "uploadDocument": "Resminama ýükle",
-    "documentTitle": "Resminamanyň ady",
-    "description": "Düşündiriş"
+    "title": "Kompaniýanyň resminamalary",
+    "subTitle": "Kompaniýanyň resminamalaryny dolandyryň we paýlaşyň",
+    "uploadDoc": "Resminama ýükle",
+    "fileTypes": "Faýl görnüşleri",
+    "noDocs": "Resminama tapylmady.",
+    "deleteErr": "Resminamany pozmak başartmady",
+    "upload": {
+      "title": "Resminamanyň ady",
+      "titlePlaceholder": "Resminamanyň adyny giriziň",
+      "desc": "Düşündiriş",
+      "descPlaceholder": "Resminama düşündirişini giriziň",
+      "uploadFile": "Faýly ýükle",
+      "dropzone": "Ýüklemek üçin basyň ýa-da süýräp getiriň",
+      "fileInfo": "PDF, DOCX, XLS (maks. 10MB)",
+      "unsupported": "Goldanylmaýan faýl formaty",
+      "maxSize": "Faýlyň ölçegi 10MB-dan uly bolmaly däl",
+      "selectFileReq": "Faýl saýlaň",
+      "uploadFailed": "Faýly ýüklemek başartmady",
+      "uploadErr": "Faýl ýüklenende ýalňyşlyk ýüze çykdy: ",
+      "uploading": "Ýüklenýär..."
+    },
+    "card": {
+      "download": "Ýükläp al"
+    }
+  },
+  "calendar": {
+    "title": "Kompaniýanyň senenamasy",
+    "subTitle": "Wakalary, baýramçylyklary we möhüm seneleri dolandyryň",
+    "addEvent": "Waka goş",
+    "eventTitle": "Wakanyň ady",
+    "type": "Görnüşi",
+    "types": {
+      "public_holiday": "Döwlet baýramçylygy",
+      "company_event": "Kompaniýa wakasy",
+      "department_event": "Bölüm wakasy",
+      "note": "Bellik",
+      "engineering_team": "Inženerçilik topary",
+      "all_hands": "Umumy ýygnak",
+      "event": "Waka"
+    },
+    "legendTitle": "Şertli belgiler:",
+    "months": {
+      "january": "Ýanwar",
+      "february": "Fewral",
+      "march": "Mart",
+      "april": "Aprel",
+      "may": "Maý",
+      "june": "Iýun",
+      "july": "Iýul",
+      "august": "Awgust",
+      "sentember": "Sentýabr",
+      "october": "Oktýabr",
+      "november": "Noýabr",
+      "december": "Dekabr"
+    },
+    "weekdays": {
+      "sun": "Ýek",
+      "mon": "Duş",
+      "tue": "Siş",
+      "wed": "Çar",
+      "thu": "Pen",
+      "fri": "Jum",
+      "sat": "Şen"
+    }
+  },
+  "announcements": {
+    "title": "Bildirişler",
+    "subTitle": "Kompaniýa boýunça bildirişleri dolandyryň we yzarlaň",
+    "newAnnouncement": "Täze bildiriş",
+    "editAnnouncement": "Bildirişi redaktirläň",
+    "createAnnouncement": "Bildiriş dörediň",
+    "deleteAnnouncement": "Bildirişi poz",
+    "deleteConfirm": "Siz dogrudan-da bu bildirişi pozmak isleýärsiňizmi? Bu amal yzyna gaýtarylyp bilinmez.",
+    "all": "Hemmesi",
+    "published": "Goýberilen",
+    "draft": "Garalama",
+    "noAnnouncements": "Bu kategoriýa üçin bildiriş tapylmady.",
+    "announcementText": "Tekst",
+    "targetAudience": "Maksatly auditoriýa",
+    "status": "Ýagdaýy",
+    "sections": "Bölümler",
+    "readStats": "Okanlar barada statistika",
+    "readStatistics": "Okan statistika",
+    "readProgress": "Okalyş ýagdaýy",
+    "details": "Bildirişiň jikme-jikligi",
+    "untitled": "Atlandyrylmadyk",
+    "company": "Kompaniýa",
+    "allEmployees": "Ähli işgärler",
+    "publishedStatus": "Goýberilen",
+    "draftStatus": "Garalama",
+    "general": "Umumy",
+    "saving": "Ýatda saklanylýar..."
+  },
+  "newRequests": {
+    "title": "Täze işgär soraglary",
+    "subTitle": "Täze işgär arzalaryna serediň we gelişiň",
+    "all": "Hemmesi",
+    "pending": "Garaşylýar",
+    "approved": "Tassyklandy",
+    "rejected": "Ret edildi",
+    "firstName": "Ady:",
+    "lastName": "Familiýasy:",
+    "preferredName": "Gowy görülýän ady:",
+    "requestDate": "Soraşylan senesi:",
+    "reject": "Ret et",
+    "approveBtn": "Tassyklamaly",
+    "successUpdate": "Goşulmak baradaky soragyň ýagdaýy üstünlikli täzelendi!",
+    "errorUpdate": "Goşulmak baradaky soragyň ýagdaýy täzelenende ýalňyşlyk ýüze çykdy",
+    "errorData": "Maglumatlary almak",
+    "serverError": "Serwer ýalňyşlygy ýüze çykdy",
+    "notFound": "Bu ýagdaý üçin maglumat tapylmady"
   }
 }

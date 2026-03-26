@@ -116,3 +116,11 @@ export const sendContactMessage = async (objectData) => {
   return response;
 };
 
+export const addJobs = async (objectData) => {
+  const response = await api.postPrivate(
+    `/company-service/jobs/add`,
+    objectData,
+  );
+  return response;
+};
+

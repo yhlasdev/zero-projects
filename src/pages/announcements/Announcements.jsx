@@ -17,8 +17,10 @@ import { getAllAnnouncement } from "../../api/queries/getters";
 import { deleteAnnouncement } from "../../api/queries/delete";
 import { formatTimeYear } from "../../utils/formatTime";
 import AnnouncementDetail from "./components/AnnouncementDetail";
+import { useLocale } from "../../hooks/useLocale";
 
 const AnnouncementsPage = () => {
+  const { t } = useLocale();
   const [filters, setFilters] = useState({
     status: "",
   });
@@ -27,7 +29,7 @@ const AnnouncementsPage = () => {
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
   const [selectedId, setSelectedDetail] = useState(null);
   const [isDetailModal, setIsDetailModal] = useState(false);
-  
+
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
 
@@ -77,35 +79,42 @@ const AnnouncementsPage = () => {
       await deleteMutation.mutateAsync(deleteId);
     }
   };
+  const formatLabel = (value) => {
+    if (!value) return t("announcements.general");
+
+    return value
+      .replace(/_/g, " ")
+      .replace(/\b\w/g, (char) => char.toUpperCase());
+  };
 
   const columns = [
     {
       key: "Text",
-      label: "Title",
+      label: t("announcements.announcementText"),
       render: (row) => (
         <Typography variant="body2" sx={{ fontWeight: 500 }}>
-          {row.Text || "No Title"}
+          {row.Text || t("announcements.untitled")}
         </Typography>
       ),
     },
     {
       key: "CreatedAt",
-      label: "Date",
+      label: t("leaveRequests.date"),
       render: (row) => <Box>{formatTimeYear(row.CreatedAt)}</Box>,
     },
     {
       key: "TargetAudience",
-      label: "Target Audience",
-      render: (row) => row.TargetAudience || "General",
+      label: t("announcements.targetAudience"),
+      render: (row) => formatLabel(row.TargetAudience),
     },
     {
       key: "Status",
-      label: "Status",
+      label: t("announcements.status"),
       render: (row) => <StatusChip status={row.Status} />,
     },
     {
       key: "ReadCount",
-      label: "Read stats",
+      label: t("announcements.readStats"),
       render: (row) => (
         <Box sx={{ fontSize: "0.875rem", color: "text.secondary" }}>
           {row?.ReadCount || 0} / {row?.SendCount || 0}
@@ -114,7 +123,7 @@ const AnnouncementsPage = () => {
     },
     {
       key: "actions",
-      label: "Actions",
+      label: t("common.actions"),
       render: (row) => (
         <TableActions
           onEdit={() => handleOpenModal(row)}
@@ -139,15 +148,15 @@ const AnnouncementsPage = () => {
         }}
       >
         <PageTitle
-          title="Announcements"
-          subTitle="Manage and track company-wide announcements"
+          title={t("announcements.title")}
+          subTitle={t("announcements.subTitle")}
         />
         <HeaderButton
           onClick={() => handleOpenModal(null)}
-          width={'200px'}
+          width={"200px"}
           icon={<AddIcon sx={{ width: "14px", height: "14px" }} />}
         >
-          New Announcement
+          {t("announcements.newAnnouncement")}
         </HeaderButton>
       </Box>
 
@@ -164,7 +173,7 @@ const AnnouncementsPage = () => {
           }}
         >
           <Tab
-            label="All"
+            label={t("announcements.all")}
             sx={{
               textTransform: "none",
               fontWeight: 500,
@@ -181,7 +190,7 @@ const AnnouncementsPage = () => {
             }}
           />
           <Tab
-            label="Published"
+            label={t("announcements.published")}
             sx={{
               textTransform: "none",
               fontWeight: 500,
@@ -198,7 +207,7 @@ const AnnouncementsPage = () => {
             }}
           />
           <Tab
-            label="Draft"
+            label={t("announcements.draft")}
             sx={{
               textTransform: "none",
               fontWeight: 500,
@@ -224,7 +233,7 @@ const AnnouncementsPage = () => {
         isLoading={announcementsQuery.isLoading}
         isFetchingNextPage={announcementsQuery.isFetchingNextPage}
         isError={announcementsQuery.isError}
-        emptyMessage="No announcements found for this category."
+        emptyMessage={t("announcements.noAnnouncements")}
       />
 
       <GlobalModal open={isModal} onClose={handleCloseModal} width={896}>
@@ -252,10 +261,10 @@ const AnnouncementsPage = () => {
       >
         <Box p={3}>
           <Typography variant="h6" mb={2}>
-            Delete Announcement
+            {t("announcements.deleteAnnouncement")}
           </Typography>
           <Typography mb={3} color="text.secondary">
-            Are you sure you want to delete this announcement? This action cannot be undone.
+            {t("announcements.deleteConfirm")}
           </Typography>
           <Box display="flex" justifyContent="flex-end" gap={2}>
             <Button
@@ -263,7 +272,7 @@ const AnnouncementsPage = () => {
               onClick={() => setDeleteModal(false)}
               sx={{ borderRadius: "8px" }}
             >
-              Cancel
+              {t("common.cancel")}
             </Button>
             <Button
               variant="contained"
@@ -272,7 +281,7 @@ const AnnouncementsPage = () => {
               disabled={deleteMutation.isPending}
               sx={{ borderRadius: "8px" }}
             >
-              {deleteMutation.isPending ? "Deleting..." : "Delete"}
+              {deleteMutation.isPending ? t("announcements.saving") : t("common.delete")}
             </Button>
           </Box>
         </Box>

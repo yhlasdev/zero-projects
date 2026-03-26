@@ -17,6 +17,8 @@ import { useInfiniteGet } from "../../hooks/useInfiniteList";
 import { getAllDocuments } from "../../api/queries/getters";
 import { useQueryClient } from "@tanstack/react-query";
 import UploadContent from "./components/UploadContent";
+import { useLocale } from "../../hooks/useLocale";
+import toast from "react-hot-toast";
 
 const allowedExtensions = [
   "jpg",
@@ -31,6 +33,7 @@ const allowedExtensions = [
 ];
 
 const DocumentsPage = () => {
+  const { t } = useLocale();
   const { open, openSet, closeSet } = useOpenCloseDrawer();
   const queryClient = useQueryClient();
   const [filters, setFilter] = useState({
@@ -51,10 +54,11 @@ const DocumentsPage = () => {
         method: "DELETE",
       });
       if (!response.ok) {
-        throw new Error("Failed to delete document");
+        throw new Error(t("documents.deleteErr"));
       }
       queryClient.invalidateQueries({ queryKey: ["documents"] });
     } catch (error) {
+      toast.error(error.message || t("common.error"))
     }
   };
 
@@ -81,15 +85,15 @@ const DocumentsPage = () => {
           }}
         >
           <PageTitle
-            title={"Company Documents"}
-            subTitle={"Manage and share company documents"}
+            title={t("documents.title")}
+            subTitle={t("documents.subTitle")}
           />
           <HeaderButton
             icon={<FileUploadIcon />}
             className="whitespace-nowrap h-10"
             onClick={openSet}
           >
-            Upload Document
+            {t("documents.uploadDoc")}
           </HeaderButton>
         </Box>
 
@@ -104,11 +108,11 @@ const DocumentsPage = () => {
               value={filters.fileTypes || []}
               onChange={handleTypeSelect}
               onClear={handleClearType}
-              label="File Types"
+              label={t("documents.fileTypes")}
               displayEmpty
             >
               <MenuItem value="" disabled sx={{ display: 'none' }}>
-                <em>All Types</em>
+                <em>{t("documents.allTypes")}</em>
               </MenuItem>
               {allowedExtensions.map((ext) => (
                 <MenuItem key={ext} value={ext.toUpperCase()}>
@@ -161,7 +165,7 @@ const DocumentsPage = () => {
                 height: "calc(100vh - 370px)",
               }}
             >
-              No documents found.
+              {t("documents.noDocs")}
             </Typography>
           )}
         </Paper>

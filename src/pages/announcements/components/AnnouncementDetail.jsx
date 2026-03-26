@@ -16,6 +16,7 @@ import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { getAnnouncementById } from "../../../api/queries/getters";
 import StatusChip from "../../../components/table/StatusChip";
+import { useLocale } from "../../../hooks/useLocale";
 
 const DetailSkeleton = () => (
   <Box px={3} pb={5}>
@@ -33,6 +34,7 @@ const DetailSkeleton = () => (
   </Box>
 );
 const AnnouncementDetail = ({ onClose, id }) => {
+  const { t } = useLocale();
   const { data, isLoading, isError } = useQuery({
     queryKey: ["announcement", id],
     queryFn: () => getAnnouncementById(id),
@@ -48,7 +50,7 @@ const AnnouncementDetail = ({ onClose, id }) => {
 
   const targetAudienceLabel =
     val?.TargetAudience === "all_employees"
-      ? "All employees"
+      ? t("announcements.allEmployees")
       : val?.TargetAudience;
 
   return (
@@ -62,7 +64,7 @@ const AnnouncementDetail = ({ onClose, id }) => {
         alignItems="center"
       >
         <Typography fontSize={18} fontWeight={600}>
-          Announcement Details
+          {t("announcements.details")}
         </Typography>
         <IconButton onClick={onClose}>
           <CloseIcon />
@@ -74,19 +76,19 @@ const AnnouncementDetail = ({ onClose, id }) => {
       {isLoading ? (
         <DetailSkeleton />
       ) : isError ? (
-        <Box>Something went wrong</Box>
+        <Box>{t("common.error")}</Box>
       ) : (
         <Box px={3} pb={5}>
           {/* Title */}
           <Typography fontSize={20} fontWeight={600} mb={2}>
-            {val?.Text?.split("\n")[0] || "Untitled"}
+            {val?.Text?.split("\n")[0] || t("announcements.untitled")}
           </Typography>
 
           {/* Meta Info */}
           <Box display="flex" alignItems="center" gap={3} mb={3}>
             <Box display="flex" alignItems="center" gap={1}>
               <PersonOutlineIcon fontSize="small" />
-              <Typography color="text.secondary">Company</Typography>
+              <Typography color="text.secondary">{t("announcements.company")}</Typography>
             </Box>
 
             <Box display="flex" alignItems="center" gap={1}>
@@ -116,14 +118,14 @@ const AnnouncementDetail = ({ onClose, id }) => {
           <Grid container spacing={4}>
             <Grid size={6}>
               <Typography fontSize={14} color="text.secondary" mb={0.5}>
-                Target Audience
+                {t("announcements.targetAudience")}
               </Typography>
               <Typography fontWeight={600}>{targetAudienceLabel}</Typography>
             </Grid>
 
             <Grid size={6}>
               <Typography fontSize={14} color="text.secondary" mb={0.5}>
-                Read Statistics
+                {t("announcements.readStatistics")}
               </Typography>
               <Typography fontWeight={600}>
                 {readCount} / {sendCount} ({percentage}%)
@@ -134,7 +136,7 @@ const AnnouncementDetail = ({ onClose, id }) => {
           {/* Progress */}
           <Box mt={4}>
             <Box display="flex" justifyContent="space-between" mb={1}>
-              <Typography fontSize={14}>Read Progress</Typography>
+              <Typography fontSize={14}>{t("announcements.readProgress")}</Typography>
               <Typography fontSize={14}>{percentage}%</Typography>
             </Box>
 

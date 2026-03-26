@@ -2,7 +2,6 @@ import {
   Box,
   Typography,
   Stack,
-  Chip,
   IconButton,
   Button,
   Dialog,
@@ -40,6 +39,34 @@ export default function ExportModal({
       return String(val);
     };
 
+    // Always English day names regardless of locale
+    const DAYS = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
+
+    // Colors — exact from screenshots
+    const C = {
+      navy: [13, 37, 64], // #0d2540 dark navy
+      white: [255, 255, 255],
+      lightBlue: [147, 190, 240], // Period / Exported labels in header
+      teal: [94, 210, 190], // subtitle + Weekend stat value
+      green: [22, 163, 74], // Present text / Summary
+      greenBg: [240, 253, 244], // Present status cell bg
+      gray: [100, 116, 139], // muted text
+      grayLight: [148, 163, 184], // table header labels / weekend text
+      border: [220, 225, 235],
+      rowBorder: [230, 235, 242],
+      statBg: [255, 255, 255],
+      empBoxBg: [248, 250, 252],
+      tableHeadBg: [245, 247, 250],
+    };
+
     const runExport = () => {
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF({
@@ -48,252 +75,369 @@ export default function ExportModal({
         format: "a4",
       });
       const pageW = 210;
-      const margin = 14;
-      const colW = pageW - margin * 2;
+      const M = 14; // margin
+      const colW = pageW - M * 2;
 
-      // ── Header bar ──────────────────────────────────────────────────────
-      doc.setFillColor(13, 37, 64);
-      doc.rect(0, 0, pageW, 28, "F");
+      // ════════════════════════════════════════════════════════════
+      // IMAGE 1 — HEADER
+      // ════════════════════════════════════════════════════════════
+      const headerH = 36;
+      doc.setFillColor(...[13, 37, 64]);
+      doc.rect(0, 0, pageW, headerH, "F");
 
-      doc.setTextColor(255, 255, 255);
+      // LEFT — "Yerinde" very large bold white
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(22);
+      doc.setTextColor(...C.white);
+      doc.text("Yerinde", M, 15);
+
+      // LEFT — "Workforce Management" normal light-blue below
+      doc.setFont("helvetica", "normal");
       doc.setFontSize(9);
-      doc.setFont("helvetica", "normal");
-      doc.text("Yerinde", margin, 9);
+      doc.setTextColor(...C.lightBlue);
+      doc.text("Workforce Management", M, 23);
 
-      doc.setFontSize(7);
-      doc.text("Workforce Management", margin, 14);
-
-      doc.setFontSize(14);
+      // CENTER — "Individual Attendance Report" bold white
       doc.setFont("helvetica", "bold");
-      doc.text("Individual Attendance Report", pageW / 2, 10, {
+      doc.setFontSize(16);
+      doc.setTextColor(...C.white);
+      doc.text("Individual Attendance Report", pageW / 2, 14, {
         align: "center",
       });
 
-      doc.setFontSize(8);
+      // CENTER — "Daily Check-in / Check-out Records" teal normal
       doc.setFont("helvetica", "normal");
-      doc.text("Daily Check-in / Check-out Records", pageW / 2, 16, {
+      doc.setFontSize(9);
+      doc.setTextColor(...C.teal);
+      doc.text("Daily Check-in / Check-out Records", pageW / 2, 22, {
         align: "center",
       });
 
+      // RIGHT TOP — "Period" small light-blue
+      doc.setFont("helvetica", "normal");
       doc.setFontSize(7);
-      doc.setTextColor(160, 200, 255);
-      doc.text("Period", pageW - margin, 7, { align: "right" });
+      doc.setTextColor(...C.lightBlue);
+      doc.text("Period", pageW - M, 10, { align: "right" });
 
-      doc.setTextColor(255, 255, 255);
+      // RIGHT — "DD.MM.YYYY → DD.MM.YYYY" bold white larger
       doc.setFont("helvetica", "bold");
-      doc.setFontSize(8);
-      doc.text(startDate + " -> " + endDate, pageW - margin, 12, {
+      doc.setFontSize(9);
+      doc.setTextColor(...C.white);
+      doc.text(startDate + "  ⟶  " + endDate, pageW - M, 17, {
         align: "right",
       });
 
+      // RIGHT — "Exported: ..." light-blue small
       doc.setFont("helvetica", "normal");
-      doc.setFontSize(7);
+      doc.setFontSize(7.5);
+      doc.setTextColor(...C.lightBlue);
       doc.text(
         "Exported: " + dayjs().format("DD.MM.YYYY HH:mm"),
-        pageW - margin,
-        17,
+        pageW - M,
+        25,
         { align: "right" },
       );
 
-      // ── Employee info box ────────────────────────────────────────────────
-      doc.setFillColor(248, 250, 252);
-      doc.setDrawColor(220, 225, 235);
-      doc.roundedRect(margin, 33, colW, 20, 2, 2, "FD");
+      // ════════════════════════════════════════════════════════════
+      // IMAGE 2 — EMPLOYEE BOX
+      // ════════════════════════════════════════════════════════════
+      const empY = headerH + 5;
+      const empH = 22;
+      doc.setFillColor(...C.empBoxBg);
+      doc.setDrawColor(...C.border);
+      doc.setLineWidth(0.4);
+      doc.roundedRect(M, empY, colW, empH, 2, 2, "FD");
 
-      doc.setTextColor(20, 20, 40);
-      doc.setFontSize(13);
+      // Name
       doc.setFont("helvetica", "bold");
-      doc.text(s(employee?.name), margin + 4, 41);
+      doc.setFontSize(14);
+      doc.setTextColor(...C.navy);
+      doc.text(s(employee?.name), M + 5, empY + 9);
 
-      doc.setFontSize(8);
+      // Position · Department
       doc.setFont("helvetica", "normal");
-      doc.setTextColor(100, 110, 130);
+      doc.setFontSize(8);
+      doc.setTextColor(...C.gray);
       doc.text(
-        s(employee?.position) + " · " + s(employee?.department),
-        margin + 4,
-        47,
+        s(employee?.position) + " - " + s(employee?.department),
+        M + 5,
+        empY + 16,
       );
 
+      // Employee ID label (right top of box)
+      doc.setFont("helvetica", "normal");
       doc.setFontSize(7);
-      doc.setTextColor(100, 110, 130);
-      doc.text("Employee ID", pageW - margin - 4, 39, { align: "right" });
+      doc.setTextColor(...C.gray);
+      doc.text("Employee ID", pageW - M - 5, empY + 8, { align: "right" });
 
-      doc.setFontSize(10);
+      // Employee ID value bold navy
       doc.setFont("helvetica", "bold");
-      doc.setTextColor(13, 37, 64);
-      doc.text(s(employee?.employee_id), pageW - margin - 4, 46, {
+      doc.setFontSize(11);
+      doc.setTextColor(...C.navy);
+      doc.text(s(employee?.employee_id), pageW - M - 5, empY + 16, {
         align: "right",
       });
 
-      // ── Stats row ────────────────────────────────────────────────────────
+      // ════════════════════════════════════════════════════════════
+      // IMAGE 2 — STATS ROW (6 columns)
+      // NOTE: WEEKEND value is teal, PRESENT is green, rest navy
+      // ════════════════════════════════════════════════════════════
       const statsArr = [
-        { label: "TOTAL DAYS", value: s(totalDays) },
-        { label: "PRESENT", value: s(presentDays), green: true },
-        { label: "WEEKEND", value: s(weekendDays) },
-        { label: "TOTAL HOURS", value: s(totalHours) + "h" },
-        { label: "AVG CHECK-IN", value: s(avgCheckIn) },
-        { label: "AVG CHECK-OUT", value: s(avgCheckOut) },
+        { label: "TOTAL DAYS", value: s(totalDays), color: C.navy },
+        { label: "PRESENT", value: s(presentDays), color: C.green },
+        { label: "WEEKEND", value: s(weekendDays), color: C.teal },
+        { label: "TOTAL HOURS", value: s(totalHours) + "h", color: C.navy },
+        { label: "AVG CHECK-IN", value: s(avgCheckIn) || "-", color: C.navy },
+        { label: "AVG CHECK-OUT", value: s(avgCheckOut) || "-", color: C.navy },
       ];
 
-      const statW = colW / statsArr.length;
-      const statY = 57;
+      const statY = empY + empH + 5;
+      const statH = 20;
+      const statW = colW / 6;
 
-      doc.setDrawColor(220, 225, 235);
+      doc.setFillColor(...C.statBg);
+      doc.setDrawColor(...C.border);
       doc.setLineWidth(0.3);
-      doc.line(margin, statY, margin + colW, statY);
-      doc.line(margin, statY + 16, margin + colW, statY + 16);
+      doc.rect(M, statY, colW, statH, "FD");
 
       statsArr.forEach((stat, i) => {
-        const x = margin + i * statW + statW / 2;
-        doc.setFontSize(12);
+        const x = M + i * statW + statW / 2;
+
+        // Value — large bold
         doc.setFont("helvetica", "bold");
-        if (stat.green) {
-          doc.setTextColor(34, 140, 80);
-        } else {
-          doc.setTextColor(20, 20, 40);
-        }
-        doc.text(stat.value, x, statY + 8, { align: "center" });
+        doc.setFontSize(14);
+        doc.setTextColor(...stat.color);
+        doc.text(stat.value, x, statY + 9, { align: "center" });
 
+        // Label — small caps gray bold
+        doc.setFont("helvetica", "bold");
         doc.setFontSize(6);
-        doc.setFont("helvetica", "normal");
-        doc.setTextColor(120, 130, 150);
-        doc.text(stat.label, x, statY + 13, { align: "center" });
+        doc.setTextColor(...C.grayLight);
+        doc.text(stat.label, x, statY + 16, { align: "center" });
 
+        // Vertical dividers between cells
         if (i > 0) {
-          doc.setDrawColor(220, 225, 235);
-          doc.line(margin + i * statW, statY, margin + i * statW, statY + 16);
+          doc.setDrawColor(...C.border);
+          doc.setLineWidth(0.3);
+          doc.line(M + i * statW, statY, M + i * statW, statY + statH);
         }
       });
 
-      // ── Table header ─────────────────────────────────────────────────────
-      const tY = 79;
+      // ════════════════════════════════════════════════════════════
+      // IMAGE 3 — SECTION TITLE
+      // ════════════════════════════════════════════════════════════
+      const secTitleY = statY + statH + 8;
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(10);
+      doc.setTextColor(...C.navy);
+      doc.text("Daily Check-in / Check-out Records", M, secTitleY);
+
+      // ════════════════════════════════════════════════════════════
+      // IMAGE 3 — TABLE
+      // Column widths (total = colW = 182mm)
+      //   #=12, Date=30, Day=30, CheckIn=26, CheckOut=26, Hours=22, Status=36
+      // ════════════════════════════════════════════════════════════
       const cols = [
-        { label: "#", w: 10 },
-        { label: "Date", w: 28 },
-        { label: "Day", w: 25 },
-        { label: "Check In", w: 25 },
-        { label: "Check Out", w: 25 },
-        { label: "Hours", w: 20 },
+        { label: "#", w: 12 },
+        { label: "Date", w: 30 },
+        { label: "Day", w: 30 },
+        { label: "Check In", w: 26 },
+        { label: "Check Out", w: 26 },
+        { label: "Hours", w: 22 },
         { label: "Status", w: 0 },
       ];
-      const usedW = cols.slice(0, -1).reduce((acc, c) => acc + c.w, 0);
-      cols[cols.length - 1].w = colW - usedW;
+      const usedW = cols.slice(0, -1).reduce((a, c) => a + c.w, 0);
+      cols[6].w = colW - usedW; // Status gets the rest
 
-      doc.setFillColor(245, 247, 250);
-      doc.rect(margin, tY, colW, 8, "F");
-      doc.setFontSize(7);
+      const tY = secTitleY + 5;
+      const tHeadH = 9;
+      const rowH = 11; // taller rows like in screenshot
+
+      // Table header background
+      doc.setFillColor(...C.tableHeadBg);
+      doc.rect(M, tY, colW, tHeadH, "F");
+
+      // Bottom border of header
+      doc.setDrawColor(...C.border);
+      doc.setLineWidth(0.3);
+      doc.line(M, tY + tHeadH, M + colW, tY + tHeadH);
+
+      // Header labels
       doc.setFont("helvetica", "bold");
-      doc.setTextColor(100, 110, 130);
-
-      let cx = margin;
+      doc.setFontSize(7.5);
+      doc.setTextColor(...C.grayLight);
+      let cx = M;
       cols.forEach((col) => {
-        doc.text(col.label, cx + 2, tY + 5.5);
+        doc.text(col.label, cx + 3, tY + 6.2);
         cx += col.w;
       });
 
-      // ── Rows ─────────────────────────────────────────────────────────────
-      let rowY = tY + 8;
+      // ── Rows ──────────────────────────────────────────────────
+      let rowY = tY + tHeadH;
 
       records.forEach((item, idx) => {
         const isPresent = item.status === "Present";
         const isWeekend = item.status === "Weekend";
-        const rowH = 9;
+        const dayName = DAYS[dayjs(item.work_date).day()];
+        const checkIn = formatTime(item.check_in) || "-";
+        const checkOut = formatTime(item.check_out) || "-";
+        const hours = item.hours ? s(item.hours.toFixed(1)) + "h" : "--";
 
+        // White row bg (clean)
+        doc.setFillColor(255, 255, 255);
+        doc.rect(M, rowY, colW, rowH, "F");
+
+        // For Present rows: light green bg on STATUS CELL ONLY
         if (isPresent) {
-          doc.setFillColor(240, 253, 245);
-          doc.rect(margin, rowY, colW, rowH, "F");
+          const statusColStart =
+            M + cols.slice(0, 6).reduce((a, c) => a + c.w, 0);
+          doc.setFillColor(...C.greenBg);
+          doc.rect(statusColStart, rowY, cols[6].w, rowH, "F");
         }
 
-        const checkIn = formatTime(item.check_in);
-        const checkOut = formatTime(item.check_out);
-        const hours = item.hours ? s(item.hours.toFixed(1)) + "h" : "-";
+        // ── Cell values ────────────────────────────────────────
+        // Muted color for weekend rows, navy for present/others
+        const textColor = isWeekend ? C.grayLight : C.navy;
 
-        const rowVals = [
-          s(records.length - idx),
+        cx = M;
+        // Col 0: # — bold, larger
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(9);
+        doc.setTextColor(...textColor);
+        doc.text(s(records.length - idx), cx + 3, rowY + 7.2);
+        cx += cols[0].w;
+
+        // Col 1: Date — bold
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(8.5);
+        doc.setTextColor(...textColor);
+        doc.text(
           dayjs(item.work_date).format("DD.MM.YYYY"),
-          dayjs(item.work_date).format("dddd"),
-          s(checkIn),
-          s(checkOut),
-          hours,
-          s(item.status),
-        ];
+          cx + 3,
+          rowY + 7.2,
+        );
+        cx += cols[1].w;
 
-        cx = margin;
-        rowVals.forEach((val, ci) => {
-          doc.setFontSize(8);
-          doc.setFont("helvetica", ci === 0 ? "bold" : "normal");
+        // Col 2: Day — normal gray (always muted regardless of status)
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(8.5);
+        doc.setTextColor(...C.grayLight);
+        doc.text(dayName, cx + 3, rowY + 7.2);
+        cx += cols[2].w;
 
-          if (ci === 6) {
-            doc.setTextColor(
-              isPresent ? 34 : 120,
-              isPresent ? 140 : 130,
-              isPresent ? 80 : 150,
-            );
-          } else if (isWeekend) {
-            doc.setTextColor(160, 165, 180);
-          } else {
-            doc.setTextColor(20, 20, 40);
-          }
+        // Col 3: Check In — bold
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(8.5);
+        doc.setTextColor(...textColor);
+        doc.text(checkIn, cx + 3, rowY + 7.2);
+        cx += cols[3].w;
 
-          doc.text(val, cx + 2, rowY + 6);
-          cx += cols[ci].w;
-        });
+        // Col 4: Check Out — bold
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(8.5);
+        doc.setTextColor(...textColor);
+        doc.text(checkOut, cx + 3, rowY + 7.2);
+        cx += cols[4].w;
 
-        doc.setDrawColor(230, 235, 240);
-        doc.setLineWidth(0.2);
-        doc.line(margin, rowY + rowH, margin + colW, rowY + rowH);
+        // Col 5: Hours — bold
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(8.5);
+        doc.setTextColor(...textColor);
+        doc.text(hours, cx + 3, rowY + 7.2);
+        cx += cols[5].w;
+
+        // Col 6: Status — NO pill, plain bold text, right-aligned in cell
+        // "Present" = green bold, "Weekend" = gray bold
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(8.5);
+        if (isPresent) {
+          doc.setTextColor(...C.green);
+          doc.text("Present", cx + cols[6].w - 4, rowY + 7.2, {
+            align: "right",
+          });
+        } else if (isWeekend) {
+          doc.setTextColor(...C.grayLight);
+          doc.text("Weekend", cx + cols[6].w - 4, rowY + 7.2, {
+            align: "right",
+          });
+        } else {
+          doc.setTextColor(...C.gray);
+          doc.text(s(item.status), cx + cols[6].w - 4, rowY + 7.2, {
+            align: "right",
+          });
+        }
+
+        // Row bottom divider
+        doc.setDrawColor(...C.rowBorder);
+        doc.setLineWidth(0.25);
+        doc.line(M, rowY + rowH, M + colW, rowY + rowH);
+
         rowY += rowH;
       });
 
-      // ── Summary box ──────────────────────────────────────────────────────
-      const sumY = rowY + 6;
+      // ════════════════════════════════════════════════════════════
+      // IMAGE 4 — SUMMARY BOX
+      // ════════════════════════════════════════════════════════════
+      const sumY = rowY + 7;
       const avgHrs =
         attendance?.total_hours && attendance?.present_days
           ? s((attendance.total_hours / attendance.present_days).toFixed(1))
           : "-";
 
-      doc.setFillColor(240, 253, 245);
-      doc.setDrawColor(34, 160, 90);
+      doc.setFillColor(...C.greenBg);
+      doc.setDrawColor(...C.green);
       doc.setLineWidth(0.5);
-      doc.roundedRect(margin, sumY, colW, 10, 2, 2, "FD");
+      doc.roundedRect(M, sumY, colW, 11, 2, 2, "FD");
 
-      doc.setFontSize(8);
+      // Summary label — green bold, then separator, then normal text all in one box
+      // Draw a small green filled circle as checkmark indicator
+      doc.setFillColor(...C.green);
+      doc.circle(M + 7, sumY + 5.5, 2.5, "F");
       doc.setFont("helvetica", "bold");
-      doc.setTextColor(34, 140, 80);
-      doc.text("Summary", margin + 4, sumY + 6.5);
-
-      doc.setFont("helvetica", "normal");
-      doc.setTextColor(60, 80, 60);
-      doc.text(
-        "  " +
-          s(presentDays) +
-          " present days of " +
-          s(totalDays) +
-          " total  |  " +
-          s(totalHours) +
-          "h total  |  Avg " +
-          avgHrs +
-          "h/day",
-        margin + 22,
-        sumY + 6.5,
-      );
-
-      // ── Footer ───────────────────────────────────────────────────────────
-      const footY = 282;
-      doc.setDrawColor(200, 205, 215);
-      doc.line(margin, footY, pageW - margin, footY);
       doc.setFontSize(7);
+      doc.setTextColor(255, 255, 255);
+      doc.text("v", M + 7, sumY + 6.5, { align: "center" });
+
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(8.5);
+      doc.setTextColor(...C.green);
+      doc.text("Summary", M + 13, sumY + 7.5);
+
+      // Rest of summary text — dark normal
       doc.setFont("helvetica", "normal");
-      doc.setTextColor(130, 140, 160);
+      doc.setFontSize(8.5);
+      doc.setTextColor(50, 70, 55);
+      const sumText =
+        s(presentDays) +
+        " present days out of " +
+        s(totalDays) +
+        " total  .  " +
+        s(totalHours) +
+        "h total hours worked  .  Average " +
+        avgHrs +
+        "h per working day";
+      doc.text(sumText, M + 38, sumY + 7.5);
+
+      // ════════════════════════════════════════════════════════════
+      // IMAGE 4 — FOOTER
+      // ════════════════════════════════════════════════════════════
+      const footY = 284;
+      doc.setDrawColor(...C.border);
+      doc.setLineWidth(0.3);
+      doc.line(M, footY, pageW - M, footY);
+
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(7.5);
+      doc.setTextColor(...C.gray);
       doc.text(
         "Generated by Yerinde  " + dayjs().format("DD.MM.YYYY HH:mm"),
-        margin,
-        footY + 4,
+        M,
+        footY + 5,
       );
-      doc.text("CONFIDENTIAL - For internal use only", pageW / 2, footY + 4, {
+      doc.text("CONFIDENTIAL - For internal use only", pageW / 2, footY + 5, {
         align: "center",
       });
-      doc.text("Page 1 of 1", pageW - margin, footY + 4, { align: "right" });
+      doc.text("Page 1 of 1", pageW - M, footY + 5, { align: "right" });
 
       doc.save(
         "attendance_" +
@@ -321,7 +465,6 @@ export default function ExportModal({
     <Dialog
       open={open}
       onClose={onClose}
-      width={"760px"}
       PaperProps={{
         sx: { borderRadius: "16px", overflow: "hidden", maxWidth: 680 },
       }}
@@ -356,7 +499,7 @@ export default function ExportModal({
               bgcolor: "#FFFFFF",
               color: "#494848",
               borderRadius: "8px",
-              "&:hover": { bgcolor: "rgba(255,255,255,0.2)",color: '#e5e5e5' },
+              "&:hover": { bgcolor: "rgba(255,255,255,0.2)", color: "#e5e5e5" },
             }}
           >
             <CloseIcon fontSize="small" />
@@ -445,7 +588,6 @@ export default function ExportModal({
         {/* Records */}
         <Box sx={{ maxHeight: 380, overflowY: "auto" }}>
           {records.map((item) => {
-            // const isPresent = item.status === "Present";
             const isWeekend = item.status === "Weekend";
             const dayNum = dayjs(item.work_date).format("DD");
 
@@ -527,21 +669,6 @@ export default function ExportModal({
                   {item.hours ? item.hours.toFixed(1) + "h" : "-"}
                 </Typography>
 
-                {/* <Chip
-                  label={item.status}
-                  size="small"
-                  sx={{
-                    width: 80,
-                    height: 26,
-                    borderRadius: "20px",
-                    fontSize: 12,
-                    fontWeight: 600,
-                    bgcolor: isPresent ? "#dcfce7" : "#f1f5f9",
-                    color: isPresent ? "#16a34a" : "#64748b",
-                    border: "none",
-                    textTransform: "capitalize",
-                  }}
-                /> */}
                 <StatusChip status={item.status} />
                 <Box />
               </Box>

@@ -9,39 +9,68 @@ import {
   IconButton,
   Box,
   CircularProgress,
+  Divider,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateDepartments } from "../../../api/queries/post";
+import { useLocale } from "../../../hooks/useLocale";
+import toast from "react-hot-toast";
 
 const AddDepartmentModal = ({ open, onClose }) => {
+  const { t } = useLocale();
   const queryClient = useQueryClient();
-  const [form, setForm] = useState({ name: "", head_of_department: "" });
+
+  const [form, setForm] = useState({
+    name: "",
+    head_of_department: "",
+  });
+
   const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    if (open) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setForm({ name: "", head_of_department: "" });
+      setErrors({});
+    }
+  }, [open]);
 
   const { mutate, isPending } = useMutation({
     mutationFn: updateDepartments,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["departments"] });
+
+      toast.success(t("settings.modal.deptAdded"));
+
       handleClose();
     },
     onError: (err) => {
       console.error("Add department error:", err);
+      toast.error(t("settings.modal.deptAddedErr"));
     },
   });
 
   const validate = () => {
     const newErrors = {};
-    if (!form.name.trim()) newErrors.name = "Department name is required";
-    if (!form.head_of_department.trim())
-      newErrors.head_of_department = "Head of department is required";
+
+    if (!form.name.trim()) {
+      newErrors.name = t("settings.modal.deptNameReq");
+    }
+
+    if (!form.head_of_department.trim()) {
+      newErrors.head_of_department = t("settings.modal.deptHeadReq");
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    if (e) e.preventDefault();
     if (!validate()) return;
+
     mutate({
       name: form.name.trim(),
       head_of_department: form.head_of_department.trim(),
@@ -49,14 +78,19 @@ const AddDepartmentModal = ({ open, onClose }) => {
   };
 
   const handleClose = () => {
-    setForm({ name: "", head_of_department: "" });
     setErrors({});
     onClose();
   };
 
   const handleChange = (field) => (e) => {
-    setForm((prev) => ({ ...prev, [field]: e.target.value }));
-    if (errors[field]) setErrors((prev) => ({ ...prev, [field]: undefined }));
+    setForm((prev) => ({
+      ...prev,
+      [field]: e.target.value,
+    }));
+
+    if (errors[field]) {
+      setErrors((prev) => ({ ...prev, [field]: undefined }));
+    }
   };
 
   return (
@@ -66,124 +100,127 @@ const AddDepartmentModal = ({ open, onClose }) => {
       PaperProps={{
         sx: {
           width: 672,
-          minHeight: 309,
+          minHeight: 337,
           borderRadius: "12px",
+          boxShadow: "0px 25px 50px -12px #00000040",
           p: 0,
         },
       }}
     >
-      {/* Title */}
+      {/* Header */}
       <DialogTitle
         sx={{
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
           px: 3,
-          pt: 3,
+          pt: 2.5,
           pb: 2,
         }}
       >
-        <Typography variant="subtitle1" fontWeight={700} fontSize="1rem">
-          Add Department
+        <Typography fontSize="16px" fontWeight={600}>
+          {t("settings.modal.addDept")}
         </Typography>
-        <IconButton
-          size="small"
-          onClick={handleClose}
-          sx={{ color: "text.secondary" }}
-        >
-          <CloseIcon fontSize="small" />
+
+        <IconButton onClick={handleClose} size="small">
+          <CloseIcon sx={{ fontSize: 18 }} />
         </IconButton>
       </DialogTitle>
+      <Divider />
+      <Box component="form" onSubmit={handleSubmit}>
+        {/* Content */}
+        <DialogContent sx={{ px: 3, py: 1, mt: 2 }}>
+          {/* Department Name */}
+          <Box mb={3}>
+            <Typography fontSize="13px" mb={1}>
+              {t("settings.modal.deptName")}
+            </Typography>
 
-      {/* Content */}
-      <DialogContent sx={{ px: 3, py: 0 }}>
-        {/* Department Name */}
-        <Box mb={2.5}>
-          <Typography variant="body2" fontWeight={500} mb="10px">
-            Department Name
-          </Typography>
-          <TextField
-            fullWidth
-            size="small"
-            placeholder=""
-            value={form.name}
-            onChange={handleChange("name")}
-            error={!!errors.name}
-            helperText={errors.name}
-            InputProps={{
-              sx: { borderRadius: "8px", height: 38, fontSize: "0.875rem" },
-            }}
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                borderRadius: "8px",
-                "& fieldset": { borderWidth: "1px" },
-              },
-            }}
-          />
-        </Box>
+            <TextField
+              fullWidth
+              size="small"
+              value={form.name}
+              onChange={handleChange("name")}
+              error={!!errors.name}
+              helperText={errors.name}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "8px",
+                  height: "42px",
+                },
+              }}
+            />
+          </Box>
 
-        {/* Head of Department */}
-        <Box mb={1}>
-          <Typography variant="body2" fontWeight={500} mb="10px">
-            Head of Department
-          </Typography>
-          <TextField
-            fullWidth
-            size="small"
-            placeholder=""
-            value={form.head_of_department}
-            onChange={handleChange("head_of_department")}
-            error={!!errors.head_of_department}
-            helperText={errors.head_of_department}
-            InputProps={{
-              sx: { borderRadius: "8px", height: 38, fontSize: "0.875rem" },
-            }}
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                borderRadius: "8px",
-                "& fieldset": { borderWidth: "1px" },
-              },
-            }}
-          />
-        </Box>
-      </DialogContent>
+          {/* Head */}
+          <Box>
+            <Typography fontSize="13px" mb={1}>
+              {t("settings.modal.deptHead")}
+            </Typography>
 
-      {/* Actions */}
-      <DialogActions sx={{ px: 3, py: 3, gap: 1 }}>
-        <Button
-          variant="outlined"
-          onClick={handleClose}
-          disabled={isPending}
+            <TextField
+              fullWidth
+              size="small"
+              value={form.head_of_department}
+              onChange={handleChange("head_of_department")}
+              error={!!errors.head_of_department}
+              helperText={errors.head_of_department}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "8px",
+                  height: "42px",
+                },
+              }}
+            />
+          </Box>
+        </DialogContent>
+
+        {/* Actions */}
+        <DialogActions
           sx={{
-            textTransform: "none",
-            borderRadius: 1.5,
-            px: 2.5,
-            fontWeight: 500,
-            color: "text.primary",
-            borderColor: "grey.300",
+            px: 3,
+            pb: 2.5,
+            pt: 2,
+            justifyContent: "flex-end",
+            gap: 1.5,
           }}
         >
-          Cancel
-        </Button>
-        <Button
-          variant="contained"
-          onClick={handleSubmit}
-          disabled={isPending}
-          startIcon={
-            isPending ? <CircularProgress size={14} color="inherit" /> : null
-          }
-          sx={{
-            textTransform: "none",
-            borderRadius: 1.5,
-            px: 2.5,
-            fontWeight: 600,
-            bgcolor: "#1a2e44",
-            "&:hover": { bgcolor: "#243d58" },
-          }}
-        >
-          {isPending ? "Adding..." : "Add Department"}
-        </Button>
-      </DialogActions>
+          <Button
+            variant="outlined"
+            onClick={handleClose}
+            disabled={isPending}
+            sx={{
+              textTransform: "none",
+              borderRadius: "8px",
+              px: 3,
+              height: "36px",
+              color: "#111827",
+              borderColor: "#D1D5DB",
+            }}
+          >
+            {t("common.cancel")}
+          </Button>
+
+          <Button
+            type="submit"
+            variant="contained"
+            disabled={isPending}
+            startIcon={
+              isPending ? <CircularProgress size={14} color="inherit" /> : null
+            }
+            sx={{
+              textTransform: "none",
+              borderRadius: "8px",
+              px: 3,
+              height: "36px",
+              bgcolor: "#1E3A5F",
+              "&:hover": { bgcolor: "#2A4A73" },
+            }}
+          >
+            {isPending ? t("common.deleting").replace('...', '') + '...' : t("settings.modal.addDept")}
+          </Button>
+        </DialogActions>
+      </Box>
     </Dialog>
   );
 };

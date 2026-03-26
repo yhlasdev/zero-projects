@@ -1,4 +1,11 @@
-import { Box, Typography, Divider, IconButton, Button } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Divider,
+  IconButton,
+  Button,
+  Grid,
+} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useForm } from "react-hook-form";
 import { CustomForm } from "../../../components/form/CustomForm";
@@ -7,8 +14,10 @@ import { announcementAdd } from "../../../api/queries/post";
 import { updateAnnouncement } from "../../../api/queries/put";
 import CustomFormTextField from "../../../components/textField/CustomTextField";
 import CustomFormSelect from "../../../components/select/CustomFormSelect";
+import { useLocale } from "../../../hooks/useLocale";
 
 const AnnouncementContent = ({ onClose, data }) => {
+  const { t } = useLocale();
   const isEdit = Boolean(data);
   const {
     control,
@@ -46,11 +55,11 @@ const AnnouncementContent = ({ onClose, data }) => {
   };
 
   const statusOptions = [
-    { value: "publish", label: "Publish" },
-    { value: "draft", label: "Draft" },
+    { value: "publish", label: t("announcements.publishedStatus") },
+    { value: "draft", label: t("announcements.draftStatus") },
   ];
 
-  const targetOptions = [{ value: "all_employees", label: "all_employees" }];
+  const targetOptions = [{ value: "all_employees", label: t("announcements.allEmployees") }];
 
   return (
     <Box>
@@ -64,7 +73,7 @@ const AnnouncementContent = ({ onClose, data }) => {
           pt={1.5}
         >
           <Typography fontSize={18} fontWeight={600}>
-            {isEdit ? "Edit Announcement" : "New Announcement"}
+            {isEdit ? t("announcements.editAnnouncement") : t("announcements.newAnnouncement")}
           </Typography>
 
           <IconButton onClick={onClose}>
@@ -81,26 +90,39 @@ const AnnouncementContent = ({ onClose, data }) => {
             name="text"
             rowNum={4}
             className="w-full"
-            label={"Text"}
+            label={t("announcements.announcementText")}
             closeIcon={false}
           />
 
-          <Box display={"flex"} gap={4} mt={3}>
-            <CustomFormSelect
-              name="target_audience"
-              label="Target Audience"
-              control={control}
-              errors={errors}
-              options={targetOptions}
-            />
-            <CustomFormSelect
-              name="status"
-              label="Status"
-              control={control}
-              errors={errors}
-              options={statusOptions}
-            />
-          </Box>
+          <Grid container mt={3} spacing={3}>
+            <Grid size={6}>
+              <CustomFormSelect
+                name="target_audience"
+                label={t("announcements.targetAudience")}
+                control={control}
+                errors={errors}
+                options={targetOptions}
+              />
+            </Grid>
+            <Grid size={6}>
+              <CustomFormSelect
+                name="status"
+                label={t("announcements.status")}
+                control={control}
+                errors={errors}
+                options={statusOptions}
+              />
+            </Grid>
+            <Grid size={6}>
+              <CustomFormSelect
+                name="section"
+                label={t("announcements.sections")}
+                control={control}
+                errors={errors}
+                options={statusOptions}
+              />
+            </Grid>
+          </Grid>
           <Box
             sx={{
               pt: 3,
@@ -114,7 +136,7 @@ const AnnouncementContent = ({ onClose, data }) => {
               onClick={onClose}
               sx={{ borderRadius: "8px" }}
             >
-              Cancel
+              {t("common.cancel")}
             </Button>
 
             <Button
@@ -124,10 +146,10 @@ const AnnouncementContent = ({ onClose, data }) => {
               disabled={mutation.isPending}
             >
               {mutation.isPending
-                ? "Saving..."
+                ? t("announcements.saving")
                 : isEdit
-                  ? "Save changes"
-                  : "Create Announcement"}
+                  ? t("common.save")
+                  : t("announcements.createAnnouncement")}
             </Button>
           </Box>
         </Box>

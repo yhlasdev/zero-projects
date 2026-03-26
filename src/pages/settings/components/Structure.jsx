@@ -12,122 +12,212 @@ import {
   DialogContent,
   DialogActions,
   CircularProgress,
+  useColorScheme,
+  Divider,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useLocale } from "../../../hooks/useLocale";
 import AddDepartmentModal from "../modal/AddDepartment";
 import EditDepartmentModal from "../modal/EditDepartment";
-import { getAllDepartments } from "../../../api/queries/getters";
-import { deleteDepartment } from "../../../api/queries/delete";
+import AddPositionModal from "../modal/AddPosition";
+import EditPositionModal from "../modal/EditPosition";
+import { getAllDepartments, getAllJobs } from "../../../api/queries/getters";
+import { deleteDepartment, deleteJobs } from "../../../api/queries/delete";
 import { AiOutlineEdit } from "react-icons/ai";
 import { RiDeleteBinLine } from "react-icons/ri";
-
+import toast from "react-hot-toast";
+import CloseIcon from "@mui/icons-material/Close";
 const DeleteConfirmDialog = ({
   open,
   onClose,
   onConfirm,
   isPending,
-  departmentName,
-}) => (
-  <Dialog
-    open={open}
-    onClose={onClose}
-    PaperProps={{ sx: { width: 500, borderRadius: "12px", p: 0 } }}
-  >
-    <DialogTitle sx={{ px: 3, pt: 2, pb: 2 }}>
-      <Typography variant="h6" textAlign={"center"} fontWeight={700}>
-        Delete Department
-      </Typography>
-    </DialogTitle>
+  title,
+  itemName,
+}) => {
+  const { t } = useLocale();
 
-    <DialogContent sx={{ px: 3, py: 1 }}>
-      <Typography variant="body2" color="text.secondary">
-        Are you sure you want to delete
-        <Typography
-          component="span"
-          variant="body2"
-          mx={1}
-          fontWeight={600}
-          color="text.primary"
-        >
-          {departmentName}
+  const handleConfirm = async () => {
+    try {
+      await onConfirm();
+      toast.success(t("settings.deleteSuccess"));
+    } catch (e) {
+      console.log(e);
+      toast.error(t("settings.deleteFailed"));
+    }
+  };
+
+  return (
+    <Dialog
+      open={open}
+      onClose={onClose}
+      PaperProps={{
+        sx: {
+          width: 480,
+          borderRadius: "12px",
+          boxShadow: "0px 25px 50px -12px #00000040",
+          p: 0,
+        },
+      }}
+    >
+      {/* Header */}
+      <DialogTitle
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          px: 3,
+          pt: 2.5,
+          pb: 2,
+        }}
+      >
+        <Typography fontSize="16px" fontWeight={600}>
+          {title || t("settings.deleteConfirmTitle")}
         </Typography>
-        ? This action cannot be undone.
-      </Typography>
-    </DialogContent>
 
-    <DialogActions sx={{ px: 3, py: 2.5, gap: 1 }}>
-      <Button
-        variant="outlined"
-        onClick={onClose}
-        disabled={isPending}
+        <IconButton onClick={onClose} size="small">
+          <CloseIcon sx={{ fontSize: 18 }} />
+        </IconButton>
+      </DialogTitle>
+      <Divider />
+      {/* Content */}
+      <DialogContent sx={{ px: 3, py: 1, mt: 2 }}>
+        <Typography
+          sx={{
+            fontSize: "14px",
+            color: "text.secondary",
+            lineHeight: "20px",
+          }}
+        >
+          {t("settings.deleteConfirmDescPrefix")}
+          <Box
+            component="span"
+            sx={{
+              fontWeight: 600,
+              color: "text.primary",
+            }}
+          >
+            {itemName}
+          </Box>
+          {t("settings.deleteConfirmDescSuffix")}
+        </Typography>
+      </DialogContent>
+
+      {/* Actions */}
+      <DialogActions
         sx={{
-          textTransform: "none",
-          borderRadius: 1.5,
-          px: 2.5,
-          fontWeight: 500,
-          color: "text.primary",
-          borderColor: "grey.300",
+          px: 3,
+          pb: 2.5,
+          pt: 2,
+          justifyContent: "flex-end",
+          gap: 1.5,
         }}
       >
-        Cancel
-      </Button>
-      <Button
-        variant="contained"
-        onClick={onConfirm}
-        disabled={isPending}
-        startIcon={
-          isPending ? <CircularProgress size={14} color="inherit" /> : null
-        }
-        sx={{
-          textTransform: "none",
-          borderRadius: 1.5,
-          px: 2.5,
-          fontWeight: 600,
-          "&:hover": { bgcolor: "error.dark" },
-        }}
-      >
-        {isPending ? "Deleting..." : "Delete"}
-      </Button>
-    </DialogActions>
-  </Dialog>
-);
+        <Button
+          variant="outlined"
+          onClick={onClose}
+          disabled={isPending}
+          sx={{
+            textTransform: "none",
+            borderRadius: "8px",
+            px: 3,
+            height: "36px",
+            color: "#111827",
+            borderColor: "#D1D5DB",
+          }}
+        >
+          {t("common.cancel")}
+        </Button>
 
-const PositionCard = ({ position, onEdit, onDelete }) => (
-  <Box
-    sx={{
-      border: "1px solid",
-      borderColor: "grey.200",
-      borderRadius: 1.5,
-      px: 2,
-      py: 1.5,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "space-between",
-      bgcolor: "background.paper",
-    }}
-  >
-    <Box>
-      <Typography variant="body2" fontWeight={500} color="text.primary">
-        {position.title}
-      </Typography>
-      <Typography variant="caption" color="text.secondary">
-        {position.employeeCount ?? position.employees ?? 0} employees
-      </Typography>
+        <Button
+          variant="contained"
+          onClick={handleConfirm}
+          disabled={isPending}
+          startIcon={
+            isPending ? <CircularProgress size={14} color="inherit" /> : null
+          }
+          sx={{
+            textTransform: "none",
+            borderRadius: "8px",
+            px: 3,
+            height: "36px",
+            bgcolor: "#DC2626", // 🔥 danger red
+            "&:hover": { bgcolor: "#B91C1C" },
+          }}
+        >
+          {isPending ? t("common.deleting") : t("common.delete")}
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
+const PositionCard = ({ position, onEdit, onDelete }) => {
+  const { t } = useLocale();
+  return (
+    <Box
+      sx={{
+        width: "100%",
+        minWidth: "342.66px",
+        minHeight: "75px",
+        borderRadius: "8px",
+        border: "1px solid",
+        borderColor: "divider",
+        px: 2,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+      }}
+    >
+      {/* Left */}
+      <Box>
+        <Typography
+          sx={{
+            fontWeight: 500,
+            fontSize: "14px",
+            lineHeight: "20px",
+            color: "text.primary",
+          }}
+        >
+          {position.job_title ?? position.title}
+        </Typography>
+
+        <Typography
+          sx={{
+            fontWeight: 400,
+            fontSize: "12px",
+            lineHeight: "16px",
+            color: "text.secondary",
+          }}
+        >
+          {position.employee_count ?? position.employeeCount ?? 0}{" "}
+          {t("settings.structure.employees")}
+        </Typography>
+      </Box>
+
+      {/* Right Icons */}
+      <Box display="flex" alignItems="center" gap={0.5}>
+        <IconButton
+          size="small"
+          onClick={() => onEdit(position)}
+          sx={{ p: 0.5 }}
+        >
+          <AiOutlineEdit sx={{ fontSize: 16 }} />
+        </IconButton>
+
+        <IconButton
+          size="small"
+          onClick={() => onDelete(position)}
+          sx={{ p: 0.5 }}
+        >
+          <RiDeleteBinLine sx={{ fontSize: 17 }} />
+        </IconButton>
+      </Box>
     </Box>
-    <Box display="flex" gap={0.5}>
-      <IconButton size="small" onClick={() => onEdit(position)}>
-        <BorderColorOutlinedIcon sx={{ fontSize: 16 }} />
-      </IconButton>
-      <IconButton size="small" onClick={() => onDelete(position.id)}>
-        <DeleteOutlineIcon sx={{ fontSize: 17 }} />
-      </IconButton>
-    </Box>
-  </Box>
-);
+  );
+};
 
 const DepartmentCard = ({
   department,
@@ -136,8 +226,18 @@ const DepartmentCard = ({
   onAddPosition,
   onEditPosition,
   onDeletePosition,
+  mode,
 }) => {
-  const positions = department.positions ?? department.jobPositions ?? [];
+  const { t } = useLocale();
+  const { data: positions = [], isLoading: jobsLoading } = useQuery({
+    queryKey: ["jobs", department.id],
+    queryFn: () => getAllJobs(department.id),
+    select: (res) => {
+      if (Array.isArray(res?.data?.data)) return res.data.data;
+      if (Array.isArray(res?.data)) return res.data;
+      return [];
+    },
+  });
 
   return (
     <Paper
@@ -152,6 +252,8 @@ const DepartmentCard = ({
           alignItems: "center",
           justifyContent: "space-between",
           borderBottom: "1px solid",
+          borderColor: "divider",
+          bgcolor: mode === "dark" ? "action.hover" : "#F4F4F4",
         }}
       >
         <Box>
@@ -159,8 +261,9 @@ const DepartmentCard = ({
             {department?.name}
           </Typography>
           <Typography variant="caption" color="text.secondary">
-            Head: {department?.head_of_departments} •{" "}
-            {department?.employee_count || 0} employees
+            {t("settings.structure.head")}: {department?.head_of_departments} •{" "}
+            {department?.employee_count || 0}{" "}
+            {t("settings.structure.employees")}
           </Typography>
         </Box>
 
@@ -171,14 +274,16 @@ const DepartmentCard = ({
             startIcon={<AddIcon sx={{ fontSize: 14 }} />}
             onClick={() => onAddPosition(department.id)}
             sx={{
-              textTransform: "none",
               fontSize: "0.75rem",
               borderRadius: 1.5,
               px: 1.5,
+              color: mode === "dark" ? "#fff" : "#333333",
+              borderColor: "transparent",
+              background: "var(--text-220, #9F9F9F33)",
               py: 0.5,
             }}
           >
-            Add Position
+            {t("settings.structure.addPos")}
           </Button>
           <IconButton size="small" onClick={() => onEditDept(department)}>
             <AiOutlineEdit size={20} />
@@ -190,9 +295,17 @@ const DepartmentCard = ({
       </Box>
 
       <Box sx={{ p: 2 }}>
-        {positions.length === 0 ? (
+        {jobsLoading ? (
+          <Grid container spacing={1.5}>
+            {[1, 2, 3].map((i) => (
+              <Grid item xs={12} sm={6} md={4} key={i}>
+                <Skeleton variant="rounded" height={60} />
+              </Grid>
+            ))}
+          </Grid>
+        ) : positions.length === 0 ? (
           <Typography variant="body2" color="text.secondary" sx={{ py: 1 }}>
-            No positions yet.
+            {t("settings.structure.noPos")}
           </Typography>
         ) : (
           <Grid container spacing={1.5}>
@@ -201,7 +314,9 @@ const DepartmentCard = ({
                 <PositionCard
                   position={pos}
                   onEdit={onEditPosition}
-                  onDelete={(posId) => onDeletePosition(department.id, posId)}
+                  onDelete={(position) =>
+                    onDeletePosition(department.id, position)
+                  }
                 />
               </Grid>
             ))}
@@ -243,7 +358,11 @@ const CompanyStructure = () => {
   const [addDeptOpen, setAddDeptOpen] = useState(false);
   const [editDept, setEditDept] = useState(null);
   const [deleteDept, setDeleteDept] = useState(null);
-
+  const [addPosition, setAddPosition] = useState(null);
+  const [editPosition, setEditPosition] = useState(null);
+  const [deletePos, setDeletePos] = useState(null);
+  const { mode } = useColorScheme();
+  const { t } = useLocale();
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["departments"],
     queryFn: getAllDepartments,
@@ -264,11 +383,33 @@ const CompanyStructure = () => {
     },
   });
 
-  const handleDeletePosition = (deptId, posId) =>
-    console.log("Delete pos:", posId, "dept:", deptId);
-  const handleAddPosition = (deptId) =>
-    console.log("Add position for dept:", deptId);
-  const handleEditPosition = (pos) => console.log("Edit pos:", pos);
+  const { mutate: confirmDeletePos, isPending: isDeletingPos } = useMutation({
+    mutationFn: () => deleteJobs(deletePos?.id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["jobs", deletePos?.deptId] });
+      queryClient.invalidateQueries({ queryKey: ["departments"] });
+      setDeletePos(null);
+    },
+    onError: (err) => {
+      console.error("Delete position error:", err);
+    },
+  });
+
+  const handleDeletePosition = (deptId, position) =>
+    setDeletePos({
+      id: position.id,
+      name: position.job_title ?? position.title,
+      deptId,
+    });
+
+  const handleAddPosition = (deptId) => {
+    const dept = data?.find((d) => d.id === deptId);
+    setAddPosition({ deptId, deptName: dept?.name ?? "" });
+  };
+
+  const handleEditPosition = (pos, deptId, deptName) => {
+    setEditPosition({ position: pos, deptId, deptName });
+  };
 
   return (
     <Box>
@@ -279,7 +420,7 @@ const CompanyStructure = () => {
         mb={3}
       >
         <Typography fontSize={18} fontWeight={600}>
-          Departments & Positions
+          {t("settings.structure.title")}
         </Typography>
         <Button
           variant="contained"
@@ -291,11 +432,11 @@ const CompanyStructure = () => {
             borderRadius: 1.5,
             px: 2.5,
             fontWeight: 600,
-            bgcolor: "#1a2e44",
-            "&:hover": { bgcolor: "#243d58" },
+            bgcolor: "primary.main",
+            "&:hover": { bgcolor: "primary.dark" },
           }}
         >
-          Add Department
+          {t("settings.structure.addDept")}
         </Button>
       </Box>
 
@@ -309,12 +450,15 @@ const CompanyStructure = () => {
 
       {isError && (
         <Alert severity="error" sx={{ mb: 2 }}>
-          Getting the department: {error?.message ?? "Some problems"}
+          {t("settings.structure.errorDepts")}:{" "}
+          {error?.message ?? "Some problems"}
         </Alert>
       )}
 
       {!isLoading && !isError && data?.length === 0 && (
-        <Typography color="text.secondary">Not added the Department</Typography>
+        <Typography color="text.secondary">
+          {t("settings.structure.noDepts")}
+        </Typography>
       )}
 
       {!isLoading &&
@@ -326,8 +470,11 @@ const CompanyStructure = () => {
             onEditDept={(d) => setEditDept(d)}
             onDeleteDept={(d) => setDeleteDept(d)}
             onAddPosition={handleAddPosition}
-            onEditPosition={handleEditPosition}
+            onEditPosition={(pos) =>
+              handleEditPosition(pos, dept.id, dept.name)
+            }
             onDeletePosition={handleDeletePosition}
+            mode={mode}
           />
         ))}
 
@@ -345,7 +492,29 @@ const CompanyStructure = () => {
         onClose={() => setDeleteDept(null)}
         onConfirm={confirmDelete}
         isPending={isDeleting}
-        departmentName={deleteDept?.name}
+        title={t("settings.modal.deleteDeptTitle")}
+        itemName={deleteDept?.name}
+      />
+      <DeleteConfirmDialog
+        open={!!deletePos}
+        onClose={() => setDeletePos(null)}
+        onConfirm={confirmDeletePos}
+        isPending={isDeletingPos}
+        title={t("settings.modal.deletePosTitle")}
+        itemName={deletePos?.name}
+      />
+      <AddPositionModal
+        open={!!addPosition}
+        onClose={() => setAddPosition(null)}
+        departmentId={addPosition?.deptId}
+        departmentName={addPosition?.deptName}
+      />
+      <EditPositionModal
+        open={!!editPosition}
+        onClose={() => setEditPosition(null)}
+        position={editPosition?.position}
+        departmentId={editPosition?.deptId}
+        departmentName={editPosition?.deptName}
       />
     </Box>
   );
