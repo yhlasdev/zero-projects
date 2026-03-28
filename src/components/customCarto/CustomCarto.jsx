@@ -96,7 +96,8 @@ const CustomCarto = ({ latitude, longitude, radius = 100, onChange }) => {
         setLocateTrigger(prev => prev + 1);
     };
 
-    if (!initialLat && !initialLng && !pos[0] && !pos[1]) return null;
+    const isPosZero = pos[0] === 0 && pos[1] === 0;
+    const mapCenter = isPosZero ? [41.0082, 28.9784] : pos; // Default to Istanbul if 0,0
 
     return (
         <Box sx={{ width: '100%', mb: 2 }}>
@@ -115,8 +116,8 @@ const CustomCarto = ({ latitude, longitude, radius = 100, onChange }) => {
                 }}
             >
                 <MapContainer
-                    center={pos}
-                    zoom={16}
+                    center={mapCenter}
+                    zoom={isPosZero ? 10 : 16}
                     style={{ height: '100%', width: '100%' }}
                     scrollWheelZoom={true}
                 >

@@ -317,10 +317,10 @@ const CompanyOverview = () => {
           />
         </Grid>
 
-        {/* Read-only: location coords */}
+        {/* Location coords display */}
         {(() => {
-          const lat = data?.location?.latitude;
-          const lng = data?.location?.longitude;
+          const lat = watch("latitude");
+          const lng = watch("longitude");
           const hasLocation = lat && lng && !(lat === 0 && lng === 0);
           return (
             <Grid size={6}>
@@ -340,52 +340,22 @@ const CompanyOverview = () => {
         })()}
       </Grid>
 
-      {/* ── Map — only shown when real coords exist ── */}
-      {(() => {
-        const lat = data?.location?.latitude;
-        const lng = data?.location?.longitude;
-        const hasLocation = lat && lng && !(lat === 0 && lng === 0);
-        if (!hasLocation)
-          return (
-            <Box
-              mb={3}
-              sx={{
-                width: "100%",
-                height: 200,
-                borderRadius: 2,
-                border: "1px dashed",
-                borderColor: "divider",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 1,
-              }}
-            >
-              <LocationOnIcon sx={{ color: "text.disabled", fontSize: 36 }} />
-              <Typography variant="body2" color="text.disabled">
-                {t('settings.notSet')}
-              </Typography>
-            </Box>
-          );
-        return (
-          <Box mb={3}>
-            <Typography variant="subtitle2" fontWeight={600} mb={1.5}>
-              {t('settings.mapTitle')}
-            </Typography>
-            <CustomCarto
-              latitude={watch('latitude')}
-              longitude={watch('longitude')}
-              radius={watch('radius')}
-              onChange={(val) => {
-                setValue('latitude', val.latitude, { shouldDirty: true });
-                setValue('longitude', val.longitude, { shouldDirty: true });
-                setValue('radius', val.radius, { shouldDirty: true });
-              }}
-            />
-          </Box>
-        );
-      })()}
+      {/* ── Map Section ── */}
+      <Box mb={3}>
+        <Typography variant="subtitle2" fontWeight={600} mb={1.5}>
+          {t('settings.mapTitle')}
+        </Typography>
+        <CustomCarto
+          latitude={watch('latitude')}
+          longitude={watch('longitude')}
+          radius={watch('radius')}
+          onChange={(val) => {
+            setValue('latitude', val.latitude, { shouldDirty: true });
+            setValue('longitude', val.longitude, { shouldDirty: true });
+            setValue('radius', val.radius, { shouldDirty: true });
+          }}
+        />
+      </Box>
 
       {/* ── Save ── */}
       <Box display="flex" justifyContent="flex-end">

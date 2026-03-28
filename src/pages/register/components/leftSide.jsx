@@ -43,6 +43,9 @@ export const LeftSide = () => {
           width: "100%",
           height: "100%",
           zIndex: 99999,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center'
         }}
       >
         <YerindeLogo />
