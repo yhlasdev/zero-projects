@@ -139,8 +139,8 @@ export const RightSide = () => {
 
         Cookies.set("auth_token", token, {
           expires: 30,
-          secure: true,
-          sameSite: "Strict",
+          secure: false,
+          sameSite: "Lax",
         });
         navigate("/dashboard");
         toast.success("Logged in successfully!");
