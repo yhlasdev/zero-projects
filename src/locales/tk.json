@@ -329,6 +329,8 @@
     "errorUpdate": "Goşulmak baradaky soragyň ýagdaýy täzelenende ýalňyşlyk ýüze çykdy",
     "errorData": "Maglumatlary almak",
     "serverError": "Serwer ýalňyşlygy ýüze çykdy",
-    "notFound": "Bu ýagdaý üçin maglumat tapylmady"
+    "notFound": "Bu ýagdaý üçin maglumat tapylmady",
+    "viewCertificate": "Sertifikaty gör",
+    "noCertificate": "Bu sorag üçin şahadatnama ýok"
   }
 }

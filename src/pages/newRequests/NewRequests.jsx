@@ -91,10 +91,10 @@ const RequestCard = ({ request, isActive, onReject, onApprove, loadingId, t, sta
             alignItems="center"
             mb={1.5}
           >
-            <Typography color="text.secondary" fontSize="14px" fontWeight={400}>
+            <Typography fontSize="14px" fontWeight={400}>
               {label}
             </Typography>
-            <Typography fontWeight={500} fontSize="14px" color="#333333">
+            <Typography fontWeight={500} fontSize="14px">
               {value ?? "—"}
             </Typography>
           </Box>
@@ -287,7 +287,14 @@ const NewRequestsPage = () => {
         </Tabs>
       </HeaderAppBar>
 
-      <Box sx={{ height: "calc(100vh - 303px)", overflow: "auto", p: 3, background: 'white',borderTop:'1px solid #eeeeee' }}>
+      <Box sx={{
+        height: "calc(100vh - 303px)",
+        overflow: "auto",
+        p: 3,
+        borderTop: '1px solid #eeeeee'
+      }}
+        className="wrapper-component"
+      >
         {isLoading && <GlobalLoader />}
 
         {isError && (

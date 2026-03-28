@@ -21,32 +21,6 @@ import toast from "react-hot-toast";
 import { useLocale } from "../../../hooks/useLocale";
 import CustomCarto from "../../../components/customCarto/CustomCarto";
 
-const OfficeMap = ({ latitude, longitude }) => {
-  if (!latitude || !longitude) return null;
-  const src = `https://maps.google.com/maps?q=${latitude},${longitude}&z=15&output=embed`;
-  return (
-    <Box
-      sx={{
-        width: "100%",
-        height: 200,
-        borderRadius: 2,
-        overflow: "hidden",
-        border: "1px solid",
-        borderColor: "divider",
-      }}
-    >
-      <iframe
-        title="Office Location"
-        width="100%"
-        height="100%"
-        style={{ border: 0, display: "block" }}
-        loading="lazy"
-        src={src}
-      />
-    </Box>
-  );
-};
-
 const NAVY = "#0F3254";
 
 const DEFAULT_VALUES = {
@@ -65,7 +39,7 @@ const CompanyOverview = () => {
   const { t } = useLocale();
   const queryClient = useQueryClient();
   const [logoPreview, setLogoPreview] = useState(null);
-  const {mode} = useColorScheme()
+  const { mode } = useColorScheme()
   const { data, isLoading, isError } = useQuery({
     queryKey: ["overview-info"],
     queryFn: getSettingsOverview,
@@ -145,7 +119,6 @@ const CompanyOverview = () => {
 
   return (
     <Box component="form" onSubmit={handleSubmit(onSubmit)}>
-      {/* ── Logo ── */}
       <Paper
         variant="outlined"
         sx={{
@@ -209,9 +182,7 @@ const CompanyOverview = () => {
         </Box>
       </Paper>
 
-      {/* ── Form Fields ── */}
       <Grid container spacing={2.5} mb={3}>
-        {/* Read-only: ID */}
         <Grid size={6}>
           <FieldLabel
             label={t('settings.companyId')}
@@ -225,7 +196,6 @@ const CompanyOverview = () => {
           />
         </Grid>
 
-        {/* Editable fields */}
         <Grid size={6}>
           <Controller
             name="company_name"
@@ -317,7 +287,6 @@ const CompanyOverview = () => {
           />
         </Grid>
 
-        {/* Location coords display */}
         {(() => {
           const lat = watch("latitude");
           const lng = watch("longitude");
@@ -340,7 +309,6 @@ const CompanyOverview = () => {
         })()}
       </Grid>
 
-      {/* ── Map Section ── */}
       <Box mb={3}>
         <Typography variant="subtitle2" fontWeight={600} mb={1.5}>
           {t('settings.mapTitle')}
@@ -357,7 +325,6 @@ const CompanyOverview = () => {
         />
       </Box>
 
-      {/* ── Save ── */}
       <Box display="flex" justifyContent="flex-end">
         <Button
           type="submit"

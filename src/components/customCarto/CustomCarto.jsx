@@ -182,7 +182,7 @@ const CustomCarto = ({ latitude, longitude, radius = 100, onChange }) => {
             <Box sx={{ px: 1 }}>
                 <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1}>
                     <Typography variant="subtitle2" color="text.secondary" fontWeight={600}>
-                        Area Radius (m)
+                        Ulanyjylaryň programmany ulanyp biljek radius-ny saýlaň  (m)
                     </Typography>
                     <Typography variant="subtitle2" color="primary" fontWeight={700}>
                         {val} m
@@ -212,8 +212,8 @@ const CustomCarto = ({ latitude, longitude, radius = 100, onChange }) => {
                         },
                     }}
                 />
-                <Typography variant="caption" color="text.disabled" sx={{ display: 'block', mt: 0.5 }}>
-                    Drag the marker, click on the map, or use "Find Me" to select a spot.
+                <Typography variant="h6" color="red" sx={{ display: 'block', mt: 0.5 }}>
+                    Markeri syçanjyk bilen saklap öz ofis ýeriňize süýşürip bilersiňiz ýa-da ofis ýeriňize syçanjyk bilen basanyňyzda markeriň özi ofis ýeriňizde bolar!
                 </Typography>
             </Box>
         </Box>

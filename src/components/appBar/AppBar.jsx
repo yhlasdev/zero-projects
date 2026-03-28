@@ -8,7 +8,8 @@ export default function HeaderAppBar({ children }) {
         paddingTop: 1.5,
         paddingBottom: 1.5,
         marginTop: 2,
-        backgroundColor: "#fff",
+        backgroundColor: "background.paper",
+        backgroundImage: "none",
         borderRadius: "10px 10px 0 0",
       }}
       elevation={0}

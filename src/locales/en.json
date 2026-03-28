@@ -329,6 +329,8 @@
     "errorUpdate": "Join request status some problems",
     "errorData": "Getting the data",
     "serverError": "Some problems server error",
-    "notFound": "Not found this status"
+    "notFound": "Not found this status",
+    "viewCertificate": "View Certificate",
+    "noCertificate": "No certificate available for this request"
   }
 }
