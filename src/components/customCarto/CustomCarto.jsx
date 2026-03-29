@@ -56,7 +56,7 @@ const FindLocationHandler = ({ trigger, onFound }) => {
     return null;
 };
 
-const CustomCarto = ({ latitude, longitude, radius = 100, onChange }) => {
+const CustomCarto = ({ latitude, longitude, radius = 5, onChange }) => {
     const initialLat = Number(latitude) || 0;
     const initialLng = Number(longitude) || 0;
 
@@ -97,7 +97,7 @@ const CustomCarto = ({ latitude, longitude, radius = 100, onChange }) => {
     };
 
     const isPosZero = pos[0] === 0 && pos[1] === 0;
-    const mapCenter = isPosZero ? [41.0082, 28.9784] : pos; // Default to Istanbul if 0,0
+    const mapCenter = isPosZero ? [41.0082, 28.9784] : pos;
 
     return (
         <Box sx={{ width: '100%', mb: 2 }}>
@@ -144,7 +144,7 @@ const CustomCarto = ({ latitude, longitude, radius = 100, onChange }) => {
                         }}
                     >
                         <Popup>
-                            Selected Location
+                            Saýlanan ýer
                         </Popup>
                     </Marker>
                     <Circle

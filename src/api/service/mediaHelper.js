@@ -17,6 +17,7 @@ const privateConfig = () => ({
   withCredentials: false,
 });
 
+
 export const mediaApi = {
   get: async (url) => {
     const response = await axiosInstanceMedia.get(url, { ...config });

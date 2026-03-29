@@ -16,7 +16,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 import FieldLabel from "../../../components/textField/LabelInput";
 import { getSettingsOverview } from "../../../api/queries/getters";
-import { updateContactOverview } from "../../../api/queries/post";
+import { updateContactOverview, uploadCompanyLogo } from "../../../api/queries/post";
 import toast from "react-hot-toast";
 import { useLocale } from "../../../hooks/useLocale";
 import CustomCarto from "../../../components/customCarto/CustomCarto";
@@ -32,19 +32,21 @@ const DEFAULT_VALUES = {
   open_year: "",
   latitude: 0,
   longitude: 0,
-  radius: 100,
+  radius: 5,
 };
 
 const CompanyOverview = () => {
   const { t } = useLocale();
   const queryClient = useQueryClient();
-  const [logoPreview, setLogoPreview] = useState(null);
   const { mode } = useColorScheme()
+  const [logoKey, setLogoKey] = useState(Date.now());
   const { data, isLoading, isError } = useQuery({
     queryKey: ["overview-info"],
     queryFn: getSettingsOverview,
     select: (res) => res?.data?.data ?? res?.data ?? {},
   });
+
+  console.log('this-data---------', data);
 
   const {
     control,
@@ -78,8 +80,7 @@ const CompanyOverview = () => {
 
   const mutation = useMutation({
     mutationFn: updateContactOverview,
-    onSuccess: (_, variables) => {
-      reset(variables, { keepDefaultValues: false });
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["overview-info"] });
       toast.success(t("settings.overview.success"));
     },
@@ -91,12 +92,48 @@ const CompanyOverview = () => {
   });
 
   const onSubmit = (formData) => {
-    mutation.mutate(formData);
+    const { latitude, longitude, radius, ...rest } = formData;
+    const payload = {
+      ...rest,
+      location: {
+        latitude: Number(latitude) || 0,
+        longitude: Number(longitude) || 0,
+        radius: Number(radius) || 0,
+      },
+    };
+
+    mutation.mutate(payload, {
+      onSuccess: () => {
+        reset(formData, { keepDefaultValues: false });
+      }
+    });
   };
+
+  const logoMutation = useMutation({
+    mutationFn: uploadCompanyLogo,
+    onSuccess: () => {
+      setLogoKey(Date.now());
+      queryClient.invalidateQueries({ queryKey: ["overview-info"] });
+      toast.success(t("settings.overview.logoSuccess") || "Logo updated successfully");
+    },
+    onError: (error) => {
+      const message =
+        error?.response?.data?.message || "Failed to upload logo. Please try again.";
+      toast.error(message);
+    },
+  });
 
   const handleLogoChange = (e) => {
     const file = e.target.files[0];
-    if (file) setLogoPreview(URL.createObjectURL(file));
+    if (file && data?.id) {
+      const formData = new FormData();
+      formData.append("images", file);
+
+      logoMutation.mutate({
+        id: data.id,
+        formData
+      });
+    }
   };
 
   if (isLoading) {
@@ -145,9 +182,9 @@ const CompanyOverview = () => {
             flexShrink: 0,
           }}
         >
-          {logoPreview ? (
+          {data?.id ? (
             <img
-              src={logoPreview}
+              src={`http://194.156.117.223:8004/yerinde/storage-service/logo/${data?.id}/100x100?t=${logoKey}`}
               alt="Logo"
               style={{ width: "100%", height: "100%", objectFit: "contain" }}
             />
@@ -168,10 +205,11 @@ const CompanyOverview = () => {
             component="label"
             variant="outlined"
             size="small"
-            startIcon={<UploadIcon />}
+            disabled={logoMutation.isPending}
+            startIcon={logoMutation.isPending ? <CircularProgress size={16} color="inherit" /> : <UploadIcon />}
             sx={{ textTransform: "none", borderRadius: 1.5, bgcolor: mode == 'dark' ? 'action.hover' : '', color: mode == 'dark' ? '#fff' : '' }}
           >
-            {t('settings.changeLogo')}
+            {logoMutation.isPending ? t('common.loading', 'Loading...') : t('settings.changeLogo')}
             <input
               type="file"
               accept="image/png,image/jpeg"

@@ -117,8 +117,8 @@
       "structure": "Kompaniýanyň gurluşy",
       "contact": "Habarlaşmak üçin maglumatlar"
     },
-    "companyLogo": "Kompaniýanyň logotibi",
-    "logoHint": "Kompaniýanyňyzyň logotibini ýükläň (PNG, JPG, maks 2MB)",
+    "companyLogo": "Kompaniýanyň logosy",
+    "logoHint": "Kompaniýanyňyzyň logosyny ýükläň (PNG, JPG, maks 2MB)",
     "changeLogo": "Logony üýtget",
     "companyId": "Kompaniýanyň ID-si",
     "companyName": "Kompaniýanyň ady",

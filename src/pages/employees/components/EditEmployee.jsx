@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import {
   Box,
   Typography,
@@ -22,6 +22,7 @@ import {
 } from "../../../api/queries/getters";
 import { updateEmployee } from "../../../api/queries/put";
 import DebounceSelect from "../../../components/select/DebounceSelect";
+import toast from "react-hot-toast";
 
 const CustomFieldLabel = ({ label, ...props }) => (
   <Box sx={{ width: "100%" }}>
@@ -65,6 +66,7 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
     enabled: !!employeeId,
     refetchOnMount: true,
   });
+
   const { data: departmentsData } = useQuery({
     queryKey: ["departments"],
     queryFn: getAllDepartment,
@@ -105,10 +107,15 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
 
   const mutation = useMutation({
     mutationFn: updateEmployee,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["employees"] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["employees"] });
+      await queryClient.invalidateQueries({ queryKey: ["employee", employeeId] });
+      toast.success("Employee updated successfully");
       onClose();
     },
+    onError: () => {
+      toast.error("Failed to update employee");
+    }
   });
 
   const onSubmit = (formData) => {

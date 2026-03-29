@@ -124,3 +124,11 @@ export const addJobs = async (objectData) => {
   return response;
 };
 
+export const uploadCompanyLogo = async ({ id, formData }) => {
+  const response = await mediaApi.postPrivate(
+    `/logo/${id}/upload-images`,
+    formData
+  );
+  return response;
+};
+

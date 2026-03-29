@@ -9,6 +9,7 @@ import {
   Divider,
   CircularProgress,
   IconButton,
+  useColorScheme,
 } from "@mui/material";
 
 import AddIcon from "@mui/icons-material/Add";
@@ -99,7 +100,7 @@ export default function EmployeeView({ employee, onClose }) {
           borderRadius: 3,
           border: "1px solid #eee",
           height: 123,
-          position: "relative", // Position için
+          position: "relative",
         }}
       >
         <Stack
@@ -345,10 +346,10 @@ export default function EmployeeView({ employee, onClose }) {
               >
                 <Box flex={2}>
                   <Typography fontWeight={500}>
-                    {dayjs(item.date).format("dddd")}
+                    {start.add((item.dayOfWeek ?? item.day_of_week ?? 1) - 1, "day").format("dddd")}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {dayjs(item.date).format("MMM DD")}
+                    {start.add((item.dayOfWeek ?? item.day_of_week ?? 1) - 1, "day").format("MMM DD")}
                   </Typography>
                 </Box>
 
@@ -427,6 +428,7 @@ export default function EmployeeView({ employee, onClose }) {
 }
 
 function SummaryCard({ title, subtitle }) {
+  const { mode } = useColorScheme();
   return (
     <Paper
       elevation={0}
@@ -436,7 +438,7 @@ function SummaryCard({ title, subtitle }) {
         borderRadius: 3,
         border: "1px solid #eee",
         textAlign: "center",
-        bgcolor: "#F4F4F4",
+        backgroundColor: mode === 'light' && "#eeeeee",
       }}
     >
       <Typography fontSize={22} fontWeight={600}>

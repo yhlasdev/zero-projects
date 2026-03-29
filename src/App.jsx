@@ -13,16 +13,16 @@ dayjs.extend(updateLocale);
 
 dayjs.updateLocale("tr", {
   weekdays: [
+    "Yekşenbe",
     "Duşenbe",
     "Sişenbe",
     "Çarşenbe",
     "Penşenbe",
     "Anna",
-    "Şenbe",
-    "Yekşenbe"
+    "Şenbe"
   ],
-  weekdaysShort: ["Du", "Şi", "Ça", "Pe", "An", "Şe", "Ye"],
-  weekdaysMin: ["Du", "Şi", "Ça", "Pe", "An", "Şe", "Ye"],
+  weekdaysShort: ["Ye", "Du", "Şi", "Ça", "Pe", "An", "Şe"],
+  weekdaysMin: ["Ye", "Du", "Şi", "Ça", "Pe", "An", "Şe"],
   months: [
     "Ýanwar",
     "Fewral",

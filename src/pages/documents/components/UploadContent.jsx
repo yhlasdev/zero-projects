@@ -2,7 +2,7 @@ import { Box, Button, IconButton, Typography } from "@mui/material";
 
 const CloseIcon = () => (
   <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M15 5L5 15M5 5l10 10" stroke="#667085" strokeWidth="1.67" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M15 5L5 15M5 5l10 10" stroke="#667085" strokeWidth="1.67" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 import { useForm, Controller } from "react-hook-form";
@@ -131,12 +131,12 @@ const UploadContent = ({ closeSet }) => {
         throw new Error(resData.message || t("common.error"));
       }
 
-      const uploadedFile = resData.data.content[0];
+      const uploadedFile = resData.data
 
       const payload = {
         title: data.title,
         description: data.description,
-        file: uploadedFile.path,
+        file: uploadedFile,
         file_type: fileExtension.toUpperCase(),
       };
 
