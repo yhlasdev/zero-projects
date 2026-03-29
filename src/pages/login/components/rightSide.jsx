@@ -274,6 +274,7 @@ export const RightSide = () => {
           onChange={(e) => handleChange("password", e.target.value)}
           error={!!errors.password}
           helperText={errors.password}
+          height={46}
           icon={
             <IconButton
               onClick={() => setShowPassword(!showPassword)}

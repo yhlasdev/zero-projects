@@ -266,18 +266,16 @@ const NewRequestsPage = () => {
               py: 0.75,
               borderRadius: "8px",
               transition: "background-color 0.2s, color 0.2s",
+              "&.Mui-selected": {
+                backgroundColor: "#1a2e44",
+                fontWeight: 600,
+                color: "#fff !important",
+                borderRadius: "8px",
+              },
             },
-            "& .Mui-selected": {
+            "& .MuiButtonBase-root.MuiTab-root.Mui-selected": {
               backgroundColor: "#1a2e44",
-              fontWeight: 600,
               color: "#fff",
-              borderRadius: "8px",
-            },
-            ".css-n6e6a9-MuiButtonBase-root-MuiTab-root.Mui-selected": {
-              backgroundColor: "#1a2e44",
-              fontWeight: 600,
-              color: "#fff",
-              borderRadius: "8px",
             }
           }}
         >
@@ -327,7 +325,7 @@ const NewRequestsPage = () => {
           </Box>
         )}
       </Box>
-    </Box>
+    </Box >
   );
 };
 
