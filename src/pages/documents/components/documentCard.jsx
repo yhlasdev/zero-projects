@@ -87,7 +87,7 @@ export const DocumentCard = ({
         p: "25px",
         border: "1px solid #E5E7EB",
         borderRadius: "12px",
-        width: "346px",
+        width: "100%",
         height: "234px",
         display: "flex",
         flexDirection: "column",
@@ -120,7 +120,6 @@ export const DocumentCard = ({
             sx={{
               fontWeight: 600,
               fontSize: 15,
-              color: "#111827",
               lineHeight: 1.3,
               whiteSpace: "nowrap",
               overflow: "hidden",
@@ -171,7 +170,6 @@ export const DocumentCard = ({
           disableRipple={false}
           sx={{
             background: "#9F9F9F33",
-            color: "#374151",
             boxShadow: "none",
             borderRadius: "8px",
             width: "216px",

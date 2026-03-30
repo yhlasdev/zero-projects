@@ -158,7 +158,7 @@ const DocumentsPage = () => {
               sx={{
                 display: "grid",
                 gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
-                gap: 3,
+                gap: 1,
               }}
             >
               {data?.map((doc) => {
