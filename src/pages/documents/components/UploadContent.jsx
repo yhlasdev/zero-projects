@@ -6,8 +6,9 @@ const CloseIcon = () => (
   </svg>
 );
 import { useForm, Controller } from "react-hook-form";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { documentAdd } from "../../../api/queries/post";
+import { updateDocument } from "../../../api/queries/put";
 import { useAppMutation } from "../../../hooks/useMutation";
 import { useLocale } from "../../../hooks/useLocale";
 
@@ -60,9 +61,9 @@ const labelStyle = {
   display: "block",
 };
 
-const UploadContent = ({ closeSet }) => {
+const UploadContent = ({ closeSet, editingDoc }) => {
   const { t } = useLocale();
-  const { control, handleSubmit } = useForm({
+  const { control, handleSubmit, reset } = useForm({
     defaultValues: {
       description: "",
       title: "",
@@ -70,13 +71,30 @@ const UploadContent = ({ closeSet }) => {
     mode: "onSubmit",
   });
 
+  useEffect(() => {
+    if (editingDoc) {
+      reset({
+        title: editingDoc.title,
+        description: editingDoc.description,
+      });
+    }
+  }, [editingDoc, reset]);
+
   const fileInputRef = useRef(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [dragOver, setDragOver] = useState(false);
 
-  const mutation = useAppMutation({
+  const addMutation = useAppMutation({
     mutationFn: documentAdd,
+    queryKey: ["documents"],
+    onSuccess: () => {
+      closeSet();
+    },
+  });
+
+  const updateMutation = useAppMutation({
+    mutationFn: updateDocument,
     queryKey: ["documents"],
     onSuccess: () => {
       closeSet();
@@ -106,41 +124,47 @@ const UploadContent = ({ closeSet }) => {
   };
 
   const submitHandler = async (data) => {
-    if (!selectedFile) {
-      alert(t("documents.upload.selectFileReq"));
-      return;
-    }
-
-    const fileExtension = selectedFile.name.split(".").pop().toLowerCase();
-
     try {
-      setIsUploading(true);
-      const formData = new FormData();
-      formData.append("files", selectedFile);
+      let uploadedFile = editingDoc?.file || "";
+      let fileExtension = editingDoc?.file_type?.toLowerCase() || "";
 
-      const response = await fetch(
-        "http://194.156.117.223:8004/yerinde/storage-service/documents/upload-file",
-        { method: "POST", body: formData }
-      );
+      if (selectedFile) {
+        setIsUploading(true);
+        const formData = new FormData();
+        formData.append("files", selectedFile);
 
-      if (!response.ok) throw new Error(t("documents.upload.uploadFailed"));
+        const uploadResponse = await fetch(
+          "http://194.156.117.223:8004/yerinde/storage-service/documents/upload-file",
+          { method: "POST", body: formData }
+        );
 
-      const resData = await response.json();
+        if (!uploadResponse.ok) throw new Error(t("documents.upload.uploadFailed"));
 
-      if (!resData.status || !resData.data?.content?.length) {
-        throw new Error(resData.message || t("common.error"));
+        const resData = await uploadResponse.json();
+
+        if (!resData.status || !resData.data?.content?.length) {
+          throw new Error(resData.message || t("common.error"));
+        }
+        uploadedFile = resData.data;
+        fileExtension = selectedFile.name.split(".").pop().toLowerCase();
+      } else if (!editingDoc) {
+        alert(t("documents.upload.selectFileReq"));
+        return;
       }
-
-      const uploadedFile = resData.data
 
       const payload = {
         title: data.title,
         description: data.description,
         file: uploadedFile,
         file_type: fileExtension.toUpperCase(),
+        ...(editingDoc && { id: editingDoc.id }),
       };
 
-      mutation.mutate(payload);
+      if (editingDoc) {
+        updateMutation.mutate(payload);
+      } else {
+        addMutation.mutate(payload);
+      }
     } catch (error) {
       console.error("Upload error:", error);
       alert(t("documents.upload.uploadErr") + error.message);
@@ -183,7 +207,7 @@ const UploadContent = ({ closeSet }) => {
             lineHeight: 1,
           }}
         >
-          {t("documents.uploadDoc")}
+          {editingDoc ? t("documents.editDoc") || "Edit Document" : t("documents.uploadDoc")}
         </Typography>
         <IconButton
           onClick={closeSet}
@@ -334,7 +358,7 @@ const UploadContent = ({ closeSet }) => {
             <Button
               type="submit"
               variant="contained"
-              disabled={mutation.isPending || isUploading}
+              disabled={addMutation.isPending || updateMutation.isPending || isUploading}
               sx={{
                 height: 40,
                 px: "16px",
@@ -354,7 +378,11 @@ const UploadContent = ({ closeSet }) => {
                 },
               }}
             >
-              {isUploading ? t("documents.upload.uploading") : t("documents.uploadDoc")}
+              {isUploading
+                ? t("documents.upload.uploading")
+                : editingDoc
+                  ? t("common.save")
+                  : t("documents.uploadDoc")}
             </Button>
           </Box>
         </form>

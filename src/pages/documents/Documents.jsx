@@ -15,9 +15,11 @@ import GlobalModal from "../../components/modal/GlobalModal";
 import { useOpenCloseDrawer } from "../../hooks/useOpenCloseDrawer";
 import { useInfiniteGet } from "../../hooks/useInfiniteList";
 import { getAllDocuments } from "../../api/queries/getters";
+import { deleteDocument } from "../../api/queries/delete";
 import { useQueryClient } from "@tanstack/react-query";
 import UploadContent from "./components/UploadContent";
 import { useLocale } from "../../hooks/useLocale";
+import { useAppMutation } from "../../hooks/useMutation";
 import toast from "react-hot-toast";
 
 const allowedExtensions = [
@@ -40,6 +42,7 @@ const DocumentsPage = () => {
     search: "",
     fileTypes: [],
   });
+  const [editingDoc, setEditingDoc] = useState(null);
 
   const handleSearch = (val) => setFilter((prev) => ({ ...prev, search: val }));
   const handleTypeSelect = (e) => setFilter((prev) => ({
@@ -47,20 +50,45 @@ const DocumentsPage = () => {
     fileTypes: typeof e.target.value === 'string' ? e.target.value.split(',') : e.target.value
   }));
   const handleClearType = () => setFilter((prev) => ({ ...prev, fileTypes: [] }));
+  const handleEdit = (doc) => {
+    setEditingDoc(doc);
+    openSet();
+  };
+  const handleCloseModal = () => {
+    closeSet();
+    setEditingDoc(null);
+  };
 
-  const handleDelete = async (id) => {
+  const handleDownload = async (docId, fileObj, title) => {
     try {
-      const response = await fetch(`http://194.156.117.223:8007/yerinde/company-service/documents/delete/${id}`, {
-        method: "DELETE",
-      });
-      if (!response.ok) {
-        throw new Error(t("documents.deleteErr"));
-      }
-      queryClient.invalidateQueries({ queryKey: ["documents"] });
+      const fileData = fileObj?.content?.[0];
+      if (!fileData) throw new Error("File data not found");
+
+      const isImage = fileData?.type === "image";
+
+      const url = isImage
+        ? `http://194.156.117.223:8004/yerinde/storage-service/documents/${fileData.path}/150x150${fileData.mime}`
+        : `http://194.156.117.223:8004/yerinde/storage-service/documents/${fileData.path}/original${fileData.mime}`;
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("Network response was not ok");
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.setAttribute("download", `${title}${fileData.mime}`);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
     } catch (error) {
-      toast.error(error.message || t("common.error"))
+      toast.error(t("documents.downloadErr") || "Download failed");
     }
   };
+
+  const { mutate: deleteMutate } = useAppMutation({
+    mutationFn: deleteDocument,
+    queryKey: ["documents"],
+  });
 
   const { data } = useInfiniteGet({
     key: "documents",
@@ -72,8 +100,8 @@ const DocumentsPage = () => {
 
   return (
     <>
-      <GlobalModal open={open} onClose={closeSet} maxWidth="sm" fullWidth>
-        <UploadContent closeSet={closeSet} />
+      <GlobalModal open={open} onClose={handleCloseModal} maxWidth="sm" fullWidth>
+        <UploadContent closeSet={handleCloseModal} editingDoc={editingDoc} />
       </GlobalModal>
 
       <Box className="Documents">
@@ -134,10 +162,11 @@ const DocumentsPage = () => {
               }}
             >
               {data?.map((doc) => {
-                const isImage = ["JPG", "JPEG", "PNG", "WEBP"].includes(doc.file_type?.toUpperCase());
-                const downloadUrl = isImage
-                  ? `http://194.156.117.223:8004/yerinde/storage-service/documents/${doc.file}/150x150.webp`
-                  : doc.file;
+                const fileData = doc.file?.content?.[0];
+                const isImage = fileData?.type === "image";
+                const previewUrl = isImage
+                  ? `http://194.156.117.223:8004/yerinde/storage-service/documents/${fileData.path}/150x150.webp`
+                  : null;
 
                 return (
                   <DocumentCard
@@ -147,9 +176,10 @@ const DocumentsPage = () => {
                     file_type={doc.file_type}
                     updated_at={doc.updated_at}
                     manager_name={doc.manager_name}
-                    onDownload={() => window.open(downloadUrl, "_blank")}
-                    onEdit={() => console.log("edit", doc.id)}
-                    onDelete={() => handleDelete(doc.id)}
+                    previewUrl={previewUrl}
+                    onDownload={() => handleDownload(doc.id, doc.file, doc.title)}
+                    onEdit={() => handleEdit(doc)}
+                    onDelete={() => deleteMutate(doc.id)}
                   />
                 );
               })}

@@ -71,3 +71,11 @@ export const updateJobs = async (objectData) => {
   );
   return response;
 };
+
+export const updateDocument = async (objectData) => {
+  const response = await api.putPrivate(
+    `/company-service/documents/update`,
+    objectData,
+  );
+  return response;
+};

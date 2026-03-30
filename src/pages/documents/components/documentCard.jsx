@@ -11,6 +11,8 @@ import {
 import DescriptionIcon from "@mui/icons-material/Description";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import TableChartIcon from "@mui/icons-material/TableChart";
+import ImageIcon from "@mui/icons-material/Image";
+import ArticleIcon from "@mui/icons-material/Article";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { RiEditLine } from "react-icons/ri";
 import { LiaDownloadSolid } from "react-icons/lia";
@@ -18,19 +20,39 @@ import { useLocale } from "../../../hooks/useLocale";
 
 const getFileConfig = (type) => {
   const t = type?.toLowerCase() ?? "";
-  if (["pdf"].includes(t))
+
+  if (["pdf"].includes(t)) {
     return {
       icon: <PictureAsPdfIcon sx={{ color: "#E53935", fontSize: 22 }} />,
       bg: "#FDECEA",
     };
-  if (["xlsx", "xls", "excel", "csv"].includes(t))
+  }
+
+  if (["docx", "doc", "word"].includes(t)) {
+    return {
+      icon: <ArticleIcon sx={{ color: "#2563EB", fontSize: 22 }} />,
+      bg: "#DBEAFE",
+    };
+  }
+
+  if (["xlsx", "xls", "excel", "csv", "table"].includes(t)) {
     return {
       icon: <TableChartIcon sx={{ color: "#2E7D32", fontSize: 22 }} />,
       bg: "#E8F5E9",
     };
+  }
+
+  if (["jpg", "jpeg", "png", "webp", "gif", "image", "png"].includes(t)) {
+    return {
+      icon: <ImageIcon sx={{ color: "#D97706", fontSize: 22 }} />, // Amber/Orange
+      bg: "#FFFBEB",
+    };
+  }
+
+  // Default / Other files
   return {
-    icon: <DescriptionIcon sx={{ color: "#1976D2", fontSize: 22 }} />,
-    bg: "#E3F2FD",
+    icon: <DescriptionIcon sx={{ color: "#6B7280", fontSize: 22 }} />,
+    bg: "#F3F4F6",
   };
 };
 
@@ -49,6 +71,7 @@ export const DocumentCard = ({
   file_type,
   updated_at,
   manager_name,
+  previewUrl,
   onDownload,
   onEdit,
   onDelete,
@@ -87,6 +110,7 @@ export const DocumentCard = ({
             alignItems: "center",
             justifyContent: "center",
             flexShrink: 0,
+            overflow: "hidden",
           }}
         >
           {icon}
