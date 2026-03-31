@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useState, useMemo } from "react";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import {
   Box,
   Typography,
@@ -15,23 +15,148 @@ import {
   CalendarToday,
   Flag,
   MoreHoriz,
-  Add,
   ExpandMore,
+  Add as AddIcon,
 } from "@mui/icons-material";
-import { getAllBoardTask } from "../../../api/queries/getters";
+import { CircularProgress } from "@mui/material";
+import { getTaskList } from "../../../api/queries/getters";
 
-const useBoardTasks = ({ page = 1, limit = 50 } = {}) => {
-  return useQuery({
-    queryKey: ["boardTasks", page, limit],
-    queryFn: () => getAllBoardTask({ page, limit }),
-    select: (data) => ({
-      todo: data?.data?.data?.todo ?? { count: 0, tasks: [] },
-      in_progress: data?.data?.in_progress ?? { count: 0, tasks: [] },
-      done: data?.data?.data?.done ?? { count: 0, tasks: [] },
-    }),
-    staleTime: 1000 * 60 * 2,
-    retry: 2,
+
+const TaskColumn = ({ col }) => {
+  const limit = 10;
+  const {
+    data,
+    isLoading,
+    isError,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    refetch,
+  } = useInfiniteQuery({
+    queryKey: ["tasks", col.key],
+    queryFn: ({ pageParam = 1 }) =>
+      getTaskList({ status: col.key, page: pageParam, limit }),
+    getNextPageParam: (lastPage, allPages) => {
+      const tasks = lastPage.data?.data?.tasks ?? [];
+      const morePages = tasks.length === limit;
+      return morePages ? allPages.length + 1 : undefined;
+    },
   });
+
+  const tasks = useMemo(() => {
+    return data?.pages.flatMap((page) => page.data?.data?.tasks ?? []) ?? [];
+  }, [data]);
+
+  const totalCount = data?.pages[0]?.data?.data?.count ?? tasks.length;
+
+  if (isError) {
+    return (
+      <Box sx={{ minWidth: 270, flex: 1, maxWidth: 340 }}>
+        <ColumnHeader col={col} count={0} />
+        <Paper
+          variant="outlined"
+          sx={{ p: 2, textAlign: "center", borderColor: col.borderColor }}
+        >
+          <Typography color="error" sx={{ mb: 1, fontSize: "12px" }}>
+            Error: {error?.message}
+          </Typography>
+          <Button variant="outlined" size="small" onClick={() => refetch()}>
+            Retry
+          </Button>
+        </Paper>
+      </Box>
+    );
+  }
+
+  return (
+    <Box sx={{ minWidth: 270, flex: 1, maxWidth: 340 }}>
+      <ColumnHeader col={col} count={totalCount} />
+
+      <Paper
+        variant="outlined"
+        sx={{
+          borderRadius: "14px",
+          p: "12px 10px",
+          minHeight: 140,
+          bgcolor: col.headerBg,
+          borderColor: col.borderColor,
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        {isLoading ? (
+          <>
+            <CardSkeleton />
+            <CardSkeleton />
+          </>
+        ) : tasks.length === 0 ? (
+          <Typography
+            sx={{
+              fontSize: "12px",
+              color: "#9ca3af",
+              textAlign: "center",
+              py: 3,
+            }}
+          >
+            Not added task
+          </Typography>
+        ) : (
+          <>
+            {tasks.map((task) => (
+              <BoardCard key={task.id} task={task} />
+            ))}
+
+            {hasNextPage && (
+              <Box
+                onClick={() => !isFetchingNextPage && fetchNextPage()}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  mt: 0.5,
+                  cursor: isFetchingNextPage ? "default" : "pointer",
+                  color: "#6b7280",
+                  "&:hover": { color: isFetchingNextPage ? "#6b7280" : "#374151" },
+                }}
+              >
+                <Typography sx={{ fontSize: "12px", fontWeight: 500 }}>
+                  {isFetchingNextPage ? <CircularProgress size={16} /> : "Daha fazla yükle"}
+                </Typography>
+                {!isFetchingNextPage && (
+                  <ExpandMore
+                    sx={{
+                      fontSize: 16,
+                    }}
+                  />
+                )}
+              </Box>
+            )}
+          </>
+        )}
+
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 0.5,
+            mt: 1,
+            px: 0.5,
+            py: 0.75,
+            borderRadius: "8px",
+            cursor: "pointer",
+            color: "#9ca3af",
+            "&:hover": { bgcolor: "rgba(0,0,0,0.04)", color: "#374151" },
+          }}
+        >
+          <AddIcon sx={{ fontSize: 16 }} />
+          <Typography sx={{ fontSize: "12px", fontWeight: 500 }}>
+            Add Task
+          </Typography>
+        </Box>
+      </Paper>
+    </Box>
+  );
 };
 
 const COLUMNS = [
@@ -216,18 +341,18 @@ const BoardCard = ({ task }) => {
         >
           {task.title}
         </Typography>
-        {task.owner && (
-          <Tooltip title={task.owner}>
+        {task.owner?.manager_name && (
+          <Tooltip title={task.owner.manager_name}>
             <Avatar
               sx={{
                 width: 24,
                 height: 24,
                 fontSize: "9px",
-                bgcolor: stringToColor(task.owner),
+                bgcolor: stringToColor(task.owner.manager_name),
                 flexShrink: 0,
               }}
             >
-              {task?.owner?.slice?.(0, 2)?.toUpperCase()}
+              {task.owner.manager_name.slice(0, 2).toUpperCase()}
             </Avatar>
           </Tooltip>
         )}
@@ -380,37 +505,12 @@ const ColumnHeader = ({ col, count }) => (
       <MoreHoriz sx={{ fontSize: 16 }} />
     </IconButton>
     <IconButton size="small" sx={{ color: "#9ca3af", p: 0.5 }}>
-      <Add sx={{ fontSize: 16 }} />
+      <AddIcon sx={{ fontSize: 16 }} />
     </IconButton>
   </Box>
 );
 
-const SHOW_MORE_LIMIT = 2;
-
-const BoardView = ({ page = 1, limit = 50 }) => {
-  const { data, isLoading, isError, error, refetch } = useBoardTasks({
-    page,
-    limit,
-  });
-
-  const [showMore, setShowMore] = useState({});
-
-  const toggleShowMore = (key) =>
-    setShowMore((prev) => ({ ...prev, [key]: !prev[key] }));
-
-  if (isError) {
-    return (
-      <Box sx={{ p: 4, textAlign: "center" }}>
-        <Typography color="error" sx={{ mb: 1 }}>
-          Error: {error?.message}
-        </Typography>
-        <Button variant="outlined" size="small" onClick={() => refetch()}>
-          Retry
-        </Button>
-      </Box>
-    );
-  }
-
+const BoardView = () => {
   return (
     <Box
       sx={{
@@ -426,102 +526,9 @@ const BoardView = ({ page = 1, limit = 50 }) => {
         height: "calc(100vh - 300px)",
       }}
     >
-      {COLUMNS.map((col) => {
-        const tasks = data?.[col.key]?.tasks ?? [];
-        const count = data?.[col.key]?.count ?? tasks.length;
-        const isExpanded = showMore[col.key];
-        const visibleTasks = isExpanded
-          ? tasks
-          : tasks.slice(0, SHOW_MORE_LIMIT);
-        const hasMore = tasks.length > SHOW_MORE_LIMIT;
-
-        return (
-          <Box key={col.key} sx={{ minWidth: 270, flex: 1, maxWidth: 340 }}>
-            <ColumnHeader col={col} count={count} />
-
-            <Paper
-              variant="outlined"
-              sx={{
-                borderRadius: "14px",
-                p: "12px 10px",
-                minHeight: 140,
-                bgcolor: col.headerBg,
-                borderColor: col.borderColor,
-              }}
-            >
-              {isLoading ? (
-                <>
-                  <CardSkeleton />
-                  <CardSkeleton />
-                </>
-              ) : visibleTasks.length === 0 ? (
-                <Typography
-                  sx={{
-                    fontSize: "12px",
-                    color: "#9ca3af",
-                    textAlign: "center",
-                    py: 3,
-                  }}
-                >
-                  Not added task
-                </Typography>
-              ) : (
-                visibleTasks.map((task) => (
-                  <BoardCard key={task.id} task={task} />
-                ))
-              )}
-
-              {!isLoading && hasMore && (
-                <Box
-                  onClick={() => toggleShowMore(col.key)}
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    mt: 0.5,
-                    cursor: "pointer",
-                    color: "#6b7280",
-                    "&:hover": { color: "#374151" },
-                  }}
-                >
-                  <Typography sx={{ fontSize: "12px", fontWeight: 500 }}>
-                    {isExpanded
-                      ? "Daha az göster"
-                      : `${tasks.length - SHOW_MORE_LIMIT} daha göster`}
-                  </Typography>
-                  <ExpandMore
-                    sx={{
-                      fontSize: 16,
-                      transition: "transform 0.2s",
-                      transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)",
-                    }}
-                  />
-                </Box>
-              )}
-
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 0.5,
-                  mt: 1,
-                  px: 0.5,
-                  py: 0.75,
-                  borderRadius: "8px",
-                  cursor: "pointer",
-                  color: "#9ca3af",
-                  "&:hover": { bgcolor: "rgba(0,0,0,0.04)", color: "#374151" },
-                }}
-              >
-                <Add sx={{ fontSize: 16 }} />
-                <Typography sx={{ fontSize: "12px", fontWeight: 500 }}>
-                  Add Task
-                </Typography>
-              </Box>
-            </Paper>
-          </Box>
-        );
-      })}
+      {COLUMNS.map((col) => (
+        <TaskColumn key={col.key} col={col} />
+      ))}
     </Box>
   );
 };
