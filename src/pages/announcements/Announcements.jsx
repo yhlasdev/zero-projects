@@ -19,6 +19,8 @@ import { formatTimeYear } from "../../utils/formatTime";
 import AnnouncementDetail from "./components/AnnouncementDetail";
 import { useLocale } from "../../hooks/useLocale";
 
+import Seo from "../../components/seo/seo";
+
 const AnnouncementsPage = () => {
   const { t } = useLocale();
   const [filters, setFilters] = useState({
@@ -139,6 +141,13 @@ const AnnouncementsPage = () => {
 
   return (
     <Box>
+      <Seo
+        title={t("announcements.title")}
+        description={t("announcements.subTitle")}
+        name="Yerinde"
+        type="website"
+        href={window.location.href}
+      />
       <Box
         sx={{
           display: "flex",

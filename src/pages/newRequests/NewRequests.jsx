@@ -25,6 +25,7 @@ import { updateNewRequest } from "../../api/queries/put";
 import GlobalLoader from "../../components/Loading";
 import { useLocale } from "../../hooks/useLocale";
 import toast from "react-hot-toast";
+import Seo from "../../components/seo/seo";
 
 const getTabs = (t) => [
   { label: t("newRequests.all"), status: null },
@@ -242,6 +243,12 @@ const NewRequestsPage = () => {
 
   return (
     <Box>
+      <Seo
+        title={t("newRequests.title")}
+        description={t("newRequests.subTitle")}
+        name="Yerinde"
+        type="website"
+      />
       <PageTitle
         title={t("newRequests.title")}
         subTitle={t("newRequests.subTitle")}

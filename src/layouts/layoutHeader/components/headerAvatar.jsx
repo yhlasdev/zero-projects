@@ -21,6 +21,10 @@ import { useNavigate } from "react-router-dom";
 import { useLocale } from "../../../hooks/useLocale";
 import { useTranslation } from "react-i18next";
 
+import { useQuery } from "@tanstack/react-query";
+import { getSettingsOverview } from "../../../api/queries/getters";
+
+
 const languages = [
   { label: "Türkmen", flag: tmFlag, code: "tk" },
   { label: "Русский", flag: ruFlag, code: "ru" },
@@ -34,6 +38,14 @@ export const HeaderAvatar = () => {
   const currentLanguage = i18n.language;
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
+
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["getProfile"],
+    queryFn: () => getSettingsOverview(),
+  });
+
+  console.log('this-profile--------', data?.data?.data);
+  const profileData = data?.data?.data;
 
   const handleOpen = (event) => setAnchorEl(event.currentTarget);
   const handleClose = () => setAnchorEl(null);
@@ -73,10 +85,10 @@ export const HeaderAvatar = () => {
           sx={{ display: "flex", flexDirection: "column", textAlign: "left" }}
         >
           <Typography variant="body2" fontWeight={600} lineHeight={1.3}>
-            {t("common.admin")}
+            {profileData?.manager_name}
           </Typography>
           <Typography variant="caption" color="text.secondary" lineHeight={1.3}>
-            {t("common.administrator")}
+            {profileData?.company_name}
           </Typography>
         </Box>
 

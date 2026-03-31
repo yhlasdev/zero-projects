@@ -18,6 +18,7 @@ import * as yup from "yup";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { sendContactMessage } from "../../api/queries/post";
+import Seo from "../../components/seo/seo";
 
 const schema = yup.object().shape({
   name: yup.string().required("Adyňyz hökmany"),
@@ -63,6 +64,12 @@ const Welcome = () => {
 
   return (
     <Paper sx={{ bgcolor: "#fff", fontFamily: "'Poppins', sans-serif" }}>
+      <Seo
+        title={t("sidebar.title") + " - Hoş geldiňiz"}
+        description={t("welcome.videoSubtitle")}
+        name="Yerinde"
+        type="website"
+      />
       <AppBar
         position="static"
         color="transparent"

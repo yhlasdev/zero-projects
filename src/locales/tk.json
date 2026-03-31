@@ -216,33 +216,32 @@
     "days": "Günler"
   },
   "letterRequests": {
+    "title": "Hat soraglary",
+    "subtitle": "Işgärleriň hatlaryny we habarlaşmalaryny dolandyryň",
     "attachment": "Gerkebnama"
   },
   "documents": {
-    "title": "Kompaniýanyň resminamalary",
-    "subTitle": "Kompaniýanyň resminamalaryny dolandyryň we paýlaşyň",
-    "uploadDoc": "Resminama ýükle",
-    "fileTypes": "Faýl görnüşleri",
-    "noDocs": "Resminama tapylmady.",
-    "deleteErr": "Resminamany pozmak başartmady",
-    "upload": {
-      "title": "Resminamanyň ady",
-      "titlePlaceholder": "Resminamanyň adyny giriziň",
-      "desc": "Düşündiriş",
-      "descPlaceholder": "Resminama düşündirişini giriziň",
-      "uploadFile": "Faýly ýükle",
-      "dropzone": "Ýüklemek üçin basyň ýa-da süýräp getiriň",
-      "fileInfo": "PDF, DOCX, XLS (maks. 10MB)",
-      "unsupported": "Goldanylmaýan faýl formaty",
-      "maxSize": "Faýlyň ölçegi 10MB-dan uly bolmaly däl",
-      "selectFileReq": "Faýl saýlaň",
-      "uploadFailed": "Faýly ýüklemek başartmady",
-      "uploadErr": "Faýl ýüklenende ýalňyşlyk ýüze çykdy: ",
-      "uploading": "Ýüklenýär..."
-    },
-    "card": {
-      "download": "Ýükläp al"
-    }
+    "title": "Resminamalar",
+    "subtitle": "Kompaniýa resminamalaryny dolandyryň we yzarlaň",
+    "uploadDoc": "Resminama ýükläň",
+    "editDoc": "Resminamany redaktirläň",
+    "upload": "Ýükle",
+    "uploading": "Ýüklenýär...",
+    "uploadSuccess": "Resminama üstünlikli ýüklendi!",
+    "uploadFailed": "Resminama ýüklemekde ýalňyşlyk ýüze çykdy",
+    "uploadErr": "Resminama ýüklemekde ýalňyşlyk ýüze çykdy: ",
+    "selectFileReq": "Resminama ýüklemek üçin faýl saýlamak hökman",
+    "unsupported": "Bu faýl görnüşi goldanylmaýar. Diňe jpg, png, txt, pdf, xls, xlsx, doc, docx faýllary kabul edilýär.",
+    "maxSize": "Faýl 10MB-dan uly bolmaly däl.",
+    "noDocuments": "Resminama tapylmady.",
+    "deleteConfirm": "Siz dogrudan-da bu resminamany pozmak isleýärsiňizmi? Bu amal yzyna gaýtarylyp bilinmez.",
+    "deleteSuccess": "Resminama üstünlikli pozuldy",
+    "deleteFailed": "Resminamany pozmak başartmady",
+    "file": "Faýl",
+    "fileType": "Faýl görnüşi",
+    "fileSize": "Faýl ölçegi",
+    "uploadedAt": "Ýüklenen senesi",
+    "noFile": "Faýl ýok"
   },
   "calendar": {
     "title": "Kompaniýanyň senenamasy",

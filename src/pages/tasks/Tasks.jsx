@@ -8,13 +8,20 @@ import TaskDetailView from "./components/TaskDetail";
 import GlobalModal from "../../components/modal/GlobalModal";
 import { useState } from "react";
 import { useLocale } from "../../hooks/useLocale";
+import Seo from "../../components/seo/seo";
 
 const TasksPage = () => {
   const { t } = useLocale();
   const [openModal, setOpenModal] = useState(false);
 
   return (
-    <Box>
+    <Box tabIndex={0}>
+      <Seo
+        title={t("tasks.title")}
+        description={t("tasks.subtitle")}
+        name="Yerinde"
+        type="website"
+      />
       <Box
         sx={{
           display: "flex",

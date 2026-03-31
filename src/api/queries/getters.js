@@ -212,3 +212,7 @@ export const getTaskList = async (status) => {
   );
   return response;
 };
+
+export const getProfile = async () => {
+  const response = await api.getPrivate('')
+}

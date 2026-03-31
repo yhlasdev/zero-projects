@@ -12,19 +12,19 @@ export const MonthStatistic = ({ titleColor, title, data }) => {
                 <Typography variant="h4" color={titleColor}> {title} </Typography>
                 <CustomDivider />
                 <StatisticLine
-                    prefix={'In kop islenen gun'}
+                    prefix={'Iň köp işlenen gün'}
                     suffix={`${Math.ceil(data[0].suffix)} sagat`}
                     suffixUp={dayjs(data[0].suffixUp).format('DD.MM.YYYY')}
                 />
                 <Divider />
                 <StatisticLine
-                    prefix={'In az islenen gun'}
+                    prefix={'Iň az işlenen gün'}
                     suffix={`${Math.ceil(data[1].suffix)} sagat`}
                     suffixUp={dayjs(data[1].suffixUp).format('DD.MM.YYYY')}
                 />
                 <Divider />
                 <StatisticLine
-                    prefix={'Ortaca gundelik'}
+                    prefix={'Ortaça gündelik'}
                     suffix={`${Math.ceil(data[2].suffix)} sagat`}
                     suffixUp={dayjs(data[2].suffixUp).format('DD.MM.YYYY')}
                 />

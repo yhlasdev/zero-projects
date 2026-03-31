@@ -7,6 +7,7 @@ import ContactInformation from "./components/ContactInformation";
 import CompanyStructure from "./components/Structure";
 
 import { useLocale } from "../../hooks/useLocale";
+import Seo from "../../components/seo/seo";
 
 const SettingsPage = () => {
   const { t } = useLocale();
@@ -20,6 +21,12 @@ const SettingsPage = () => {
 
   return (
     <Box>
+      <Seo
+        title={t("settings.title")}
+        description={t("settings.subtitle")}
+        name="Yerinde"
+        type="website"
+      />
       <PageTitle
         title={t('settings.title')}
         subTitle={t('settings.subtitle')}

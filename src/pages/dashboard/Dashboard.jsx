@@ -5,6 +5,7 @@ import { TimeStaticSection } from "./components/timeStatisticSection/timeStaticS
 import { CustomDivider } from "../../components/customDivider"
 import { FooterSection } from "./components/footerSection/footerSection"
 import { useLocale } from "../../hooks/useLocale"
+import Seo from "../../components/seo/seo"
 
 
 export const DashBoardPage = () => {
@@ -12,6 +13,12 @@ export const DashBoardPage = () => {
 
     return (
         <Box className=' dashboard'>
+            <Seo
+                title={t("dashboard.title")}
+                description={t("dashboard.subtitle")}
+                name="Yerinde"
+                type="website"
+            />
             <PageTitle title={t('dashboard.title')} subTitle={t('dashboard.subtitle')} />
             <CustomDivider sx={{ mb: 5 }} />
             <StatisticSection />
