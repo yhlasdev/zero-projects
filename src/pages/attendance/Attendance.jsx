@@ -15,7 +15,7 @@ import TablePaginationInfo from "../../components/table/TablePagination";
 import { getAllAttendance } from "../../api/queries/getters";
 import dayjs from "dayjs";
 import { useLocale } from "../../hooks/useLocale";
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import Seo from "../../components/seo/seo";
 
 const AttendancePage = () => {
@@ -34,10 +34,6 @@ const AttendancePage = () => {
   });
 
   const [page, setPage] = useState(1);
-
-  useEffect(() => {
-    setPage(1);
-  }, [filters.date, filters.search, filters.department_ids, filters.status]);
 
   const attendanceQuery = usePaginationGet({
     key: "attendances",
