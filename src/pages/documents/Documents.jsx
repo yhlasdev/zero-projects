@@ -16,7 +16,6 @@ import { useOpenCloseDrawer } from "../../hooks/useOpenCloseDrawer";
 import { useInfiniteGet } from "../../hooks/useInfiniteList";
 import { getAllDocuments } from "../../api/queries/getters";
 import { deleteDocument } from "../../api/queries/delete";
-import { useQueryClient } from "@tanstack/react-query";
 import UploadContent from "./components/UploadContent";
 import { useLocale } from "../../hooks/useLocale";
 import { useAppMutation } from "../../hooks/useMutation";
@@ -37,7 +36,6 @@ const allowedExtensions = [
 const DocumentsPage = () => {
   const { t } = useLocale();
   const { open, openSet, closeSet } = useOpenCloseDrawer();
-  const queryClient = useQueryClient();
   const [filters, setFilter] = useState({
     search: "",
     fileTypes: [],
@@ -81,6 +79,7 @@ const DocumentsPage = () => {
       link.parentNode.removeChild(link);
       window.URL.revokeObjectURL(blobUrl);
     } catch (error) {
+      console.log("Download error:", error);
       toast.error(t("documents.downloadErr") || "Download failed");
     }
   };

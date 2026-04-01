@@ -47,12 +47,16 @@ export const getAllJobs = async (department_id) => {
 };
 
 export const getAllAttendance = async ({
+  page,
+  limit,
   date,
   department_ids,
   status,
   search,
 }) => {
   return await api.getPrivate("/company-service/attendances/get-by-date", {
+    page,
+    limit,
     date,
     department_ids,
     status: status?.join(","),

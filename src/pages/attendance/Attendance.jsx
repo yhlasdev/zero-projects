@@ -10,11 +10,12 @@ import GlobalModal from "../../components/modal/GlobalModal";
 import EditAttendance from "./components/EditAttendanceContent";
 import AttendanceDetailsContent from "./AttendanceDetail";
 import BulkExportModal from "./components/BulkeExport";
-import { useInfiniteGet } from "../../hooks/useInfiniteList";
+import { usePaginationGet } from "../../hooks/usePaginationGet";
+import TablePaginationInfo from "../../components/table/TablePagination";
 import { getAllAttendance } from "../../api/queries/getters";
 import dayjs from "dayjs";
 import { useLocale } from "../../hooks/useLocale";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 
 const AttendancePage = () => {
   const { t } = useLocale();
@@ -31,15 +32,25 @@ const AttendancePage = () => {
     status: [],
   });
 
-  const attendanceQuery = useInfiniteGet({
-    key: ["attendances"],
-    apiFn: ({ ...restFilters }) =>
+  const [page, setPage] = useState(1);
+
+  useEffect(() => {
+    setPage(1);
+  }, [filters.date, filters.search, filters.department_ids, filters.status]);
+
+  const attendanceQuery = usePaginationGet({
+    key: "attendances",
+    apiFn: ({ page: apiPage, limit: apiLimit, ...restFilters }) =>
       getAllAttendance({
+        page: apiPage,
+        limit: apiLimit,
         date: restFilters.date?.format("YYYY-MM-DD"),
         search: restFilters.search,
         department_ids: restFilters.department_ids,
         status: restFilters.status,
       }),
+    page,
+    limit: 10,
     dataKey: "attendances",
     countKey: "total",
     filters,
@@ -142,11 +153,15 @@ const AttendancePage = () => {
         <GlobalTable
           columns={columns}
           rows={rows}
-          onScroll={attendanceQuery.handleScroll}
           isLoading={attendanceQuery.isLoading}
-          isFetchingNextPage={attendanceQuery.isFetchingNextPage}
           isError={attendanceQuery.isError}
           emptyMessage={t("employees.noRecords")}
+        />
+        <TablePaginationInfo
+          total={attendanceQuery.totalItems}
+          page={page}
+          limit={10}
+          onChange={(val) => setPage(val)}
         />
       </>
 
