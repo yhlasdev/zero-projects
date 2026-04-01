@@ -14,6 +14,7 @@ import TablePaginationInfo from "../../components/table/TablePagination";
 import { getAllEmployee } from "../../api/queries/getters";
 import EditEmployeeContent from "./components/EditEmployee";
 import { useLocale } from "../../hooks/useLocale";
+import Seo from "../../components/seo/seo";
 
 const EmployeesPage = () => {
   const { t } = useLocale();
@@ -100,6 +101,12 @@ const EmployeesPage = () => {
 
   return (
     <Box className="employees">
+      <Seo
+        title={t("employees.title")}
+        description={t("employees.subtitle")}
+        name="Yerinde"
+        type="website"
+      />
       {openViewModal ? (
         <ViewEmployeeWeek
           employee={selectedEmployee}

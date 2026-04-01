@@ -6,6 +6,8 @@ import TablePaginationInfo from "../../components/table/TablePagination";
 import GlobalModal from "../../components/modal/GlobalModal";
 import LetterContent from "./components/LetterContent";
 import { useState } from "react";
+import { useLocale } from "../../hooks/useLocale";
+import Seo from "../../components/seo/seo";
 
 const requests = [
     {
@@ -48,13 +50,20 @@ const requests = [
 
 
 const LetterRequestsPage = () => {
+    const { t } = useLocale();
     const [selectedRow, setSelectedRow] = useState(null);
 
     return (
         <Box className=' letterRequests'>
+            <Seo
+                title={t("letterRequests.title")}
+                description={t("letterRequests.subtitle")}
+                name="Yerinde"
+                type="website"
+            />
             <PageTitle
-                title="Letter Requests"
-                subTitle="Manage employee letters and communications"
+                title={t("letterRequests.title")}
+                subTitle={t("letterRequests.subtitle")}
             />
             <Header />
             <Divider />

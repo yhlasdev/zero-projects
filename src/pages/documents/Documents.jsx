@@ -20,6 +20,7 @@ import UploadContent from "./components/UploadContent";
 import { useLocale } from "../../hooks/useLocale";
 import { useAppMutation } from "../../hooks/useMutation";
 import toast from "react-hot-toast";
+import Seo from "../../components/seo/seo";
 
 const allowedExtensions = [
   "jpg",
@@ -89,7 +90,7 @@ const DocumentsPage = () => {
     queryKey: ["documents"],
   });
 
-  const { data } = useInfiniteGet({
+  const { isLoading, isError, data } = useInfiniteGet({
     key: "documents",
     apiFn: getAllDocuments,
     limit: 30,
@@ -104,6 +105,12 @@ const DocumentsPage = () => {
       </GlobalModal>
 
       <Box className="Documents">
+        <Seo
+          title={t("documents.title")}
+          description={t("documents.subTitle")}
+          name="Yerinde"
+          type="website"
+        />
         <Box
           sx={{
             display: "flex",
@@ -152,6 +159,13 @@ const DocumentsPage = () => {
 
         <Divider />
         <Paper sx={{ height: "calc(100vh - 320px)", overflowY: "auto", p: 3 }}>
+          {isLoading ? (
+            <Box display={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '100%'
+            }}> Ýüklenýär... </Box>) : isError ? (<Box>Ýalňyşlyk</Box>) : null}
           {data?.length > 0 ? (
             <Box
               sx={{
@@ -183,20 +197,7 @@ const DocumentsPage = () => {
                 );
               })}
             </Box>
-          ) : (
-            <Typography
-              sx={{
-                p: 3,
-                width: "100%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                height: "calc(100vh - 370px)",
-              }}
-            >
-              {t("documents.noDocs")}
-            </Typography>
-          )}
+          ) : null}
         </Paper>
       </Box>
     </>

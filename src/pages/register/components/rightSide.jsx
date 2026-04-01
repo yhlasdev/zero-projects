@@ -9,8 +9,6 @@ import {
   CircularProgress,
   Alert,
 } from "@mui/material";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useNavigate } from "react-router-dom";
 
 import { registerEmail, registerPhone } from "../../../api/queries/post";
@@ -20,7 +18,6 @@ import FieldLabelPasswordInput from "../../../components/textField/passwordTextF
 import { useLocale } from "../../../hooks/useLocale";
 import { EyeClosedIcon, EyeOpenIcon } from "../../../utils/Icon";
 
-// ─── Validation helpers ───────────────────────────────────────────────────────
 const validateCompanyName = (v) => {
   if (!v.trim()) return "Company name is required.";
   if (v.trim().length < 2) return "Company name must be at least 2 characters.";
@@ -53,7 +50,6 @@ const validateConfirmPassword = (v, password) => {
   return "";
 };
 
-// ─── Friendly API error messages ─────────────────────────────────────────────
 const getFriendlyError = (error) => {
   const status = error?.response?.status;
   const message = error?.response?.data?.message;
@@ -128,13 +124,15 @@ export const RightSide = () => {
     try {
       let response;
       if (type === "phone") {
-        response = await registerPhone({
+        const res = {
           company_name: form.company_name,
-          phone_number: Number(form.phone_number),
           country_code: Number(form.country_code),
+          phone_number: Number(form.phone_number),
           password: form.password,
           fcm_token: FCM_TOKEN,
-        });
+        }
+        console.log('this----', res);
+        response = await registerPhone(res);
       } else {
         response = await registerEmail({
           company_name: form.company_name,
@@ -260,6 +258,7 @@ export const RightSide = () => {
             error={!!errors.phone_number}
             helperText={errors.phone_number}
             height={46}
+            startIcon={'+993'}
           />
         ) : (
           <FieldLabel

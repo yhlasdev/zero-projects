@@ -13,7 +13,6 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 import { registerVerify } from "../../../api/queries/post";
 
-// ─── Friendly API error messages ─────────────────────────────────────────────
 const getFriendlyError = (error) => {
   const status = error?.response?.status;
   const message = error?.response?.data?.message;
@@ -46,7 +45,6 @@ export const OtpSection = ({ setOtpSection, token, type }) => {
   };
 
   const handleSubmit = async () => {
-    // Client-side validation
     if (code.length < 4) {
       setError("Please enter the 4-digit code.");
       return;
@@ -57,7 +55,7 @@ export const OtpSection = ({ setOtpSection, token, type }) => {
 
     try {
       const res = await registerVerify({ code }, token, endpoint);
-      if (res.status === 200 || res.status === 201) {
+      if (res.status === 200 || res.status === 201 || res.status == 202) {
         Cookies.set("auth_token", res.data.data.token, {
           expires: 7,
           secure: true,

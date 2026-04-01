@@ -23,9 +23,10 @@ import { useLocale } from "../../../hooks/useLocale";
 import { EyeClosedIcon, EyeOpenIcon } from "../../../utils/Icon";
 
 const loginPhone = async ({ phone, password }) => {
+  const phoneNumber = "993" + phone;
   const response = await axios.post(
     "http://194.156.117.223:8007/yerinde/company-service/companies/login-phone",
-    { phone_number: phone, password },
+    { phone_number: phoneNumber, password },
   );
   return response.data;
 };
@@ -253,7 +254,7 @@ export const RightSide = () => {
             helperText={errors.phone}
             width={420}
             height={46}
-            startIcon={'+'}
+            startIcon={'+993'}
           />
         ) : (
           <FieldLabel

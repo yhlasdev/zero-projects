@@ -209,10 +209,15 @@ export const getNewRequest = async (status) => {
   return response;
 };
 
-export const getTaskList = async (status) => {
-  const response = await api.getPrivate(
-    "/company-service/tasks/get-all",
+export const getTaskList = async ({ status, page, limit }) => {
+  const response = await api.getPrivate("/company-service/tasks/get-all", {
     status,
-  );
+    page,
+    limit,
+  });
   return response;
 };
+
+export const getProfile = async () => {
+  const response = await api.getPrivate('')
+}

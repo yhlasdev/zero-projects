@@ -16,6 +16,7 @@ import { getAllAttendance } from "../../api/queries/getters";
 import dayjs from "dayjs";
 import { useLocale } from "../../hooks/useLocale";
 import { useCallback, useEffect } from "react";
+import Seo from "../../components/seo/seo";
 
 const AttendancePage = () => {
   const { t } = useLocale();
@@ -119,6 +120,12 @@ const AttendancePage = () => {
 
   return (
     <Box className="attendance">
+      <Seo
+        title={t("sidebar.attendance")}
+        description={t("dashboard.reportSubtitle")}
+        name="Yerinde"
+        type="website"
+      />
       <GlobalModal
         open={openViewModal}
         onClose={() => setOpenViewModal(false)}

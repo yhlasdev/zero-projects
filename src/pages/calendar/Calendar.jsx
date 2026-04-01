@@ -8,6 +8,7 @@ import GlobalModal from "../../components/modal/GlobalModal";
 import AddEvent from "./components/AddEvent";
 
 import { useLocale } from "../../hooks/useLocale";
+import Seo from "../../components/seo/seo";
 
 function CalendarPage() {
   const { t } = useLocale();
@@ -15,6 +16,12 @@ function CalendarPage() {
 
   return (
     <Box>
+      <Seo
+        title={t("calendar.title")}
+        description={t("calendar.subTitle")}
+        name="Yerinde"
+        type="website"
+      />
       <Box
         sx={{
           display: "flex",

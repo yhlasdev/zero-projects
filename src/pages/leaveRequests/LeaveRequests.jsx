@@ -12,6 +12,7 @@ import GlobalTable from "../../components/table/Table";
 import StatusChip from "../../components/table/StatusChip";
 import TableActions from "../../components/table/TableActions";
 import { useLocale } from "../../hooks/useLocale";
+import Seo from "../../components/seo/seo";
 
 
 const LeaveRequestsPage = () => {
@@ -80,6 +81,12 @@ const LeaveRequestsPage = () => {
   ];
   return (
     <Box className=" leaveRequest">
+      <Seo
+        title={t("leaveRequests.title")}
+        description={t("leaveRequests.subtitle")}
+        name="Yerinde"
+        type="website"
+      />
       <PageTitle
         title={t('leaveRequests.title')}
         subTitle={t('leaveRequests.subtitle')}
