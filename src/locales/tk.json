@@ -31,6 +31,8 @@
     "email": "E-poçta",
     "password": "Parol",
     "confirmPassword": "Paroly tassykla",
+    "showing": "Görkezilýän",
+    "of": "içinden",
     "department": "Bölüm",
     "title": "Wezipe",
     "nationality": "Milleti",
@@ -41,7 +43,12 @@
     "checkIn": "Gelen wagty",
     "checkOut": "Giden wagty",
     "position": "Wezipe",
-    "viewDetails": "Jikme-jik gör"
+    "viewDetails": "Jikme-jik gör",
+    "next": "Indiki",
+    "previous": "Öňki",
+    "noData": "Maglumat tapylmady",
+    "search": "Gözleg",
+    "select": "Saýla"
   },
   "dashboard": {
     "title": "Dolandyryş paneli",
