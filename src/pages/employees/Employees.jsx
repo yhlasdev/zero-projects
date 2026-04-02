@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PageTitle } from "../../components/pageTitle/pageTitle";
 import GlobalTable from "../../components/table/Table";
 import EmployeeCell from "../../components/table/EmployeeCell";
@@ -9,7 +9,8 @@ import GlobalModal from "../../components/modal/GlobalModal";
 import AddEmployeeContent from "./components/AddEmployeeContent";
 import ViewEmployeeWeek from "./components/EmployeeDetailWeek";
 import Header from "./components/Header";
-import { useInfiniteGet } from "../../hooks/useInfiniteList";
+import { usePaginationGet } from "../../hooks/usePaginationGet";
+import TablePaginationInfo from "../../components/table/TablePagination";
 import { getAllEmployee } from "../../api/queries/getters";
 import EditEmployeeContent from "./components/EditEmployee";
 import { useLocale } from "../../hooks/useLocale";
@@ -21,15 +22,22 @@ const EmployeesPage = () => {
   const [openViewModal, setOpenViewModal] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [openEditModal, setOpenEditModal] = useState(false);
+  const [page, setPage] = useState(1);
   const [filters, setFilter] = useState({
     department_id: "",
     job_id: "",
     search: "",
   });
 
-  const employeeQuery = useInfiniteGet({
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setPage(1);
+  }, [filters.department_id, filters.job_id, filters.search]);
+
+  const employeeQuery = usePaginationGet({
     key: "employees",
     apiFn: getAllEmployee,
+    page,
     limit: 10,
     filters,
     dataKey: "employees",
@@ -48,7 +56,7 @@ const EmployeesPage = () => {
       render: (row) => (
         <EmployeeCell
           name={`${row.user?.first_name} ${row.user?.last_name}`}
-          avatar={`http://194.156.117.223:8004/yerinde/storage-service/attendances/${row?.user?.user_id}`}
+          avatar={null}
         />
       ),
     },
@@ -104,7 +112,10 @@ const EmployeesPage = () => {
         type="website"
       />
       {openViewModal ? (
-        <ViewEmployeeWeek employee={selectedEmployee} onClose={() => setOpenViewModal(false)} />
+        <ViewEmployeeWeek
+          employee={selectedEmployee}
+          onClose={() => setOpenViewModal(false)}
+        />
       ) : (
         <>
           <PageTitle
@@ -119,16 +130,17 @@ const EmployeesPage = () => {
           <GlobalTable
             columns={columns}
             rows={employeeQuery?.data}
-            onScroll={employeeQuery.handleScroll}
             isLoading={employeeQuery.isLoading}
-            isFetchingNextPage={employeeQuery.isFetchingNextPage}
             isError={employeeQuery.isError}
             emptyMessage={t("employees.noRecords")}
           />
 
-          {/* <TablePaginationInfo
+          <TablePaginationInfo
             total={employeeQuery.totalItems}
-          /> */}
+            page={page}
+            limit={10}
+            onChange={(val) => setPage(val)}
+          />
         </>
       )}
 

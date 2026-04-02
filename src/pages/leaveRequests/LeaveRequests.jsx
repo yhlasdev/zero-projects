@@ -3,8 +3,9 @@ import { PageTitle } from "../../components/pageTitle/pageTitle";
 import Header from "./components/Header";
 import LeaveRequestDetail from "./components/EditRequestContent";
 import GlobalModal from "../../components/modal/GlobalModal";
-import { useState } from "react";
-import { useInfiniteGet } from "../../hooks/useInfiniteList";
+import { useState, useEffect } from "react";
+import { usePaginationGet } from "../../hooks/usePaginationGet";
+import TablePaginationInfo from "../../components/table/TablePagination";
 import { getLeavesAll } from "../../api/queries/getters";
 import { formatTimeYear } from "../../utils/formatTime";
 import GlobalTable from "../../components/table/Table";
@@ -23,9 +24,17 @@ const LeaveRequestsPage = () => {
     type: "",
   });
 
-  const leavesQuery = useInfiniteGet({
-    key: ["leaves"],
+  const [page, setPage] = useState(1);
+
+  useEffect(() => {
+    setPage(1);
+  }, [filters.status, filters.type]);
+
+  const leavesQuery = usePaginationGet({
+    key: "leaves",
     apiFn: getLeavesAll,
+    page,
+    limit: 10,
     dataKey: "leaves",
     countKey: "total",
     filters,
@@ -87,11 +96,15 @@ const LeaveRequestsPage = () => {
       <GlobalTable
         columns={columns}
         rows={rows || []}
-        onScroll={leavesQuery.handleScroll}
         isLoading={leavesQuery.isLoading}
-        isFetchingNextPage={leavesQuery.isFetchingNextPage}
         isError={leavesQuery.isError}
         emptyMessage={t('employees.noRecords')}
+      />
+      <TablePaginationInfo
+        total={leavesQuery.totalItems}
+        page={page}
+        limit={10}
+        onChange={(val) => setPage(val)}
       />
 
 

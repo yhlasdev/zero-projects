@@ -24,7 +24,7 @@ export default function GlobalTable({
     <TableContainer
       component={Paper}
       elevation={0}
-      sx={{ height: "calc(100vh - 300px)", overflowY: "auto" }}
+      sx={{ height: "calc(100vh - 360px)", overflowY: "auto" }}
       onScroll={onScroll}
     >
       <Table stickyHeader>

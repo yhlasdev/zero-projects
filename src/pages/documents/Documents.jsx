@@ -80,6 +80,7 @@ const DocumentsPage = () => {
       link.parentNode.removeChild(link);
       window.URL.revokeObjectURL(blobUrl);
     } catch (error) {
+      console.log("Download error:", error);
       toast.error(t("documents.downloadErr") || "Download failed");
     }
   };

@@ -56,7 +56,7 @@ const CustomFieldLabel = ({ label, ...props }) => (
 export default function EditEmployeeContent({ employeeId, onClose }) {
   const queryClient = useQueryClient();
   const MODAL_WIDTH = "896px";
-  const MODAL_HEIGHT = "725px";
+  const MODAL_HEIGHT = "740px";
   const RADIUS_8 = "8px";
   const MODAL_RADIUS = "12px";
 
@@ -155,7 +155,6 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
         borderRadius: MODAL_RADIUS,
         display: "flex",
         flexDirection: "column",
-        overflow: "scroll",
         boxShadow: "0px 8px 30px rgba(0,0,0,0.08)",
       }}
     >
@@ -374,7 +373,7 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
         <Box
           sx={{
             px: 4,
-            pb: 5,
+            pb: 2,
             display: "flex",
             justifyContent: "flex-end",
             gap: 1.5,
