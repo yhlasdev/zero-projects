@@ -44,7 +44,7 @@ const TasksPage = () => {
         </HeaderButton>
       </Box>
 
-      <TaskDetailView />
+      <TaskDetailView onOpenCreateModal={() => setOpenModal(true)} />
 
       <GlobalModal
         open={openModal}

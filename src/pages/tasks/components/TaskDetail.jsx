@@ -11,7 +11,7 @@ import BoardView from "./BoardView";
 import CalendarView from "./CalendarView";
 import FilterPopover from "./FilterPopover";
 
-const TaskDetailView = ({ tasks = [] }) => {
+const TaskDetailView = ({ tasks = [], onOpenCreateModal }) => {
   const [filterAnchorEl, setFilterAnchorEl] = useState(null);
   const [filters, setFilters] = useState({});
 
@@ -190,7 +190,7 @@ const TaskDetailView = ({ tasks = [] }) => {
 
       {/* ── Content ── */}
       <Box sx={{ p: 2.5 }}>
-        <ActiveView tasks={tasks} filters={filters} />
+        <ActiveView tasks={tasks} filters={filters} onOpenCreateModal={onOpenCreateModal} />
       </Box>
     </Paper>
   );

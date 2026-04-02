@@ -34,6 +34,8 @@ const EmployeesPage = () => {
     filters,
     dataKey: "employees",
   });
+
+
   const columns = [
     {
       key: "employee_id",
@@ -46,7 +48,7 @@ const EmployeesPage = () => {
       render: (row) => (
         <EmployeeCell
           name={`${row.user?.first_name} ${row.user?.last_name}`}
-          avatar={null}
+          avatar={`http://194.156.117.223:8004/yerinde/storage-service/attendances/${row?.user?.user_id}`}
         />
       ),
     },
@@ -90,6 +92,8 @@ const EmployeesPage = () => {
       ),
     },
   ];
+
+  console.log('this--employees-----', employeeQuery.data)
 
   return (
     <Box className="employees">
