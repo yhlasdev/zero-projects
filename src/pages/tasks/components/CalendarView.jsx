@@ -52,6 +52,17 @@ const getStatusCfg = (s) =>
 const fmtKey = (y, m, d) =>
   `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
 
+const getInitials = (p) => {
+  const name = p.preferred_name || `${p.first_name} ${p.last_name}`;
+  return name
+    .trim()
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
+};
+
 const StatusDot = ({ status }) => {
   const cfg = getStatusCfg(status);
   return (
@@ -94,6 +105,141 @@ const TaskPill = ({ task }) => {
       >
         {task.title}
       </Typography>
+    </Box>
+  );
+};
+
+const DayPanel = ({ dateKey, tasks }) => {
+  if (!dateKey) return null;
+
+  const dt = new Date(dateKey + "T00:00:00");
+  const dateLabel = `${dt.getDate()} ${MONTHS[dt.getMonth()]} ${dt.getFullYear()}`;
+
+  return (
+    <Box sx={{ mt: 2, borderTop: "1px solid #e5e7eb", pt: 2 }}>
+      {/* Date heading */}
+      <Typography sx={{ fontWeight: 700, fontSize: "13px", mb: 1.5 }}>
+        {dateLabel}
+        <Typography
+          component="span"
+          sx={{
+            fontWeight: 400,
+            fontSize: "12px",
+            color: "text.secondary",
+            ml: 1,
+          }}
+        >
+          {tasks.length} task{tasks.length !== 1 ? "s" : ""}
+        </Typography>
+      </Typography>
+
+      {tasks.length === 0 ? (
+        <Typography sx={{ fontSize: "13px", color: "text.secondary" }}>
+          No tasks for this day
+        </Typography>
+      ) : (
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+          {tasks.map((task) => {
+            const cfg = getStatusCfg(task.status);
+            return (
+              <Box
+                key={task.id}
+                sx={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: 1.5,
+                  p: 1.5,
+                  border: "1px solid #e5e7eb",
+                  borderLeft: `4px solid ${cfg.border}`,
+                  borderRadius: "0 8px 8px 0",
+                  bgcolor: cfg.bg,
+                }}
+              >
+                {/* Task info */}
+                <Box sx={{ flex: 1, minWidth: 0 }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                      mb: 0.3,
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        fontWeight: 600,
+                        fontSize: "13px",
+                        color: "#1a2b4a",
+                        flex: 1,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      {task.title}
+                    </Typography>
+                    <Chip
+                      label={cfg.label}
+                      size="small"
+                      sx={{
+                        bgcolor: "#fff",
+                        color: cfg.color,
+                        fontWeight: 600,
+                        fontSize: "10px",
+                        height: 20,
+                        border: `1px solid ${cfg.border}`,
+                        flexShrink: 0,
+                      }}
+                    />
+                  </Box>
+
+                  {/* Participants */}
+                  {task.participants?.length > 0 && (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 0.5,
+                        flexWrap: "wrap",
+                        mt: 0.5,
+                      }}
+                    >
+                      {task.participants.map((p) => (
+                        <Box
+                          key={p.participant_id}
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 0.4,
+                          }}
+                        >
+                          <Avatar
+                            sx={{
+                              width: 18,
+                              height: 18,
+                              fontSize: "9px",
+                              bgcolor: cfg.border,
+                              color: "#fff",
+                            }}
+                          >
+                            {getInitials(p)}
+                          </Avatar>
+                          <Typography
+                            sx={{ fontSize: "11px", color: "text.secondary" }}
+                          >
+                            {p.preferred_name ||
+                              `${p.first_name} ${p.last_name}`}
+                          </Typography>
+                        </Box>
+                      ))}
+                    </Box>
+                  )}
+                </Box>
+              </Box>
+            );
+          })}
+        </Box>
+      )}
     </Box>
   );
 };
@@ -191,7 +337,6 @@ const CalendarView = () => {
     <Box
       sx={{
         p: 3,
-        // bgcolor: "#fff",
         borderRadius: 2,
         position: "relative",
         // height: "calc(100vh - 305px)",
@@ -222,7 +367,6 @@ const CalendarView = () => {
           sx={{
             position: "absolute",
             inset: 0,
-            // bgcolor: "rgba(255,255,255,0.7)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -271,117 +415,16 @@ const CalendarView = () => {
           const today_ = isToday(cell);
           const selected = isSelected(cell);
 
-          const showDots = tasks.length > 2;
-
           return (
-            <Box
+            <CalendarCell
               key={i}
-              onClick={() => handleDayClick(cell)}
-              sx={{
-                width: 148,
-                height: 130,
-                borderRadius: "8px",
-                border: "1px solid",
-                borderColor: selected
-                  ? "#16a34a"
-                  : today_
-                    ? "#1a2b4a"
-                    : "#e5e7eb",
-                borderWidth: selected || today_ ? "2px" : "1px",
-                p: "6px",
-                boxSizing: "border-box",
-                // bgcolor: selected ? "#e8f5f0" : today_ ? "#f0f4ff" : "",
-                bgcolor:
-                  mode === "dark"
-                    ? selected
-                      ? "#0f2a1f"
-                      : today_
-                        ? "#0a172c"
-                        : "#111827"
-                    : selected
-                      ? "#e8f5f0"
-                      : today_
-                        ? "#f0f4ff"
-                        : "",
-                cursor: cell.currentMonth ? "pointer" : "default",
-                transition: "background 0.15s",
-                overflow: "hidden",
-                "&:hover": cell.currentMonth
-                  ? // ? {
-                    //     bgcolor: selected
-                    //       ? "#ddf0e8"
-                    //       : today_
-                    //         ? "#e8eeff"
-                    //         : "#f8fafc",
-                    //   }
-                    {
-                      bgcolor:
-                        mode === "dark"
-                          ? selected
-                            ? "#133528"
-                            : today_
-                              ? "#26324a"
-                              : "#1f2937"
-                          : selected
-                            ? "#ddf0e8"
-                            : today_
-                              ? "#e8eeff"
-                              : "#f8fafc",
-                    }
-                  : {},
-              }}
-            >
-              {/* Day number */}
-              <Box
-                sx={{
-                  width: 24,
-                  height: 24,
-                  borderRadius: "50%",
-                  bgcolor: today_ ? "#1a2b4a" : "transparent",
-                  color: today_
-                    ? "#fff"
-                    : cell.currentMonth
-                      ? "text.primary"
-                      : "text.disabled",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "12px",
-                  fontWeight: today_ || selected ? 700 : 400,
-                  mb: 0.5,
-                }}
-              >
-                {cell.day}
-              </Box>
-
-              {showDots ? (
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexWrap: "wrap",
-                    gap: "3px",
-                    mt: 0.3,
-                  }}
-                >
-                  {tasks.map((task) => (
-                    <StatusDot key={task.id} status={task.status} />
-                  ))}
-                </Box>
-              ) : (
-                <>
-                  {tasks.slice(0, 2).map((task) => (
-                    <TaskPill key={task.id} task={task} />
-                  ))}
-                  {tasks.length > 2 && (
-                    <Typography
-                      sx={{ fontSize: "9px", color: "text.secondary", pl: 0.5 }}
-                    >
-                      +{tasks.length - 2} more
-                    </Typography>
-                  )}
-                </>
-              )}
-            </Box>
+              cell={cell}
+              mode={mode}
+              today_={today_}
+              selected={selected}
+              handleDayClick={handleDayClick}
+              tasks={tasks}
+            />
           );
         })}
       </Box>

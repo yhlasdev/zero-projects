@@ -1,9 +1,7 @@
 import {
   Box,
   Typography,
-  Paper,
   Stack,
-  Chip,
   IconButton,
   CircularProgress,
   Button,
@@ -14,10 +12,12 @@ import { useQuery } from "@tanstack/react-query";
 import { getEmployeeDetail } from "../../api/queries/getters";
 import DateRangeSelect from "./components/DateRangeSelect";
 import ExportModal from "./components/EmportModalDetail";
-import CloseIcon from "@mui/icons-material/Close";
 import DownloadIcon from "@mui/icons-material/Download";
 import { formatTime } from "../../utils/formatTime";
-import StatusChip from "../../components/table/StatusChip";
+
+import AttendanceSummaryCard from "./components/AttendanceSummaryCard";
+import AttendanceHeader from "./components/AttendanceHeader";
+import AttendanceRecordCard from "./components/AttendanceRecordCard";
 
 export default function AttendanceDetailsContent({ employee, onClose }) {
   const [dateRange, setDateRange] = useState([
@@ -61,17 +61,17 @@ export default function AttendanceDetailsContent({ employee, onClose }) {
 
   return (
     <>
-    <Box
-      sx={{
-        padding: 3,
-        position: "relative",
-        minHeight: "80vh",
-        maxHeight: '90vh',
-        display: "flex",
-        flexDirection: "column",
-        overflow: "hidden",
-      }}
-    >
+      <Box
+        sx={{
+          padding: 3,
+          position: "relative",
+          minHeight: "80vh",
+          maxHeight: "90vh",
+          display: "flex",
+          flexDirection: "column",
+          overflow: "hidden",
+        }}
+      >
         {/* LOADING OVERLAY */}
         {isFetching && (
           <Box
@@ -91,27 +91,12 @@ export default function AttendanceDetailsContent({ employee, onClose }) {
         )}
 
         {/* HEADER */}
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          alignItems={"start"}
-          mb={1}
-        >
-          <Box>
-            <Typography variant="body2" color="text.secondary">
-              Attendance Details
-            </Typography>
-            <Typography py={1} fontSize={25} fontWeight={600}>
-              {employeeName}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              {position} • {departmentName}
-            </Typography>
-          </Box>
-          <IconButton size="small" onClick={() => onClose(false)}>
-            <CloseIcon />
-          </IconButton>
-        </Stack>
+        <AttendanceHeader
+          employeeName={employeeName}
+          position={position}
+          departmentName={departmentName}
+          onClose={onClose}
+        />
 
         {/* SUMMARY CARDS */}
         <Stack
@@ -120,25 +105,21 @@ export default function AttendanceDetailsContent({ employee, onClose }) {
           mt={1.5}
           mb={1}
         >
-          <SummaryCard
+          <AttendanceSummaryCard
             title={avgCheckIn}
             subtitle="Avg Check In"
-            sx={{ backgroundColor: "#9F9F9F33" }}
           />
-          <SummaryCard
+          <AttendanceSummaryCard
             title={avgCheckOut}
             subtitle="Avg Check Out"
-            sx={{ backgroundColor: "#9F9F9F33" }}
           />
-          <SummaryCard
+          <AttendanceSummaryCard
             title={totalHours}
             subtitle="Total Hours"
-            sx={{ backgroundColor: "#9F9F9F33" }}
           />
-          <SummaryCard
+          <AttendanceSummaryCard
             title={presentDays}
             subtitle="Present Days"
-            sx={{ backgroundColor: "#9F9F9F33" }}
           />
         </Stack>
 
@@ -146,7 +127,7 @@ export default function AttendanceDetailsContent({ employee, onClose }) {
           display={"flex"}
           alignItems={"center"}
           justifyContent={"space-between"}
-          sx={{ position: "relative", zIndex: 100 , marginTop: 3}}
+          sx={{ position: "relative", zIndex: 100, marginTop: 3 }}
         >
           <Typography
             fontSize={"14px"}
@@ -160,19 +141,19 @@ export default function AttendanceDetailsContent({ employee, onClose }) {
               onClick={() => setExportOpen(true)}
               variant="outlined"
               size="small"
-              startIcon={<DownloadIcon sx={{ width: '14px', height: '14px' }} />}
+              startIcon={<DownloadIcon sx={{ width: "14px", height: "14px" }} />}
               sx={{
                 borderRadius: "8px",
-                width: '88px',
-                height: '32px',
+                width: "88px",
+                height: "32px",
                 textTransform: "none",
                 fontWeight: 400,
-                fontSize: '14px',
+                fontSize: "14px",
                 color: "#333333",
                 border: "1px solid #e0e0e0",
                 bgcolor: "#fff",
                 whiteSpace: "nowrap",
-                "&:hover": { bgcolor: "#1e3a5f", color: '#fff' },
+                "&:hover": { bgcolor: "#1e3a5f", color: "#fff" },
               }}
             >
               Export
@@ -193,74 +174,9 @@ export default function AttendanceDetailsContent({ employee, onClose }) {
             mt: 2,
           }}
         >
-          {records.map((item) => {
-            const dayNumber = dayjs(item.work_date).format("DD");
-            return (
-              <Paper
-                key={item.attendance_id}
-                sx={{
-                  p: 2,
-                  borderRadius: "8px",
-                  border: "1px solid #e0e0e0",
-                  width: "100%",
-                  boxSizing: "border-box",
-                }}
-                elevation={0}
-              >
-                <Stack
-                  direction={{ xs: "column", sm: "row" }}
-                  alignItems="center"
-                  justifyContent={"space-between"}
-                  spacing={3}
-                >
-                  <Box display={"flex"} gap={2} alignItems={"center"}>
-                    <Box
-                      sx={{
-                        width: 38,
-                        height: 38,
-                        borderRadius: 2,
-                        backgroundColor: "#0A2540",
-                        color: "#fff",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        flexDirection: "column",
-                      }}
-                    >
-                      <Typography fontWeight={600} fontSize={"11px"}>
-                        {dayNumber}
-                      </Typography>
-                    </Box>
-
-                    <Box width={{ xs: "100%", sm: "auto" }}>
-                      <Typography fontWeight={600} fontSize={"13px"}>
-                        {dayjs(item.work_date).format("DD.MM.YYYY")}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        {dayjs(item.work_date).format("ddd")}
-                      </Typography>
-                    </Box>
-                  </Box>
-                  <InfoBlock
-                    label="CHECK IN"
-                    value={formatTime(item.check_in)}
-                  />
-                  <InfoBlock
-                    label="CHECK OUT"
-                    value={formatTime(item.check_out)}
-                  />
-                  <InfoBlock
-                    label="HOURS"
-                    value={item.hours?.toFixed?.(1) || "-"}
-                  />
-
-                  <Box ml="auto">
-                    <StatusChip status={item.status} />
-                      </Box>
-                </Stack>
-              </Paper>
-            );
-          })}
+          {records.map((item) => (
+            <AttendanceRecordCard key={item.attendance_id} item={item} />
+          ))}
         </Box>
       </Box>
 
@@ -273,36 +189,5 @@ export default function AttendanceDetailsContent({ employee, onClose }) {
         dateRange={dateRange}
       />
     </>
-  );
-}
-
-function SummaryCard({ title, subtitle }) {
-  return (
-    <Paper
-      sx={{
-        p: 2,
-        borderRadius: 3,
-        border: "1px solid #e0e0e0",
-        bgcolor: "#9F9F9F33",
-        width: "130px",
-      }}
-      elevation={0}
-    >
-      <Typography fontSize={"9px"} fontWeight={600} color="#9F9F9F">
-        {subtitle}
-      </Typography>
-      <Typography fontWeight={600}>{title}</Typography>
-    </Paper>
-  );
-}
-
-function InfoBlock({ label, value }) {
-  return (
-    <Box width={100}>
-      <Typography variant="body2" fontSize={11} color="text.secondary">
-        {label}
-      </Typography>
-      <Typography fontWeight={600}>{value}</Typography>
-    </Box>
   );
 }

@@ -36,9 +36,6 @@ export const TopPerformers = () => {
 
     const allTopPerformers = topPerformers?.data || [];
 
-    console.log('this=======', allTopPerformers);
-
-
 
     return (
         <Card sx={{ p: 3, borderRadius: '8px' }}>

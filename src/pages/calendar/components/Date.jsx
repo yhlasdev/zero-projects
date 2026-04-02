@@ -12,55 +12,17 @@ import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import { getMainCalendar } from "../../../api/queries/getters";
 import { useLocale } from "../../../hooks/useLocale";
 
-const getEventStyles = (t) => ({
-  public_holiday: {
-    bg: "#fce4ec",
-    color: "#c62828",
-    dot: "#e53935",
-    label: t("calendar.types.public_holiday"),
-  },
-  company_event: {
-    bg: "#e8f5e9",
-    color: "#2e7d32",
-    dot: "#43a047",
-    label: t("calendar.types.company_event"),
-  },
-  department_event: {
-    bg: "#e3f2fd",
-    color: "#1565c0",
-    dot: "#1e88e5",
-    label: t("calendar.types.department_event"),
-  },
-  note: { bg: "#fffde7", color: "#f57f17", dot: "#fdd835", label: t("calendar.types.note") },
-  engineering_team: {
-    bg: "#e3f2fd",
-    color: "#1565c0",
-    dot: "#1e88e5",
-    label: t("calendar.types.engineering_team"),
-  },
-  all_hands: {
-    bg: "#e8f5e9",
-    color: "#2e7d32",
-    dot: "#43a047",
-    label: t("calendar.types.all_hands"),
-  },
-  default: { bg: "#f3f4f6", color: "#374151", dot: "#9ca3af", label: t("calendar.types.event") },
-});
-
-const LEGEND_STATIC = [
-  "public_holiday",
-  "company_event",
-  "department_event",
-  "note",
-];
-
-const getStyle = (event_type = "", styles) =>
-  styles[event_type.toLowerCase()] ?? styles.default;
-
-const getDaysInMonth = (y, m) => new Date(y, m + 1, 0).getDate();
-const getFirstDayOfMonth = (y, m) => new Date(y, m, 1).getDay();
-const fmtKey = (y, m, d) =>
-  `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+import {
+  LEGEND_STATIC,
+  getEventStyles,
+  getDaysInMonth,
+  getFirstDayOfMonth,
+  fmtKey,
+  getThemeColors,
+} from "./DateUtils";
+import DateCell from "./DateCell";
+import DateLegend from "./DateLegend";
+import DateSelectedDetails from "./DateSelectedDetails";
 
 const MainCalendar = () => {
   const { t } = useLocale();
@@ -158,19 +120,10 @@ const MainCalendar = () => {
     ),
   ].filter((t) => !LEGEND_STATIC.includes(t));
 
-  /* ─── border / bg tokens (light / dark) ─── */
-  const borderColor = isDark ? "#2a3441" : "#e5e7eb";
-  const cellBg = isDark ? "#18212F" : "#ffffff";
-  const cellBgOther = isDark ? "#121821" : "#fafafa";
-  const cellBgSel = isDark ? "#1f3a44" : "#e8f6f5";
-  const cellBgSelHov = isDark ? "#274a55" : "#d5eeec";
-  const cellBgHov = isDark ? "#1f2937" : "#f5f5f5";
-  const tealAccent = "#4db6ac";
+  const { borderColor } = getThemeColors(isDark);
 
   return (
-    /* ── Outer wrapper positions arrows at absolute edges ── */
     <Box sx={{ position: "relative" }}>
-      {/* ── Left arrow — flush to the outer left edge ── */}
       <IconButton
         onClick={handlePrev}
         size="small"
@@ -187,7 +140,6 @@ const MainCalendar = () => {
         <ChevronLeft fontSize="small" />
       </IconButton>
 
-      {/* ── Right arrow — flush to the outer right edge ── */}
       <IconButton
         onClick={handleNext}
         size="small"
@@ -204,7 +156,6 @@ const MainCalendar = () => {
         <ChevronRight fontSize="small" />
       </IconButton>
 
-      {/* ── Card ── */}
       <Paper
         elevation={0}
         sx={{
@@ -214,7 +165,6 @@ const MainCalendar = () => {
           position: "relative",
         }}
       >
-        {/* Loading overlay */}
         {isLoading && (
           <Box
             sx={{
@@ -287,224 +237,37 @@ const MainCalendar = () => {
             const today_ = isToday(cell);
             const sel = isSelected(cell);
 
-            /* column position (0-based) */
-            const col = idx % 7;
-            /* last row index */
-            const lastRowStart = totalCells - 7;
-            const isLastRow = idx >= lastRowStart;
-
             return (
-              <Box
+              <DateCell
                 key={idx}
-                onClick={() => handleDayClick(cell)}
-                sx={{
-                  minHeight: 130,
-                  p: 0.75,
-                  /* borders: right for all except last col, bottom for all except last row */
-                  borderRight: col < 6 ? `1px solid ${borderColor}` : "none",
-                  borderBottom: !isLastRow
-                    ? `1px solid ${borderColor}`
-                    : "none",
-                  /* selected ring drawn with outline so it overlaps borders */
-                  outline: sel ? `2px solid ${tealAccent}` : "none",
-                  outlineOffset: "-1px",
-                  bgcolor: sel
-                    ? cellBgSel
-                    : cell.currentMonth
-                      ? cellBg
-                      : cellBgOther,
-                  cursor: cell.currentMonth ? "pointer" : "default",
-                  transition: "background 0.12s",
-                  "&:hover": cell.currentMonth
-                    ? { bgcolor: sel ? cellBgSelHov : cellBgHov }
-                    : {},
-                }}
-              >
-                {cell.currentMonth && (
-                  <>
-                    {/* Day number */}
-                    <Typography
-                      sx={{
-                        display: "block",
-                        mb: 0.5,
-                        fontSize: "13px",
-                        fontWeight: today_ ? 700 : 400,
-                        color: today_
-                          ? tealAccent
-                          : isDark
-                            ? "#e5e7eb"
-                            : "#111827",
-                      }}
-                    >
-                      {cell.day}
-                    </Typography>
-
-                    {/* Events */}
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "3px",
-                      }}
-                    >
-                      {events.map((event) => {
-                        const s = getStyle(event.event_type, EVENT_STYLES);
-                        return (
-                          <Box
-                            key={event.id}
-                            sx={{
-                              bgcolor: s.bg,
-                              borderRadius: "4px",
-                              px: 0.75,
-                              py: "2px",
-                              overflow: "hidden",
-                            }}
-                          >
-                            <Typography
-                              noWrap
-                              sx={{
-                                fontSize: "10px",
-                                fontWeight: 500,
-                                color: s.color,
-                                lineHeight: 1.5,
-                              }}
-                            >
-                              {event.event_title}
-                            </Typography>
-                          </Box>
-                        );
-                      })}
-                    </Box>
-                  </>
-                )}
-              </Box>
+                cell={cell}
+                idx={idx}
+                totalCells={totalCells}
+                events={events}
+                today_={today_}
+                sel={sel}
+                handleDayClick={handleDayClick}
+                isDark={isDark}
+                EVENT_STYLES={EVENT_STYLES}
+              />
             );
           })}
         </Box>
 
         {/* ── Legend ── */}
-        <Box sx={{ px: 3, pt: 2.5, pb: 2 }}>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: 2,
-              flexWrap: "wrap",
-            }}
-          >
-            <Typography sx={{ fontSize: "12px", fontWeight: 700 }}>
-              {t("calendar.legendTitle")}
-            </Typography>
-            {LEGEND_STATIC.map((type) => {
-              const s = getStyle(type, EVENT_STYLES);
-              return (
-                <Box
-                  key={type}
-                  sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
-                >
-                  <Box
-                    sx={{
-                      width: 10,
-                      height: 10,
-                      borderRadius: "50%",
-                      bgcolor: s.dot,
-                    }}
-                  />
-                  <Typography
-                    sx={{
-                      fontSize: "12px",
-                      color: isDark ? "#d1d5db" : "#374151",
-                    }}
-                  >
-                    {s.label}
-                  </Typography>
-                </Box>
-              );
-            })}
-          </Box>
-
-          {dynamicTypes.length > 0 && (
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: 2,
-                flexWrap: "wrap",
-                mt: 1,
-              }}
-            >
-              {dynamicTypes.map((type) => {
-                const s = getStyle(type, EVENT_STYLES);
-                return (
-                  <Box
-                    key={type}
-                    sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
-                  >
-                    <Box
-                      sx={{
-                        width: 10,
-                        height: 10,
-                        borderRadius: "50%",
-                        bgcolor: s.dot,
-                      }}
-                    />
-                    <Typography
-                      sx={{
-                        fontSize: "12px",
-                        color: isDark ? "#d1d5db" : "#374151",
-                      }}
-                    >
-                      {s.label}
-                    </Typography>
-                  </Box>
-                );
-              })}
-            </Box>
-          )}
-        </Box>
+        <DateLegend
+          EVENT_STYLES={EVENT_STYLES}
+          dynamicTypes={dynamicTypes}
+          isDark={isDark}
+          t={t}
+        />
 
         {/* ── Selected day detail ── */}
-        {selectedKey && (eventMap[selectedKey] ?? []).length > 0 && (
-          <Box
-            sx={{
-              mx: 3,
-              mb: 2,
-              pt: 2,
-              borderTop: `1px solid ${borderColor}`,
-              display: "flex",
-              gap: 2,
-              flexWrap: "wrap",
-            }}
-          >
-            {(eventMap[selectedKey] ?? []).map((event) => {
-              const s = getStyle(event.event_type, EVENT_STYLES);
-              return (
-                <Box
-                  key={event.id}
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 1,
-                    mb: 0.8,
-                  }}
-                >
-                  <Box
-                    sx={{
-                      width: 10,
-                      height: 10,
-                      borderRadius: "50%",
-                      bgcolor: s.dot,
-                      flexShrink: 0,
-                    }}
-                  />
-                  <Typography sx={{ fontSize: "13px" }}>
-                    {event.event_title}
-                  </Typography>
-                </Box>
-              );
-            })}
-          </Box>
-        )}
+        <DateSelectedDetails
+          selectedEvents={eventMap[selectedKey]}
+          EVENT_STYLES={EVENT_STYLES}
+          borderColor={borderColor}
+        />
       </Paper>
     </Box>
   );

@@ -24,7 +24,6 @@ export const getBorderColor = (status) => {
   }
 };
 
-// Normalize API status value → display label
 export const normalizeStatus = (raw = "") => {
   const map = {
     todo: "To Do",
@@ -36,7 +35,6 @@ export const normalizeStatus = (raw = "") => {
   return map[raw?.toLowerCase().replace(" ", "_")] ?? raw;
 };
 
-// Format ISO date → "DD.MM.YYYY"
 export const formatDate = (iso) => {
   if (!iso) return "";
   const d = new Date(iso);
@@ -47,7 +45,6 @@ export const formatDate = (iso) => {
   return `${dd}.${mm}.${yyyy}`;
 };
 
-// Format ISO date → { day, month, year } for DateBlock
 export const parseDateBlock = (iso) => {
   if (!iso) return { day: "", month: "", year: "" };
   const d = new Date(iso);
@@ -59,7 +56,6 @@ export const parseDateBlock = (iso) => {
   };
 };
 
-// Map API task → internal task shape
 export const mapApiTask = (task) => ({
   id: task.id,
   title: task.title,

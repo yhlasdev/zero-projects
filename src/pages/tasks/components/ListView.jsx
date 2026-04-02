@@ -10,7 +10,6 @@ import {
 } from "./TaskViewComponent";
 import { getTaskList } from "../../../api/queries/getters";
 
-// ─── Task Row ─────────────────────────────────────────────────────────────────
 const TaskRow = ({ task }) => {
   const cfg = getStatusConfig(task.status);
   const isActive = task.status?.toUpperCase() !== "TO DO";
@@ -30,7 +29,6 @@ const TaskRow = ({ task }) => {
           boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
         }}
       >
-        {/* Top row: status chip + assignee */}
         <Box
           sx={{
             display: "flex",
@@ -43,12 +41,10 @@ const TaskRow = ({ task }) => {
           <AssigneeAvatar assignee={task.assignee} />
         </Box>
 
-        {/* Title */}
         <Typography sx={{ fontWeight: 600, fontSize: "14px", mb: 0.5 }}>
           {task.title}
         </Typography>
 
-        {/* Description */}
         <Typography
           variant="body2"
           sx={{
@@ -64,7 +60,6 @@ const TaskRow = ({ task }) => {
           {task.description}
         </Typography>
 
-        {/* Bottom row: date range + team */}
         <Box
           sx={{
             display: "flex",
@@ -80,7 +75,6 @@ const TaskRow = ({ task }) => {
   );
 };
 
-// ─── ListView ─────────────────────────────────────────────────────────────────
 const ListView = ({ filters = {} }) => {
   const {
     status,

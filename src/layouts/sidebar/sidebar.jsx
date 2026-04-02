@@ -9,9 +9,9 @@ import Divider from "@mui/material/Divider";
 import { useSidebarItems } from "../../hooks/useSidebarItems";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import websiteLogo from "../../assets/logo/last_logo.png";
+import lightMode from "../../assets/logo/logo_light.png";
 
-import websiteLogoDarkMode from '../../assets/logo/logo_dark_mode.png'
+import darkMode from '../../assets/logo/logo_dark.png'
 
 import { useColorScheme } from "@mui/material";
 
@@ -48,7 +48,7 @@ export const Sidebar = () => {
         }}
       >
         {
-          mode === 'dark' ? <img style={{ width: '96px', height: '71px' }} src={websiteLogoDarkMode} /> : <img style={{ width: '96px', height: '71px' }} src={websiteLogo} />
+          mode === 'dark' ? <img style={{ width: '196px', height: '71px' }} src={darkMode} /> : <img style={{ width: '196px', height: '71px' }} src={lightMode} />
         }
       </Box>
 
@@ -67,16 +67,13 @@ export const Sidebar = () => {
                 mb: 1,
                 borderRadius: "8px",
                 "&.Mui-selected": {
-                  backgroundColor: "primary.main",
-                  color: "primary.contrastText",
-                },
-                "&.Mui-selected:hover": {
-                  backgroundColor: mode === "dark" ? "primary.light" : "primary.dark",
+                  backgroundColor: "#0F325426",
+                  color: "#0F3254",
                 },
               }}
             >
               <ListItemIcon>
-                <Icon className={`${isActive && "text-[#eeeeee]"}`} />
+                <Icon className={`${isActive && "text-[#0F3254]"}`} />
               </ListItemIcon>
 
               <ListItemText primary={item.name} />
