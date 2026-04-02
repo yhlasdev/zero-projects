@@ -67,16 +67,13 @@ export const Sidebar = () => {
                 mb: 1,
                 borderRadius: "8px",
                 "&.Mui-selected": {
-                  backgroundColor: "primary.main",
-                  color: "primary.contrastText",
-                },
-                "&.Mui-selected:hover": {
-                  backgroundColor: mode === "dark" ? "primary.light" : "primary.dark",
+                  backgroundColor: "#0F325426",
+                  color: "#0F3254",
                 },
               }}
             >
               <ListItemIcon>
-                <Icon className={`${isActive && "text-[#eeeeee]"}`} />
+                <Icon className={`${isActive && "text-[#0F3254]"}`} />
               </ListItemIcon>
 
               <ListItemText primary={item.name} />
