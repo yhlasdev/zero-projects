@@ -36,9 +36,9 @@ const TaskDetailView = ({ tasks = [] }) => {
   const [activeTab, setActiveTab] = useState(0);
   const ActiveView = VIEWS[activeTab].component;
 
-  const handleFilterClick = (event) => {
-    setFilterAnchorEl(event.currentTarget);
-  };
+  // const handleFilterClick = (event) => {
+  //   setFilterAnchorEl(event.currentTarget);
+  // };
 
   const handleFilterClose = () => {
     setFilterAnchorEl(null);
@@ -134,7 +134,7 @@ const TaskDetailView = ({ tasks = [] }) => {
         </Box>
 
         <Box sx={{ display: "flex", alignItems: "center", gap: 1, py: 1 }}>
-          <Box
+          {/* <Box
             onClick={handleFilterClick}
             sx={{
               display: "flex",
@@ -153,7 +153,7 @@ const TaskDetailView = ({ tasks = [] }) => {
             <Typography sx={{ fontSize: "13px", color: "text.secondary" }}>
               Filter
             </Typography>
-          </Box>
+          </Box> */}
 
           <FilterPopover
             anchorEl={filterAnchorEl}

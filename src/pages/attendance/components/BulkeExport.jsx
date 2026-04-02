@@ -113,12 +113,15 @@ export default function BulkExportModal({ open, onClose, rows = [], date }) {
       const colW = pageW - margin * 2;
       doc.setFillColor(13, 37, 64);
       doc.rect(0, 0, pageW, 28, "F");
+
       doc.setTextColor(255, 255, 255);
-      doc.setFontSize(14);
       doc.setFont("helvetica", "bold");
-      doc.text("Yerinde", margin, 9);
-      doc.setFontSize(7);
-      doc.text("Workforce Management", margin, 14);
+      doc.setFontSize(22);
+      doc.text("Yerinde", margin, 12);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(9);
+      doc.text("Workforce Management", margin, 18);
+
       doc.setFontSize(14);
       doc.setFont("helvetica", "bold");
       doc.text("Attendance Report", pageW / 2, 10, { align: "center" });
@@ -288,7 +291,9 @@ export default function BulkExportModal({ open, onClose, rows = [], date }) {
           alignItems="flex-start"
         >
           <Box>
-            <Typography sx={{ color: "#FFFFFF", fontWeight: 700, fontSize: 20 }}>
+            <Typography
+              sx={{ color: "#FFFFFF", fontWeight: 700, fontSize: 20 }}
+            >
               Export Attendance Records
             </Typography>
             <Typography sx={{ color: "#FFFFFF", fontSize: 13, mt: 0.3 }}>
@@ -316,7 +321,7 @@ export default function BulkExportModal({ open, onClose, rows = [], date }) {
               color: "#3f3f3f",
               borderRadius: "8px",
               bgcolor: "#fff",
-              "&:hover": { bgcolor: "rgba(255,255,255,0.2)", color: '#fff' },
+              "&:hover": { bgcolor: "rgba(255,255,255,0.2)", color: "#fff" },
             }}
           >
             <CloseIcon fontSize="small" />
@@ -331,7 +336,7 @@ export default function BulkExportModal({ open, onClose, rows = [], date }) {
             display: "grid",
             gridTemplateColumns: "repeat(6, 1fr)",
             borderBottom: "1px solid #e5e9f0",
-            bgcolor: "#F8FAFC"
+            bgcolor: "#F8FAFC",
           }}
         >
           {[
@@ -416,7 +421,7 @@ export default function BulkExportModal({ open, onClose, rows = [], date }) {
             py: 1,
             // bgcolor: "#f8fafc",
             borderBottom: "1px solid #e5e9f0",
-            bgcolor: "#F4F7FA"
+            bgcolor: "#F4F7FA",
           }}
         >
           <Box />
@@ -456,7 +461,7 @@ export default function BulkExportModal({ open, onClose, rows = [], date }) {
             const pos = item.position || item.job?.title || "-";
             const ci = fmtTime(item.checkInRaw ?? item.check_in);
             const co = fmtTime(item.checkOutRaw ?? item.check_out);
-            const hrs = fmtHours(item.hours) || '-';
+            const hrs = fmtHours(item.hours) || "-";
             const stat = item.status
               ? item.status.charAt(0).toUpperCase() + item.status.slice(1)
               : "-";
