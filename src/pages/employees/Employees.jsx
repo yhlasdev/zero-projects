@@ -101,8 +101,6 @@ const EmployeesPage = () => {
     },
   ];
 
-  console.log('this--employees-----', employeeQuery.data)
-
   return (
     <Box className="employees">
       <Seo

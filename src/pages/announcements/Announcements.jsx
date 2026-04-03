@@ -101,7 +101,7 @@ const AnnouncementsPage = () => {
     },
     {
       key: "CreatedAt",
-      label: t("leaveRequests.date"),
+      label: t("announcements.date"),
       render: (row) => <Box>{formatTimeYear(row.CreatedAt)}</Box>,
     },
     {
@@ -174,8 +174,13 @@ const AnnouncementsPage = () => {
           value={tab}
           onChange={handleTabChange}
           sx={{
-            px: 2,
+            px: 0,
+            ml: -1.5,
+            width: "100%",
             minHeight: "48px",
+            "& .MuiTabs-flexContainer": {
+              justifyContent: "flex-start",
+            },
             "& .MuiTabs-indicator": {
               display: "none",
             },

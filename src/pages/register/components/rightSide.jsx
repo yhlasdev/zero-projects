@@ -131,7 +131,6 @@ export const RightSide = () => {
           password: form.password,
           fcm_token: FCM_TOKEN,
         }
-        console.log('this----', res);
         response = await registerPhone(res);
       } else {
         response = await registerEmail({
@@ -284,6 +283,7 @@ export const RightSide = () => {
               {showPassword ? <EyeClosedIcon /> : <EyeOpenIcon />}
             </IconButton>
           }
+          height={46}
         />
 
         {/* Confirm Password */}
@@ -302,6 +302,7 @@ export const RightSide = () => {
               {showPasswordConfirm ? <EyeClosedIcon /> : <EyeOpenIcon />}
             </IconButton>
           }
+          height={46}
         />
 
         {/* Submit */}

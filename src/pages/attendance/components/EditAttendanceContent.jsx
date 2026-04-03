@@ -99,7 +99,7 @@ const EditAttendance = ({ data, onClose }) => {
             gap={2}
           >
             <Avatar
-              src={`http://194.156.117.223:8004/yerinde/storage-service/attendances/${data?.attendance_id}`}
+              src={`http://194.156.117.223:8004/yerinde/storage-service/attendances/${data?.employee_id}`}
               alt={data?.employee_id}
             />
             <Box>

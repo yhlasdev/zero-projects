@@ -146,6 +146,11 @@
   "tasks": {
     "title": "Wezipeler",
     "subtitle": "Işgärleriň wezipelerini dolandyryň we yzarlaň",
+    "tabs": {
+      "list": "Sanaw",
+      "board": "Tagta",
+      "calendar": "Senenama"
+    },
     "createTask": "Wezipe döret",
     "taskTitle": "Wezipäniň ady",
     "description": "Düşündiriş",
@@ -385,6 +390,7 @@
     "publishedStatus": "Goýberilen",
     "draftStatus": "Garalama",
     "general": "Umumy",
+    "date": "Sene",
     "saving": "Ýatda saklanylýar..."
   },
   "newRequests": {

@@ -92,6 +92,8 @@ export default function EmployeeView({ employee, onClose }) {
 
   const weekLabel = `${start.format("MMM DD")} - ${end.format("DD, YYYY")}`;
 
+  console.log('this-employee-', employee);
+
   return (
     <Box p={3}>
       <Paper
@@ -112,7 +114,7 @@ export default function EmployeeView({ employee, onClose }) {
           marginLeft={2}
           alignItems="center"
         >
-          <Avatar src={employee?.avatar} sx={{ width: 56, height: 56 }} />
+          <Avatar src={`http://194.156.117.223:8004/yerinde/storage-service/avatar/${employee?.user?.user_id}/50x50`} sx={{ width: 56, height: 56 }} />
 
           <Box>
             <Box display="flex" gap={1}>

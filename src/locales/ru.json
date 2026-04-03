@@ -146,6 +146,11 @@
   "tasks": {
     "title": "Задачи",
     "subtitle": "Управление и отслеживание задач сотрудников",
+    "tabs": {
+      "list": "Список",
+      "board": "Доска",
+      "calendar": "Календарь"
+    },
     "createTask": "Создать задачу",
     "taskTitle": "Название задачи",
     "description": "Описание",
@@ -380,6 +385,7 @@
     "publishedStatus": "Опубликовано",
     "draftStatus": "Черновик",
     "general": "Общий",
+    "date": "Дата",
     "saving": "Сохранение..."
   },
   "newRequests": {

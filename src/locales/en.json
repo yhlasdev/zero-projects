@@ -143,6 +143,11 @@
   "tasks": {
     "title": "Task",
     "subtitle": "Manage and track employee tasks",
+    "tabs": {
+      "list": "List",
+      "board": "Board",
+      "calendar": "Calendar"
+    },
     "createTask": "Create Task",
     "taskTitle": "Task Title",
     "description": "Description",
@@ -377,6 +382,7 @@
     "publishedStatus": "Published",
     "draftStatus": "Draft",
     "general": "General",
+    "date": "Date",
     "saving": "Saving..."
   },
   "newRequests": {
