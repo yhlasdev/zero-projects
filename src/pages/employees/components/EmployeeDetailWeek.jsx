@@ -26,6 +26,7 @@ import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import EditWeekContent from "./EditWeekContent";
 import { useDeleteSchedule } from "./useMutation";
 import CloseIcon from "@mui/icons-material/Close";
+import { useLocale } from "../../../hooks/useLocale";
 
 dayjs.extend(isoWeek);
 
@@ -54,6 +55,7 @@ const formatTime = (val) => {
 };
 
 export default function EmployeeView({ employee, onClose }) {
+  const { t } = useLocale();
   const [currentDate, setCurrentDate] = useState(dayjs());
   const [openCreate, setCreate] = useState(false);
   const [openEdit, setEdit] = useState(false);
@@ -132,7 +134,7 @@ export default function EmployeeView({ employee, onClose }) {
               <Box display="flex" gap={0.5} alignItems="center">
                 <CgCalendar fontSize={15} />
                 <Typography variant="body2" color="text.secondary">
-                  ID: {employee?.employee_id}
+                  {t("common.id")}: {employee?.employee_id}
                 </Typography>
               </Box>
 
@@ -182,10 +184,10 @@ export default function EmployeeView({ employee, onClose }) {
       >
         <Box>
           <Typography fontWeight={700} fontSize={21}>
-            Weekly Schedules
+            {t("employees.weeklySchedules")}
           </Typography>
           <Typography variant="body2" fontWeight={400} color="text.secondary">
-            View and manage work schedules by week
+            {t("employees.weeklySchedulesSub")}
           </Typography>
         </Box>
 
@@ -226,7 +228,7 @@ export default function EmployeeView({ employee, onClose }) {
               "&:hover": { bgcolor: "#1e6b4f" },
             }}
           >
-            Edit Week
+            {t("employees.editWeek")}
           </Button>
 
           <Button
@@ -242,7 +244,7 @@ export default function EmployeeView({ employee, onClose }) {
               "&:hover": { backgroundColor: "#081C30" },
             }}
           >
-            Create New Week
+            {t("employees.createNewWeek")}
           </Button>
         </Stack>
       </Stack>
@@ -268,7 +270,7 @@ export default function EmployeeView({ employee, onClose }) {
                 },
               }}
             >
-              Previous
+              {t("common.previous")}
             </Button>
             <Typography>{weekLabel}</Typography>
             <Button
@@ -285,7 +287,7 @@ export default function EmployeeView({ employee, onClose }) {
                 },
               }}
             >
-              Next
+              {t("common.next")}
             </Button>
           </Stack>
         </Stack>
@@ -300,10 +302,10 @@ export default function EmployeeView({ employee, onClose }) {
           color="text.secondary"
           bgcolor="background.default"
         >
-          <Box flex={2}>Day</Box>
-          <Box flex={2}>Shift</Box>
-          <Box flex={2}>Work Time</Box>
-          <Box flex={1}>Hours</Box>
+          <Box flex={2}>{t("employees.day")}</Box>
+          <Box flex={2}>{t("employees.shift")}</Box>
+          <Box flex={2}>{t("employees.workTime")}</Box>
+          <Box flex={1}>{t("employees.hours")}</Box>
         </Stack>
 
         <Divider />
@@ -315,7 +317,7 @@ export default function EmployeeView({ employee, onClose }) {
         ) : !data?.days?.length ? (
           <Box p={3} textAlign="center">
             <Typography color="text.secondary">
-              No schedule found for this week.
+              {t("employees.noScheduleFound")}
             </Typography>
           </Box>
         ) : (
@@ -377,7 +379,7 @@ export default function EmployeeView({ employee, onClose }) {
       </Paper>
 
       <Paper sx={{ padding: 3, borderRadius: 3, mt: 3 }}>
-        <Box sx={{ fontWeight: 700 }}>Week Summary</Box>
+        <Box sx={{ fontWeight: 700 }}>{t("employees.weekSummary")}</Box>
 
         <Stack direction="row" spacing={2} mt={3}>
           <SummaryCard
@@ -386,15 +388,15 @@ export default function EmployeeView({ employee, onClose }) {
                 ? Number(data.total_hours).toFixed(1)
                 : "0"
             }
-            subtitle="Total Hours"
+            subtitle={t("employees.totalHours")}
           />
           <SummaryCard
             title={data?.work_day ?? data?.workDay ?? "0"}
-            subtitle="Work Days"
+            subtitle={t("employees.workDays")}
           />
           <SummaryCard
             title={data?.day_off ?? data?.dayOff ?? "0"}
-            subtitle="Days Off"
+            subtitle={t("employees.daysOff")}
           />
         </Stack>
       </Paper>

@@ -26,7 +26,7 @@ export default function DateLegend({ EVENT_STYLES, dynamicTypes, isDark, t }) {
                 sx={{
                   width: 10,
                   height: 10,
-                  borderRadius: "50%",
+                  borderRadius: "2px",
                   bgcolor: s.dot,
                 }}
               />
@@ -64,7 +64,7 @@ export default function DateLegend({ EVENT_STYLES, dynamicTypes, isDark, t }) {
                   sx={{
                     width: 10,
                     height: 10,
-                    borderRadius: "50%",
+                    borderRadius: "2px",
                     bgcolor: s.dot,
                   }}
                 />

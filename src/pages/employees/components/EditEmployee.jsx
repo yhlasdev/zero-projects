@@ -23,6 +23,9 @@ import {
 import { updateEmployee } from "../../../api/queries/put";
 import DebounceSelect from "../../../components/select/DebounceSelect";
 import toast from "react-hot-toast";
+import dayjs from "dayjs";
+import DateSelect from "../../../components/dateSelect/DateSelect";
+import { useLocale } from "../../../hooks/useLocale";
 
 const CustomFieldLabel = ({ label, ...props }) => (
   <Box sx={{ width: "100%" }}>
@@ -54,6 +57,7 @@ const CustomFieldLabel = ({ label, ...props }) => (
 );
 
 export default function EditEmployeeContent({ employeeId, onClose }) {
+  const { t } = useLocale();
   const queryClient = useQueryClient();
   const MODAL_WIDTH = "896px";
   const MODAL_HEIGHT = "740px";
@@ -110,11 +114,11 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["employees"] });
       await queryClient.invalidateQueries({ queryKey: ["employee", employeeId] });
-      toast.success("Employee updated successfully");
+      toast.success(t("employees.updateSuccess"));
       onClose();
     },
     onError: () => {
-      toast.error("Failed to update employee");
+      toast.error(t("employees.updateFail"));
     }
   });
 
@@ -142,7 +146,7 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
           alignItems: "center",
         }}
       >
-        Ýüklenýär...
+        {t("common.loading")}
       </Box>
     );
 
@@ -171,7 +175,7 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
         <Typography
           sx={{ fontWeight: 600, fontSize: "20px", color: "#101828" }}
         >
-          Update Employee
+          {t("employees.editEmployee")}
         </Typography>
         <IconButton onClick={onClose} size="small">
           <CloseIcon fontSize="small" />
@@ -193,7 +197,7 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
                   color: "#344054",
                 }}
               >
-                Upload photo
+                {t("employees.uploadPhoto")}
               </Typography>
               <Box
                 sx={{
@@ -212,7 +216,7 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
                   sx={{ color: "#667085", fontSize: 28 }}
                 />
                 <Typography sx={{ fontSize: "12px", mt: 1, color: "#475467" }}>
-                  Click to upload or drag and drop
+                  {t("employees.uploadHint")}
                 </Typography>
               </Box>
             </Grid>
@@ -238,7 +242,7 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
                       control={<Radio size="small" />}
                       label={
                         <Typography sx={{ fontSize: "14px" }}>
-                          Active
+                          {t("common.active")}
                         </Typography>
                       }
                     />
@@ -247,7 +251,7 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
                       control={<Radio size="small" />}
                       label={
                         <Typography sx={{ fontSize: "14px" }}>
-                          Inactive
+                          {t("common.inactive")}
                         </Typography>
                       }
                     />
@@ -261,7 +265,7 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
                 name="job_id"
                 control={control}
                 render={({ field }) => (
-                  <CustomFieldLabel label="Job ID" {...field} />
+                  <CustomFieldLabel label={t("employees.jobId")} {...field} />
                 )}
               />
             </Grid>
@@ -280,7 +284,7 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
                         color: "#344054",
                       }}
                     >
-                      Department
+                      {t("common.department")}
                     </Typography>
                     <DebounceSelect
                       value={field.value}
@@ -304,14 +308,15 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
                 name="employee_id"
                 control={control}
                 render={({ field }) => (
-                  <CustomFieldLabel label="Employee ID" {...field} disabled />
+                  <CustomFieldLabel label={t("employees.employeeId")} {...field} disabled />
                 )}
               />
             </Grid>
             <Grid size={6}>
               <CustomFieldLabel
-                label="Nationality"
-                placeholder="Enter nationality"
+                label={t("common.nationality")}
+                disabled
+                placeholder={t("common.nationality")}
                 defaultValue={data?.data?.data?.user?.nationality}
               />
             </Grid>
@@ -321,11 +326,25 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
                 name="hiring_date"
                 control={control}
                 render={({ field }) => (
-                  <CustomFieldLabel
-                    label="Hiring date"
-                    type="date"
-                    {...field}
-                  />
+                  <Box sx={{ width: "100%" }}>
+                    <Typography
+                      sx={{
+                        fontSize: "13px",
+                        fontWeight: 500,
+                        mb: "6px",
+                        color: "#344054",
+                      }}
+                    >
+                      {t("employees.hiringDate")}
+                    </Typography>
+                    <DateSelect
+                      value={field.value ? dayjs(field.value) : null}
+                      onChange={(newValue) => {
+                        field.onChange(newValue ? dayjs(newValue).format("YYYY-MM-DD") : "");
+                      }}
+                      placeholder="Select date"
+                    />
+                  </Box>
                 )}
               />
             </Grid>
@@ -334,11 +353,25 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
                 name="probation_end_date"
                 control={control}
                 render={({ field }) => (
-                  <CustomFieldLabel
-                    label="Probation end date"
-                    type="date"
-                    {...field}
-                  />
+                  <Box sx={{ width: "100%" }}>
+                    <Typography
+                      sx={{
+                        fontSize: "13px",
+                        fontWeight: 500,
+                        mb: "6px",
+                        color: "#344054",
+                      }}
+                    >
+                      {t("employees.probationEnd")}
+                    </Typography>
+                    <DateSelect
+                      value={field.value ? dayjs(field.value) : null}
+                      onChange={(newValue) => {
+                        field.onChange(newValue ? dayjs(newValue).format("YYYY-MM-DD") : "");
+                      }}
+                      placeholder="Select date"
+                    />
+                  </Box>
                 )}
               />
             </Grid>
@@ -348,22 +381,22 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
                 name="working_time"
                 control={control}
                 render={({ field }) => (
-                  <CustomFieldLabel label="Working timing" {...field} />
+                  <CustomFieldLabel label={t("employees.workingTiming")} {...field} />
                 )}
               />
             </Grid>
             <Grid size={6}>
               <CustomFieldLabel
-                label="Office"
-                placeholder="Enter office"
+                label={t("employees.office")}
+                placeholder={t("employees.office")}
                 defaultValue={data?.data?.data?.office?.company_name}
               />
             </Grid>
 
             <Grid size={6}>
               <CustomFieldLabel
-                label="Report to"
-                placeholder="Enter report to"
+                label={t("employees.reportsTo")}
+                placeholder={t("employees.reportsTo")}
                 defaultValue={data?.data?.data?.office?.report_to || ""}
               />
             </Grid>
@@ -392,7 +425,7 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
               py: 1
             }}
           >
-            Cancel
+            {t("common.cancel")}
           </Button>
           <Button
             type="submit"
@@ -407,7 +440,7 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
               "&:hover": { bgcolor: "#0a1d37" },
             }}
           >
-            {mutation.isPending ? "Updating..." : "Update Employee"}
+            {mutation.isPending ? t("employees.updating") : t("employees.updateEmployee")}
           </Button>
         </Box>
       </form>

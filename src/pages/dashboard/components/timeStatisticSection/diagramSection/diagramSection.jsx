@@ -6,9 +6,11 @@ import DebounceSelect from "../../../../../components/select/DebounceSelect"
 import { useQuery } from "@tanstack/react-query"
 import { getAllDepartments, getDahsboardHourStat } from "../../../../../api/queries/getters"
 import { useState } from "react"
+import { useLocale } from "../../../../../hooks/useLocale"
 
 
 export const DiagramSection = () => {
+    const { t } = useLocale();
     const [selectedDepartment, setSelectedDepartment] = useState("Ähli bölümler");
 
     const { data: response, isLoading } = useQuery({
@@ -32,17 +34,17 @@ export const DiagramSection = () => {
         }}>
             <Box sx={{ p: 3 }}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }} >
-                    <Typography sx={{ fontWeight: 600, fontSize: '17.75px' }}> Her günki işlenen sagat sany </Typography>
+                    <Typography sx={{ fontWeight: 600, fontSize: '17.75px' }}> {t('dashboard.dailyWorkedHours')} </Typography>
                     <Box sx={{ width: '200px' }}>
                         <DebounceSelect
                             value={selectedDepartment}
                             onChange={(e) => setSelectedDepartment(e.target.value)}
                             onClear={() => setSelectedDepartment("Ähli bölümler")}
-                            placeholder="Saýlaň..."
+                            placeholder={t('dashboard.selectPlaceholder')}
                         >
-                            <MenuItem value="Ähli bölümler">Ähli bölümler</MenuItem>
+                            <MenuItem value="Ähli bölümler">{t('dashboard.allDepartmentsLabel')}</MenuItem>
                             {isLoading ? (
-                                <MenuItem disabled>Ýüklenýär...</MenuItem>
+                                <MenuItem disabled>{t('common.loading')}</MenuItem>
                             ) : (
                                 allDepartments.map((dept) => (
                                     <MenuItem key={dept.id} value={dept.id}>

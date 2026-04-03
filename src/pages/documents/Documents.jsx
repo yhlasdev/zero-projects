@@ -165,7 +165,7 @@ const DocumentsPage = () => {
               justifyContent: 'center',
               alignItems: 'center',
               height: '100%'
-            }}> Ýüklenýär... </Box>) : isError ? (<Box>Ýalňyşlyk</Box>) : null}
+            }}> {t("common.loading")} </Box>) : isError ? (<Box>{t("common.error")}</Box>) : null}
           {data?.length > 0 ? (
             <Box
               sx={{
