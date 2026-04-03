@@ -16,7 +16,7 @@ import { useState, useEffect } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateJobs } from "../../../api/queries/put";
 import { useLocale } from "../../../hooks/useLocale";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 const EditPositionModal = ({
   open,

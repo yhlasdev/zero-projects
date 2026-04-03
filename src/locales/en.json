@@ -138,7 +138,9 @@
     "updateScheduleFail": "Failed to update schedule!",
     "editWeeklySchedule": "Edit Weekly Schedule",
     "currentWeek": "Current Week",
-    "updateSchedule": "Update Schedule"
+    "updateSchedule": "Update Schedule",
+    "scheduleDeleted": "Schedule deleted successfully",
+    "scheduleDeleteFail": "Failed to delete schedule"
   },
   "tasks": {
     "title": "Task",
@@ -166,7 +168,8 @@
       "low": "Low",
       "clear": "Clear",
       "none": "None"
-    }
+    },
+    "createSuccess": "Successfuly created task"
   },
   "settings": {
     "title": "Company Settings",
@@ -210,11 +213,13 @@
       "email": "Email",
       "phone": "Phone",
       "address": "Address",
-      "success": "Contact information saved successfully."
+      "success": "Contact information saved successfully.",
+      "loadFail": "Failed to load contact information. Please refresh the page."
     },
     "overview": {
       "birthDate": "Manager Birth Date",
-      "success": "Company overview saved successfully."
+      "success": "Company overview saved successfully.",
+      "loadFail": "Failed to load company overview."
     },
     "modal": {
       "addDept": "Add Department",
@@ -245,7 +250,8 @@
     "forgot": "Forgot your password?",
     "submit": "Log in",
     "noAccount": "Don't have an account?",
-    "register": "Register now"
+    "register": "Register now",
+    "loginSuccess": "Logged in successfully!"
   },
   "register": {
     "title": "Create an account",

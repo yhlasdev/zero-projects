@@ -27,7 +27,7 @@ import { getAllDepartments, getAllJobs } from "../../../api/queries/getters";
 import { deleteDepartment, deleteJobs } from "../../../api/queries/delete";
 import { AiOutlineEdit } from "react-icons/ai";
 import { RiDeleteBinLine } from "react-icons/ri";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import CloseIcon from "@mui/icons-material/Close";
 const DeleteConfirmDialog = ({
   open,

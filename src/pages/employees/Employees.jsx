@@ -56,7 +56,7 @@ const EmployeesPage = () => {
       render: (row) => (
         <EmployeeCell
           name={`${row.user?.first_name} ${row.user?.last_name}`}
-          avatar={`http://194.156.117.223:8004/yerinde/storage-service/avatar/${row.user.user_id}/50x50`}
+          avatar={`http://194.156.117.223:8004/yerinde/storage-service/attendances/${row?.employee_id}`}
         />
       ),
     },

@@ -19,7 +19,7 @@ import { deleteDocument } from "../../api/queries/delete";
 import UploadContent from "./components/UploadContent";
 import { useLocale } from "../../hooks/useLocale";
 import { useAppMutation } from "../../hooks/useMutation";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import Seo from "../../components/seo/seo";
 
 const allowedExtensions = [

@@ -20,7 +20,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { createDocument } from "../../../api/queries/post";
 import { useLocale } from "../../../hooks/useLocale";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 import {
   STATUS_OPTIONS,
@@ -63,7 +63,7 @@ export default function CreateTaskModal({ onClose }) {
     mutationFn: (payload) => createDocument(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
-      toast.success("Successfuly created task");
+      toast.success(t("tasks.createSuccess"));
       handleClose();
     },
   });

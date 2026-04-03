@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Box,
   Typography,
@@ -22,7 +22,7 @@ import {
 } from "../../../api/queries/getters";
 import { updateEmployee } from "../../../api/queries/put";
 import DebounceSelect from "../../../components/select/DebounceSelect";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import dayjs from "dayjs";
 import DateSelect from "../../../components/dateSelect/DateSelect";
 import { useLocale } from "../../../hooks/useLocale";
@@ -63,6 +63,42 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
   const MODAL_HEIGHT = "740px";
   const RADIUS_8 = "8px";
   const MODAL_RADIUS = "12px";
+
+  const fileInputRef = useRef(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setSelectedFile(file);
+    setPreviewUrl(URL.createObjectURL(file));
+    setIsUploading(true);
+
+    const fd = new FormData();
+    fd.append("images", file);
+    try {
+      const uploadResponse = await fetch(
+        `http://194.156.117.223:8004/yerinde/storage-service/attendances/${employeeId}`,
+        { method: "POST", body: fd }
+      );
+      if (!uploadResponse.ok) {
+        console.error("Upload failed");
+        toast.error(t("common.error") || "Upload failed");
+      } else {
+        await queryClient.invalidateQueries({ queryKey: ["employees"] });
+        await queryClient.invalidateQueries({ queryKey: ["employee", employeeId] });
+        toast.success(t("common.success") || "Uploaded successfully");
+      }
+    } catch (error) {
+      console.error("Upload error:", error);
+      toast.error(t("common.error") || "Error uploading file");
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
   const { data, isLoading } = useQuery({
     queryKey: ["employee", employeeId],
@@ -122,7 +158,8 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
     }
   });
 
-  const onSubmit = (formData) => {
+  const onSubmit = async (formData) => {
+
     const payload = {
       department_id: Number(formData.department_id),
       employee_id: Number(formData.employee_id),
@@ -200,6 +237,7 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
                 {t("employees.uploadPhoto")}
               </Typography>
               <Box
+                onClick={() => fileInputRef.current?.click()}
                 sx={{
                   border: "1.5px dashed #EAECF0",
                   borderRadius: RADIUS_8,
@@ -210,14 +248,50 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
                   justifyContent: "center",
                   bgcolor: "#F9FAFB",
                   cursor: "pointer",
+                  overflow: "hidden",
+                  position: "relative",
+                  p: previewUrl ? 0 : 2,
                 }}
               >
-                <CloudUploadOutlinedIcon
-                  sx={{ color: "#667085", fontSize: 28 }}
+                {previewUrl ? (
+                  <>
+                    <img
+                      src={previewUrl}
+                      alt="Preview"
+                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    />
+                    {isUploading && (
+                      <Box
+                        sx={{
+                          position: "absolute",
+                          inset: 0,
+                          bgcolor: "rgba(255, 255, 255, 0.7)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <Typography sx={{ fontSize: "13px", fontWeight: 500, color: "#344054" }}>
+                          {t("common.loading") || "Uploading..."}
+                        </Typography>
+                      </Box>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <CloudUploadOutlinedIcon sx={{ color: "#667085", fontSize: 28 }} />
+                    <Typography sx={{ fontSize: "12px", mt: 1, color: "#475467" }}>
+                      {t("employees.uploadHint")}
+                    </Typography>
+                  </>
+                )}
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                  style={{ display: "none" }}
+                  accept="image/*"
                 />
-                <Typography sx={{ fontSize: "12px", mt: 1, color: "#475467" }}>
-                  {t("employees.uploadHint")}
-                </Typography>
               </Box>
             </Grid>
 

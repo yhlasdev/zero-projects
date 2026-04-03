@@ -15,7 +15,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { useState, useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import dayjs from "dayjs";
 import { updateSchedule } from "../../../api/queries/put";
 import { useLocale } from "../../../hooks/useLocale";

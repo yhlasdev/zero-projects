@@ -114,7 +114,7 @@ export default function EmployeeView({ employee, onClose }) {
           marginLeft={2}
           alignItems="center"
         >
-          <Avatar src={`http://194.156.117.223:8004/yerinde/storage-service/avatar/${employee?.user?.user_id}/50x50`} sx={{ width: 56, height: 56 }} />
+          <Avatar src={`http://194.156.117.223:8004/yerinde/storage-service/attendances/${employee?.employee_id}`} sx={{ width: 56, height: 56 }} />
 
           <Box>
             <Box display="flex" gap={1}>

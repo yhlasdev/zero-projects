@@ -18,7 +18,7 @@ import axios from "axios";
 import FieldLabelPasswordInput from "../../../components/textField/passwordTextField";
 import FieldLabel from "../../../components/textField/LabelInput";
 import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import { useLocale } from "../../../hooks/useLocale";
 import { EyeClosedIcon, EyeOpenIcon } from "../../../utils/Icon";
 
@@ -144,7 +144,7 @@ export const RightSide = () => {
           sameSite: "Lax",
         });
         navigate("/dashboard");
-        toast.success("Logged in successfully!");
+        toast.success(t("login.loginSuccess"));
       }
     },
   });

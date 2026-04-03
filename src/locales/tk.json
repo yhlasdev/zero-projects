@@ -110,7 +110,7 @@
     "employeeId": "Işgäriň ID-si",
     "hiringDate": "Iş başlan senesi",
     "reportsTo": "Hasabat berýän adamy",
-    "probation end date": "Synag möhletiniň gutarýan senesi",
+    "probationEnd": "Synag möhletiniň gutarýan senesi",
     "workingTiming": "Iş wagty",
     "office": "Ofis",
     "noRecords": "Gatnaşyk ýazgysy tapylmady",
@@ -141,7 +141,9 @@
     "updateScheduleFail": "Iş tertibini üýtgetmek başartmady!",
     "editWeeklySchedule": "Hepdelik iş tertibini üýtget",
     "currentWeek": "Häzirki hepde",
-    "updateSchedule": "Iş tertibini üýtget"
+    "updateSchedule": "Iş tertibini üýtget",
+    "scheduleDeleted": "Iş tertibi üstünlikli pozuldy",
+    "scheduleDeleteFail": "Iş tertibini pozmak başartmady"
   },
   "tasks": {
     "title": "Wezipeler",
@@ -169,7 +171,8 @@
       "low": "Pes",
       "clear": "Arassala",
       "none": "Ýok"
-    }
+    },
+    "createSuccess": "Wezipe üstünlikli döredildi"
   },
   "settings": {
     "title": "Kompaniýanyň sazlamalary",
@@ -213,11 +216,13 @@
       "email": "E-poçta",
       "phone": "Telefon",
       "address": "Salgysy",
-      "success": "Habarlaşmak üçin maglumatlar ýatda saklandy."
+      "success": "Habarlaşmak üçin maglumatlar ýatda saklandy.",
+      "loadFail": "Habarlaşmak üçin maglumatlary ýükläp bolmady. Sahypany täzelemegiňizi haýyş edýäris."
     },
     "overview": {
       "birthDate": "Menejeriň doglan senesi",
-      "success": "Kompaniýa barada syn ýatda saklandy."
+      "success": "Kompaniýa barada syn ýatda saklandy.",
+      "loadFail": "Kompaniýa barada syny ýükläp bolmady."
     },
     "modal": {
       "addDept": "Bölüm goş",
@@ -248,7 +253,8 @@
     "forgot": "Paroly ýatdan çykardyňyzmy?",
     "submit": "Giriş",
     "noAccount": "Hasabyňyz ýokmy?",
-    "register": "Hasap açyň"
+    "register": "Hasap açyň",
+    "loginSuccess": "Üstünlikli girdiňiz!"
   },
   "register": {
     "title": "Hasap açyň",
