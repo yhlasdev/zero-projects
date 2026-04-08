@@ -38,7 +38,7 @@ const Header = ({ filters, setFilters, setOpenExportModal, handleSearch }) => {
         onChange={(e) =>
           setFilters((prev) => ({
             ...prev,
-            department_ids: e.target.value ? [e.target.value] : [],
+            department_ids: e.target.value ? [Number(e.target.value)] : [],
           }))
         }
         onClear={() =>

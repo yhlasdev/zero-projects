@@ -19,6 +19,7 @@ import { useForm, Controller } from "react-hook-form";
 import {
   getAllDepartment,
   getEmployeeById,
+  getAllJobs,
 } from "../../../api/queries/getters";
 import { updateEmployee } from "../../../api/queries/put";
 import DebounceSelect from "../../../components/select/DebounceSelect";
@@ -65,7 +66,7 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
   const MODAL_RADIUS = "12px";
 
   const fileInputRef = useRef(null);
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [_selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
 
@@ -82,14 +83,16 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
     try {
       const uploadResponse = await fetch(
         `http://194.156.117.223:8004/yerinde/storage-service/attendances/${employeeId}`,
-        { method: "POST", body: fd }
+        { method: "POST", body: fd },
       );
       if (!uploadResponse.ok) {
         console.error("Upload failed");
         toast.error(t("common.error") || "Upload failed");
       } else {
         await queryClient.invalidateQueries({ queryKey: ["employees"] });
-        await queryClient.invalidateQueries({ queryKey: ["employee", employeeId] });
+        await queryClient.invalidateQueries({
+          queryKey: ["employee", employeeId],
+        });
         toast.success(t("common.success") || "Uploaded successfully");
       }
     } catch (error) {
@@ -113,7 +116,7 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
   });
   const departments = departmentsData?.data?.data || [];
 
-  const { control, handleSubmit, reset } = useForm({
+  const { control, handleSubmit, reset, watch } = useForm({
     defaultValues: {
       department_id: 0,
       employee_id: 0,
@@ -125,6 +128,20 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
     },
   });
 
+  const selectedDepartmentId = watch("department_id");
+
+  const { data: jobsData, isLoading: isJobsLoading } = useQuery({
+    queryKey: ["jobs", selectedDepartmentId],
+    queryFn: () => getAllJobs(selectedDepartmentId),
+    enabled: !!selectedDepartmentId,
+  });
+  const jobs = jobsData?.data?.data || [];
+
+  const currentJob = data?.data?.data?.job;
+  const displayJobs = [...jobs];
+  if (currentJob?.id && !displayJobs.some((j) => j.id === currentJob.id)) {
+    displayJobs.push(currentJob);
+  }
   const formatDateForInput = (dateString) => {
     if (!dateString) return "";
     return dateString.split("T")[0];
@@ -161,7 +178,6 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
   });
 
   const onSubmit = async (formData) => {
-
     const payload = {
       department_id: Number(formData.department_id),
       employee_id: Number(formData.employee_id),
@@ -260,7 +276,11 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
                     <img
                       src={previewUrl}
                       alt="Preview"
-                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                      }}
                     />
                     {isUploading && (
                       <Box
@@ -273,7 +293,13 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
                           justifyContent: "center",
                         }}
                       >
-                        <Typography sx={{ fontSize: "13px", fontWeight: 500, color: "#344054" }}>
+                        <Typography
+                          sx={{
+                            fontSize: "13px",
+                            fontWeight: 500,
+                            color: "#344054",
+                          }}
+                        >
                           {t("common.loading") || "Uploading..."}
                         </Typography>
                       </Box>
@@ -281,8 +307,12 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
                   </>
                 ) : (
                   <>
-                    <CloudUploadOutlinedIcon sx={{ color: "#667085", fontSize: 28 }} />
-                    <Typography sx={{ fontSize: "12px", mt: 1, color: "#475467" }}>
+                    <CloudUploadOutlinedIcon
+                      sx={{ color: "#667085", fontSize: 28 }}
+                    />
+                    <Typography
+                      sx={{ fontSize: "12px", mt: 1, color: "#475467" }}
+                    >
                       {t("employees.uploadHint")}
                     </Typography>
                   </>
@@ -338,16 +368,6 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
 
             <Grid size={6}>
               <Controller
-                name="job_id"
-                control={control}
-                render={({ field }) => (
-                  <CustomFieldLabel label="Job ID" {...field} />
-                )}
-              />
-            </Grid>
-
-            <Grid size={6}>
-              <Controller
                 name="department_id"
                 control={control}
                 render={({ field }) => (
@@ -384,7 +404,31 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
                 name="job_id"
                 control={control}
                 render={({ field }) => (
-                  <CustomFieldLabel label="Position" {...field} />
+                  <Box sx={{ width: "100%" }}>
+                    <Typography
+                      sx={{
+                        fontSize: "13px",
+                        fontWeight: 500,
+                        mb: "6px",
+                        color: "#344054",
+                      }}
+                    >
+                      {t("common.position") || "Position"}
+                    </Typography>
+                    <DebounceSelect
+                      value={field.value || ""}
+                      onChange={(e) => field.onChange(e.target.value)}
+                      onClear={() => field.onChange("")}
+                      width="100%"
+                      disabled={isJobsLoading || !selectedDepartmentId}
+                    >
+                      {displayJobs.map((job) => (
+                        <MenuItem key={job.id} value={job.id}>
+                          {job.title}
+                        </MenuItem>
+                      ))}
+                    </DebounceSelect>
+                  </Box>
                 )}
               />
             </Grid>
@@ -394,7 +438,11 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
                 name="employee_id"
                 control={control}
                 render={({ field }) => (
-                  <CustomFieldLabel label={t("employees.employeeId")} {...field} disabled />
+                  <CustomFieldLabel
+                    label={t("employees.employeeId")}
+                    {...field}
+                    disabled
+                  />
                 )}
               />
             </Grid>
@@ -426,7 +474,9 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
                     <DateSelect
                       value={field.value ? dayjs(field.value) : null}
                       onChange={(newValue) => {
-                        field.onChange(newValue ? dayjs(newValue).format("YYYY-MM-DD") : "");
+                        field.onChange(
+                          newValue ? dayjs(newValue).format("YYYY-MM-DD") : "",
+                        );
                       }}
                       placeholder="Select date"
                     />
@@ -453,7 +503,9 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
                     <DateSelect
                       value={field.value ? dayjs(field.value) : null}
                       onChange={(newValue) => {
-                        field.onChange(newValue ? dayjs(newValue).format("YYYY-MM-DD") : "");
+                        field.onChange(
+                          newValue ? dayjs(newValue).format("YYYY-MM-DD") : "",
+                        );
                       }}
                       placeholder="Select date"
                     />
@@ -467,7 +519,10 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
                 name="working_time"
                 control={control}
                 render={({ field }) => (
-                  <CustomFieldLabel label={t("employees.workingTiming")} {...field} />
+                  <CustomFieldLabel
+                    label={t("employees.workingTiming")}
+                    {...field}
+                  />
                 )}
               />
             </Grid>
@@ -476,6 +531,7 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
                 label={t("employees.office")}
                 placeholder={t("employees.office")}
                 defaultValue={data?.data?.data?.office?.company_name}
+                disabled
               />
             </Grid>
 
@@ -483,7 +539,8 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
               <CustomFieldLabel
                 label={t("employees.reportsTo")}
                 placeholder={t("employees.reportsTo")}
-                defaultValue={data?.data?.data?.office?.report_to || ""}
+                disabled
+                defaultValue={data?.data?.data?.office?.manager_name || ""}
               />
             </Grid>
           </Grid>
@@ -526,7 +583,9 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
               "&:hover": { bgcolor: "#0a1d37" },
             }}
           >
-            {mutation.isPending ? t("employees.updating") : t("employees.updateEmployee")}
+            {mutation.isPending
+              ? t("employees.updating")
+              : t("employees.updateEmployee")}
           </Button>
         </Box>
       </form>

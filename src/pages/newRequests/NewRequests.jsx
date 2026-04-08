@@ -104,7 +104,7 @@ const RequestCard = ({ request, isActive, onReject, onApprove, loadingId, t, sta
         <Box mt={1.5} mb={2}>
           <StatusChip status={request.status} statusStyles={statusStyles} />
         </Box>
-
+        {request.status !== "approved" && request.status !== 'rejected' &&
         <Box display="flex" gap={1.5}>
           <Button
             variant="contained"
@@ -155,7 +155,7 @@ const RequestCard = ({ request, isActive, onReject, onApprove, loadingId, t, sta
               t("newRequests.approveBtn")
             )}
           </Button>
-        </Box>
+        </Box>}
       </CardContent>
     </Card>
   );

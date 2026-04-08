@@ -291,7 +291,12 @@
     "noReasonProvided": "Причина не указана.",
     "reject": "Отклонить",
     "approve": "Одобрить",
-    "close": "Закрыть"
+    "close": "Закрыть",
+    "types": {
+      "annual": "Ежегодный отпуск",
+      "sick": "Больничный",
+      "unpaid": "Отпуск за свой счет"
+    }
   },
   "letterRequests": {
     "attachment": "Вложение"

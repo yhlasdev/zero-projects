@@ -58,7 +58,7 @@ export const getAllAttendance = async ({
     page,
     limit,
     date,
-    department_ids,
+    department_ids: department_ids?.join(","),
     status: status?.join(","),
     search,
   });
@@ -92,11 +92,12 @@ export const getLeavesById = async (id) => {
   return await api.getPrivate(`/company-service/leaves/get/${id}`);
 };
 
-export const getAllDocuments = async ({ page, limit, search }) => {
+export const getAllDocuments = async ({ page, limit, search, file_types }) => {
   return await api.getPrivate("/company-service/documents/get-all", {
     page,
     limit,
     search,
+    file_types: file_types?.join(","),
   });
 };
 
@@ -219,5 +220,6 @@ export const getTaskList = async ({ status, page, limit }) => {
 };
 
 export const getProfile = async () => {
-  const response = await api.getPrivate('')
+  const response = await api.getPrivate('');
+  return response;
 }

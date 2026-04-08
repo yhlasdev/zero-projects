@@ -25,6 +25,12 @@ import CustomTimePicker from "./CustomDateSelect";
 const EditAttendance = ({ data, onClose }) => {
   const { AttendanceValid } = useValidSchema();
   const { mode } = useColorScheme();
+  const parseTime = (timeStr) => {
+    if (!timeStr) return null;
+    if (timeStr.includes("T")) return dayjs(timeStr);
+    return dayjs(`${dayjs().format("YYYY-MM-DD")}T${timeStr}`);
+  };
+
   const {
     control,
     handleSubmit,
@@ -32,8 +38,8 @@ const EditAttendance = ({ data, onClose }) => {
   } = useForm({
     defaultValues: {
       attendance_id: data.attendance_id,
-      check_in: data.checkInRaw ? dayjs(data.checkInRaw) : null,
-      check_out: data.checkOutRaw ? dayjs(data.checkOutRaw) : null,
+      check_in: parseTime(data.checkInRaw),
+      check_out: parseTime(data.checkOutRaw),
       status: data.status,
       reason: data.reason || "",
     },
@@ -52,8 +58,8 @@ const EditAttendance = ({ data, onClose }) => {
   const submitHandler = async (formData) => {
     await mutation.mutateAsync({
       attendance_id: Number(formData.attendance_id),
-      check_in: formData.check_in,
-      check_out: formData.check_out,
+      check_in: formData.check_in ? dayjs(formData.check_in).format("HH:mm") : null,
+      check_out: formData.check_out ? dayjs(formData.check_out).format("HH:mm") : null,
       status: formData.status,
       reason: formData.reason,
     });

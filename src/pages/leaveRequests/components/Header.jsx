@@ -7,14 +7,15 @@ import { useLocale } from "../../../hooks/useLocale";
 const Header = ({ setFilter, filters }) => {
   const { t } = useLocale();
   const AllTypes = [
-    { value: "annual", label: t('attendance.annual') },
-    { value: "slick", label: t('attendance.slick') },
-    { value: "unpaid", label: t('attendance.unpaid') },
+    { value: "annual", label: t('leaveRequests.types.annual') },
+    { value: "sick", label: t('leaveRequests.types.sick') },
+    { value: "unpaid", label: t('leaveRequests.types.unpaid') },
   ];
 
   const AllStatus = [
-    { value: "pending", label: t('common.pending') },
-    { value: "approved", label: t('common.approved') },
+    { value: "pending", label: 'Pending' },
+    { value: "approve", label: 'Approve' },
+    { value: "rejected", label: 'Rejected' },
   ];
 
 
@@ -22,7 +23,7 @@ const Header = ({ setFilter, filters }) => {
     <HeaderAppBar>
       <Box width={"100%"} display={"flex"} gap={3}>
         <DebounceSelect
-          label={t('common.allTypes')}
+          label={t('leaveRequests.leaveType')}
           width="297px"
 
           value={filters.type || ""}
@@ -37,7 +38,7 @@ const Header = ({ setFilter, filters }) => {
         </DebounceSelect>
 
         <DebounceSelect
-          label={t('common.allStatus')}
+          label={t('common.status')}
           width="297px"
 
           value={filters.status || ""}

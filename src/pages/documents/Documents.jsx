@@ -39,16 +39,16 @@ const DocumentsPage = () => {
   const { open, openSet, closeSet } = useOpenCloseDrawer();
   const [filters, setFilter] = useState({
     search: "",
-    fileTypes: [],
+    file_types: [],
   });
   const [editingDoc, setEditingDoc] = useState(null);
 
   const handleSearch = (val) => setFilter((prev) => ({ ...prev, search: val }));
   const handleTypeSelect = (e) => setFilter((prev) => ({
     ...prev,
-    fileTypes: typeof e.target.value === 'string' ? e.target.value.split(',') : e.target.value
+    file_types: typeof e.target.value === 'string' ? e.target.value.split(',') : e.target.value
   }));
-  const handleClearType = () => setFilter((prev) => ({ ...prev, fileTypes: [] }));
+  const handleClearType = () => setFilter((prev) => ({ ...prev, file_types: [] }));
   const handleEdit = (doc) => {
     setEditingDoc(doc);
     openSet();
@@ -139,10 +139,10 @@ const DocumentsPage = () => {
             <DebounceSelect
               multiple
               width="297px"
-              value={filters.fileTypes || []}
+              value={filters.file_types || []}
               onChange={handleTypeSelect}
               onClear={handleClearType}
-              label={t("documents.fileTypes")}
+              label={t("documents.file_types")}
               displayEmpty
             >
               <MenuItem value="" disabled sx={{ display: 'none' }}>

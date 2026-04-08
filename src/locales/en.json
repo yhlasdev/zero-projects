@@ -288,7 +288,12 @@
     "noReasonProvided": "No reason provided.",
     "reject": "Reject",
     "approve": "Approve",
-    "close": "Close"
+    "close": "Close",
+    "types": {
+      "annual": "Annual",
+      "sick": "Sick",
+      "unpaid": "Unpaid"
+    }
   },
   "letterRequests": {
     "attachment": "Attachment"
