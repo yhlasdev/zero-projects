@@ -10,24 +10,26 @@ import ListView from "./ListView";
 import BoardView from "./BoardView";
 import CalendarView from "./CalendarView";
 import FilterPopover from "./FilterPopover";
+import { useLocale } from "../../../hooks/useLocale";
 
 const TaskDetailView = ({ tasks = [], onOpenCreateModal }) => {
+  const { t } = useLocale();
   const [filterAnchorEl, setFilterAnchorEl] = useState(null);
   const [filters, setFilters] = useState({});
 
   const VIEWS = [
     {
-      label: "List",
+      label: t("tasks.tabs.list"),
       icon: <ListIcon sx={{ fontSize: 15 }} />,
       component: ListView,
     },
     {
-      label: "Board",
+      label: t("tasks.tabs.board"),
       icon: <BoardIcon sx={{ fontSize: 15 }} />,
       component: BoardView,
     },
     {
-      label: "Calendar",
+      label: t("tasks.tabs.calendar"),
       icon: <CalendarTodayIcon sx={{ fontSize: 15 }} />,
       component: CalendarView,
     },
@@ -84,15 +86,15 @@ const TaskDetailView = ({ tasks = [], onOpenCreateModal }) => {
                     fontWeight: isActive ? 700 : 400,
                     "&::after": isActive
                       ? {
-                          content: '""',
-                          position: "absolute",
-                          bottom: 0,
-                          left: 0,
-                          right: 0,
-                          height: "2px",
-                          bgcolor: "#1a2b4a",
-                          borderRadius: "2px 2px 0 0",
-                        }
+                        content: '""',
+                        position: "absolute",
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        height: "2px",
+                        bgcolor: "#1a2b4a",
+                        borderRadius: "2px 2px 0 0",
+                      }
                       : {},
                     "&:hover": { color: "#1a2b4a" },
                     transition: "color 0.15s",
@@ -180,7 +182,7 @@ const TaskDetailView = ({ tasks = [], onOpenCreateModal }) => {
             <InputBase
               placeholder="Search..."
               value={filters.search || ""}
-              onChange={(e) => setFilters(prev => ({...prev, search: e.target.value}))}
+              onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
               sx={{ fontSize: "13px", flex: 1 }}
               inputProps={{ style: { padding: 0 } }}
             />

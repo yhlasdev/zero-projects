@@ -15,6 +15,7 @@ import { getLeavesById } from "../../../api/queries/getters";
 import { useAppMutation } from "../../../hooks/useMutation";
 import { updateLeaves } from "../../../api/queries/put";
 import { formatTimeYear } from "../../../utils/formatTime";
+import { useLocale } from "../../../hooks/useLocale";
 
 const leaveTypeColors = {
   annual: { bg: "#0a64da", color: "#2563EB" },
@@ -29,6 +30,7 @@ const statusColors = {
 };
 
 const EditLeaveRequest = ({ leave_id, onClose }) => {
+  const { t } = useLocale();
   const {
     data: leaveResponse,
     isLoading,
@@ -77,10 +79,10 @@ const EditLeaveRequest = ({ leave_id, onClose }) => {
           textAlign="center"
         >
           <Typography color="error" gutterBottom>
-            Failed to load request details.
+            {t('leaveRequests.failedToLoad')}
           </Typography>
           <Button variant="outlined" onClick={onClose}>
-            Close
+            {t('leaveRequests.close')}
           </Button>
         </Box>
       ) : (
@@ -102,7 +104,7 @@ const EditLeaveRequest = ({ leave_id, onClose }) => {
                 verticalAlign: "middle",
               }}
             >
-              Edit Attendance Record
+              {t('leaveRequests.editAttendanceRecord')}
             </Typography>
             <IconButton size="small" onClick={onClose}>
               <CloseIcon sx={{ width: "21px", height: "21px" }} />
@@ -118,7 +120,7 @@ const EditLeaveRequest = ({ leave_id, onClose }) => {
               <Box display="grid" gridTemplateColumns="1fr 1fr" gap={3}>
                 <Box>
                   <Typography fontSize={13} color="text.secondary">
-                    Employee
+                    {t('common.employee')}
                   </Typography>
                   <Typography
                     fontWeight={500}
@@ -131,21 +133,21 @@ const EditLeaveRequest = ({ leave_id, onClose }) => {
                       : "-"}
                   </Typography>
                   <Typography fontSize={13} mt={3} color="text.secondary">
-                    Position
+                    {t('common.position')}
                   </Typography>
                   <Typography>{data?.job?.title || "-"}</Typography>
                 </Box>
                 <Box>
                   <Typography fontSize={13} color="text.secondary">
-                    Department
+                    {t('common.department')}
                   </Typography>
                   <Typography fontWeight={500} mb={1}>
                     {data?.department?.name || "-"}
                   </Typography>
                   <Typography fontSize={13} mt={2.5} color="text.secondary">
-                    Leave Balance
+                    {t('leaveRequests.leaveBalance')}
                   </Typography>
-                  <Typography>{data?.leave_balance || 0} days</Typography>
+                  <Typography>{data?.leave_balance || 0}</Typography>
                 </Box>
               </Box>
             </Paper>
@@ -154,10 +156,10 @@ const EditLeaveRequest = ({ leave_id, onClose }) => {
             <Box display="grid" gridTemplateColumns="1fr 1fr" gap={3} mb={3}>
               <Box>
                 <Typography fontSize={13} color="text.secondary">
-                  Leave Type
+                  {t('leaveRequests.leaveType')}
                 </Typography>
                 <Chip
-                  label={data?.leave_type || "Unknown"}
+                  label={data?.leave_type || t('leaveRequests.unknown')}
                   size="small"
                   sx={{
                     mt: 0.5,
@@ -170,10 +172,10 @@ const EditLeaveRequest = ({ leave_id, onClose }) => {
               </Box>
               <Box>
                 <Typography fontSize={13} color="text.secondary">
-                  Status
+                  {t('common.status')}
                 </Typography>
                 <Chip
-                  label={data?.leave_status || "Pending"}
+                  label={data?.leave_status || t('common.pending')}
                   size="small"
                   sx={{
                     mt: 0.5,
@@ -186,7 +188,7 @@ const EditLeaveRequest = ({ leave_id, onClose }) => {
               </Box>
               <Box>
                 <Typography fontSize={13} color="text.secondary">
-                  Start Date
+                  {t('leaveRequests.startDate')}
                 </Typography>
                 <Typography fontSize={"16px"}>
                   {formatTimeYear(data?.start_date)}
@@ -194,25 +196,25 @@ const EditLeaveRequest = ({ leave_id, onClose }) => {
               </Box>
               <Box>
                 <Typography fontSize={13} color="text.secondary">
-                  End Date
+                  {t('leaveRequests.endDate')}
                 </Typography>
                 <Typography>{formatTimeYear(data?.end_date)}</Typography>
               </Box>
               <Box>
                 <Typography fontSize={13} color="text.secondary">
-                  Total Days
+                  {t('leaveRequests.days')}
                 </Typography>
-                <Typography>{data?.total_days || 0} days</Typography>
+                <Typography>{data?.total_days || 0}</Typography>
               </Box>
               <Box>
                 <Typography fontSize={13} color="text.secondary">
-                  Applied Date
+                  {t('leaveRequests.appliedDate')}
                 </Typography>
                 <Typography>{formatTimeYear(data?.applied_date)}</Typography>
               </Box>
               <Box gridColumn="span 2">
                 <Typography fontSize={13} color="text.secondary" mb={0.5}>
-                  Reason
+                  {t('leaveRequests.reason')}
                 </Typography>
                 <Typography
                   sx={{
@@ -222,7 +224,7 @@ const EditLeaveRequest = ({ leave_id, onClose }) => {
                     border: "1px solid #e9ecef",
                   }}
                 >
-                  {data?.reason || "No reason provided."}
+                  {data?.reason || t('leaveRequests.noReasonProvided')}
                 </Typography>
               </Box>
             </Box>
@@ -237,7 +239,7 @@ const EditLeaveRequest = ({ leave_id, onClose }) => {
                 onClick={onClose}
                 disabled={mutation.isPending}
               >
-                Reject
+                {t('leaveRequests.reject')}
               </Button>
               <Button
                 variant="contained"
@@ -248,7 +250,7 @@ const EditLeaveRequest = ({ leave_id, onClose }) => {
                 {mutation.isPending ? (
                   <CircularProgress size={24} color="inherit" />
                 ) : (
-                  "Approve"
+                  t('leaveRequests.approve')
                 )}
               </Button>
             </Box>

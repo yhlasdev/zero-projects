@@ -14,8 +14,9 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import { createWeaklySchedule } from "../../../api/queries/post";
+import { useLocale } from "../../../hooks/useLocale";
 
 const SHIFT_DEFAULTS = {
   "Morning Shift": { start: "08:00", end: "16:00" },
@@ -106,6 +107,7 @@ const buildDays = (mondayDate) =>
   });
 
 export default function CreateScheduleModalContent({ onClose, employeeId }) {
+  const { t } = useLocale();
   const [selectedWeekIdx, setSelectedWeekIdx] = useState(0);
   const [schedule, setSchedule] = useState(() =>
     buildDays(WEEK_OPTIONS[0].monday),
@@ -151,11 +153,11 @@ export default function CreateScheduleModalContent({ onClose, employeeId }) {
   const { mutate, isPending } = useMutation({
     mutationFn: createWeaklySchedule,
     onSuccess: () => {
-      toast.success("Schedule created successfully!");
+      toast.success(t("employees.scheduleCreated"));
       onClose?.();
     },
     onError: (err) => {
-      const errorMessage = err?.response?.data?.message || "Schedule already exists or invalid!";
+      const errorMessage = err?.response?.data?.message || t("employees.scheduleExist");
       toast.error(errorMessage);
     },
   });
@@ -192,7 +194,7 @@ export default function CreateScheduleModalContent({ onClose, employeeId }) {
           alignItems="flex-start"
         >
           <Typography fontSize={20} fontWeight={700} mb={3}>
-            Create New Weekly Schedule
+            {t("employees.createNewWeeklySchedule")}
           </Typography>
           <IconButton
             onClick={onClose}
@@ -215,7 +217,7 @@ export default function CreateScheduleModalContent({ onClose, employeeId }) {
           {/* WEEK SELECT */}
           <Box mb={3}>
             <Typography mb={1} fontSize={14} fontWeight={500}>
-              Select Week
+              {t("employees.selectWeek")}
             </Typography>
             <Select
               fullWidth
@@ -257,22 +259,22 @@ export default function CreateScheduleModalContent({ onClose, employeeId }) {
             >
               <Box flex={2}>
                 <Typography fontSize={14} fontWeight={600} color="#6B7280">
-                  Day
+                  {t("employees.day")}
                 </Typography>
               </Box>
               <Box flex={2}>
                 <Typography fontSize={14} fontWeight={600} color="#6B7280">
-                  Shift Type
+                  {t("employees.shift")}
                 </Typography>
               </Box>
               <Box flex={3}>
                 <Typography fontSize={14} fontWeight={600} color="#6B7280">
-                  Work Time
+                  {t("employees.workTime")}
                 </Typography>
               </Box>
               <Box flex={1} textAlign="right">
                 <Typography fontSize={14} fontWeight={600} color="#6B7280">
-                  Hours
+                  {t("employees.hours")}
                 </Typography>
               </Box>
             </Stack>
@@ -407,7 +409,7 @@ export default function CreateScheduleModalContent({ onClose, employeeId }) {
                 "&:hover": { bgcolor: "#F3F4F6" },
               }}
             >
-              Cancel
+              {t("common.cancel")}
             </Button>
 
             <Button
@@ -426,7 +428,7 @@ export default function CreateScheduleModalContent({ onClose, employeeId }) {
                 "&:disabled": { bgcolor: "#9CA3AF" },
               }}
             >
-              {isPending ? "Creating..." : "Create Schedule"}
+              {isPending ? t("employees.creating") : t("employees.createSchedule")}
             </Button>
           </Stack>
         </Box>

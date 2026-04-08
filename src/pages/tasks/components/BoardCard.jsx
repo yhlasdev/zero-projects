@@ -56,12 +56,11 @@ export const formatDate = (dateStr) => {
 };
 
 export const ParticipantAvatars = ({ participants = [] }) => {
-  const visible = participants.slice(0, 4);
-  const extra = participants.length - 4;
+  const isMoreThanTwo = participants.length > 2;
+  const visible = isMoreThanTwo ? participants.slice(0, 2) : participants;
   return (
     <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
       <AvatarGroup
-        max={4}
         sx={{
           "& .MuiAvatar-root": {
             width: 24,
@@ -88,11 +87,11 @@ export const ParticipantAvatars = ({ participants = [] }) => {
           </Tooltip>
         ))}
       </AvatarGroup>
-      {extra > 0 && (
+      {isMoreThanTwo && (
         <Typography
           sx={{ fontSize: "11px", color: "#6b7280", fontWeight: 600 }}
         >
-          {extra}+
+          2+
         </Typography>
       )}
     </Box>

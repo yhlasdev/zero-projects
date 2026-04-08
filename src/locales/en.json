@@ -66,7 +66,35 @@
     "currentMonth": "Current Month (Details)",
     "lastMonth": "Last Month (Details)",
     "reportTitle": "Attendance Report",
-    "reportSubtitle": "Track and manage employee attendance records"
+    "reportSubtitle": "Track and manage employee attendance records",
+    "totalCurrentMonth": "Total (this month)",
+    "totalLastMonth": "Total (last month)",
+    "avgCurrentMonth": "Average (this month)",
+    "hoursDisplay": "hours",
+    "hoursPerDay": "hours/day",
+    "change": "Change",
+    "thisMonthLabel": "This month",
+    "lastMonthLabel": "Last month",
+    "mostWorkedDay": "Most worked day",
+    "leastWorkedDay": "Least worked day",
+    "dailyAverage": "Daily average",
+    "allDepartmentsLabel": "All departments",
+    "dailyWorkedHours": "Daily worked hours",
+    "selectPlaceholder": "Select...",
+    "months": {
+      "jan": "Jan.",
+      "feb": "Feb.",
+      "mar": "Mar.",
+      "apr": "Apr.",
+      "may": "May",
+      "jun": "Jun.",
+      "jul": "Jul.",
+      "aug": "Aug.",
+      "sep": "Sep.",
+      "oct": "Oct.",
+      "nov": "Nov.",
+      "dec": "Dec."
+    }
   },
   "employees": {
     "title": "Employee",
@@ -84,15 +112,44 @@
     "office": "Office",
     "noRecords": "No attendance records found",
     "weeklySchedules": "Weekly Schedules",
+    "weeklySchedulesSub": "View and manage work schedules by week",
+    "editWeek": "Edit Week",
+    "createNewWeek": "Create New Week",
     "day": "Day",
     "shift": "Shift",
     "workTime": "Work Time",
     "hours": "Hours",
-    "weekSummary": "Week Summary"
+    "noScheduleFound": "No schedule found for this week.",
+    "weekSummary": "Week Summary",
+    "totalHours": "Total Hours",
+    "workDays": "Work Days",
+    "daysOff": "Days Off",
+    "updateEmployee": "Update Employee",
+    "updating": "Updating...",
+    "updateSuccess": "Employee updated successfully",
+    "jobId": "Job ID",
+    "scheduleCreated": "Schedule created successfully!",
+    "scheduleExist": "Schedule already exists or invalid!",
+    "createNewWeeklySchedule": "Create New Weekly Schedule",
+    "selectWeek": "Select Week",
+    "creating": "Creating...",
+    "createSchedule": "Create Schedule",
+    "scheduleUpdated": "Schedule updated successfully!",
+    "updateScheduleFail": "Failed to update schedule!",
+    "editWeeklySchedule": "Edit Weekly Schedule",
+    "currentWeek": "Current Week",
+    "updateSchedule": "Update Schedule",
+    "scheduleDeleted": "Schedule deleted successfully",
+    "scheduleDeleteFail": "Failed to delete schedule"
   },
   "tasks": {
     "title": "Task",
     "subtitle": "Manage and track employee tasks",
+    "tabs": {
+      "list": "List",
+      "board": "Board",
+      "calendar": "Calendar"
+    },
     "createTask": "Create Task",
     "taskTitle": "Task Title",
     "description": "Description",
@@ -111,7 +168,8 @@
       "low": "Low",
       "clear": "Clear",
       "none": "None"
-    }
+    },
+    "createSuccess": "Successfuly created task"
   },
   "settings": {
     "title": "Company Settings",
@@ -155,11 +213,13 @@
       "email": "Email",
       "phone": "Phone",
       "address": "Address",
-      "success": "Contact information saved successfully."
+      "success": "Contact information saved successfully.",
+      "loadFail": "Failed to load contact information. Please refresh the page."
     },
     "overview": {
       "birthDate": "Manager Birth Date",
-      "success": "Company overview saved successfully."
+      "success": "Company overview saved successfully.",
+      "loadFail": "Failed to load company overview."
     },
     "modal": {
       "addDept": "Add Department",
@@ -190,7 +250,8 @@
     "forgot": "Forgot your password?",
     "submit": "Log in",
     "noAccount": "Don't have an account?",
-    "register": "Register now"
+    "register": "Register now",
+    "loginSuccess": "Logged in successfully!"
   },
   "register": {
     "title": "Create an account",
@@ -217,7 +278,17 @@
     "leaveType": "Leave Type",
     "startDate": "Start Date",
     "endDate": "End Date",
-    "days": "Days"
+    "days": "Days",
+    "failedToLoad": "Failed to load request details.",
+    "editAttendanceRecord": "Edit Attendance Record",
+    "leaveBalance": "Leave Balance",
+    "unknown": "Unknown",
+    "appliedDate": "Applied Date",
+    "reason": "Reason",
+    "noReasonProvided": "No reason provided.",
+    "reject": "Reject",
+    "approve": "Approve",
+    "close": "Close"
   },
   "letterRequests": {
     "attachment": "Attachment"
@@ -226,9 +297,12 @@
     "title": "Company Documents",
     "subTitle": "Manage and share company documents",
     "uploadDoc": "Upload Document",
+    "editDoc": "Edit Document",
     "fileTypes": "File Types",
+    "allTypes": "All Types",
     "noDocs": "No documents found.",
     "deleteErr": "Failed to delete document",
+    "downloadErr": "Download failed",
     "upload": {
       "title": "Document Title",
       "titlePlaceholder": "Enter document title",
@@ -314,6 +388,7 @@
     "publishedStatus": "Published",
     "draftStatus": "Draft",
     "general": "General",
+    "date": "Date",
     "saving": "Saving..."
   },
   "newRequests": {

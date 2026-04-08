@@ -15,9 +15,10 @@ import CloseIcon from "@mui/icons-material/Close";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { useState, useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import dayjs from "dayjs";
 import { updateSchedule } from "../../../api/queries/put";
+import { useLocale } from "../../../hooks/useLocale";
 
 const SHIFT_DEFAULTS = {
   MORNING: { start: "08:00", end: "16:00" },
@@ -54,6 +55,7 @@ const calculateHours = (start, end) => {
 };
 
 export default function EditWeekContent({ onClose, scheduleData, onDelete }) {
+  const { t } = useLocale();
   const [schedule, setSchedule] = useState([]);
 
   useEffect(() => {
@@ -119,12 +121,12 @@ export default function EditWeekContent({ onClose, scheduleData, onDelete }) {
   const { mutate, isPending } = useMutation({
     mutationFn: updateSchedule,
     onSuccess: () => {
-      toast.success("Schedule updated successfully!");
+      toast.success(t("employees.scheduleUpdated"));
       onClose?.();
     },
     onError: (err) => {
       const errorMessage =
-        err?.response?.data?.message || "Failed to update schedule!";
+        err?.response?.data?.message || t("employees.updateScheduleFail");
       toast.error(errorMessage);
     },
   });
@@ -152,7 +154,7 @@ export default function EditWeekContent({ onClose, scheduleData, onDelete }) {
       ? `${dayjs(scheduleData.week_start).format("MMM DD")}-${dayjs(scheduleData.week_end).format("DD, YYYY")}`
       : scheduleData?.weekStart && scheduleData?.weekEnd
         ? `${dayjs(scheduleData.weekStart).format("MMM DD")}-${dayjs(scheduleData.weekEnd).format("DD, YYYY")}`
-        : "Loading...";
+        : t("common.loading");
 
   return (
     <>
@@ -166,7 +168,7 @@ export default function EditWeekContent({ onClose, scheduleData, onDelete }) {
           alignItems="flex-start"
         >
           <Typography fontSize={20} fontWeight={700} mb={3}>
-            Edit Weekly Schedule
+            {t("employees.editWeeklySchedule")}
           </Typography>
           <IconButton
             onClick={onClose}
@@ -189,7 +191,7 @@ export default function EditWeekContent({ onClose, scheduleData, onDelete }) {
           {/* CURRENT WEEK */}
           <Box mb={3}>
             <Typography mb={1} fontSize={14} fontWeight={500}>
-              Current Week
+              {t("employees.currentWeek")}
             </Typography>
             <Box
               sx={{
@@ -225,22 +227,22 @@ export default function EditWeekContent({ onClose, scheduleData, onDelete }) {
             >
               <Box flex={2}>
                 <Typography fontSize={14} fontWeight={600} color="#6B7280">
-                  Day
+                  {t("employees.day")}
                 </Typography>
               </Box>
               <Box flex={2}>
                 <Typography fontSize={14} fontWeight={600} color="#6B7280">
-                  Shift Type
+                  {t("employees.shift")}
                 </Typography>
               </Box>
               <Box flex={3}>
                 <Typography fontSize={14} fontWeight={600} color="#6B7280">
-                  Work Time
+                  {t("employees.workTime")}
                 </Typography>
               </Box>
               <Box flex={1} textAlign="right">
                 <Typography fontSize={14} fontWeight={600} color="#6B7280">
-                  Hours
+                  {t("employees.hours")}
                 </Typography>
               </Box>
             </Stack>
@@ -373,7 +375,7 @@ export default function EditWeekContent({ onClose, scheduleData, onDelete }) {
                 },
               }}
             >
-              Delete
+              {t("common.delete")}
             </Button>
 
             <Stack direction="row" spacing={2}>
@@ -388,7 +390,7 @@ export default function EditWeekContent({ onClose, scheduleData, onDelete }) {
                   "&:hover": { bgcolor: "#F3F4F6" },
                 }}
               >
-                Cancel
+                {t("common.cancel")}
               </Button>
 
               <Button
@@ -407,7 +409,7 @@ export default function EditWeekContent({ onClose, scheduleData, onDelete }) {
                   "&:disabled": { bgcolor: "#9CA3AF" },
                 }}
               >
-                {isPending ? "Updating..." : "Update Schedule"}
+                {isPending ? t("employees.updating") : t("employees.updateSchedule")}
               </Button>
             </Stack>
           </Stack>

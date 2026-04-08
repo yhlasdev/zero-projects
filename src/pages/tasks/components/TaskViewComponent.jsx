@@ -53,8 +53,8 @@ export const AssigneeAvatar = ({ assignee }) => (
 
 // ─── Team Avatars ─────────────────────────────────────────────────────────────
 export const TeamAvatars = ({ team = [] }) => {
-  const visible = team.slice(0, 3);
-  const extra = team.length - visible.length;
+  const isMoreThanFour = team.length > 4;
+  const visible = isMoreThanFour ? team.slice(0, 4) : team;
 
   return (
     <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -68,7 +68,7 @@ export const TeamAvatars = ({ team = [] }) => {
               fontWeight: 600,
               ml: i === 0 ? 0 : "-8px",
               border: "2px solid #fff",
-              bgcolor: ["#90CAF9", "#A5D6A7", "#FFCC80"][i % 3],
+              bgcolor: ["#90CAF9", "#A5D6A7", "#FFCC80", "#E1BEE7"][i % 4],
               color: "#333",
               zIndex: visible.length - i,
             }}
@@ -77,7 +77,7 @@ export const TeamAvatars = ({ team = [] }) => {
           </Avatar>
         </Tooltip>
       ))}
-      {extra > 0 && (
+      {isMoreThanFour && (
         <Avatar
           sx={{
             width: 28,
@@ -91,7 +91,7 @@ export const TeamAvatars = ({ team = [] }) => {
             zIndex: 0,
           }}
         >
-          {extra}+
+          4+
         </Avatar>
       )}
     </Box>

@@ -9,6 +9,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { useState, useEffect } from "react";
 import { getTaskCalendar } from "../../../api/queries/getters";
+import CalendarCell from "./CalendarCell";
 
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const MONTHS = [
@@ -450,9 +451,9 @@ const CalendarView = () => {
           >
             <Box
               sx={{
-                width: 10,
-                height: 10,
-                borderRadius: "50%",
+                width: 16,
+                height: 16,
+                borderRadius: "4px",
                 bgcolor: cfg.border,
               }}
             />

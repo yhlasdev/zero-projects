@@ -11,6 +11,7 @@ import {
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import { getMainCalendar } from "../../../api/queries/getters";
 import { useLocale } from "../../../hooks/useLocale";
+import HeaderAppBar from "../../../components/appBar/AppBar";
 
 import {
   LEGEND_STATIC,
@@ -124,43 +125,51 @@ const MainCalendar = () => {
 
   return (
     <Box sx={{ position: "relative" }}>
-      <IconButton
-        onClick={handlePrev}
-        size="small"
-        sx={{
-          position: "absolute",
-          left: -8,
-          top: "50%",
-          transform: "translateY(-50%)",
-          zIndex: 2,
-          color: isDark ? "#9ca3af" : "#6b7280",
-          "&:hover": { color: isDark ? "#e5e7eb" : "#111827" },
-        }}
-      >
-        <ChevronLeft fontSize="small" />
-      </IconButton>
+      <HeaderAppBar>
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <IconButton
+            onClick={handlePrev}
+            size="small"
+            sx={{
+              color: isDark ? "#9ca3af" : "#6b7280",
+              "&:hover": { color: isDark ? "#e5e7eb" : "#111827" },
+            }}
+          >
+            <ChevronLeft fontSize="small" />
+          </IconButton>
 
-      <IconButton
-        onClick={handleNext}
-        size="small"
-        sx={{
-          position: "absolute",
-          right: -8,
-          top: "50%",
-          transform: "translateY(-50%)",
-          zIndex: 2,
-          color: isDark ? "#9ca3af" : "#6b7280",
-          "&:hover": { color: isDark ? "#e5e7eb" : "#111827" },
-        }}
-      >
-        <ChevronRight fontSize="small" />
-      </IconButton>
+          <Typography
+            sx={{ fontWeight: 700, fontSize: "18px", letterSpacing: 0, color: "text.primary" }}
+          >
+            {MONTHS[month]} {year}
+          </Typography>
+
+          <IconButton
+            onClick={handleNext}
+            size="small"
+            sx={{
+              color: isDark ? "#9ca3af" : "#6b7280",
+              "&:hover": { color: isDark ? "#e5e7eb" : "#111827" },
+            }}
+          >
+            <ChevronRight fontSize="small" />
+          </IconButton>
+        </Box>
+      </HeaderAppBar>
 
       <Paper
         elevation={0}
         sx={{
-          borderRadius: 2,
+          borderRadius: "0 0 10px 10px",
           border: `1px solid ${borderColor}`,
+          borderTop: "none",
           overflow: "hidden",
           position: "relative",
         }}
@@ -181,15 +190,6 @@ const MainCalendar = () => {
             <CircularProgress size={28} />
           </Box>
         )}
-
-        {/* ── Month / Year title ── */}
-        <Box sx={{ py: 2, textAlign: "center" }}>
-          <Typography
-            sx={{ fontWeight: 700, fontSize: "18px", letterSpacing: 0 }}
-          >
-            {MONTHS[month]} {year}
-          </Typography>
-        </Box>
 
         {/* ── Weekday header row ── */}
         <Box

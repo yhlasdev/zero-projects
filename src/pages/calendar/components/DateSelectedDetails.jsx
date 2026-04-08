@@ -32,7 +32,7 @@ export default function DateSelectedDetails({ selectedEvents, EVENT_STYLES, bord
               sx={{
                 width: 10,
                 height: 10,
-                borderRadius: "50%",
+                borderRadius: "2px",
                 bgcolor: s.dot,
                 flexShrink: 0,
               }}

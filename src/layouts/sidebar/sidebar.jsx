@@ -67,13 +67,13 @@ export const Sidebar = () => {
                 mb: 1,
                 borderRadius: "8px",
                 "&.Mui-selected": {
-                  backgroundColor: "#0F325426",
-                  color: "#0F3254",
+                  backgroundColor: mode === 'dark' ? "#0F3254" : "#0F325426",
+                  color: mode == 'dark' ? '#fff' : "#0F3254",
                 },
               }}
             >
               <ListItemIcon>
-                <Icon className={`${isActive && "text-[#0F3254]"}`} />
+                <Icon className={`${mode == 'dark' ? 'text-[#fff]' : "text-[#0F3254]"}`} />
               </ListItemIcon>
 
               <ListItemText primary={item.name} />

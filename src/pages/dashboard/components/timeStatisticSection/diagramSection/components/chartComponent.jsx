@@ -1,6 +1,7 @@
 import { Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import { LineChart, lineElementClasses, areaElementClasses } from '@mui/x-charts/LineChart';
+import { useLocale } from "../../../../../../hooks/useLocale";
 
 const daily_hours_last_30 = [
     { "day": "2026-02-19T00:00:00Z", "hours": 7 },
@@ -70,6 +71,7 @@ const daily_hours_30_to_60 = [
 ];
 
 export default function AreaChartSection() {
+    const { t } = useLocale();
     return (
         <Box sx={{ width: '100%', height: 400, mt: 5, pb: 3 }}>
             <svg style={{ position: 'absolute', width: 0, height: 0, visibility: 'hidden' }}>
@@ -109,7 +111,12 @@ export default function AreaChartSection() {
                         data: daily_hours_last_30.map((d) => new Date(d.day)),
                         scaleType: 'point',
                         valueFormatter: (value) => {
-                            const months = ['ýan.', 'few.', 'mart', 'apr.', 'maý', 'iyun', 'iyul', 'awg.', 'sent.', 'okt.', 'noy.', 'dek.'];
+                            const months = [
+                                t('dashboard.months.jan'), t('dashboard.months.feb'), t('dashboard.months.mar'),
+                                t('dashboard.months.apr'), t('dashboard.months.may'), t('dashboard.months.jun'),
+                                t('dashboard.months.jul'), t('dashboard.months.aug'), t('dashboard.months.sep'),
+                                t('dashboard.months.oct'), t('dashboard.months.nov'), t('dashboard.months.dec')
+                            ];
                             return `${value.getDate()} ${months[value.getMonth()]}`;
                         },
                     },
@@ -148,11 +155,11 @@ export default function AreaChartSection() {
 
                 <Box className=' flex items-center gap-2'>
                     <Box className=' w-5 h-5 rounded-full bg-[#1D61E7]'></Box>
-                    <Typography sx={{ fontSize: '12.43px', color: '#1D61E7' }}>Şu aý</Typography>
+                    <Typography sx={{ fontSize: '12.43px', color: '#1D61E7' }}>{t('dashboard.thisMonthLabel')}</Typography>
                 </Box>
                 <Box className=' flex items-center gap-2'>
                     <Box className=' w-5 h-5 rounded-full bg-[#D93B2D]'></Box>
-                    <Typography sx={{ fontSize: '12.43px', color: '#D93B2D' }}>Geçen aý</Typography>
+                    <Typography sx={{ fontSize: '12.43px', color: '#D93B2D' }}>{t('dashboard.lastMonthLabel')}</Typography>
                 </Box>
             </Box>
         </Box>

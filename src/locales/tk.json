@@ -69,7 +69,35 @@
     "currentMonth": "Şu aý (jikme-jik)",
     "lastMonth": "Geçen aý (jikme-jik)",
     "reportTitle": "Gatnaşyk hasabaty",
-    "reportSubtitle": "Işgärleriň gatnaşyk ýazgylaryna gözegçilik ediň we dolandyryň"
+    "reportSubtitle": "Işgärleriň gatnaşyk maglumatlaryny yzarlaň we dolandyryň",
+    "totalCurrentMonth": "Jemi (şu aý)",
+    "totalLastMonth": "Jemi (geçen aý)",
+    "avgCurrentMonth": "Ortaça (şu aý)",
+    "hoursDisplay": "sagat",
+    "hoursPerDay": "sagat/gün",
+    "change": "Üýtgeşme",
+    "thisMonthLabel": "Şu aý",
+    "lastMonthLabel": "Geçen aý",
+    "mostWorkedDay": "Iň köp işlenen gün",
+    "leastWorkedDay": "Iň az işlenen gün",
+    "dailyAverage": "Ortaça gündelik",
+    "allDepartmentsLabel": "Ähli bölümler",
+    "dailyWorkedHours": "Her günki işlenen sagat sany",
+    "selectPlaceholder": "Saýlaň...",
+    "months": {
+      "jan": "ýan.",
+      "feb": "few.",
+      "mar": "mart",
+      "apr": "apr.",
+      "may": "maý",
+      "jun": "iyun",
+      "jul": "iyul",
+      "aug": "awg.",
+      "sep": "sent.",
+      "oct": "okt.",
+      "nov": "noy.",
+      "dec": "dek."
+    }
   },
   "employees": {
     "title": "Işgär",
@@ -82,20 +110,49 @@
     "employeeId": "Işgäriň ID-si",
     "hiringDate": "Iş başlan senesi",
     "reportsTo": "Hasabat berýän adamy",
-    "probation end date": "Synag möhletiniň gutarýan senesi",
+    "probationEnd": "Synag möhletiniň gutarýan senesi",
     "workingTiming": "Iş wagty",
     "office": "Ofis",
     "noRecords": "Gatnaşyk ýazgysy tapylmady",
     "weeklySchedules": "Hepdelik tertipler",
+    "weeklySchedulesSub": "Iş tertiplerini hepde boýunça görüň we dolandyryň",
+    "editWeek": "Hepdäni üýtget",
+    "createNewWeek": "Täze hepde döret",
     "day": "Gün",
     "shift": "Smena",
     "workTime": "Iş wagty",
     "hours": "Sagat",
-    "weekSummary": "Hepdelik jem"
+    "noScheduleFound": "Bu hepde üçin iş tertibi tapylmady.",
+    "weekSummary": "Hepdelik jem",
+    "totalHours": "Umumy sagat",
+    "workDays": "Iş günleri",
+    "daysOff": "Dynç günleri",
+    "updateEmployee": "Işgäri täzele",
+    "updating": "Täzelenýär...",
+    "updateSuccess": "Işgär üstünlikli täzelendi",
+    "jobId": "Wezipe ID",
+    "scheduleCreated": "Iş tertibi üstünlikli döredildi!",
+    "scheduleExist": "Iş tertibi eýýäm bar ýa-da nädogry!",
+    "createNewWeeklySchedule": "Täze hepdelik iş tertibini döret",
+    "selectWeek": "Hepdäni saýla",
+    "creating": "Döredilýär...",
+    "createSchedule": "Iş tertibini döret",
+    "scheduleUpdated": "Iş tertibi üstünlikli üýtgedildi!",
+    "updateScheduleFail": "Iş tertibini üýtgetmek başartmady!",
+    "editWeeklySchedule": "Hepdelik iş tertibini üýtget",
+    "currentWeek": "Häzirki hepde",
+    "updateSchedule": "Iş tertibini üýtget",
+    "scheduleDeleted": "Iş tertibi üstünlikli pozuldy",
+    "scheduleDeleteFail": "Iş tertibini pozmak başartmady"
   },
   "tasks": {
     "title": "Wezipeler",
     "subtitle": "Işgärleriň wezipelerini dolandyryň we yzarlaň",
+    "tabs": {
+      "list": "Sanaw",
+      "board": "Tagta",
+      "calendar": "Senenama"
+    },
     "createTask": "Wezipe döret",
     "taskTitle": "Wezipäniň ady",
     "description": "Düşündiriş",
@@ -114,7 +171,8 @@
       "low": "Pes",
       "clear": "Arassala",
       "none": "Ýok"
-    }
+    },
+    "createSuccess": "Wezipe üstünlikli döredildi"
   },
   "settings": {
     "title": "Kompaniýanyň sazlamalary",
@@ -158,11 +216,13 @@
       "email": "E-poçta",
       "phone": "Telefon",
       "address": "Salgysy",
-      "success": "Habarlaşmak üçin maglumatlar ýatda saklandy."
+      "success": "Habarlaşmak üçin maglumatlar ýatda saklandy.",
+      "loadFail": "Habarlaşmak üçin maglumatlary ýükläp bolmady. Sahypany täzelemegiňizi haýyş edýäris."
     },
     "overview": {
       "birthDate": "Menejeriň doglan senesi",
-      "success": "Kompaniýa barada syn ýatda saklandy."
+      "success": "Kompaniýa barada syn ýatda saklandy.",
+      "loadFail": "Kompaniýa barada syny ýükläp bolmady."
     },
     "modal": {
       "addDept": "Bölüm goş",
@@ -193,7 +253,8 @@
     "forgot": "Paroly ýatdan çykardyňyzmy?",
     "submit": "Giriş",
     "noAccount": "Hasabyňyz ýokmy?",
-    "register": "Hasap açyň"
+    "register": "Hasap açyň",
+    "loginSuccess": "Üstünlikli girdiňiz!"
   },
   "register": {
     "title": "Hasap açyň",
@@ -220,7 +281,17 @@
     "leaveType": "Rugsat görnüşi",
     "startDate": "Başlaýan senesi",
     "endDate": "Gutarýan senesi",
-    "days": "Günler"
+    "days": "Günler",
+    "failedToLoad": "Sorag maglumatlaryny ýükläp bolmady.",
+    "editAttendanceRecord": "Gatnaşyk ýazgysyny üýtget",
+    "leaveBalance": "Galan rugsat günleri",
+    "unknown": "Näbelli",
+    "appliedDate": "Ýüz tutulan senesi",
+    "reason": "Sebäbi",
+    "noReasonProvided": "Sebäp görkezilmedi.",
+    "reject": "Ret et",
+    "approve": "Tassykla",
+    "close": "Ýap"
   },
   "letterRequests": {
     "title": "Hat soraglary",
@@ -229,26 +300,35 @@
   },
   "documents": {
     "title": "Resminamalar",
-    "subtitle": "Kompaniýa resminamalaryny dolandyryň we yzarlaň",
+    "subTitle": "Kompaniýa resminamalaryny dolandyryň we yzarlaň",
     "uploadDoc": "Resminama ýükläň",
     "editDoc": "Resminamany redaktirläň",
-    "upload": "Ýükle",
-    "uploading": "Ýüklenýär...",
-    "uploadSuccess": "Resminama üstünlikli ýüklendi!",
-    "uploadFailed": "Resminama ýüklemekde ýalňyşlyk ýüze çykdy",
-    "uploadErr": "Resminama ýüklemekde ýalňyşlyk ýüze çykdy: ",
-    "selectFileReq": "Resminama ýüklemek üçin faýl saýlamak hökman",
-    "unsupported": "Bu faýl görnüşi goldanylmaýar. Diňe jpg, png, txt, pdf, xls, xlsx, doc, docx faýllary kabul edilýär.",
-    "maxSize": "Faýl 10MB-dan uly bolmaly däl.",
-    "noDocuments": "Resminama tapylmady.",
+    "fileTypes": "Faýl görnüşleri",
+    "allTypes": "Ähli görnüşler",
+    "noDocs": "Resminama tapylmady.",
+    "deleteErr": "Resminamany pozmak başartmady",
+    "downloadErr": "Ýüklemek başartmady",
     "deleteConfirm": "Siz dogrudan-da bu resminamany pozmak isleýärsiňizmi? Bu amal yzyna gaýtarylyp bilinmez.",
     "deleteSuccess": "Resminama üstünlikli pozuldy",
-    "deleteFailed": "Resminamany pozmak başartmady",
-    "file": "Faýl",
-    "fileType": "Faýl görnüşi",
-    "fileSize": "Faýl ölçegi",
-    "uploadedAt": "Ýüklenen senesi",
-    "noFile": "Faýl ýok"
+    "upload": {
+      "title": "Resminamanyň ady",
+      "titlePlaceholder": "Resminamanyň adyny giriziň",
+      "desc": "Düşündiriş",
+      "descPlaceholder": "Resminamanyň düşündirişini giriziň",
+      "uploadFile": "Faýl ýükle",
+      "dropzone": "Ýüklemek üçin basyň ýa-da süýräp getiriň",
+      "fileInfo": "PDF, DOCX, XLS (maks. 10MB)",
+      "unsupported": "Bu faýl görnüşi goldanylmaýar. Diňe jpg, png, txt, pdf, xls, xlsx, doc, docx faýllary kabul edilýär.",
+      "maxSize": "Faýl 10MB-dan uly bolmaly däl.",
+      "selectFileReq": "Resminama ýüklemek üçin faýl saýlamak hökman",
+      "uploadFailed": "Resminama ýüklemekde ýalňyşlyk ýüze çykdy",
+      "uploadErr": "Resminama ýüklemekde ýalňyşlyk ýüze çykdy: ",
+      "uploading": "Ýüklenýär...",
+      "uploadSuccess": "Resminama üstünlikli ýüklendi!"
+    },
+    "card": {
+      "download": "Ýükle"
+    }
   },
   "calendar": {
     "title": "Kompaniýanyň senenamasy",
@@ -316,6 +396,7 @@
     "publishedStatus": "Goýberilen",
     "draftStatus": "Garalama",
     "general": "Umumy",
+    "date": "Sene",
     "saving": "Ýatda saklanylýar..."
   },
   "newRequests": {

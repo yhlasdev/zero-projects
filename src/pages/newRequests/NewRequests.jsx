@@ -24,7 +24,7 @@ import { formatTimeYear } from "../../utils/formatTime";
 import { updateNewRequest } from "../../api/queries/put";
 import GlobalLoader from "../../components/Loading";
 import { useLocale } from "../../hooks/useLocale";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import Seo from "../../components/seo/seo";
 
 const getTabs = (t) => [

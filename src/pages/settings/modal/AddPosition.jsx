@@ -16,7 +16,7 @@ import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addJobs } from "../../../api/queries/post";
 import { useLocale } from "../../../hooks/useLocale";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 const AddPositionModal = ({ open, onClose, departmentId, departmentName }) => {
   const { t } = useLocale();

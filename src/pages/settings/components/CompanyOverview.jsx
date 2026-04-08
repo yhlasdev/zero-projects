@@ -17,7 +17,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import FieldLabel from "../../../components/textField/LabelInput";
 import { getSettingsOverview } from "../../../api/queries/getters";
 import { updateContactOverview, uploadCompanyLogo } from "../../../api/queries/post";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import { useLocale } from "../../../hooks/useLocale";
 import CustomCarto from "../../../components/customCarto/CustomCarto";
 
@@ -150,7 +150,7 @@ const CompanyOverview = () => {
   }
 
   if (isError) {
-    toast.error("Failed to load company overview.");
+    toast.error(t("settings.overview.loadFail"));
     return null;
   }
 

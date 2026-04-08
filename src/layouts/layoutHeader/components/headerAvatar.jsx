@@ -79,7 +79,7 @@ export const HeaderAvatar = () => {
           userSelect: "none",
         }}
       >
-        <Avatar src={""} sx={{ width: 40, height: 40 }} />
+        <Avatar src={`http://194.156.117.223:8004/yerinde/storage-service/avatar/${profileData?.id}/50x50`} sx={{ width: 40, height: 40 }} />
 
         <Box
           sx={{ display: "flex", flexDirection: "column", textAlign: "left" }}

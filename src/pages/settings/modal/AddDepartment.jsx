@@ -16,7 +16,7 @@ import { useState, useEffect } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateDepartments } from "../../../api/queries/post";
 import { useLocale } from "../../../hooks/useLocale";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 const AddDepartmentModal = ({ open, onClose }) => {
   const { t } = useLocale();

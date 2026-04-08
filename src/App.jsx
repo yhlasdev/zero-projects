@@ -7,7 +7,8 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import updateLocale from "dayjs/plugin/updateLocale";
 import "dayjs/locale/tr";
-import { Toaster } from 'react-hot-toast';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 dayjs.extend(updateLocale);
 
@@ -59,7 +60,7 @@ dayjs.locale("tr");
 function App() {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="tr" >
-      <Toaster position="top-center" />
+      <ToastContainer position="bottom-right" />
       <RouterProvider router={routes} />
     </LocalizationProvider>
   )

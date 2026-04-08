@@ -55,54 +55,62 @@ export const TopPerformers = () => {
                         </TableRow>
                     </TableHead>
 
-                    {isLoading ? (
-                        <Box>{t('common.loading')}</Box>
-                    ) : isError ? (
-                        <Box>{t('common.error')}</Box>
-                    ) : null}
-
                     <TableBody>
-                        {allTopPerformers.map((emp) => (
-                            <TableRow key={emp.rank} hover>
-                                {/* Rank */}
-                                <TableCell>
-                                    <Box
-                                        sx={{
-                                            width: 32,
-                                            height: 32,
-                                            borderRadius: "50%",
-                                            bgcolor: getRankColor(emp.rank),
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "center",
-                                            fontWeight: 600
-                                        }}
-                                    >
-                                        {emp.rank}
-                                    </Box>
-                                </TableCell>
-
-                                {/* Employee */}
-                                <TableCell>
-                                    <Box display="flex" alignItems="center" gap={2}>
-                                        <Avatar src={`http://194.156.117.223:8004/yerinde/storage-service/attendances/${emp.employee_id}`} />
-                                        <Typography fontWeight={600}>
-                                            {emp.first_name}
-                                        </Typography>
-                                        <Typography fontWeight={600}>
-                                            {emp.last_name}
-                                        </Typography>
-                                    </Box>
-                                </TableCell>
-
-                                <TableCell>{emp.department}</TableCell>
-                                <TableCell>{emp.job}</TableCell>
-
-                                <TableCell align="right" sx={{ fontWeight: 600 }}>
-                                    {emp.hours.toFixed(1)}
+                        {isLoading ? (
+                            <TableRow>
+                                <TableCell colSpan={5} align="center">
+                                    <Box>{t('common.loading')}</Box>
                                 </TableCell>
                             </TableRow>
-                        ))}
+                        ) : isError ? (
+                            <TableRow>
+                                <TableCell colSpan={5} align="center">
+                                    <Box>{t('common.error')}</Box>
+                                </TableCell>
+                            </TableRow>
+                        ) : (
+                            allTopPerformers.map((emp) => (
+                                <TableRow key={emp.rank} hover>
+                                    {/* Rank */}
+                                    <TableCell>
+                                        <Box
+                                            sx={{
+                                                width: 32,
+                                                height: 32,
+                                                borderRadius: "50%",
+                                                bgcolor: getRankColor(emp.rank),
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "center",
+                                                fontWeight: 600
+                                            }}
+                                        >
+                                            {emp.rank}
+                                        </Box>
+                                    </TableCell>
+
+                                    {/* Employee */}
+                                    <TableCell>
+                                        <Box display="flex" alignItems="center" gap={2}>
+                                            <Avatar src={`http://194.156.117.223:8004/yerinde/storage-service/attendances/${emp.employee_id}`} />
+                                            <Typography fontWeight={600}>
+                                                {emp.first_name}
+                                            </Typography>
+                                            <Typography fontWeight={600}>
+                                                {emp.last_name}
+                                            </Typography>
+                                        </Box>
+                                    </TableCell>
+
+                                    <TableCell>{emp.department}</TableCell>
+                                    <TableCell>{emp.job}</TableCell>
+
+                                    <TableCell align="right" sx={{ fontWeight: 600 }}>
+                                        {emp.hours.toFixed(1)}
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        )}
                     </TableBody>
                 </Table>
             </TableContainer>

@@ -7,7 +7,7 @@ import FieldLabel from "../../../components/textField/LabelInput";
 import { getSettingsContact } from "../../../api/queries/getters";
 import { updateContactCompanies } from "../../../api/queries/post";
 import { useLocale } from "../../../hooks/useLocale";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 const FIELDS = () => {
   const { t } = useLocale();
@@ -115,7 +115,7 @@ const ContactInformation = () => {
   }
 
   if (isError) {
-    toast.error("Failed to load contact information. Please refresh the page.");
+    toast.error(t("settings.contact.loadFail"));
     return null;
   }
 
