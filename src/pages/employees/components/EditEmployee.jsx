@@ -109,13 +109,15 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
     mutationFn: updateEmployee,
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["employees"] });
-      await queryClient.invalidateQueries({ queryKey: ["employee", employeeId] });
+      await queryClient.invalidateQueries({
+        queryKey: ["employee", employeeId],
+      });
       toast.success("Employee updated successfully");
       onClose();
     },
     onError: () => {
       toast.error("Failed to update employee");
-    }
+    },
   });
 
   const onSubmit = (formData) => {
@@ -258,16 +260,6 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
 
             <Grid size={6}>
               <Controller
-                name="job_id"
-                control={control}
-                render={({ field }) => (
-                  <CustomFieldLabel label="Job ID" {...field} />
-                )}
-              />
-            </Grid>
-
-            <Grid size={6}>
-              <Controller
                 name="department_id"
                 control={control}
                 render={({ field }) => (
@@ -285,7 +277,7 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
                     <DebounceSelect
                       value={field.value}
                       onChange={(e) => field.onChange(e.target.value)}
-                      onClear={() => field.onChange('')}
+                      onClear={() => field.onChange("")}
                       width="100%"
                     >
                       {departments.map((dept) => (
@@ -295,6 +287,16 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
                       ))}
                     </DebounceSelect>
                   </Box>
+                )}
+              />
+            </Grid>
+
+            <Grid size={6}>
+              <Controller
+                name="job_id"
+                control={control}
+                render={({ field }) => (
+                  <CustomFieldLabel label="Position" {...field} />
                 )}
               />
             </Grid>
@@ -389,7 +391,7 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
               borderColor: "#D0D5DD",
               borderRadius: RADIUS_8,
               px: 3,
-              py: 1
+              py: 1,
             }}
           >
             Cancel
