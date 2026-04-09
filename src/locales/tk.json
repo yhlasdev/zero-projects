@@ -339,6 +339,7 @@
     "title": "Kompaniýanyň senenamasy",
     "subTitle": "Wakalary, baýramçylyklary we möhüm seneleri dolandyryň",
     "addEvent": "Waka goş",
+    "editEvent": "Wakany üýtget",
     "eventTitle": "Wakanyň ady",
     "type": "Görnüşi",
     "types": {

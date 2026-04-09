@@ -79,3 +79,19 @@ export const updateDocument = async (objectData) => {
   );
   return response;
 };
+
+export const updateCalendar = async (objectData) => {
+  const response = await api.putPrivate(
+    `/company-service/calendars/update`,
+    objectData,
+  );
+  return response;
+};
+
+export const updateTask = async (objectData) => {
+  const response = await api.putPrivate(
+    `/company-service/tasks/update`,
+    objectData,
+  );
+  return response;
+};

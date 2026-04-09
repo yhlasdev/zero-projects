@@ -1,18 +1,18 @@
 import { Box, Typography, IconButton, Grid, Button } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import CustomFormSelect from "../../../components/select/CustomFormSelect";
-import { useForm } from "react-hook-form";
-import { CustomForm } from "../../../components/form/CustomForm";
-import CustomFormTextField from "../../../components/textField/CustomTextField";
-import { calendarAdd } from "../../../api/queries/post";
-import { useAppMutation } from "../../../hooks/useMutation";
+import { useForm, Controller } from "react-hook-form";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-
-import { Controller } from "react-hook-form";
 import dayjs from "dayjs";
+import { useEffect } from "react";
+
+import CustomFormTextField from "../../../components/textField/CustomTextField";
+import CustomFormSelect from "../../../components/select/CustomFormSelect";
+import { CustomForm } from "../../../components/form/CustomForm";
+import { updateCalendar } from "../../../api/queries/put";
+import { useAppMutation } from "../../../hooks/useMutation";
 import { useLocale } from "../../../hooks/useLocale";
 
-export default function AddEvent({ onClose }) {
+export default function EditCalendarModal({ event, onClose }) {
   const { t } = useLocale();
   const typeOptions = [
     { value: "public_holiday", label: t("calendar.types.public_holiday") },
@@ -23,19 +23,38 @@ export default function AddEvent({ onClose }) {
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     defaultValues: {
       date: null,
       description: "",
+      id: 0,
       title: "",
       type: "",
     },
     mode: "onSubmit",
   });
 
+  // Pre-fill form when event changes
+  useEffect(() => {
+    if (event) {
+      reset({
+        title: event.event_title ?? event.title ?? "",
+        description: event.description ?? "",
+        id: event.id ?? 0,
+        type: event.event_type ?? event.type ?? "",
+        date: event.date
+          ? dayjs(event.date)
+          : event.event_date
+            ? dayjs(event.event_date)
+            : null,
+      });
+    }
+  }, [event, reset]);
+
   const mutation = useAppMutation({
-    mutationFn: calendarAdd,
+    mutationFn: updateCalendar,
     queryKey: ["mainCalendar"],
     onSuccess: () => {
       onClose();
@@ -64,13 +83,13 @@ export default function AddEvent({ onClose }) {
           }}
         >
           <Typography sx={{ fontWeight: "bold", fontSize: 20 }}>
-            {t("calendar.addEvent")}
+            {t("calendar.editEvent")}
           </Typography>
           <IconButton onClick={onClose}>
             <CloseIcon />
           </IconButton>
         </Box>
-        <Box sx={{ px: 3 }}>
+        <Box sx={{ px: 3, pb: 3, pt: 1 }}>
           <CustomFormTextField
             control={control}
             errors={errors}
@@ -88,7 +107,15 @@ export default function AddEvent({ onClose }) {
           />
           <Grid container spacing={2} alignItems="center" mt={3}>
             <Grid size={6}>
-              <Box fontSize={15}>{t("announcements.date")}</Box>
+              <Typography
+                fontSize={14}
+                mb={0.5}
+                fontWeight={500}
+                color="text.secondary"
+              >
+                {t("announcements.date")}
+              </Typography>
+
               <Controller
                 name="date"
                 control={control}
@@ -127,8 +154,7 @@ export default function AddEvent({ onClose }) {
         <Box
           sx={{
             px: 3,
-            py: 3,
-            mt: 2,
+            py: 2,
             display: "flex",
             justifyContent: "flex-end",
             gap: 1,
@@ -136,19 +162,17 @@ export default function AddEvent({ onClose }) {
         >
           <Button
             variant="outlined"
-            sx={{ borderRadius: "8px" }}
             onClick={onClose}
-            disabled={mutation.isLoading}
+            disabled={mutation.isPending}
           >
             {t("common.cancel")}
           </Button>
           <Button
             variant="contained"
-            sx={{ borderRadius: "8px" }}
             type="submit"
-            loading={mutation.isLoading}
+            loading={mutation.isPending}
           >
-            {t("calendar.addEvent")}
+            {t("common.save")}
           </Button>
         </Box>
       </CustomForm>

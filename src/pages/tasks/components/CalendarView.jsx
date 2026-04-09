@@ -10,6 +10,9 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { useState, useEffect } from "react";
 import { getTaskCalendar } from "../../../api/queries/getters";
 import CalendarCell from "./CalendarCell";
+import CalendarDayPanel from "./CalendarDayPanel";
+import GlobalModal from "../../../components/modal/GlobalModal";
+import EditTaskContent from "./EditTaskContent";
 
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const MONTHS = [
@@ -260,6 +263,7 @@ const CalendarView = () => {
   const [calendarData, setCalendarData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedKey, setSelectedKey] = useState(todayKey);
+  const [editingTask, setEditingTask] = useState(null);
 
   const { year, month } = current;
 
@@ -463,49 +467,23 @@ const CalendarView = () => {
           </Box>
         ))}
       </Box>
-      {(() => {
-        const allTasks = selectedKey ? (taskMap[selectedKey] ?? []) : [];
-        const unique = [...new Map(allTasks.map((t) => [t.title, t])).values()];
-        if (!unique.length) return null;
-        return (
-          <Box
-            sx={{
-              mt: 2,
-              display: "flex",
-              flexWrap: "wrap",
-              gap: 2.5,
-              alignItems: "center",
-              p: 1,
-              borderRadius: "8px",
-            }}
-          >
-            {unique.map((task) => {
-              const cfg = getStatusCfg(task.status);
-              return (
-                <Box
-                  key={task.id}
-                  sx={{ display: "flex", alignItems: "center", gap: 0.8 }}
-                >
-                  <Box
-                    sx={{
-                      width: 16,
-                      height: 16,
-                      borderRadius: "4px",
-                      bgcolor: cfg.border,
-                      flexShrink: 0,
-                    }}
-                  />
-                  <Typography
-                    sx={{ fontSize: "13px", color: "text.secondary" }}
-                  >
-                    {task.title}
-                  </Typography>
-                </Box>
-              );
-            })}
-          </Box>
-        );
-      })()}
+      <CalendarDayPanel
+        dateKey={selectedKey}
+        tasks={selectedKey ? (taskMap[selectedKey] ?? []) : []}
+        onEdit={(task) => setEditingTask(task)}
+      />
+
+      <GlobalModal
+        open={Boolean(editingTask)}
+        onClose={() => setEditingTask(null)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <EditTaskContent
+          task={editingTask}
+          onClose={() => setEditingTask(null)}
+        />
+      </GlobalModal>
     </Box>
   );
 };

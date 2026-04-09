@@ -1,4 +1,5 @@
 import { useState } from "react";
+import GlobalModal from "../../../components/modal/GlobalModal";
 import { useQuery } from "@tanstack/react-query";
 import {
   Box,
@@ -12,6 +13,8 @@ import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import { getMainCalendar } from "../../../api/queries/getters";
 import { useLocale } from "../../../hooks/useLocale";
 import HeaderAppBar from "../../../components/appBar/AppBar";
+import { deleteCalendar } from "../../../api/queries/delete";
+import { useAppMutation } from "../../../hooks/useMutation";
 
 import {
   LEGEND_STATIC,
@@ -24,6 +27,7 @@ import {
 import DateCell from "./DateCell";
 import DateLegend from "./DateLegend";
 import DateSelectedDetails from "./DateSelectedDetails";
+import EditCalendarModal from "./EditCalendarModal";
 
 const MainCalendar = () => {
   const { t } = useLocale();
@@ -64,6 +68,19 @@ const MainCalendar = () => {
   const [selectedKey, setSelectedKey] = useState(
     fmtKey(today.getFullYear(), today.getMonth(), today.getDate()),
   );
+  const [editingEvent, setEditingEvent] = useState(null);
+
+  const handleEditEvent = (event) => setEditingEvent(event);
+  const handleCloseEditModal = () => setEditingEvent(null);
+
+  const deleteMutation = useAppMutation({
+    mutationFn: deleteCalendar,
+    queryKey: ["mainCalendar"],
+  });
+
+  const handleDeleteEvent = async (event) => {
+    await deleteMutation.mutateAsync(event.id);
+  };
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
@@ -79,7 +96,9 @@ const MainCalendar = () => {
       const map = {};
       raw.forEach(({ date, events }) => {
         const key = date?.split("T")[0];
-        if (key) map[key] = events ?? [];
+        if (key) {
+          map[key] = (events ?? []).map((ev) => ({ ...ev, date: key }));
+        }
       });
       return map;
     },
@@ -267,8 +286,22 @@ const MainCalendar = () => {
           selectedEvents={eventMap[selectedKey]}
           EVENT_STYLES={EVENT_STYLES}
           borderColor={borderColor}
+          onEdit={handleEditEvent}
+          onDelete={handleDeleteEvent}
         />
       </Paper>
+
+      {/* ── Edit Task Modal ── */}
+      <GlobalModal
+        open={Boolean(editingEvent)}
+        onClose={handleCloseEditModal}
+        width="708"
+      >
+        <EditCalendarModal
+          event={editingEvent}
+          onClose={handleCloseEditModal}
+        />
+      </GlobalModal>
     </Box>
   );
 };

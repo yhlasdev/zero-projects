@@ -1,7 +1,8 @@
-import { Box, Typography, Chip, Avatar } from "@mui/material";
+import { Box, Typography, Chip, Avatar, IconButton } from "@mui/material";
+import { FiEdit2 } from "react-icons/fi";
 import { MONTHS, getStatusCfg, getInitials } from "./CalendarUtils";
 
-const DayPanel = ({ dateKey, tasks }) => {
+const DayPanel = ({ dateKey, tasks, onEdit }) => {
   if (!dateKey) return null;
 
   const dt = new Date(dateKey + "T00:00:00");
@@ -127,6 +128,20 @@ const DayPanel = ({ dateKey, tasks }) => {
                     </Box>
                   )}
                 </Box>
+
+                {/* Edit icon */}
+                <IconButton
+                  size="small"
+                  onClick={() => onEdit?.(task)}
+                  sx={{
+                    color: "#64748b",
+                    flexShrink: 0,
+                    alignSelf: "center",
+                    "&:hover": { color: "primary.main", bgcolor: "action.hover" },
+                  }}
+                >
+                  <FiEdit2 size={15} />
+                </IconButton>
               </Box>
             );
           })}
@@ -137,3 +152,4 @@ const DayPanel = ({ dateKey, tasks }) => {
 };
 
 export default DayPanel;
+

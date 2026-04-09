@@ -151,6 +151,7 @@
       "calendar": "Calendar"
     },
     "createTask": "Create Task",
+    "editTask": "Edit Task",
     "taskTitle": "Task Title",
     "description": "Description",
     "comment": "Comment",
@@ -331,6 +332,7 @@
     "title": "Company Calendar",
     "subTitle": "Manage events holidays, and important dates",
     "addEvent": "Add Event",
+    "editEvent": "Edit Event",
     "eventTitle": "Event title",
     "type": "Type",
     "types": {

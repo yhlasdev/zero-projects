@@ -37,3 +37,8 @@ export const deleteDocument = async (id) => {
   const response = await api.deletePrivate(`/company-service/documents/delete/${id}`);
   return response;
 };
+
+export const deleteCalendar = async (id) => {
+  const response = await api.deletePrivate(`/company-service/calendars/delete/${id}`);
+  return response;
+};

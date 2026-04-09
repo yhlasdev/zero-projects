@@ -14,6 +14,7 @@ export default function DatePopover({
   setStartDate,
   setEndDate,
   t,
+  isSingleDate = false,
 }) {
   const [pickingDate, setPickingDate] = useState("start");
   const [calView, setCalView] = useState(dayjs());
@@ -57,7 +58,7 @@ export default function DatePopover({
           mt: 0.5,
           boxShadow: (theme) => theme.shadows[10],
           overflow: "hidden",
-          width: 580,
+          width: isSingleDate ? 500 : 580,
         },
       }}
     >
@@ -111,52 +112,54 @@ export default function DatePopover({
               fontWeight: startDate ? 500 : 400,
             }}
           >
-            {startDate ? startDate.format("DD MMM YYYY") : "Due date"}
+            {startDate ? startDate.format("DD MMM YYYY") : t("tasks.dueDate")}
           </Typography>
         </Box>
 
-        <Box
-          onClick={() => setPickingDate("end")}
-          sx={{
-            flex: 1,
-            display: "flex",
-            alignItems: "center",
-            gap: 1.2,
-            cursor: "pointer",
-            bgcolor: "background.paper",
-            border:
-              pickingDate === "end"
-                ? "2px solid var(--mui-palette-primary-main)"
-                : "2px solid var(--mui-palette-divider)",
-            borderRadius: "10px",
-            px: 1.5,
-            py: 1.2,
-            transition: "border 0.15s",
-          }}
-        >
+        {!isSingleDate && (
           <Box
+            onClick={() => setPickingDate("end")}
             sx={{
-              width: 30,
-              height: 30,
-              border: "1.5px solid #ccc",
-              borderRadius: "7px",
+              flex: 1,
               display: "flex",
               alignItems: "center",
-              justifyContent: "center",
+              gap: 1.2,
+              cursor: "pointer",
+              bgcolor: "background.paper",
+              border:
+                pickingDate === "end"
+                  ? "2px solid var(--mui-palette-primary-main)"
+                  : "2px solid var(--mui-palette-divider)",
+              borderRadius: "10px",
+              px: 1.5,
+              py: 1.2,
+              transition: "border 0.15s",
             }}
           >
-            <CalendarTodayIcon sx={{ fontSize: 15, color: "#aaa" }} />
+            <Box
+              sx={{
+                width: 30,
+                height: 30,
+                border: "1.5px solid #ccc",
+                borderRadius: "7px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <CalendarTodayIcon sx={{ fontSize: 15, color: "#aaa" }} />
+            </Box>
+            <Typography
+              sx={{
+                fontSize: 15,
+                color: endDate ? "#0f172a" : "#aaa",
+                fontWeight: endDate ? 500 : 400,
+              }}
+            >
+              {endDate ? endDate.format("DD MMM YYYY") : t("tasks.dueDate")}
+            </Typography>
           </Box>
-          <Typography
-            sx={{
-              fontSize: 15,
-              color: endDate ? "#0f172a" : "#aaa",
-              fontWeight: endDate ? 500 : 400,
-            }}
-          >
-            {endDate ? endDate.format("DD MMM YYYY") : "Due date"}
-          </Typography>
-        </Box>
+        )}
       </Box>
 
       <Box sx={{ display: "flex" }}>
@@ -183,7 +186,11 @@ export default function DatePopover({
                   if (pickingDate === "start") {
                     setStartDate(targetDate);
                     setCalView(targetDate);
-                    setPickingDate("end");
+                    if (isSingleDate) {
+                      onClose();
+                    } else {
+                      setPickingDate("end");
+                    }
                   } else {
                     setEndDate(targetDate);
                     setCalView(targetDate);
@@ -311,7 +318,11 @@ export default function DatePopover({
                   onClick={() => {
                     if (pickingDate === "start") {
                       setStartDate(thisDay);
-                      setPickingDate("end");
+                      if (isSingleDate) {
+                        onClose();
+                      } else {
+                        setPickingDate("end");
+                      }
                     } else {
                       setEndDate(thisDay);
                       onClose();

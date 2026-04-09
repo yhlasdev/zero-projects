@@ -97,7 +97,7 @@ export const getAllDocuments = async ({ page, limit, search, file_types }) => {
     page,
     limit,
     search,
-    file_types: file_types?.join(","),
+    file_types: file_types?.length > 0 ? file_types?.join() : null,
   });
 };
 

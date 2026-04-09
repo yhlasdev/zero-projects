@@ -43,8 +43,7 @@ function CalendarPage() {
       <GlobalModal
         open={openAddModal}
         onClose={() => setOpenAddModal(false)}
-        maxWidth="sm"
-        fullWidth
+        width={708}
       >
         <AddEvent onClose={() => setOpenAddModal(false)} />
       </GlobalModal>

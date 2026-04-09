@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, Divider, Paper, Typography, MenuItem } from "@mui/material";
+import { Box, Divider, Paper, Typography, MenuItem, CircularProgress } from "@mui/material";
 
 import { PageTitle } from "../../components/pageTitle/pageTitle";
 import { CustomDivider } from "../../components/customDivider";
@@ -44,11 +44,16 @@ const DocumentsPage = () => {
   const [editingDoc, setEditingDoc] = useState(null);
 
   const handleSearch = (val) => setFilter((prev) => ({ ...prev, search: val }));
-  const handleTypeSelect = (e) => setFilter((prev) => ({
-    ...prev,
-    file_types: typeof e.target.value === 'string' ? e.target.value.split(',') : e.target.value
-  }));
-  const handleClearType = () => setFilter((prev) => ({ ...prev, file_types: [] }));
+  const handleTypeSelect = (e) =>
+    setFilter((prev) => ({
+      ...prev,
+      file_types:
+        typeof e.target.value === "string"
+          ? e.target.value.split(",")
+          : e.target.value,
+    }));
+  const handleClearType = () =>
+    setFilter((prev) => ({ ...prev, file_types: [] }));
   const handleEdit = (doc) => {
     setEditingDoc(doc);
     openSet();
@@ -100,7 +105,12 @@ const DocumentsPage = () => {
 
   return (
     <>
-      <GlobalModal open={open} onClose={handleCloseModal} maxWidth="sm" fullWidth>
+      <GlobalModal
+        open={open}
+        onClose={handleCloseModal}
+        maxWidth="sm"
+        fullWidth
+      >
         <UploadContent closeSet={handleCloseModal} editingDoc={editingDoc} />
       </GlobalModal>
 
@@ -145,7 +155,7 @@ const DocumentsPage = () => {
               label={t("documents.file_types")}
               displayEmpty
             >
-              <MenuItem value="" disabled sx={{ display: 'none' }}>
+              <MenuItem value="" disabled sx={{ display: "none" }}>
                 <em>{t("documents.allTypes")}</em>
               </MenuItem>
               {allowedExtensions.map((ext) => (
@@ -160,12 +170,19 @@ const DocumentsPage = () => {
         <Divider />
         <Paper sx={{ height: "calc(100vh - 320px)", overflowY: "auto", p: 3 }}>
           {isLoading ? (
-            <Box display={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: '100%'
-            }}> {t("common.loading")} </Box>) : isError ? (<Box>{t("common.error")}</Box>) : null}
+            <Box
+              display={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "90%",
+              }}
+            >
+              <CircularProgress aria-label="Loading…" />
+            </Box>
+          ) : isError ? (
+            <Box>{t("common.error")}</Box>
+          ) : null}
           {data?.length > 0 ? (
             <Box
               sx={{
@@ -190,13 +207,19 @@ const DocumentsPage = () => {
                     updated_at={doc.updated_at}
                     manager_name={doc.manager_name}
                     previewUrl={previewUrl}
-                    onDownload={() => handleDownload(doc.id, doc.file, doc.title)}
+                    onDownload={() =>
+                      handleDownload(doc.id, doc.file, doc.title)
+                    }
                     onEdit={() => handleEdit(doc)}
                     onDelete={() => deleteMutate(doc.id)}
                   />
                 );
               })}
             </Box>
+          ) : !isLoading && !isError ? (
+            <Typography align="center" sx={{ mt: 5 }}>
+              {t("documents.noDocs")}
+            </Typography>
           ) : null}
         </Paper>
       </Box>
