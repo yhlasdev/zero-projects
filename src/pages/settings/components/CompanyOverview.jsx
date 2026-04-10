@@ -46,8 +46,6 @@ const CompanyOverview = () => {
     select: (res) => res?.data?.data ?? res?.data ?? {},
   });
 
-  console.log('this-data---------', data);
-
   const {
     control,
     handleSubmit,
