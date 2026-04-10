@@ -41,6 +41,7 @@ export const DiagramSection = () => {
                             onChange={(e) => setSelectedDepartment(e.target.value)}
                             onClear={() => setSelectedDepartment("Ähli bölümler")}
                             placeholder={t('dashboard.selectPlaceholder')}
+                            hasCancel={true}
                         >
                             <MenuItem value="Ähli bölümler">{t('dashboard.allDepartmentsLabel')}</MenuItem>
                             {isLoading ? (

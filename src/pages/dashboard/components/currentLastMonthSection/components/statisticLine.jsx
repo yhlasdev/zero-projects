@@ -9,8 +9,8 @@ export const StatisticLine = ({ prefix, suffix, suffixUp }) => {
         }}>
             <Typography variant="body1"> {prefix} </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                <Typography variant="body2"> {suffixUp} </Typography>
-                <Typography variant="body1"> {suffix} </Typography>
+                <Typography variant="body2" textAlign={'right'}> {suffixUp} </Typography>
+                <Typography variant="body1" textAlign={'right'}> {suffix} </Typography>
             </Box>
         </Box>
     )

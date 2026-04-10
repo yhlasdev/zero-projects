@@ -16,19 +16,19 @@ export const MonthStatistic = ({ titleColor, title, data }) => {
                 <StatisticLine
                     prefix={t('dashboard.mostWorkedDay')}
                     suffix={`${Math.ceil(data[0].suffix)} ${t('dashboard.hoursDisplay')}`}
-                    suffixUp={dayjs(data[0].suffixUp).format('DD.MM.YYYY')}
+                    suffixUp={data[0].suffixUp ? dayjs(data[0].suffixUp).format('DD.MM.YYYY') : '-'}
                 />
                 <Divider />
                 <StatisticLine
                     prefix={t('dashboard.leastWorkedDay')}
                     suffix={`${Math.ceil(data[1].suffix)} ${t('dashboard.hoursDisplay')}`}
-                    suffixUp={dayjs(data[1].suffixUp).format('DD.MM.YYYY')}
+                    suffixUp={data[1].suffixUp ? dayjs(data[1].suffixUp).format('DD.MM.YYYY') : '-'}
                 />
                 <Divider />
                 <StatisticLine
                     prefix={t('dashboard.dailyAverage')}
                     suffix={`${Math.ceil(data[2].suffix)} ${t('dashboard.hoursDisplay')}`}
-                    suffixUp={dayjs(data[2].suffixUp).format('DD.MM.YYYY')}
+                    suffixUp={data[2].suffixUp ? dayjs(data[2].suffixUp).format('DD.MM.YYYY') : '-'}
                 />
                 <Divider />
             </Box>

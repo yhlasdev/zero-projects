@@ -17,6 +17,7 @@ export default function DebounceSelect({
   label,
   placeholder,
   width = "100%",
+  hasCancel = false,
   ...props
 }) {
   const hasValue = Array.isArray(value) ? value.length > 0 : (value !== "" && value !== null && value !== undefined);
@@ -60,7 +61,7 @@ export default function DebounceSelect({
           return selectedItem ? selectedItem.props.children : selected;
         }}
         endAdornment={
-          hasValue ? (
+          hasValue && !hasCancel ? (
             <InputAdornment
               position="end"
               sx={{ mr: 2, position: "absolute", right: "20px" }}
@@ -79,11 +80,6 @@ export default function DebounceSelect({
         }
         {...props}
       >
-        {/* {placeholder && (
-          <MenuItem disabled value="">
-            {placeholder}
-          </MenuItem>
-        )} */}
 
         {children}
       </Select>
