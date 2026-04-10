@@ -6,6 +6,7 @@ import {
   IconButton,
   Grid,
   Button,
+  Popover,
 } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers";
@@ -177,11 +178,13 @@ export default function DateRangeSelect({ value, onChange }) {
   );
   const [end, setEnd] = useState(value?.[1] ? dayjs(value[1]) : defaultEnd);
   const [open, setOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
   const [selecting, setSelecting] = useState(null);
   const [tempStart, setTempStart] = useState(null);
   const [tempEnd, setTempEnd] = useState(null);
 
-  const handleInputClick = () => {
+  const handleInputClick = (event) => {
+    setAnchorEl(event.currentTarget);
     setTempStart(start);
     setTempEnd(end);
     setSelecting("start");
@@ -211,10 +214,12 @@ export default function DateRangeSelect({ value, onChange }) {
     setEnd(e);
     if (onChange) onChange([s, e]);
     setOpen(false);
+    setAnchorEl(null);
   };
 
   const handleCancel = () => {
     setOpen(false);
+    setAnchorEl(null);
     setTempStart(null);
     setTempEnd(null);
     setSelecting(null);
@@ -265,72 +270,78 @@ export default function DateRangeSelect({ value, onChange }) {
         </Box>
 
         {/* Calendar dropdown */}
-        {open && (
-          <Box
-            sx={{
-              position: "absolute",
-              top: "calc(100% + 8px)",
-              left: 0,
-              zIndex: 1000,
-            }}
-          >
-            <Paper
-              elevation={0}
-              sx={{
+        <Popover
+          open={open}
+          anchorEl={anchorEl}
+          onClose={handleCancel}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "right",
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          slotProps={{
+            paper: {
+              elevation: 4,
+              sx: {
                 border: "1.5px solid #1565c0",
                 borderRadius: "16px",
                 overflow: "hidden",
-                // bgcolor: "#fff",
+                mt: 1,
+              },
+            },
+          }}
+        >
+          <Box>
+            <InlineCalendar
+              value={tempStart || start}
+              rangeStart={tempStart || start}
+              rangeEnd={tempEnd || (selecting === null ? end : null)}
+              onSelect={handleSelect}
+            />
+            {/* Cancel / Ok buttons */}
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                px: 3,
+                py: 1.5,
+                borderTop: "1px solid #f0f0f0",
               }}
             >
-              <InlineCalendar
-                value={tempStart || start}
-                rangeStart={tempStart || start}
-                rangeEnd={tempEnd || (selecting === null ? end : null)}
-                onSelect={handleSelect}
-              />
-              {/* Cancel / Ok buttons */}
-              <Box
+              <Button
+                onClick={handleCancel}
                 sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  px: 3,
-                  py: 1.5,
-                  borderTop: "1px solid #f0f0f0",
+                  color: "#1565c0",
+                  fontWeight: 600,
+                  fontSize: 16,
+                  textTransform: "none",
+                  p: 0,
+                  minWidth: 0,
+                  "&:hover": { bgcolor: "transparent", color: "#0d2b5e" },
                 }}
               >
-                <Button
-                  onClick={handleCancel}
-                  sx={{
-                    color: "#1565c0",
-                    fontWeight: 600,
-                    fontSize: 16,
-                    textTransform: "none",
-                    p: 0,
-                    minWidth: 0,
-                    "&:hover": { bgcolor: "transparent", color: "#0d2b5e" },
-                  }}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  onClick={handleOk}
-                  sx={{
-                    color: "#1565c0",
-                    fontWeight: 600,
-                    fontSize: 16,
-                    textTransform: "none",
-                    p: 0,
-                    minWidth: 0,
-                    "&:hover": { bgcolor: "transparent", color: "#0d2b5e" },
-                  }}
-                >
-                  Ok
-                </Button>
-              </Box>
-            </Paper>
+                Cancel
+              </Button>
+              <Button
+                onClick={handleOk}
+                sx={{
+                  color: "#1565c0",
+                  fontWeight: 600,
+                  fontSize: 16,
+                  textTransform: "none",
+                  p: 0,
+                  minWidth: 0,
+                  "&:hover": { bgcolor: "transparent", color: "#0d2b5e" },
+                }}
+              >
+                Ok
+              </Button>
+            </Box>
           </Box>
-        )}
+        </Popover>
       </Box>
     </LocalizationProvider>
   );

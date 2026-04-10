@@ -13,6 +13,7 @@ import Seo from "../../components/seo/seo";
 const TasksPage = () => {
   const { t } = useLocale();
   const [openModal, setOpenModal] = useState(false);
+  const [initialStatus, setInitialStatus] = useState("todo");
 
   return (
     <Box tabIndex={0}>
@@ -37,14 +38,20 @@ const TasksPage = () => {
 
         <HeaderButton
           width={160}
-          onClick={() => setOpenModal(true)}
+          onClick={() => {
+            setInitialStatus("todo");
+            setOpenModal(true);
+          }}
           icon={<AddIcon />}
         >
           {t('tasks.createTask')}
         </HeaderButton>
       </Box>
 
-      <TaskDetailView onOpenCreateModal={() => setOpenModal(true)} />
+      <TaskDetailView onOpenCreateModal={(status) => {
+        setInitialStatus(status || "todo");
+        setOpenModal(true);
+      }} />
 
       <GlobalModal
         open={openModal}
@@ -52,7 +59,10 @@ const TasksPage = () => {
         maxWidth="sm"
         fullWidth
       >
-        <CreateTask onClose={() => setOpenModal(false)} />
+        <CreateTask
+          onClose={() => setOpenModal(false)}
+          initialStatus={initialStatus}
+        />
       </GlobalModal>
     </Box>
   );

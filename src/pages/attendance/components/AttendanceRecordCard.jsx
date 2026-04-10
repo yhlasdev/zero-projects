@@ -1,6 +1,5 @@
 import { Paper, Stack, Box, Typography } from "@mui/material";
 import dayjs from "dayjs";
-import { formatTime } from "../../../utils/formatTime";
 import StatusChip from "../../../components/table/StatusChip";
 
 function InfoBlock({ label, value }) {
@@ -62,8 +61,8 @@ export default function AttendanceRecordCard({ item }) {
             </Typography>
           </Box>
         </Box>
-        <InfoBlock label="CHECK IN" value={formatTime(item.check_in)} />
-        <InfoBlock label="CHECK OUT" value={formatTime(item.check_out)} />
+        <InfoBlock label="CHECK IN" value={item.check_in || "-"} />
+        <InfoBlock label="CHECK OUT" value={item.check_out || "-"} />
         <InfoBlock label="HOURS" value={item.hours?.toFixed?.(1) || "-"} />
 
         <Box ml="auto">

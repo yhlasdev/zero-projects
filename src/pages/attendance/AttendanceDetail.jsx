@@ -51,8 +51,8 @@ export default function AttendanceDetailsContent({ employee, onClose }) {
 
   const attendance = data?.data?.data || {};
   const records = attendance?.attendances || [];
-  const avgCheckIn = formatTime(attendance?.avg_check_in);
-  const avgCheckOut = formatTime(attendance?.avg_check_out);
+  const avgCheckIn = attendance?.avg_check_in || "-";
+  const avgCheckOut = attendance?.avg_check_out || "-";
   const totalHours = attendance?.total_hours?.toFixed(1) || "-";
   const presentDays = attendance?.present_days || "-";
   const departmentName = employee?.department || "-";

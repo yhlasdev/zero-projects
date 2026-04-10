@@ -182,7 +182,7 @@ const TaskColumn = ({ col, onOpenCreateModal }) => {
         )}
 
         <Box
-          onClick={onOpenCreateModal}
+          onClick={() => onOpenCreateModal(col.key)}
           sx={{
             display: "flex",
             alignItems: "center",

@@ -15,7 +15,7 @@ import AttachFileIcon from "@mui/icons-material/AttachFile";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import FlagOutlinedIcon from "@mui/icons-material/FlagOutlined";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { createDocument } from "../../../api/queries/post";
@@ -38,14 +38,14 @@ import PriorityPopover from "./PriorityPopover";
 import AssigneePopover from "./AssigneePopover";
 import DatePopover from "./DatePopover";
 
-export default function CreateTaskModal({ onClose }) {
+export default function CreateTaskModal({ onClose, initialStatus = "todo" }) {
   const queryClient = useQueryClient();
   const { t } = useLocale();
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [comment, setComment] = useState("");
-  const [status, setStatus] = useState("todo");
+  const [status, setStatus] = useState(initialStatus);
   const [priority, setPriority] = useState(null);
   const [assignees, setAssignees] = useState([]);
   const [startDate, setStartDate] = useState(null);
@@ -58,6 +58,10 @@ export default function CreateTaskModal({ onClose }) {
   const [dateAnchor, setDateAnchor] = useState(null);
 
   const fileRef = useRef();
+
+  useEffect(() => {
+    setStatus(initialStatus);
+  }, [initialStatus]);
 
   const mutation = useMutation({
     mutationFn: (payload) => createDocument(payload),
@@ -72,7 +76,7 @@ export default function CreateTaskModal({ onClose }) {
     setTitle("");
     setDescription("");
     setComment("");
-    setStatus("todo");
+    setStatus(initialStatus);
     setPriority(null);
     setAssignees([]);
     setStartDate(null);
