@@ -15,6 +15,9 @@ import { updateAnnouncement } from "../../../api/queries/put";
 import CustomFormTextField from "../../../components/textField/CustomTextField";
 import CustomFormSelect from "../../../components/select/CustomFormSelect";
 import { useLocale } from "../../../hooks/useLocale";
+import { getAllDepartment, getAllJobs } from "../../../api/queries/getters";
+import { useEffect, useState } from "react";
+import { useWatch } from "react-hook-form";
 
 const AnnouncementContent = ({ onClose, data }) => {
   const { t } = useLocale();
@@ -25,15 +28,57 @@ const AnnouncementContent = ({ onClose, data }) => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      department_ids: [0],
-      position_ids: [0],
       status: data?.Status || "",
-      target_audience: data?.TargetAudience || "",
-      text: data?.Text || "",
+      target_audience: (data?.DepartmentIds?.[0] || data?.department_ids?.[0]) ? String(data?.DepartmentIds?.[0] || data?.department_ids?.[0]) : "",
+      section: (data?.PositionIds?.[0] || data?.position_ids?.[0]) ? String(data?.PositionIds?.[0] || data?.position_ids?.[0]) : "",
+      text: data?.Text || data?.text || "",
     },
-    // resolver: yupResolver(AnnouncementValid),
     mode: "onSubmit",
   });
+
+  const selectedDepartment = useWatch({
+    control,
+    name: "target_audience",
+  });
+
+  const [departments, setDepartments] = useState([]);
+  const [jobs, setJobs] = useState([]);
+
+  useEffect(() => {
+    const fetchDepartments = async () => {
+      try {
+        const res = await getAllDepartment();
+        const deptOptions = res?.data?.data?.map((dept) => ({
+          value: String(dept.id),
+          label: dept.name,
+        })) || [];
+        setDepartments(deptOptions);
+      } catch (error) {
+        console.error("Failed to fetch departments", error);
+      }
+    };
+    fetchDepartments();
+  }, []);
+
+  useEffect(() => {
+    const fetchJobs = async () => {
+      if (selectedDepartment) {
+        try {
+          const res = await getAllJobs(selectedDepartment);
+          const jobOptions = res?.data?.data?.map((job) => ({
+            value: String(job.id),
+            label: job.title,
+          })) || [];
+          setJobs(jobOptions);
+        } catch (error) {
+          console.error("Failed to fetch jobs", error);
+        }
+      } else {
+        setJobs([]);
+      }
+    };
+    fetchJobs();
+  }, [selectedDepartment]);
 
   const mutation = useAppMutation({
     mutationFn: isEdit ? updateAnnouncement : announcementAdd,
@@ -44,13 +89,28 @@ const AnnouncementContent = ({ onClose, data }) => {
   });
 
   const submitHandler = async (formData) => {
+    let targetAudience = "all_employees";
+    if (formData.target_audience) {
+      targetAudience = "departments";
+    }
+
+    const payload = {
+      text: formData.text,
+      status: formData.status,
+      target_audience: targetAudience,
+      department_ids: formData.target_audience
+        ? [Number(formData.target_audience)]
+        : [0],
+      position_ids: formData.section ? [Number(formData.section)] : [0],
+    };
+
     if (isEdit) {
       await mutation.mutateAsync({
         id: data.ID || data.id,
-        objectData: formData,
+        objectData: payload,
       });
     } else {
-      await mutation.mutateAsync(formData);
+      await mutation.mutateAsync(payload);
     }
   };
 
@@ -58,8 +118,6 @@ const AnnouncementContent = ({ onClose, data }) => {
     { value: "publish", label: t("announcements.publishedStatus") },
     { value: "draft", label: t("announcements.draftStatus") },
   ];
-
-  const targetOptions = [{ value: "all_employees", label: t("announcements.allEmployees") }];
 
   return (
     <Box>
@@ -98,25 +156,26 @@ const AnnouncementContent = ({ onClose, data }) => {
             <Grid size={6}>
               <CustomFormSelect
                 name="target_audience"
-                label={t("announcements.targetAudience")}
+                label={t("announcements.targetAudience") || "Department"}
                 control={control}
                 errors={errors}
-                options={targetOptions}
+                options={departments}
+              />
+            </Grid>
+            <Grid size={6}>
+              <CustomFormSelect
+                name="section"
+                label={t("announcements.sections") || "Jobs"}
+                control={control}
+                errors={errors}
+                options={jobs}
+                disabled={!selectedDepartment}
               />
             </Grid>
             <Grid size={6}>
               <CustomFormSelect
                 name="status"
                 label={t("announcements.status")}
-                control={control}
-                errors={errors}
-                options={statusOptions}
-              />
-            </Grid>
-            <Grid size={6}>
-              <CustomFormSelect
-                name="section"
-                label={t("announcements.sections")}
                 control={control}
                 errors={errors}
                 options={statusOptions}

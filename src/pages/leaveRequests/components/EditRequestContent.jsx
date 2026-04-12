@@ -25,10 +25,10 @@ const leaveTypeColors = {
 
 const statusColors = {
   pending: { bg: "#FEF3C7", color: "#D97706" },
-  approved: { bg: "#DCFCE7", color: "#15803D" },
-  rejected: { bg: "#FEE2E2", color: "#B91C1C" },
+  approve: { bg: "#DCFCE7", color: "#15803D" },
+  reject: { bg: "#FEE2E2", color: "#B91C1C" },
 };
-
+  
 const EditLeaveRequest = ({ leave_id, onClose }) => {
   const { t } = useLocale();
   const {
@@ -112,7 +112,6 @@ const EditLeaveRequest = ({ leave_id, onClose }) => {
           </Box>
           <Divider sx={{ mb: 2 }} />
           <Box px={4} py={2}>
-            {/* Top Info */}
             <Paper
               elevation={0}
               sx={{ borderRadius: "8px", p: 3, mb: 3, bgcolor: "#F4F4F4" }}
@@ -152,7 +151,6 @@ const EditLeaveRequest = ({ leave_id, onClose }) => {
               </Box>
             </Paper>
 
-            {/* Leave Info */}
             <Box display="grid" gridTemplateColumns="1fr 1fr" gap={3} mb={3}>
               <Box>
                 <Typography fontSize={13} color="text.secondary">
@@ -231,7 +229,6 @@ const EditLeaveRequest = ({ leave_id, onClose }) => {
 
             <Divider sx={{ mt: 2 }} />
 
-            {/* Actions */}
             <Box display="flex" justifyContent="flex-end" gap={1} mt={2}>
               <Button
                 variant="contained"

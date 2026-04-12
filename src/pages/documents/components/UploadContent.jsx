@@ -62,6 +62,10 @@ const labelStyle = {
 };
 
 const UploadContent = ({ closeSet, editingDoc }) => {
+
+
+  console.log('this--------', editingDoc);
+
   const { t } = useLocale();
   const { control, handleSubmit, reset } = useForm({
     defaultValues: {
@@ -186,7 +190,6 @@ const UploadContent = ({ closeSet, editingDoc }) => {
         flexDirection: "column",
       }}
     >
-      {/* Header */}
       <Box
         sx={{
           width: "100%",
@@ -222,10 +225,8 @@ const UploadContent = ({ closeSet, editingDoc }) => {
         </IconButton>
       </Box>
 
-      {/* Body */}
       <Box sx={{ px: "24px", pt: "24px", pb: "24px", flex: 1 }}>
         <form onSubmit={handleSubmit(submitHandler)}>
-          {/* Document Title */}
           <Controller
             name="title"
             control={control}
@@ -244,7 +245,6 @@ const UploadContent = ({ closeSet, editingDoc }) => {
             )}
           />
 
-          {/* Description */}
           <Controller
             name="description"
             control={control}
@@ -267,10 +267,8 @@ const UploadContent = ({ closeSet, editingDoc }) => {
             )}
           />
 
-          {/* Upload File label */}
           <label style={labelStyle}>{t("documents.upload.uploadFile")}</label>
 
-          {/* Drop Zone — width 848, height 148 */}
           <Box
             onClick={() => fileInputRef.current?.click()}
             onDragOver={(e) => {
@@ -289,7 +287,6 @@ const UploadContent = ({ closeSet, editingDoc }) => {
               borderRadius: "8px",
               border: "2px dashed",
               borderColor: dragOver ? "#1C2D4A" : "#9F9F9F99",
-              // Figma dashes: 6, 4
               backgroundImage: dragOver
                 ? "none"
                 : "none",
@@ -331,9 +328,10 @@ const UploadContent = ({ closeSet, editingDoc }) => {
               style={{ display: "none" }}
               accept=".jpg,.jpeg,.png,.txt,.pdf,.xls,.xlsx,.doc,.docx"
             />
+
+            {editingDoc?.title}
           </Box>
 
-          {/* Actions */}
           <Box display="flex" justifyContent="flex-end" gap="12px">
             <Button
               variant="outlined"

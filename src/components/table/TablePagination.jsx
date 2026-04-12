@@ -41,7 +41,6 @@ export default function TablePaginationInfo({
       </Typography>
 
       <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-        {/* Previous */}
         <Box
           onClick={() => handleChange(page - 1)}
           sx={{
@@ -84,7 +83,6 @@ export default function TablePaginationInfo({
           </Box>
         ))}
 
-        {/* Next */}
         <Box
           onClick={() => handleChange(page + 1)}
           sx={{

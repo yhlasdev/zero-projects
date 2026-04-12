@@ -2,7 +2,7 @@ import { Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import { LineChart, lineElementClasses, areaElementClasses } from '@mui/x-charts/LineChart';
 import { useLocale } from "../../../../../../hooks/useLocale";
-
+/* 
 const daily_hours_last_30 = [
     { "day": "2026-02-19T00:00:00Z", "hours": 7 },
     { "day": "2026-02-20T00:00:00Z", "hours": 5 },
@@ -69,9 +69,13 @@ const daily_hours_30_to_60 = [
     { "day": "2026-02-17T00:00:00Z", "hours": 4 },
     { "day": "2026-02-18T00:00:00Z", "hours": 2 }
 ];
-
-export default function AreaChartSection() {
+ */
+export default function AreaChartSection({ daily_hours_last_30, daily_hours_30_to_60 }) {
     const { t } = useLocale();
+
+    if (!daily_hours_last_30 || daily_hours_last_30.length === 0) {
+        return null; // Or a loading state/placeholder
+    }
     return (
         <Box sx={{ width: '100%', height: 400, mt: 5, pb: 3 }}>
             <svg style={{ position: 'absolute', width: 0, height: 0, visibility: 'hidden' }}>
@@ -90,7 +94,7 @@ export default function AreaChartSection() {
                 series={[
                     {
                         id: 'current-month',
-                        data: daily_hours_last_30.map((d) => d.hours),
+                        data: daily_hours_last_30?.map((d) => d.hours || 0),
                         color: '#1D61E7',
                         area: true,
                         showMark: false,
@@ -98,7 +102,7 @@ export default function AreaChartSection() {
                     },
                     {
                         id: 'last-month',
-                        data: daily_hours_30_to_60.slice(0, 30).map((d) => d.hours),
+                        data: daily_hours_30_to_60?.slice(0, 30).map((d) => d.hours || 0),
                         color: '#EF444499',
                         area: true,
                         showMark: false,
@@ -108,7 +112,7 @@ export default function AreaChartSection() {
                 xAxis={[
                     {
                         id: 'date',
-                        data: daily_hours_last_30.map((d) => new Date(d.day)),
+                        data: daily_hours_last_30?.map((d) => new Date(d.day)),
                         scaleType: 'point',
                         valueFormatter: (value) => {
                             const months = [

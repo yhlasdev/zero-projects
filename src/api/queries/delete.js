@@ -29,7 +29,7 @@ export const deleteAnnouncement = async (id) => {
 };
 
 export const deleteJobs = async (id) => {
-  const response = await api.deletePrivate('/company-service/jobs/delete', {id});
+  const response = await api.deletePrivate('/company-service/jobs/delete', { id });
   return response;
 };
 
@@ -40,5 +40,10 @@ export const deleteDocument = async (id) => {
 
 export const deleteCalendar = async (id) => {
   const response = await api.deletePrivate(`/company-service/calendars/delete/${id}`);
+  return response;
+};
+
+export const deleteEmployee = async (id) => {
+  const response = await api.deletePrivate('/company-service/employees/delete', { employee_id: id });
   return response;
 };

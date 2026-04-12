@@ -2,7 +2,6 @@ import { Box, Typography, Avatar, Chip, Tooltip } from "@mui/material";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import { getStatusConfig, parseDateBlock } from "./TaskViewUtils";
 
-// ─── Status Chip ──────────────────────────────────────────────────────────────
 export const StatusChip = ({ status }) => {
   const cfg = getStatusConfig(status);
   return (
@@ -36,13 +35,11 @@ export const StatusChip = ({ status }) => {
   );
 };
 
-// ─── Assignee Avatar ──────────────────────────────────────────────────────────
 export const AssigneeAvatar = ({ assignee }) => (
   <Avatar
     sx={{
       width: 34,
       height: 34,
-      // bgcolor: "#0A2540",
       fontSize: "12px",
       fontWeight: 700,
     }}
@@ -51,7 +48,6 @@ export const AssigneeAvatar = ({ assignee }) => (
   </Avatar>
 );
 
-// ─── Team Avatars ─────────────────────────────────────────────────────────────
 export const TeamAvatars = ({ team = [] }) => {
   const isMoreThanFour = team.length > 4;
   const visible = isMoreThanFour ? team.slice(0, 4) : team;
@@ -98,7 +94,6 @@ export const TeamAvatars = ({ team = [] }) => {
   );
 };
 
-// ─── Date Range ───────────────────────────────────────────────────────────────
 export const DateRange = ({ startDate, endDate }) => (
   <Box sx={{ display: "flex", alignItems: "center", gap: 0.75 }}>
     <CalendarTodayIcon sx={{ fontSize: 13, color: "text.secondary" }} />
@@ -108,7 +103,6 @@ export const DateRange = ({ startDate, endDate }) => (
   </Box>
 );
 
-// ─── Date Block (timeline left side) ─────────────────────────────────────────
 export const DateBlock = ({ date, isActive, statusDot }) => {
   const { day, month, year } = parseDateBlock(date);
 
@@ -122,7 +116,6 @@ export const DateBlock = ({ date, isActive, statusDot }) => {
         pt: 0.5,
       }}
     >
-      {/* Date text */}
       <Typography sx={{ fontSize: "18px", fontWeight: 700, lineHeight: 1.1 }}>
         {day}
       </Typography>
@@ -135,7 +128,6 @@ export const DateBlock = ({ date, isActive, statusDot }) => {
         {year}
       </Typography>
 
-      {/* Timeline dot */}
       <Box
         sx={{
           mt: 1,
@@ -148,7 +140,6 @@ export const DateBlock = ({ date, isActive, statusDot }) => {
         }}
       />
 
-      {/* Timeline line */}
       <Box
         sx={{
           flex: 1,

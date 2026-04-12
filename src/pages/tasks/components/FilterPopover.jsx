@@ -107,18 +107,22 @@ const FilterPopover = ({ anchorEl, open, onClose, filters, setFilters }) => {
             </Select>
           </ListItem>
 
-          {/* Task Name Search */}
-          <ListItem sx={{ flexDirection: "column", alignItems: "stretch", py: 1 }}>
-            <Typography variant="body2" sx={{ mb: 0.5, fontWeight: 500 }}>
-              {t("tasks.taskTitle") || "Task name"}
-            </Typography>
-            <TextField
-              size="small"
-              placeholder="Search title..."
-              value={filters.task_name || ""}
-              onChange={(e) => handleFilterChange("task_name", e.target.value)}
-              fullWidth
-              sx={{ "& .MuiOutlinedInput-root": { borderRadius: "8px" } }}
+          {/* Task Name Filter (as flag) */}
+          <ListItem sx={{ py: 1 }}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={!!filters.task_name}
+                  onChange={(e) => handleFilterChange("task_name", e.target.checked)}
+                  size="small"
+                  sx={{ color: "primary.main" }}
+                />
+              }
+              label={
+                <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                  {t("tasks.taskTitle") || "Task name"}
+                </Typography>
+              }
             />
           </ListItem>
 

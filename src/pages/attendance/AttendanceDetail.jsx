@@ -14,12 +14,14 @@ import DateRangeSelect from "./components/DateRangeSelect";
 import ExportModal from "./components/EmportModalDetail";
 import DownloadIcon from "@mui/icons-material/Download";
 import { formatTime } from "../../utils/formatTime";
+import { useLocale } from "../../hooks/useLocale";
 
 import AttendanceSummaryCard from "./components/AttendanceSummaryCard";
 import AttendanceHeader from "./components/AttendanceHeader";
 import AttendanceRecordCard from "./components/AttendanceRecordCard";
 
 export default function AttendanceDetailsContent({ employee, onClose }) {
+  const { t } = useLocale();
   const [dateRange, setDateRange] = useState([
     dayjs().subtract(1, "day"),
     dayjs(),
@@ -107,19 +109,19 @@ export default function AttendanceDetailsContent({ employee, onClose }) {
         >
           <AttendanceSummaryCard
             title={avgCheckIn}
-            subtitle="Avg Check In"
+            subtitle={t("attendance.avgCheckIn")}
           />
           <AttendanceSummaryCard
             title={avgCheckOut}
-            subtitle="Avg Check Out"
+            subtitle={t("attendance.avgCheckOut")}
           />
           <AttendanceSummaryCard
             title={totalHours}
-            subtitle="Total Hours"
+            subtitle={t("attendance.totalHours")}
           />
           <AttendanceSummaryCard
             title={presentDays}
-            subtitle="Present Days"
+            subtitle={t("attendance.presentDays")}
           />
         </Stack>
 
@@ -134,7 +136,7 @@ export default function AttendanceDetailsContent({ employee, onClose }) {
             fontWeight={700}
             fontStyle={"bold"}
           >
-            Daily Check in / Check out Records
+            {t("attendance.dailyRecords")}
           </Typography>
           <Stack direction="row" alignItems="center" spacing={1}>
             <Button
@@ -156,7 +158,7 @@ export default function AttendanceDetailsContent({ employee, onClose }) {
                 "&:hover": { bgcolor: "#1e3a5f", color: "#fff" },
               }}
             >
-              Export
+              {t("common.export")}
             </Button>
             <DateRangeSelect value={dateRange} onChange={setDateRange} />
           </Stack>

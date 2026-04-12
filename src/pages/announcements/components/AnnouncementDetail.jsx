@@ -55,7 +55,6 @@ const AnnouncementDetail = ({ onClose, id }) => {
 
   return (
     <Box>
-      {/* Header */}
       <Box
         display="flex"
         justifyContent="space-between"
@@ -79,12 +78,9 @@ const AnnouncementDetail = ({ onClose, id }) => {
         <Box>{t("common.error")}</Box>
       ) : (
         <Box px={3} pb={5}>
-          {/* Title */}
           <Typography fontSize={20} fontWeight={600} mb={2}>
             {val?.Text?.split("\n")[0] || t("announcements.untitled")}
           </Typography>
-
-          {/* Meta Info */}
           <Box display="flex" alignItems="center" gap={3} mb={3}>
             <Box display="flex" alignItems="center" gap={1}>
               <PersonOutlineIcon fontSize="small" />
@@ -101,7 +97,6 @@ const AnnouncementDetail = ({ onClose, id }) => {
             <StatusChip status={val?.Status} />
           </Box>
 
-          {/* Description Box */}
           <Box
             sx={{
               backgroundColor: mode == "dark" ? "#1F2937" : "#F4F4F4",
@@ -114,7 +109,6 @@ const AnnouncementDetail = ({ onClose, id }) => {
             <Typography color="text.secondary">{val?.Text}</Typography>
           </Box>
 
-          {/* Stats Section */}
           <Grid container spacing={4}>
             <Grid size={6}>
               <Typography fontSize={14} color="text.secondary" mb={0.5}>
@@ -133,7 +127,6 @@ const AnnouncementDetail = ({ onClose, id }) => {
             </Grid>
           </Grid>
 
-          {/* Progress */}
           <Box mt={4}>
             <Box display="flex" justifyContent="space-between" mb={1}>
               <Typography fontSize={14}>{t("announcements.readProgress")}</Typography>

@@ -67,7 +67,6 @@ const rows = [
   }
 ];
 
-// 🎨 Local status color mapping
 const statusColors = {
   Pending: {
     bg: "#FEF3C7",
@@ -83,7 +82,6 @@ const statusColors = {
   }
 };
 
-// 🎨 Leave type color mapping
 const leaveTypeColors = {
   Annual: { bg: "#DBEAFE", color: "#2563EB" },
   Sick: { bg: "#FEF9C3", color: "#CA8A04" },

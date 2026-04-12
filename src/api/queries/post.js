@@ -1,11 +1,5 @@
 import { api } from "../service/apiHelper";
 import { mediaApi } from "../service/mediaHelper";
-/*
-export const addComplexApi = async (objectData) => {
-  const response = await api.postPrivate('/complex-of-buildings/add-complex-of-buildings', objectData);
-  return response;
-};
- */
 
 export const loginEmail = async (objectData) => {
   const response = await api.postPrivate("/companies/login-mail", objectData);
@@ -71,10 +65,10 @@ export const uploadFileDocument = async (objectData) => {
   return response;
 };
 
-export const uploadFileDocumentTask = async (objectData) => {
-  const response = await mediaApi(
-    "company-service/tasks/upload-file",
-    objectData,
+export const uploadTaskFile = async (formData) => {
+  const response = await mediaApi.postPrivate(
+    "/tasks/upload-file",
+    formData,
   );
   return response;
 };

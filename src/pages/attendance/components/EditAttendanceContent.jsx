@@ -21,8 +21,10 @@ import { useAppMutation } from "../../../hooks/useMutation";
 import dayjs from "dayjs";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import CustomTimePicker from "./CustomDateSelect";
+import { useLocale } from "../../../hooks/useLocale";
 
 const EditAttendance = ({ data, onClose }) => {
+  const { t } = useLocale();
   const { AttendanceValid } = useValidSchema();
   const { mode } = useColorScheme();
   const parseTime = (timeStr) => {
@@ -85,7 +87,7 @@ const EditAttendance = ({ data, onClose }) => {
               verticalAlign: "middle",
             }}
           >
-            Edit Attendance Record
+            {t("attendance.editTitle")}
           </Typography>
           <IconButton size="small" onClick={onClose}>
             <CloseIcon sx={{ width: "21px", height: "21px" }} />
@@ -121,7 +123,7 @@ const EditAttendance = ({ data, onClose }) => {
               <CustomTimePicker
                 control={control}
                 name="check_in"
-                label="Check In Time"
+                label={t("common.checkInTime")}
                 errors={errors}
                 marginTop={0}
               />
@@ -131,14 +133,14 @@ const EditAttendance = ({ data, onClose }) => {
               <CustomTimePicker
                 control={control}
                 name="check_out"
-                label="Check Out Time"
+                label={t("common.checkOutTime")}
                 errors={errors}
                 marginTop={0}
               />
             </Grid>
             <Grid size={12}>
               <Typography fontSize={14} mb={0.5}>
-                Status
+                {t("common.status")}
               </Typography>
               <Controller
                 name="status"
@@ -158,10 +160,10 @@ const EditAttendance = ({ data, onClose }) => {
                       },
                     }}
                   >
-                    <MenuItem value="present">Present</MenuItem>
-                    <MenuItem value="absent">Absent</MenuItem>
-                    <MenuItem value="on_leave">On leave</MenuItem>
-                    <MenuItem value="day_off">Day off</MenuItem>
+                    <MenuItem value="present">{t("attendance.present")}</MenuItem>
+                    <MenuItem value="absent">{t("attendance.absent")}</MenuItem>
+                    <MenuItem value="on_leave">{t("attendance.onLeave")}</MenuItem>
+                    <MenuItem value="day_off">{t("attendance.dayOff")}</MenuItem>
                   </TextField>
                 )}
               />
@@ -169,7 +171,7 @@ const EditAttendance = ({ data, onClose }) => {
             <Grid size={12}>
               <CustomFormTextField
                 control={control}
-                label={"Reason"}
+                label={t("attendance.reason")}
                 errors={errors}
                 marginTop={0}
                 name="reason"
@@ -180,14 +182,14 @@ const EditAttendance = ({ data, onClose }) => {
 
           <Box display="flex" justifyContent="flex-end" gap={1.5} mt={3}>
             <Button variant="outlined" onClick={onClose}>
-              Cancel
+              {t("common.cancel")}
             </Button>
             <Button
               variant="contained"
               type="submit"
               disabled={mutation.isPending}
             >
-              {mutation.isPending ? "Saving..." : "Save Changes"}
+              {mutation.isPending ? t("common.saving") : t("common.save")}
             </Button>
           </Box>
         </Box>

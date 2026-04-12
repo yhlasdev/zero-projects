@@ -1,6 +1,8 @@
 import { Chip } from "@mui/material";
+import { useLocale } from "../../hooks/useLocale";
 
 export default function StatusChip({ status = "default" }) {
+  const { t } = useLocale();
   const statusStyles = {
     approve: { bg: "#D1FAE5", text: "#299764" },
     present: { bg: "var(--complete-20, #29976433)", text: "#299764" },
@@ -20,7 +22,7 @@ export default function StatusChip({ status = "default" }) {
   };
   return (
     <Chip
-      label={status}
+      label={t([`attendance.${status?.toLowerCase()}`, `common.${status?.toLowerCase()}`, status])}
       size="small"
       sx={{
         fontWeight: 500,

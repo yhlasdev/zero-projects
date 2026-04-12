@@ -3,7 +3,7 @@ import { TimeStatisticCardsSection } from "./components/timeStatisticCardsSectio
 import { Wrapper } from "../../../../../components/wrapper"
 import ChartSection from "./components/chartComponent"
 import DebounceSelect from "../../../../../components/select/DebounceSelect"
-import { useQuery } from "@tanstack/react-query"
+import { useQuery, keepPreviousData } from "@tanstack/react-query"
 import { getAllDepartments, getDahsboardHourStat } from "../../../../../api/queries/getters"
 import { useState } from "react"
 import { useLocale } from "../../../../../hooks/useLocale"
@@ -24,6 +24,7 @@ export const DiagramSection = () => {
     } = useQuery({
         queryKey: ["dahsboardHourStatistic", selectedDepartment],
         queryFn: () => getDahsboardHourStat(selectedDepartment),
+        placeholderData: keepPreviousData,
     });
 
     const TimeStatisticCardsSectionForData = responseData?.data?.data;
@@ -65,7 +66,9 @@ export const DiagramSection = () => {
                     fiveData={TimeStatisticCardsSectionForData?.change_procent}
                 />
                 <Box className='mb-2' />
-                <ChartSection />
+                <ChartSection
+                    daily_hours_last_30={TimeStatisticCardsSectionForData?.daily_hours_last_30}
+                    daily_hours_30_to_60={TimeStatisticCardsSectionForData?.daily_hours_30_to_60} />
             </Box>
         </Wrapper>
     )

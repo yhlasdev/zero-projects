@@ -152,7 +152,7 @@ const DocumentsPage = () => {
               value={filters.file_types || []}
               onChange={handleTypeSelect}
               onClear={handleClearType}
-              label={t("documents.file_types")}
+              label={t("documents.fileTypes")}
               displayEmpty
             >
               <MenuItem value="" disabled sx={{ display: "none" }}>

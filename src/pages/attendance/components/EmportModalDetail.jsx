@@ -13,6 +13,7 @@ import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import dayjs from "dayjs";
 import { formatTime } from "../../../utils/formatTime";
 import StatusChip from "../../../components/table/StatusChip";
+import { useLocale } from "../../../hooks/useLocale";
 
 export default function ExportModal({
   open,
@@ -21,6 +22,7 @@ export default function ExportModal({
   attendance,
   dateRange,
 }) {
+  const { t } = useLocale();
   const records = attendance?.attendances || [];
   const avgCheckIn = formatTime(attendance?.avg_check_in);
   const avgCheckOut = formatTime(attendance?.avg_check_out);
@@ -101,7 +103,7 @@ export default function ExportModal({
       doc.setFont("helvetica", "bold");
       doc.setFontSize(16);
       doc.setTextColor(...C.white);
-      doc.text("Individual Attendance Report", pageW / 2, 14, {
+      doc.text(t("attendance.pdfIndividualReport"), pageW / 2, 14, {
         align: "center",
       });
 
@@ -109,7 +111,7 @@ export default function ExportModal({
       doc.setFont("helvetica", "normal");
       doc.setFontSize(9);
       doc.setTextColor(...C.teal);
-      doc.text("Daily Check-in / Check-out Records", pageW / 2, 22, {
+      doc.text(t("attendance.pdfDescription"), pageW / 2, 22, {
         align: "center",
       });
 
@@ -117,7 +119,7 @@ export default function ExportModal({
       doc.setFont("helvetica", "normal");
       doc.setFontSize(7);
       doc.setTextColor(...C.lightBlue);
-      doc.text("Period", pageW - M, 10, { align: "right" });
+      doc.text(t("attendance.period"), pageW - M, 10, { align: "right" });
 
       // RIGHT — "DD.MM.YYYY → DD.MM.YYYY" bold white larger
       doc.setFont("helvetica", "bold");
@@ -132,7 +134,7 @@ export default function ExportModal({
       doc.setFontSize(7.5);
       doc.setTextColor(...C.lightBlue);
       doc.text(
-        "Exported: " + dayjs().format("DD.MM.YYYY HH:mm"),
+        t("attendance.exported") + ": " + dayjs().format("DD.MM.YYYY HH:mm"),
         pageW - M,
         25,
         { align: "right" },
@@ -168,7 +170,7 @@ export default function ExportModal({
       doc.setFont("helvetica", "normal");
       doc.setFontSize(7);
       doc.setTextColor(...C.gray);
-      doc.text("Employee ID", pageW - M - 5, empY + 8, { align: "right" });
+      doc.text(t("employees.employeeId"), pageW - M - 5, empY + 8, { align: "right" });
 
       // Employee ID value bold navy
       doc.setFont("helvetica", "bold");
@@ -183,12 +185,12 @@ export default function ExportModal({
       // NOTE: WEEKEND value is teal, PRESENT is green, rest navy
       // ════════════════════════════════════════════════════════════
       const statsArr = [
-        { label: "TOTAL DAYS", value: s(totalDays), color: C.navy },
-        { label: "PRESENT", value: s(presentDays), color: C.green },
-        { label: "WEEKEND", value: s(weekendDays), color: C.teal },
-        { label: "TOTAL HOURS", value: s(totalHours) + "h", color: C.navy },
-        { label: "AVG CHECK-IN", value: s(avgCheckIn) || "-", color: C.navy },
-        { label: "AVG CHECK-OUT", value: s(avgCheckOut) || "-", color: C.navy },
+        { label: t("attendance.totalDays"), value: s(totalDays), color: C.navy },
+        { label: t("attendance.present"), value: s(presentDays), color: C.green },
+        { label: t("attendance.weekend"), value: s(weekendDays), color: C.teal },
+        { label: t("attendance.totalHours"), value: s(totalHours) + "h", color: C.navy },
+        { label: t("attendance.avgCheckInStat"), value: s(avgCheckIn) || "-", color: C.navy },
+        { label: t("attendance.avgCheckOutStat"), value: s(avgCheckOut) || "-", color: C.navy },
       ];
 
       const statY = empY + empH + 5;
@@ -230,7 +232,7 @@ export default function ExportModal({
       doc.setFont("helvetica", "bold");
       doc.setFontSize(10);
       doc.setTextColor(...C.navy);
-      doc.text("Daily Check-in / Check-out Records", M, secTitleY);
+      doc.text(t("attendance.pdfDescription"), M, secTitleY);
 
       // ════════════════════════════════════════════════════════════
       // IMAGE 3 — TABLE
@@ -239,12 +241,12 @@ export default function ExportModal({
       // ════════════════════════════════════════════════════════════
       const cols = [
         { label: "#", w: 12 },
-        { label: "Date", w: 30 },
-        { label: "Day", w: 30 },
-        { label: "Check In", w: 26 },
-        { label: "Check Out", w: 26 },
-        { label: "Hours", w: 22 },
-        { label: "Status", w: 0 },
+        { label: t("announcements.date"), w: 30 },
+        { label: t("employees.day"), w: 30 },
+        { label: t("common.checkIn"), w: 26 },
+        { label: t("common.checkOut"), w: 26 },
+        { label: t("dashboard.hours"), w: 22 },
+        { label: t("common.status"), w: 0 },
       ];
       const usedW = cols.slice(0, -1).reduce((a, c) => a + c.w, 0);
       cols[6].w = colW - usedW; // Status gets the rest
@@ -350,22 +352,22 @@ export default function ExportModal({
         // "Present" = green bold, "Weekend" = gray bold
         doc.setFont("helvetica", "bold");
         doc.setFontSize(8.5);
-        if (isPresent) {
-          doc.setTextColor(...C.green);
-          doc.text("Present", cx + cols[6].w - 4, rowY + 7.2, {
-            align: "right",
-          });
-        } else if (isWeekend) {
-          doc.setTextColor(...C.grayLight);
-          doc.text("Weekend", cx + cols[6].w - 4, rowY + 7.2, {
-            align: "right",
-          });
-        } else {
-          doc.setTextColor(...C.gray);
-          doc.text(s(item.status), cx + cols[6].w - 4, rowY + 7.2, {
-            align: "right",
-          });
-        }
+          if (isPresent) {
+            doc.setTextColor(...C.green);
+            doc.text(t("attendance.present"), cx + cols[6].w - 4, rowY + 7.2, {
+              align: "right",
+            });
+          } else if (isWeekend) {
+            doc.setTextColor(...C.grayLight);
+            doc.text(t("attendance.weekend"), cx + cols[6].w - 4, rowY + 7.2, {
+              align: "right",
+            });
+          } else {
+            doc.setTextColor(...C.gray);
+            doc.text(t(`attendance.${(item.status || "").toLowerCase()}`), cx + cols[6].w - 4, rowY + 7.2, {
+              align: "right",
+            });
+          }
 
         // Row bottom divider
         doc.setDrawColor(...C.rowBorder);
@@ -401,21 +403,18 @@ export default function ExportModal({
       doc.setFont("helvetica", "bold");
       doc.setFontSize(8.5);
       doc.setTextColor(...C.green);
-      doc.text("Summary", M + 13, sumY + 7.5);
+      doc.text(t("attendance.summary"), M + 13, sumY + 7.5);
 
       // Rest of summary text — dark normal
       doc.setFont("helvetica", "normal");
       doc.setFontSize(8.5);
       doc.setTextColor(50, 70, 55);
-      const sumText =
-        s(presentDays) +
-        " present days out of " +
-        s(totalDays) +
-        " total  .  " +
-        s(totalHours) +
-        "h total hours worked  .  Average " +
-        avgHrs +
-        "h per working day";
+      const sumText = t("attendance.summaryDesc", {
+        presentCount: presentDays,
+        totalCount: totalDays,
+        totalHours: totalHours,
+        avgHours: avgHrs,
+      });
       doc.text(sumText, M + 38, sumY + 7.5);
 
       // ════════════════════════════════════════════════════════════
@@ -430,14 +429,14 @@ export default function ExportModal({
       doc.setFontSize(7.5);
       doc.setTextColor(...C.gray);
       doc.text(
-        "Generated by Yerinde  " + dayjs().format("DD.MM.YYYY HH:mm"),
+        t("attendance.pdfGeneratedBy") + "  " + dayjs().format("DD.MM.YYYY HH:mm"),
         M,
         footY + 5,
       );
-      doc.text("CONFIDENTIAL - For internal use only", pageW / 2, footY + 5, {
+      doc.text(t("attendance.pdfConfidential"), pageW / 2, footY + 5, {
         align: "center",
       });
-      doc.text("Page 1 of 1", pageW - M, footY + 5, { align: "right" });
+      doc.text(t("attendance.pdfPage", { page: 1, total: 1 }), pageW - M, footY + 5, { align: "right" });
 
       doc.save(
         "attendance_" +
@@ -517,12 +516,12 @@ export default function ExportModal({
           }}
         >
           {[
-            { label: "TOTAL DAYS", value: totalDays },
-            { label: "PRESENT", value: presentDays, green: true },
-            { label: "WEEKEND", value: weekendDays },
-            { label: "TOTAL HOURS", value: totalHours + "h" },
-            { label: "AVG CHECK-IN", value: avgCheckIn || "—" },
-            { label: "AVG CHECK-OUT", value: avgCheckOut || "—" },
+            { label: t("attendance.totalDays"), value: totalDays },
+            { label: t("attendance.present"), value: presentDays, green: true },
+            { label: t("attendance.weekend"), value: weekendDays },
+            { label: t("attendance.totalHours"), value: totalHours + "h" },
+            { label: t("attendance.avgCheckInStat"), value: avgCheckIn || "—" },
+            { label: t("attendance.avgCheckOutStat"), value: avgCheckOut || "—" },
           ].map((stat, i) => (
             <Box
               key={i}
@@ -568,8 +567,14 @@ export default function ExportModal({
             borderBottom: "1px solid #e5e9f0",
           }}
         >
-          {["DATE", "CHECK IN", "CHECK OUT", "HOURS", "STATUS", ""].map(
-            (h, i) => (
+          {[
+            t("announcements.date"),
+            t("common.checkIn"),
+            t("common.checkOut"),
+            t("dashboard.hours"),
+            t("common.status"),
+            "",
+          ].map((h, i) => (
               <Typography
                 key={i}
                 sx={{
@@ -700,7 +705,7 @@ export default function ExportModal({
               "&:hover": { borderColor: "#cbd5e1", bgcolor: "#f8fafc" },
             }}
           >
-            Cancel
+            {t("common.cancel")}
           </Button>
           <Button
             onClick={handleExport}
@@ -715,7 +720,7 @@ export default function ExportModal({
               "&:hover": { bgcolor: "#0F3254" },
             }}
           >
-            Export Records
+            {t("attendance.exportRecords", { count: records.length })}
           </Button>
         </Box>
       </DialogContent>

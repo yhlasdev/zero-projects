@@ -38,9 +38,9 @@ const TaskDetailView = ({ tasks = [], onOpenCreateModal }) => {
   const [activeTab, setActiveTab] = useState(0);
   const ActiveView = VIEWS[activeTab].component;
 
-  // const handleFilterClick = (event) => {
-  //   setFilterAnchorEl(event.currentTarget);
-  // };
+  const handleFilterClick = (event) => {
+    setFilterAnchorEl(event.currentTarget);
+  };
 
   const handleFilterClose = () => {
     setFilterAnchorEl(null);
@@ -135,62 +135,65 @@ const TaskDetailView = ({ tasks = [], onOpenCreateModal }) => {
           })}
         </Box>
 
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1, py: 1 }}>
-          {/* <Box
-            onClick={handleFilterClick}
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: 0.5,
-              px: 1.5,
-              py: 0.5,
-              border: "1px solid #e0e0e0",
-              borderRadius: 1.5,
-              cursor: "pointer",
-              bgcolor: filterAnchorEl ? "grey.100" : "transparent",
-              "&:hover": { bgcolor: "grey.50" },
-            }}
-          >
-            <FilterListIcon sx={{ fontSize: 15, color: "text.secondary" }} />
-            <Typography sx={{ fontSize: "13px", color: "text.secondary" }}>
-              Filter
-            </Typography>
-          </Box> */}
+        {activeTab === 0 && (
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1, py: 1 }}>
+            <Box
+              onClick={handleFilterClick}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 0.5,
+                px: 1.5,
+                py: 0.5,
+                border: "1px solid #e0e0e0",
+                borderRadius: 1.5,
+                cursor: "pointer",
+                bgcolor: filterAnchorEl ? "grey.100" : "transparent",
+                "&:hover": { bgcolor: "grey.50" },
+              }}
+            >
+              <FilterListIcon sx={{ fontSize: 15, color: "text.secondary" }} />
+              <Typography sx={{ fontSize: "13px", color: "text.secondary" }}>
+                Filter
+              </Typography>
+            </Box>
 
-          <FilterPopover
-            anchorEl={filterAnchorEl}
-            open={Boolean(filterAnchorEl)}
-            onClose={handleFilterClose}
-            filters={filters}
-            setFilters={setFilters}
-          />
+            <FilterPopover
+              anchorEl={filterAnchorEl}
+              open={Boolean(filterAnchorEl)}
+              onClose={handleFilterClose}
+              filters={filters}
+              setFilters={setFilters}
+            />
 
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              px: 1.5,
-              py: 0.4,
-              border: "1px solid #e0e0e0",
-              borderRadius: 1.5,
-              width: 140,
-            }}
-          >
-            <SearchIcon
-              sx={{ fontSize: 15, color: "text.secondary", mr: 0.5 }}
-            />
-            <InputBase
-              placeholder="Search..."
-              value={filters.search || ""}
-              onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
-              sx={{ fontSize: "13px", flex: 1 }}
-              inputProps={{ style: { padding: 0 } }}
-            />
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                px: 1.5,
+                py: 0.4,
+                border: "1px solid #e0e0e0",
+                borderRadius: 1.5,
+                width: 140,
+              }}
+            >
+              <SearchIcon
+                sx={{ fontSize: 15, color: "text.secondary", mr: 0.5 }}
+              />
+              <InputBase
+                placeholder="Search..."
+                value={filters.search || ""}
+                onChange={(e) =>
+                  setFilters((prev) => ({ ...prev, search: e.target.value }))
+                }
+                sx={{ fontSize: "13px", flex: 1 }}
+                inputProps={{ style: { padding: 0 } }}
+              />
+            </Box>
           </Box>
-        </Box>
+        )}
       </Box>
 
-      {/* ── Content ── */}
       <Box sx={{ p: 2.5 }}>
         <ActiveView tasks={tasks} filters={filters} onOpenCreateModal={onOpenCreateModal} />
       </Box>

@@ -90,13 +90,9 @@ const ListView = ({ filters = {} }) => {
     queryKey: ["tasks", filters],
     queryFn: () =>
       getTaskList({
-        ...(status && { status }),
-        ...(priority && { priority }),
-        ...(task_name && { task_name }),
-        ...(is_closed !== undefined && { is_closed }),
-        ...(search && { search }),
         page,
         limit,
+        ...filters,
       }),
     select: (res) => {
       const raw = res?.data?.data?.tasks || [];

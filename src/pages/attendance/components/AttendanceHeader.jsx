@@ -1,7 +1,9 @@
 import { Stack, Box, Typography, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { useLocale } from "../../../hooks/useLocale";
 
 export default function AttendanceHeader({ employeeName, position, departmentName, onClose }) {
+  const { t } = useLocale();
   return (
     <Stack
       direction="row"
@@ -11,7 +13,7 @@ export default function AttendanceHeader({ employeeName, position, departmentNam
     >
       <Box>
         <Typography variant="body2" color="text.secondary">
-          Attendance Details
+          {t("attendance.attendanceDetails")}
         </Typography>
         <Typography py={1} fontSize={25} fontWeight={600}>
           {employeeName}

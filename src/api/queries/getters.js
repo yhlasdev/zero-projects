@@ -126,10 +126,8 @@ export const getAllBoardTask = async ({ page, limit }) => {
   });
 };
 
-export const getTaskCalendar = async ({ month, year }) => {
-  return await api.getPrivate(
-    `/company-service/tasks/by-month?month=${month}&year=${year}`,
-  );
+export const getTaskCalendar = async (params) => {
+  return await api.getPrivate("/company-service/tasks/by-month", params);
 };
 
 export const getMainCalendar = async ({ month, year }) => {
@@ -210,12 +208,8 @@ export const getNewRequest = async (status) => {
   return response;
 };
 
-export const getTaskList = async ({ status, page, limit }) => {
-  const response = await api.getPrivate("/company-service/tasks/get-all", {
-    status,
-    page,
-    limit,
-  });
+export const getTaskList = async (params) => {
+  const response = await api.getPrivate("/company-service/tasks/get-all", params);
   return response;
 };
 

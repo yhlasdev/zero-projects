@@ -179,11 +179,11 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
 
   const onSubmit = async (formData) => {
     const payload = {
-      department_id: Number(formData.department_id),
-      employee_id: Number(formData.employee_id),
+      department_id: Number(formData.department_id) == 0 ? null : Number(formData.department_id),
+      employee_id: Number(formData.employee_id) == 0 ? null : Number(formData.employee_id),
       hiring_date: formData.hiring_date,
       is_active: formData.is_active,
-      job_id: Number(formData.job_id),
+      job_id: Number(formData.job_id) == 0 ? null : Number(formData.job_id),
       probation_end_date: formData.probation_end_date,
       working_time: formData.working_time,
     };
@@ -446,14 +446,14 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
                 )}
               />
             </Grid>
-            <Grid size={6}>
+            {/* <Grid size={6}>
               <CustomFieldLabel
                 label={t("common.nationality")}
                 disabled
                 placeholder={t("common.nationality")}
                 defaultValue={data?.data?.data?.user?.nationality}
               />
-            </Grid>
+            </Grid> */}
 
             <Grid size={6}>
               <Controller

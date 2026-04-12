@@ -1,6 +1,7 @@
 import { Paper, Stack, Box, Typography } from "@mui/material";
 import dayjs from "dayjs";
 import StatusChip from "../../../components/table/StatusChip";
+import { useLocale } from "../../../hooks/useLocale";
 
 function InfoBlock({ label, value }) {
   return (
@@ -14,6 +15,7 @@ function InfoBlock({ label, value }) {
 }
 
 export default function AttendanceRecordCard({ item }) {
+  const { t } = useLocale();
   const dayNumber = dayjs(item.work_date).format("DD");
 
   return (
@@ -61,9 +63,9 @@ export default function AttendanceRecordCard({ item }) {
             </Typography>
           </Box>
         </Box>
-        <InfoBlock label="CHECK IN" value={item.check_in || "-"} />
-        <InfoBlock label="CHECK OUT" value={item.check_out || "-"} />
-        <InfoBlock label="HOURS" value={item.hours?.toFixed?.(1) || "-"} />
+        <InfoBlock label={t("common.checkIn")} value={item.check_in || "-"} />
+        <InfoBlock label={t("common.checkOut")} value={item.check_out || "-"} />
+        <InfoBlock label={t("dashboard.hours")} value={item.hours?.toFixed?.(1) || "-"} />
 
         <Box ml="auto">
           <StatusChip status={item.status} />

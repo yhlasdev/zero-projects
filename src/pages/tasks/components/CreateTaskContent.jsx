@@ -9,6 +9,7 @@ import {
   Avatar,
   InputAdornment,
   Divider,
+  CircularProgress,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
@@ -18,7 +19,7 @@ import FlagOutlinedIcon from "@mui/icons-material/FlagOutlined";
 import { useState, useRef, useEffect } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import dayjs from "dayjs";
-import { createDocument } from "../../../api/queries/post";
+import { createDocument, uploadTaskFile } from "../../../api/queries/post";
 import { useLocale } from "../../../hooks/useLocale";
 import { toast } from "react-toastify";
 
@@ -44,7 +45,6 @@ export default function CreateTaskModal({ onClose, initialStatus = "todo" }) {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [comment, setComment] = useState("");
   const [status, setStatus] = useState(initialStatus);
   const [priority, setPriority] = useState(null);
   const [assignees, setAssignees] = useState([]);
@@ -56,6 +56,9 @@ export default function CreateTaskModal({ onClose, initialStatus = "todo" }) {
   const [assigneeAnchor, setAssigneeAnchor] = useState(null);
   const [priorityAnchor, setPriorityAnchor] = useState(null);
   const [dateAnchor, setDateAnchor] = useState(null);
+
+  const [uploadedFileData, setUploadedFileData] = useState(null);
+  const [uploading, setUploading] = useState(false);
 
   const fileRef = useRef();
 
@@ -72,16 +75,29 @@ export default function CreateTaskModal({ onClose, initialStatus = "todo" }) {
     },
   });
 
+  const uploadMutation = useMutation({
+    mutationFn: (formData) => uploadTaskFile(formData),
+    onMutate: () => setUploading(true),
+    onSuccess: (res) => {
+      const data = res?.data?.data;
+      if (data) {
+        setUploadedFileData(data);
+      }
+    },
+    onSettled: () => setUploading(false),
+    onError: () => toast.error("File upload failed"),
+  });
+
   const handleClose = () => {
     setTitle("");
     setDescription("");
-    setComment("");
     setStatus(initialStatus);
     setPriority(null);
     setAssignees([]);
     setStartDate(null);
     setEndDate(null);
     setFile(null);
+    setUploadedFileData(null);
     onClose();
   };
 
@@ -101,7 +117,7 @@ export default function CreateTaskModal({ onClose, initialStatus = "todo" }) {
           ? startDate.add(7, "day").endOf("day").toISOString()
           : dayjs().add(7, "day").endOf("day").toISOString(),
       participant_ids: assignees.map((a) => a.user_id),
-      file: file ? file.name : undefined,
+      file: uploadedFileData || undefined,
     };
     mutation.mutate(payload);
   };
@@ -157,40 +173,56 @@ export default function CreateTaskModal({ onClose, initialStatus = "todo" }) {
           sx={fieldSx}
         />
 
-        <Typography sx={{ ...labelSx, mt: 2 }}>{t("tasks.comment")}</Typography>
-        <TextField
-          fullWidth
-          size="small"
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton
-                  size="small"
-                  onClick={() => fileRef.current?.click()}
-                  sx={{ color: "#94a3b8" }}
-                >
-                  <AttachFileIcon
-                    sx={{ fontSize: 18, transform: "rotate(45deg)" }}
-                  />
-                </IconButton>
-                <input
-                  ref={fileRef}
-                  type="file"
-                  hidden
-                  onChange={(e) => setFile(e.target.files[0])}
-                />
-              </InputAdornment>
-            ),
+        <Typography sx={{ ...labelSx, mt: 2 }}>{t("tasks.file") || "File attachment"}</Typography>
+        <Box
+          onClick={() => !uploading && fileRef.current?.click()}
+          sx={{
+            ...fieldSx,
+            border: "1px dashed #cbd5eb",
+            borderRadius: "10px",
+            p: 2,
+            textAlign: "center",
+            cursor: uploading ? "default" : "pointer",
+            bgcolor: "#f8fafc",
+            "&:hover": { bgcolor: uploading ? "#f8fafc" : "#f1f5f9" },
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 1,
           }}
-          sx={fieldSx}
-        />
-        {file && (
-          <Typography sx={{ fontSize: 11, color: "text.secondary", mt: 0.5 }}>
-            📎 {file.name}
-          </Typography>
-        )}
+        >
+          {uploading ? (
+            <CircularProgress size={20} />
+          ) : uploadedFileData ? (
+            <>
+              <AttachFileIcon sx={{ fontSize: 24, color: "primary.main", transform: "rotate(45deg)" }} />
+              <Typography sx={{ fontSize: 13, fontWeight: 500 }}>
+                {file?.name || "File uploaded"}
+              </Typography>
+            </>
+          ) : (
+            <>
+              <AttachFileIcon sx={{ fontSize: 24, color: "#94a3b8", transform: "rotate(45deg)" }} />
+              <Typography sx={{ fontSize: 13, color: "text.secondary" }}>
+                Click to upload file
+              </Typography>
+            </>
+          )}
+          <input
+            ref={fileRef}
+            type="file"
+            hidden
+            onChange={(e) => {
+              const selectedFile = e.target.files[0];
+              if (selectedFile) {
+                setFile(selectedFile);
+                const formData = new FormData();
+                formData.append("files", selectedFile);
+                uploadMutation.mutate(formData);
+              }
+            }}
+          />
+        </Box>
 
         <Stack
           direction="row"
@@ -246,9 +278,9 @@ export default function CreateTaskModal({ onClose, initialStatus = "todo" }) {
                 ? assignees.length === 1
                   ? `${assignees[0]?.first_name} ${assignees[0]?.last_name}`
                   : t("tasks.multipleAssignees", {
-                      count: assignees.length,
-                      defaultValue: `${assignees.length} assignees`,
-                    })
+                    count: assignees.length,
+                    defaultValue: `${assignees.length} assignees`,
+                  })
                 : t("tasks.assignee")
             }
             active={assignees.length > 0}
@@ -260,8 +292,8 @@ export default function CreateTaskModal({ onClose, initialStatus = "todo" }) {
             label={
               startDate && endDate
                 ? startDate.format("DD MMM") +
-                  " → " +
-                  endDate.format("DD MMM YYYY")
+                " → " +
+                endDate.format("DD MMM YYYY")
                 : startDate
                   ? startDate.format("DD MMM YYYY")
                   : t("tasks.dueDate")

@@ -105,93 +105,61 @@ const RequestCard = ({ request, isActive, onReject, onApprove, loadingId, t, sta
           <StatusChip status={request.status} statusStyles={statusStyles} />
         </Box>
         {request.status !== "approved" && request.status !== 'rejected' &&
-        <Box display="flex" gap={1.5}>
-          <Button
-            variant="contained"
-            size="small"
-            disabled={isUpdating}
-            onClick={() => onReject(request)}
-            sx={{
-              width: 135,
-              height: 32,
-              flexShrink: 0,
-              bgcolor: "#D93B2D",
-              "&:hover": { bgcolor: "#B83224" },
-              "&.Mui-disabled": { bgcolor: "#D93B2D", opacity: 0.6 },
-              textTransform: "none",
-              fontWeight: 600,
-              borderRadius: "8px",
-              fontSize: "0.875rem",
-              boxShadow: "0px 1px 2px 0px #0000000D",
-            }}
-          >
-            {isUpdating ? (
-              <CircularProgress size={14} sx={{ color: "#fff" }} />
-            ) : (
-              t("newRequests.reject")
-            )}
-          </Button>
-          <Button
-            variant="contained"
-            size="small"
-            disabled={isUpdating}
-            onClick={() => onApprove(request)}
-            sx={{
-              flex: 1,
-              height: 32,
-              bgcolor: "#299764",
-              "&:hover": { bgcolor: "#1F7A50" },
-              "&.Mui-disabled": { bgcolor: "#299764", opacity: 0.6 },
-              textTransform: "none",
-              fontWeight: 600,
-              borderRadius: "8px",
-              fontSize: "0.875rem",
-              boxShadow: "0px 1px 2px 0px #0000000D",
-            }}
-          >
-            {isUpdating ? (
-              <CircularProgress size={14} sx={{ color: "#fff" }} />
-            ) : (
-              t("newRequests.approveBtn")
-            )}
-          </Button>
-        </Box>}
+          <Box display="flex" gap={1.5}>
+            <Button
+              variant="contained"
+              size="small"
+              disabled={isUpdating}
+              onClick={() => onReject(request)}
+              sx={{
+                width: 135,
+                height: 32,
+                flexShrink: 0,
+                bgcolor: "#D93B2D",
+                "&:hover": { bgcolor: "#B83224" },
+                "&.Mui-disabled": { bgcolor: "#D93B2D", opacity: 0.6 },
+                textTransform: "none",
+                fontWeight: 600,
+                borderRadius: "8px",
+                fontSize: "0.875rem",
+                boxShadow: "0px 1px 2px 0px #0000000D",
+              }}
+            >
+              {isUpdating ? (
+                <CircularProgress size={14} sx={{ color: "#fff" }} />
+              ) : (
+                t("newRequests.reject")
+              )}
+            </Button>
+            <Button
+              variant="contained"
+              size="small"
+              disabled={isUpdating}
+              onClick={() => onApprove(request)}
+              sx={{
+                flex: 1,
+                height: 32,
+                bgcolor: "#299764",
+                "&:hover": { bgcolor: "#1F7A50" },
+                "&.Mui-disabled": { bgcolor: "#299764", opacity: 0.6 },
+                textTransform: "none",
+                fontWeight: 600,
+                borderRadius: "8px",
+                fontSize: "0.875rem",
+                boxShadow: "0px 1px 2px 0px #0000000D",
+              }}
+            >
+              {isUpdating ? (
+                <CircularProgress size={14} sx={{ color: "#fff" }} />
+              ) : (
+                t("newRequests.approveBtn")
+              )}
+            </Button>
+          </Box>}
       </CardContent>
     </Card>
   );
 };
-
-const CardSkeleton = () => (
-  <Card
-    variant="outlined"
-    sx={{ width: 346, minHeight: 326, borderRadius: "12px" }}
-  >
-    <CardContent sx={{ p: "25px", "&:last-child": { pb: "25px" } }}>
-      <Skeleton variant="circular" width={60} height={60} sx={{ mb: 2.5 }} />
-      {[1, 2, 3, 4].map((i) => (
-        <Skeleton key={i} variant="text" height={22} sx={{ mb: 0.75 }} />
-      ))}
-      <Skeleton
-        variant="rounded"
-        width={80}
-        height={28}
-        sx={{ mt: 1.5, mb: 2, borderRadius: "8px" }}
-      />
-      <Box display="flex" gap={1.5}>
-        <Skeleton
-          variant="rounded"
-          width={135}
-          height={32}
-          sx={{ borderRadius: "8px" }}
-        />
-        <Skeleton
-          variant="rounded"
-          sx={{ flex: 1, height: 32, borderRadius: "8px" }}
-        />
-      </Box>
-    </CardContent>
-  </Card>
-);
 
 const NewRequestsPage = () => {
   const { t } = useLocale();

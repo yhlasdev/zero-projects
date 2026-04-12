@@ -1,4 +1,3 @@
-import { Box } from "@mui/material";
 import { useState, useEffect } from "react";
 import { PageTitle } from "../../components/pageTitle/pageTitle";
 import GlobalTable from "../../components/table/Table";
@@ -15,13 +14,19 @@ import { getAllEmployee } from "../../api/queries/getters";
 import EditEmployeeContent from "./components/EditEmployee";
 import { useLocale } from "../../hooks/useLocale";
 import Seo from "../../components/seo/seo";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { deleteEmployee } from "../../api/queries/delete";
+import DeleteConfirmDialog from "../../components/modal/DeleteConfirmDialog";
+import { Box } from "@mui/material";
 
 const EmployeesPage = () => {
   const { t } = useLocale();
+  const queryClient = useQueryClient();
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openViewModal, setOpenViewModal] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [openEditModal, setOpenEditModal] = useState(false);
+  const [deleteEmployeeData, setDeleteEmployeeData] = useState(null);
   const [page, setPage] = useState(1);
   const [filters, setFilter] = useState({
     department_id: "",
@@ -30,7 +35,6 @@ const EmployeesPage = () => {
   });
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setPage(1);
   }, [filters.department_id, filters.job_id, filters.search]);
 
@@ -41,6 +45,17 @@ const EmployeesPage = () => {
     limit: 10,
     filters,
     dataKey: "employees",
+  });
+
+  const { mutate: confirmDelete, isPending: isDeleting } = useMutation({
+    mutationFn: () => deleteEmployee(deleteEmployeeData?.id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["employees"] });
+      setDeleteEmployeeData(null);
+    },
+    onError: (err) => {
+      console.error("Delete employee error:", err);
+    },
   });
 
 
@@ -70,11 +85,11 @@ const EmployeesPage = () => {
       label: t("common.department"),
       render: (row) => row.department?.name,
     },
-    {
+/*     {
       key: "nationality",
       label: t("common.nationality"),
       render: (row) => row.user?.nationality,
-    },
+    }, */
     {
       key: "status",
       label: t("common.status"),
@@ -91,7 +106,7 @@ const EmployeesPage = () => {
             setSelectedEmployee(row);
             setOpenViewModal(true);
           }}
-          onDelete={() => console.log("del")}
+          onDelete={() => handleDeleteEmployee(row?.employee_id, `${row.user?.first_name} ${row.user?.last_name}`)}
           onEdit={() => {
             setSelectedEmployee(row);
             setOpenEditModal(true);
@@ -100,6 +115,10 @@ const EmployeesPage = () => {
       ),
     },
   ];
+
+  const handleDeleteEmployee = (id, name) => {
+    setDeleteEmployeeData({ id, name });
+  };
 
   return (
     <Box className="employees">
@@ -121,7 +140,6 @@ const EmployeesPage = () => {
             subTitle={t("employees.subtitle")}
           />
           <Header
-            // onAddClick={() => setOpenAddModal(true)}
             setFilter={setFilter}
             filters={filters}
           />
@@ -162,6 +180,14 @@ const EmployeesPage = () => {
           onClose={() => setOpenEditModal(false)}
         />
       </GlobalModal>
+
+      <DeleteConfirmDialog
+        open={!!deleteEmployeeData}
+        onClose={() => setDeleteEmployeeData(null)}
+        onConfirm={confirmDelete}
+        isPending={isDeleting}
+        itemName={deleteEmployeeData?.name}
+      />
     </Box>
   );
 };
