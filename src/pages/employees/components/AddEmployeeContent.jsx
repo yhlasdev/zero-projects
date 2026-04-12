@@ -17,7 +17,6 @@ export default function AddEmployeeContent({ onClose }) {
   const { t } = useLocale();
   return (
     <Box>
-      {/* HEADER */}
       <Box
         sx={{
           px: 3,

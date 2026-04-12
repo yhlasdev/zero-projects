@@ -19,10 +19,11 @@ import { createWeaklySchedule } from "../../../api/queries/post";
 import { useLocale } from "../../../hooks/useLocale";
 
 const SHIFT_DEFAULTS = {
-  "Morning Shift": { start: "08:00", end: "16:00" },
-  "Afternoon Shift": { start: "12:00", end: "20:00" },
-  "Night Shift": { start: "16:00", end: "00:00" },
-  "Day Off": { start: "00:00", end: "00:00" },
+  "morning": { start: "08:00", end: "16:00" },
+  "afternoon": { start: "12:00", end: "20:00" },
+  "night": { start: "16:00", end: "00:00" },
+  "day_off": { start: "00:00", end: "00:00" },
+  "on_leave": { start: "00:00", end: "00:00" },
 };
 
 const DAY_NAMES = [
