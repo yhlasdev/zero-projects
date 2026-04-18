@@ -338,7 +338,7 @@
     "subTitle": "Manage and share company documents",
     "uploadDoc": "Upload Document",
     "editDoc": "Edit Document",
-    "fileTypes": "File Types",
+    "fileTypes": "Select File Type",
     "allTypes": "All Types",
     "noDocs": "No documents found.",
     "deleteErr": "Failed to delete document",

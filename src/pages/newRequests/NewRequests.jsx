@@ -75,7 +75,7 @@ const RequestCard = ({ request, isActive, onReject, onApprove, loadingId, t, sta
     >
       <CardContent sx={{ p: "25px", "&:last-child": { pb: "25px" } }}>
         <Avatar
-          src={request.profileImage ?? request.avatarUrl}
+          src={`http://194.156.117.223:8004/yerinde/storage-service/avatar/${request.user_id}/100x100`}
           sx={{ width: 60, height: 60, mb: 2.5 }}
         />
 

@@ -4,7 +4,7 @@ import Card from "@mui/material/Card"
 import { CardRow } from './cardRow'
 import { CardBtn } from './cardBtn'
 
-export const RequestCard = ({ hasBtn, status }) => {
+export const RequestCard = ({ hasBtn, status, user_id }) => {
     return (
         <Card sx={{
             p: 2,
@@ -18,7 +18,7 @@ export const RequestCard = ({ hasBtn, status }) => {
                 flexDirection: 'column',
                 gap: 2,
             }}>
-                <Avatar />
+                <Avatar src={user_id ? `http://194.156.117.223:8004/yerinde/storage-service/avatar/${user_id}/100x100` : ""} />
                 <CardRow prefix={'First Name:'} suffix={'Alexandra'} />
                 <CardRow prefix={'First Name:'} suffix={'Alexandra'} />
                 <CardRow prefix={'First Name:'} suffix={'Alexandra'} />

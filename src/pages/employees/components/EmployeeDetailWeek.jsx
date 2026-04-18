@@ -347,13 +347,33 @@ export default function EmployeeView({ employee, onClose }) {
                 direction="row"
                 p={2}
                 alignItems="center"
+                sx={{
+                  opacity: shiftKey === "day_off" ? 0.7 : 1,
+                }}
               >
                 <Box flex={2}>
-                  <Typography fontWeight={500}>
-                    {start.add((item.dayOfWeek ?? item.day_of_week ?? 1) - 1, "day").format("dddd")}
+                  <Typography
+                    fontWeight={500}
+                    sx={{
+                      textDecoration:
+                        shiftKey === "day_off" ? "line-through" : "none",
+                    }}
+                  >
+                    {start
+                      .add((item.dayOfWeek ?? item.day_of_week ?? 1) - 1, "day")
+                      .format("dddd")}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {start.add((item.dayOfWeek ?? item.day_of_week ?? 1) - 1, "day").format("MMM DD")}
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{
+                      textDecoration:
+                        shiftKey === "day_off" ? "line-through" : "none",
+                    }}
+                  >
+                    {start
+                      .add((item.dayOfWeek ?? item.day_of_week ?? 1) - 1, "day")
+                      .format("MMM DD")}
                   </Typography>
                 </Box>
 
@@ -365,15 +385,31 @@ export default function EmployeeView({ employee, onClose }) {
                       color: color.text,
                       borderRadius: "5px",
                       fontSize: "11px",
+                      textDecoration:
+                        shiftKey === "day_off" ? "line-through" : "none",
                     }}
                   />
                 </Box>
 
-                <Box flex={2}>
+                <Box
+                  flex={2}
+                  sx={{
+                    textDecoration:
+                      shiftKey === "day_off" ? "line-through" : "none",
+                  }}
+                >
                   {startFmt && endFmt ? `${startFmt} - ${endFmt}` : "—"}
                 </Box>
 
-                <Box flex={1}>{hours}</Box>
+                <Box
+                  flex={1}
+                  sx={{
+                    textDecoration:
+                      shiftKey === "day_off" ? "line-through" : "none",
+                  }}
+                >
+                  {hours}
+                </Box>
               </Stack>
             );
           })

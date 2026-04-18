@@ -229,28 +229,30 @@ const EditLeaveRequest = ({ leave_id, onClose }) => {
 
             <Divider sx={{ mt: 2 }} />
 
-            <Box display="flex" justifyContent="flex-end" gap={1} mt={2}>
-              <Button
-                variant="contained"
-                sx={{ bgcolor: "#D93B2D", borderRadius: "8px" }}
-                onClick={onClose}
-                disabled={mutation.isPending}
-              >
-                {t('leaveRequests.reject')}
-              </Button>
-              <Button
-                variant="contained"
-                type="submit"
-                sx={{ bgcolor: "#299764", borderRadius: "8px" }}
-                disabled={mutation.isPending}
-              >
-                {mutation.isPending ? (
-                  <CircularProgress size={24} color="inherit" />
-                ) : (
-                  t('leaveRequests.approve')
-                )}
-              </Button>
-            </Box>
+            {(data?.leave_status === "pending" || !data?.leave_status) && (
+              <Box display="flex" justifyContent="flex-end" gap={1} mt={2}>
+                <Button
+                  variant="contained"
+                  sx={{ bgcolor: "#D93B2D", borderRadius: "8px" }}
+                  onClick={() => mutation.mutate("reject")}
+                  disabled={mutation.isPending}
+                >
+                  {t("leaveRequests.reject")}
+                </Button>
+                <Button
+                  variant="contained"
+                  type="submit"
+                  sx={{ bgcolor: "#299764", borderRadius: "8px" }}
+                  disabled={mutation.isPending}
+                >
+                  {mutation.isPending ? (
+                    <CircularProgress size={24} color="inherit" />
+                  ) : (
+                    t("leaveRequests.approve")
+                  )}
+                </Button>
+              </Box>
+            )}
           </Box>
         </CustomForm>
       )}

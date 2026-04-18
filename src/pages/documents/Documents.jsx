@@ -160,7 +160,7 @@ const DocumentsPage = () => {
               </MenuItem>
               {allowedExtensions.map((ext) => (
                 <MenuItem key={ext} value={ext.toUpperCase()}>
-                  {ext.toUpperCase()}
+                  {t(`documents.types.${ext}`)}
                 </MenuItem>
               ))}
             </DebounceSelect>

@@ -261,10 +261,24 @@ export default function EditWeekContent({ onClose, scheduleData, onDelete }) {
                   }}
                 >
                   <Box flex={2}>
-                    <Typography fontWeight={600} fontSize={14}>
+                    <Typography
+                      fontWeight={600}
+                      fontSize={14}
+                      sx={{
+                        textDecoration:
+                          item.shift === "DAY_OFF" ? "line-through" : "none",
+                      }}
+                    >
                       {item.day}
                     </Typography>
-                    <Typography fontSize={12} color="text.secondary">
+                    <Typography
+                      fontSize={12}
+                      color="text.secondary"
+                      sx={{
+                        textDecoration:
+                          item.shift === "DAY_OFF" ? "line-through" : "none",
+                      }}
+                    >
                       {item.date}
                     </Typography>
                   </Box>
@@ -347,7 +361,14 @@ export default function EditWeekContent({ onClose, scheduleData, onDelete }) {
 
                   {/* HOURS */}
                   <Box flex={1} textAlign="right">
-                    <Typography fontWeight={600} fontSize={14}>
+                    <Typography
+                      fontWeight={600}
+                      fontSize={14}
+                      sx={{
+                        textDecoration:
+                          item.shift === "DAY_OFF" ? "line-through" : "none",
+                      }}
+                    >
                       {item.hours}
                     </Typography>
                   </Box>

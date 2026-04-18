@@ -64,8 +64,6 @@ const labelStyle = {
 const UploadContent = ({ closeSet, editingDoc }) => {
 
 
-  console.log('this--------', editingDoc);
-
   const { t } = useLocale();
   const { control, handleSubmit, reset } = useForm({
     defaultValues: {
