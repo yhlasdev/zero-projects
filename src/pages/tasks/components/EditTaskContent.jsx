@@ -65,6 +65,7 @@ export default function EditTaskContent({ task, onClose }) {
   // Pre-fill form with existing task data
   useEffect(() => {
     if (task) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setTitle(task.title ?? "");
       setDescription(task.description ?? "");
       setStatus(task.status ?? task.type ?? "todo");
