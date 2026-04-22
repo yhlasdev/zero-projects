@@ -53,7 +53,8 @@
     "previous": "Öňki",
     "noData": "Maglumat tapylmady",
     "search": "Gözleg",
-    "select": "Saýla"
+    "select": "Saýla",
+    "export": "Eksport"
   },
   "dashboard": {
     "title": "Dolandyryş paneli",

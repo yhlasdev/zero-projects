@@ -9,7 +9,7 @@ import { useState } from "react";
 import GlobalModal from "../../components/modal/GlobalModal";
 import EditAttendance from "./components/EditAttendanceContent";
 import AttendanceDetailsContent from "./AttendanceDetail";
-import BulkExportModal from "./components/BulkeExport";
+import BulkExportModal from "./components/BulkExport";
 import { usePaginationGet } from "../../hooks/usePaginationGet";
 import TablePaginationInfo from "../../components/table/TablePagination";
 import { getAllAttendance } from "../../api/queries/getters";

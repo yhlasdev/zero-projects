@@ -50,7 +50,8 @@
     "viewDetails": "View Details",
     "selected": "selected",
     "selectAll": "Select All",
-    "employees": "Employees"
+    "employees": "Employees",
+    "export": "Export"
   },
   "dashboard": {
     "title": "Dashboard",

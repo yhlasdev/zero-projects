@@ -297,6 +297,8 @@ const CalendarView = () => {
     if (key) taskMap[key] = tasks ?? [];
   });
 
+  console.log('this--tasks-----_++-', taskMap);
+
   const daysInMonth = getDaysInMonth(year, month);
   const firstDayIdx = getFirstDayOfMonth(year, month);
   const prevDays = getDaysInMonth(year, month - 1);

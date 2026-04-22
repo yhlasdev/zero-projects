@@ -17,10 +17,11 @@ import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import FlagOutlinedIcon from "@mui/icons-material/FlagOutlined";
 import { useState, useRef, useEffect } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { updateTask } from "../../../api/queries/put";
 import { uploadTaskFile } from "../../../api/queries/post";
+import { getTaskById } from "../../../api/queries/getters";
 import { useLocale } from "../../../hooks/useLocale";
 import { toast } from "react-toastify";
 
@@ -41,6 +42,7 @@ import AssigneePopover from "./AssigneePopover";
 import DatePopover from "./DatePopover";
 
 export default function EditTaskContent({ task, onClose }) {
+
   const queryClient = useQueryClient();
   const { t } = useLocale();
 
@@ -62,25 +64,38 @@ export default function EditTaskContent({ task, onClose }) {
   const [assignees, setAssignees] = useState([]);
   const fileRef = useRef();
 
+  const { data: fullTask, isLoading } = useQuery({
+    queryKey: ["task", task?.id],
+    queryFn: () => getTaskById(task?.id),
+    enabled: !!task?.id,
+  });
+
+  const taskData = fullTask?.data?.data || task;
+
   // Pre-fill form with existing task data
   useEffect(() => {
-    if (task) {
+    if (taskData) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
-      setTitle(task.title ?? "");
-      setDescription(task.description ?? "");
-      setStatus(task.status ?? task.type ?? "todo");
-      setStartDate(task.start_date ? dayjs(task.start_date) : (task.date ? dayjs(task.date) : null));
-      setEndDate(task.end_date ? dayjs(task.end_date) : null);
-      setPriority(task.priority ?? null);
-      setAssignees(task.participants ?? []);
-      
+      setTitle(taskData.title ?? "");
+      setDescription(taskData.description ?? "");
+      setStatus(taskData.status ?? taskData.type ?? "todo");
+      setStartDate(
+        taskData.start_date
+          ? dayjs(taskData.start_date)
+          : taskData.date
+            ? dayjs(taskData.date)
+            : null
+      );
+      setEndDate(taskData.end_date ? dayjs(taskData.end_date) : null);
+      setPriority(taskData.priority ?? null);
+      setAssignees(taskData.participants ?? []);
+
       // If the task already has a file, we might want to show it.
-      // Assuming task.file might be the path or object.
-      if (task.file) {
-         setUploadedFileData(task.file);
+      if (taskData.file) {
+        setUploadedFileData(taskData.file);
       }
     }
-  }, [task]);
+  }, [taskData]);
 
   const mutation = useMutation({
     mutationFn: (payload) => updateTask(payload),
@@ -145,6 +160,7 @@ export default function EditTaskContent({ task, onClose }) {
           {t("tasks.editTask") || "Edit Task"}
         </Typography>
         <IconButton size="small" onClick={onClose} sx={{ color: "#94a3b8" }}>
+          {isLoading && <CircularProgress size={18} sx={{ mr: 1 }} />}
           <CloseIcon fontSize="small" />
         </IconButton>
       </Box>

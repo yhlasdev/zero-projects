@@ -216,4 +216,8 @@ export const getTaskList = async (params) => {
 export const getProfile = async () => {
   const response = await api.getPrivate('');
   return response;
-}
+};
+
+export const getTaskById = async (id) => {
+  return await api.getPrivate(`/company-service/tasks/${id}`);
+};

@@ -53,7 +53,8 @@
     "viewDetails": "Подробнее",
     "selected": "выбрано",
     "selectAll": "Выбрать все",
-    "employees": "Сотрудники"
+    "employees": "Сотрудники",
+    "export": "Экспорт"
   },
   "dashboard": {
     "title": "Панель управления",

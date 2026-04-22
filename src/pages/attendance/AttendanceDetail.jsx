@@ -11,9 +11,8 @@ import dayjs from "dayjs";
 import { useQuery } from "@tanstack/react-query";
 import { getEmployeeDetail } from "../../api/queries/getters";
 import DateRangeSelect from "./components/DateRangeSelect";
-import ExportModal from "./components/EmportModalDetail";
+import ExportModal from "./components/ExportModalDetail";
 import DownloadIcon from "@mui/icons-material/Download";
-import { formatTime } from "../../utils/formatTime";
 import { useLocale } from "../../hooks/useLocale";
 
 import AttendanceSummaryCard from "./components/AttendanceSummaryCard";
