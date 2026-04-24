@@ -13,9 +13,9 @@ const Header = ({ setFilter, filters }) => {
   ];
 
   const AllStatus = [
-    { value: "pending", label: 'Pending' },
-    { value: "approve", label: 'Approve' },
-    { value: "rejected", label: 'Rejected' },
+    { value: "pending", label: t('leaveRequests.status.pending') || t('common.pending') || 'Pending' },
+    { value: "approve", label: t('leaveRequests.status.approve') || t('leaveRequests.approve') || 'Approve' },
+    { value: "rejected", label: t('leaveRequests.status.rejected') || t('leaveRequests.reject') || 'Rejected' },
   ];
 
 

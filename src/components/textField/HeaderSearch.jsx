@@ -2,8 +2,10 @@ import { TextField, IconButton, InputAdornment } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useState, useEffect, useRef, useCallback } from "react";
+import { useLocale } from "../../hooks/useLocale";
 
 export default function HeaderSearch({ value, onSearch, debounceTime = 500 }) {
+  const { t } = useLocale();
   const [inputValue, setInputValue] = useState(value || "");
   const debouncedRef = useRef(null);
   const onSearchRef = useRef(onSearch);
@@ -46,7 +48,7 @@ export default function HeaderSearch({ value, onSearch, debounceTime = 500 }) {
       value={inputValue}
       onChange={(e) => setInputValue(e.target.value)}
       onKeyDown={handleKeyDown}
-      placeholder="Search..."
+      placeholder={t("common.search") + "..."}
       sx={{
         width: 290,
         "& .MuiOutlinedInput-root": { borderRadius: 2.5, pl: 0.5 },

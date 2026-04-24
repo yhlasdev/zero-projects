@@ -34,6 +34,7 @@ export default function StatusPopover({ anchorEl, onClose, status, setStatus, t 
       <StatusItem
         opt={STATUS_OPTIONS[0]}
         selected={status === "todo"}
+        t={t}
         onClick={() => {
           setStatus("todo");
           onClose();
@@ -56,6 +57,7 @@ export default function StatusPopover({ anchorEl, onClose, status, setStatus, t 
       <StatusItem
         opt={STATUS_OPTIONS[1]}
         selected={status === "in_progress"}
+        t={t}
         onClick={() => {
           setStatus("in_progress");
           onClose();
@@ -64,6 +66,7 @@ export default function StatusPopover({ anchorEl, onClose, status, setStatus, t 
       <StatusItem
         opt={STATUS_OPTIONS[2]}
         selected={status === "done"}
+        t={t}
         onClick={() => {
           setStatus("done");
           onClose();

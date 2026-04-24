@@ -127,7 +127,7 @@ export const avatarColor = (id) =>
 export const getInitials = (first = "", last = "") =>
   `${first[0] || ""}${last[0] || ""}`.toUpperCase();
 
-export function StatusItem({ opt, selected, onClick }) {
+export function StatusItem({ opt, selected, onClick, t }) {
   return (
     <Box
       onClick={onClick}
@@ -151,7 +151,9 @@ export function StatusItem({ opt, selected, onClick }) {
             color: "text.primary",
           }}
         >
-          {opt.label}
+          {opt.value === "todo" ? t("tasks.todo") : 
+           opt.value === "in_progress" ? t("tasks.inProgress") : 
+           opt.value === "done" ? t("tasks.done") : opt.label}
         </Typography>
       </Stack>
       {selected && <CheckIcon sx={{ fontSize: 14, color: "#3b82f6" }} />}

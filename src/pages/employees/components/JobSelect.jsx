@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { useLocale } from "../../../hooks/useLocale";
 
 function JobSelect({
   value,
@@ -18,6 +19,7 @@ function JobSelect({
   disabled,
   loading,
 }) {
+  const { t } = useLocale();
   const hasValue = value !== "" && value !== null && value !== undefined;
 
   return (
@@ -57,7 +59,7 @@ function JobSelect({
         }
       >
         {loading ? (
-          <MenuItem disabled>Loading...</MenuItem>
+          <MenuItem disabled>{t("common.loading")}</MenuItem>
         ) : (
           options.map((job) => (
             <MenuItem key={job.id} value={job.id}>

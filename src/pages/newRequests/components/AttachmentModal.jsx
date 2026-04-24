@@ -12,8 +12,10 @@ import {
   Close as CloseIcon,
   Download as DownloadIcon,
 } from '@mui/icons-material';
+import { useLocale } from '../../../hooks/useLocale';
 
 const AttachmentModal = ({ open, onClose, imageUrl, fileName = "certificate.jpg" }) => {
+  const { t } = useLocale();
   const handleDownload = () => {
     if (!imageUrl) return;
     const link = document.createElement('a');
@@ -54,7 +56,7 @@ const AttachmentModal = ({ open, onClose, imageUrl, fileName = "certificate.jpg"
           }}
         >
           <Typography variant="h6" fontWeight={600} color="text.primary">
-            Document Preview
+            {t("common.documentPreview")}
           </Typography>
           <IconButton
             onClick={onClose}
@@ -92,7 +94,7 @@ const AttachmentModal = ({ open, onClose, imageUrl, fileName = "certificate.jpg"
               }}
             />
           ) : (
-            <Typography color="text.secondary">No image available</Typography>
+            <Typography color="text.secondary">{t("common.noImage")}</Typography>
           )}
         </DialogContent>
 
@@ -121,7 +123,7 @@ const AttachmentModal = ({ open, onClose, imageUrl, fileName = "certificate.jpg"
               boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
             }}
           >
-            Download Document
+            {t("common.downloadDocument")}
           </Button>
         </Box>
       </Box>

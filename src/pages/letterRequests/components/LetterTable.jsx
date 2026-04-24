@@ -13,6 +13,7 @@ import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import BusinessIcon from "@mui/icons-material/Business";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
+import { useLocale } from "../../../hooks/useLocale";
 
 
 // ✅ Status Color Map
@@ -36,6 +37,7 @@ export default function RequestCard({
   hasAttachment,
   onViewDetails
 }) {
+  const { t } = useLocale();
   return (
     <Card
       sx={{
@@ -59,13 +61,13 @@ export default function RequestCard({
 
               <Stack direction="row" spacing={1} mt={1}>
                 <Chip
-                  label={type}
+                  label={t(`letterRequests.types.${type?.toLowerCase()}`) || type}
                   color={statusColors[type] || "default"}
                   size="small"
                 />
 
                 <Chip
-                  label={status}
+                  label={t(`letterRequests.status.${status?.toLowerCase()}`) || status}
                   color={statusColors[status] || "default"}
                   size="small"
                 />
@@ -75,7 +77,7 @@ export default function RequestCard({
             <Button variant="outlined" size="small"
               onClick={() => onViewDetails?.()}
             >
-              View Details
+              {t("common.viewDetails")}
             </Button>
           </Box>
 
@@ -99,7 +101,7 @@ export default function RequestCard({
             {hasAttachment && (
               <Stack direction="row" spacing={0.5} alignItems="center">
                 <AttachFileIcon fontSize="small" />
-                <Typography variant="body2">Attachment</Typography>
+                <Typography variant="body2">{t("letterRequests.attachment")}</Typography>
               </Stack>
             )}
           </Stack>

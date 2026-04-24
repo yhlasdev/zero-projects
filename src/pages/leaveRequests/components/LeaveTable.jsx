@@ -10,9 +10,11 @@ import {
   Chip,
   Typography,
   Box,
-  IconButton
+  IconButton,
+  CircularProgress
 } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import { useLocale } from "../../../hooks/useLocale";
 
 const rows = [
   {
@@ -88,7 +90,24 @@ const leaveTypeColors = {
   Unpaid: { bg: "#E5E7EB", color: "#374151" }
 };
 
-export default function LeaveTable({ onView }) {
+export default function LeaveTable({ rows = [], onView, isLoading }) {
+  const { t } = useLocale();
+
+  if (isLoading) {
+    return (
+      <Box display="flex" justifyContent="center" py={5}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (!rows || rows.length === 0) {
+    return (
+      <Box display="flex" justifyContent="center" py={5}>
+        <Typography color="text.secondary">{t("common.noData")}</Typography>
+      </Box>
+    );
+  }
   return (
     <TableContainer
       component={Paper}
@@ -96,14 +115,14 @@ export default function LeaveTable({ onView }) {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell><b>Employee</b></TableCell>
-            <TableCell><b>Department</b></TableCell>
-            <TableCell><b>Leave Type</b></TableCell>
-            <TableCell><b>Start Date</b></TableCell>
-            <TableCell><b>End Date</b></TableCell>
-            <TableCell><b>Days</b></TableCell>
-            <TableCell><b>Status</b></TableCell>
-            <TableCell align="center"><b>Actions</b></TableCell>
+            <TableCell><b>{t("common.employee")}</b></TableCell>
+            <TableCell><b>{t("common.department")}</b></TableCell>
+            <TableCell><b>{t("leaveRequests.leaveType")}</b></TableCell>
+            <TableCell><b>{t("leaveRequests.startDate")}</b></TableCell>
+            <TableCell><b>{t("leaveRequests.endDate")}</b></TableCell>
+            <TableCell><b>{t("leaveRequests.days")}</b></TableCell>
+            <TableCell><b>{t("common.status")}</b></TableCell>
+            <TableCell align="center"><b>{t("common.actions")}</b></TableCell>
           </TableRow>
         </TableHead>
 
@@ -128,11 +147,11 @@ export default function LeaveTable({ onView }) {
 
               <TableCell>
                 <Chip
-                  label={row.leaveType}
+                  label={t(`leaveRequests.types.${row.leaveType?.toLowerCase()}`) || row.leaveType}
                   size="small"
                   sx={{
-                    backgroundColor: leaveTypeColors[row.leaveType].bg,
-                    color: leaveTypeColors[row.leaveType].color,
+                    backgroundColor: leaveTypeColors[row.leaveType]?.bg || "#f3f4f6",
+                    color: leaveTypeColors[row.leaveType]?.color || "#374151",
                     fontWeight: 500
                   }}
                 />
@@ -144,11 +163,11 @@ export default function LeaveTable({ onView }) {
 
               <TableCell>
                 <Chip
-                  label={row.status}
+                  label={t(`attendance.${row.status?.toLowerCase()}`) || row.status}
                   size="small"
                   sx={{
-                    backgroundColor: statusColors[row.status].bg,
-                    color: statusColors[row.status].color,
+                    backgroundColor: statusColors[row.status]?.bg || "#f3f4f6",
+                    color: statusColors[row.status]?.color || "#374151",
                     fontWeight: 500
                   }}
                 />

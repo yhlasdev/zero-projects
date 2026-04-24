@@ -3,7 +3,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import FlagOutlinedIcon from "@mui/icons-material/FlagOutlined";
 import { PRIORITY_OPTIONS } from "./CreateTaskUtils";
 
-export default function PriorityPopover({ anchorEl, onClose, priority, setPriority }) {
+export default function PriorityPopover({ anchorEl, onClose, priority, setPriority, t }) {
   return (
     <Popover
       open={Boolean(anchorEl)}
@@ -31,7 +31,7 @@ export default function PriorityPopover({ anchorEl, onClose, priority, setPriori
           pb: 0.5,
         }}
       >
-        Task Priority
+        {t("tasks.priority")}
       </Typography>
       {PRIORITY_OPTIONS.map((p) => (
         <Box
@@ -70,7 +70,7 @@ export default function PriorityPopover({ anchorEl, onClose, priority, setPriori
               fontWeight: priority === p.value ? 600 : 400,
             }}
           >
-            {p.label}
+            {t(`tasks.priorityLevels.${p.value}`)}
           </Typography>
           {priority === p.value && (
             <CheckIcon sx={{ fontSize: 14, color: "#3b82f6", ml: "auto" }} />

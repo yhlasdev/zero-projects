@@ -18,6 +18,8 @@ import { toast } from "react-toastify";
 import { createWeaklySchedule } from "../../../api/queries/post";
 import { useLocale } from "../../../hooks/useLocale";
 
+import dayjs from "dayjs";
+
 const SHIFT_DEFAULTS = {
   "morning": { start: "08:00", end: "16:00" },
   "afternoon": { start: "12:00", end: "20:00" },
@@ -25,16 +27,6 @@ const SHIFT_DEFAULTS = {
   "day_off": { start: "00:00", end: "00:00" },
   "on_leave": { start: "00:00", end: "00:00" },
 };
-
-const DAY_NAMES = [
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-  "Sunday",
-];
 
 const formatTimeForAPI = (time) => {
   if (!time) return null;
@@ -57,58 +49,54 @@ const calculateHours = (start, end) => {
   return ((endMin - startMin) / 60).toFixed(1);
 };
 
-const generateWeeks = () => {
-  const weeks = [];
-  const today = new Date();
-
-  const monday = new Date(today);
-  monday.setDate(today.getDate() - ((today.getDay() + 6) % 7));
-
-  for (let i = 0; i < 5; i++) {
-    const start = new Date(monday);
-    start.setDate(monday.getDate() + i * 7);
-
-    const end = new Date(start);
-    end.setDate(start.getDate() + 6);
-
-    const fmt = (d) =>
-      d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-
-    weeks.push({
-      label: `${fmt(start)} - ${fmt(end)}, ${start.getFullYear()}`,
-      start: start.toISOString().slice(0, 10),
-      end: end.toISOString().slice(0, 10),
-      monday: new Date(start),
-    });
-  }
-
-  return weeks;
-};
-
-const WEEK_OPTIONS = generateWeeks();
-
-const buildDays = (mondayDate) =>
-  DAY_NAMES.map((day, i) => {
-    const date = new Date(mondayDate);
-    date.setDate(mondayDate.getDate() + i);
-
-    return {
-      day,
-      date: date.toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-      }),
-      isoDate: date.toISOString().slice(0, 10),
-      day_of_week: i + 1,
-      shift: "Day Off",
-      start: "00:00",
-      end: "00:00",
-      hours: "0.0",
-    };
-  });
-
 export default function CreateScheduleModalContent({ onClose, employeeId }) {
   const { t } = useLocale();
+
+  const DAY_NAMES = [
+    t("calendar.mon", { defaultValue: "Monday" }),
+    t("calendar.tue", { defaultValue: "Tuesday" }),
+    t("calendar.wed", { defaultValue: "Wednesday" }),
+    t("calendar.thu", { defaultValue: "Thursday" }),
+    t("calendar.fri", { defaultValue: "Friday" }),
+    t("calendar.sat", { defaultValue: "Saturday" }),
+    t("calendar.sun", { defaultValue: "Sunday" }),
+  ];
+
+  const generateWeeks = () => {
+    const weeks = [];
+    let startOfWeek = dayjs().startOf("week").add(1, "day"); // Monday
+
+    for (let i = 0; i < 5; i++) {
+      const start = startOfWeek.add(i, "week");
+      const end = start.add(6, "day");
+
+      weeks.push({
+        label: `${start.format("MMM D")} - ${end.format("MMM D")}, ${start.year()}`,
+        start: start.format("YYYY-MM-DD"),
+        end: end.format("YYYY-MM-DD"),
+        monday: start,
+      });
+    }
+    return weeks;
+  };
+
+  const WEEK_OPTIONS = useMemo(() => generateWeeks(), []);
+
+  const buildDays = (mondayDate) =>
+    DAY_NAMES.map((day, i) => {
+      const date = mondayDate.add(i, "day");
+      return {
+        day,
+        date: date.format("MMM D"),
+        isoDate: date.format("YYYY-MM-DD"),
+        day_of_week: i + 1,
+        shift: "day_off",
+        start: "00:00",
+        end: "00:00",
+        hours: "0.0",
+      };
+    });
+
   const [selectedWeekIdx, setSelectedWeekIdx] = useState(0);
   const [schedule, setSchedule] = useState(() =>
     buildDays(WEEK_OPTIONS[0].monday),

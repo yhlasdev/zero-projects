@@ -10,8 +10,9 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import CheckIcon from "@mui/icons-material/Check";
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { getAllEmployeeForTask } from "../../../api/queries/getters";
+import { removeParticipant } from "../../../api/queries/delete";
 import { avatarColor, getInitials } from "./CreateTaskUtils";
 
 export default function AssigneePopover({ anchorEl, onClose, assignees, setAssignees, t }) {
@@ -26,12 +27,34 @@ export default function AssigneePopover({ anchorEl, onClose, assignees, setAssig
 
   const employees = empData?.data?.data?.length ? empData?.data?.data : [];
 
+  console.log('this-employeees-----', employees);
+
+  const removeMutation = useMutation({
+    mutationFn: removeParticipant,
+  });
+
   const toggleAssignee = (emp) => {
-    setAssignees((prev) =>
-      prev.find((a) => a.user_id === emp.user_id)
-        ? prev.filter((a) => a.user_id !== emp.user_id)
-        : [...prev, emp],
-    );
+    setAssignees((prev) => {
+      const existing = prev.find(
+        (a) =>
+          String(a.user_id || a.participant_id) === String(emp.user_id) ||
+          (a.first_name?.trim().toLowerCase() === emp.first_name?.trim().toLowerCase() &&
+            a.last_name?.trim().toLowerCase() === emp.last_name?.trim().toLowerCase()),
+      );
+
+      if (existing) {
+        if (existing.participant_id) {
+          removeMutation.mutate({ participant_id: existing.participant_id });
+        }
+
+        return prev.filter(
+          (a) =>
+            String(a.user_id || a.participant_id) !== String(emp.user_id) &&
+            !(a.first_name === emp.first_name && a.last_name === emp.last_name),
+        );
+      }
+      return [...prev, emp];
+    });
   };
 
   return (
@@ -56,9 +79,7 @@ export default function AssigneePopover({ anchorEl, onClose, assignees, setAssig
         <TextField
           fullWidth
           size="small"
-          placeholder={t("common.searchPlaceholder", {
-            defaultValue: "Search or enter email...",
-          })}
+          placeholder={t("common.searchPlaceholder")}
           value={empSearch}
           onChange={(e) => setEmpSearch(e.target.value)}
           autoFocus
@@ -93,12 +114,15 @@ export default function AssigneePopover({ anchorEl, onClose, assignees, setAssig
               py: 2,
             }}
           >
-            {t("tasks.noEmployees", { defaultValue: "No employees found" })}
+            {t("tasks.noEmployees")}
           </Typography>
         ) : (
           employees.map((emp) => {
             const isSelected = assignees.some(
-              (a) => a.user_id === emp.user_id,
+              (a) =>
+                String(a.user_id || a.participant_id) === String(emp.user_id) ||
+                (a.first_name?.trim().toLowerCase() === emp.first_name?.trim().toLowerCase() &&
+                  a.last_name?.trim().toLowerCase() === emp.last_name?.trim().toLowerCase())
             );
             const name =
               `${emp?.first_name || ""} ${emp?.last_name || ""}`.trim();

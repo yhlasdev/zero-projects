@@ -7,7 +7,6 @@ import {
   IconButton,
   Stack,
   Avatar,
-  InputAdornment,
   Divider,
   CircularProgress,
 } from "@mui/material";
@@ -16,6 +15,7 @@ import AttachFileIcon from "@mui/icons-material/AttachFile";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import FlagOutlinedIcon from "@mui/icons-material/FlagOutlined";
+import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import { useState, useRef, useEffect } from "react";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
@@ -72,10 +72,11 @@ export default function EditTaskContent({ task, onClose }) {
 
   const taskData = fullTask?.data?.data || task;
 
-  // Pre-fill form with existing task data
+  const imageTypes = [".jpg", ".jpeg", ".png", ".webp", ".svg"];
+  const STORAGE_BASE_URL = "http://194.156.117.223:8004/yerinde/storage-service/tasks";
+
   useEffect(() => {
     if (taskData) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setTitle(taskData.title ?? "");
       setDescription(taskData.description ?? "");
       setStatus(taskData.status ?? taskData.type ?? "todo");
@@ -90,7 +91,6 @@ export default function EditTaskContent({ task, onClose }) {
       setPriority(taskData.priority ?? null);
       setAssignees(taskData.participants ?? []);
 
-      // If the task already has a file, we might want to show it.
       if (taskData.file) {
         setUploadedFileData(taskData.file);
       }
@@ -102,12 +102,13 @@ export default function EditTaskContent({ task, onClose }) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
       queryClient.invalidateQueries({ queryKey: ["taskCalendar"] });
+      queryClient.invalidateQueries({ queryKey: ["task", task?.id] });
       toast.success(t("tasks.editSuccess") || "Task updated successfully");
       onClose();
     },
     onError: (err) => {
       toast.error(
-        err?.response?.data?.message || err?.message || "Failed to update task"
+        err?.response?.data?.message || err?.message || t("tasks.editError")
       );
     },
   });
@@ -133,8 +134,8 @@ export default function EditTaskContent({ task, onClose }) {
       description: description.trim() || undefined,
       status,
       priority: priority || "clear",
-      start_date: startDate ? startDate.startOf("day").toISOString() : dayjs().startOf("day").toISOString(),
-      end_date: endDate ? endDate.endOf("day").toISOString() : undefined,
+      start_date: startDate ? startDate.add(1, "day").startOf("day").toISOString() : dayjs().add(1, "day").startOf("day").toISOString(),
+      end_date: endDate ? endDate.add(1, "day").startOf("day").toISOString() : undefined,
       participant_ids: assignees.map((a) => a.user_id || a.participant_id),
       file: uploadedFileData || undefined,
     };
@@ -189,38 +190,85 @@ export default function EditTaskContent({ task, onClose }) {
 
         <Typography sx={{ ...labelSx, mt: 2 }}>{t("tasks.file") || "File attachment"}</Typography>
         <Box
-          onClick={() => !uploading && fileRef.current?.click()}
           sx={{
             ...fieldSx,
             border: "1px dashed #cbd5eb",
-            borderRadius: "10px",
-            p: 2,
+            borderRadius: "12px",
+            p: 2.5,
             textAlign: "center",
             cursor: uploading ? "default" : "pointer",
             bgcolor: "#f8fafc",
-            "&:hover": { bgcolor: uploading ? "#f8fafc" : "#f1f5f9" },
+            transition: "all 0.2s",
+            "&:hover": { bgcolor: uploading ? "#f8fafc" : "#f1f5f9", borderColor: "primary.main" },
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            gap: 1,
+            gap: 1.5,
+            position: "relative",
           }}
         >
           {uploading ? (
-            <CircularProgress size={20} />
+            <CircularProgress size={24} />
           ) : uploadedFileData ? (
-            <>
-              <AttachFileIcon sx={{ fontSize: 24, color: "primary.main", transform: "rotate(45deg)" }} />
-              <Typography sx={{ fontSize: 13, fontWeight: 500 }}>
-                {file?.name || (typeof uploadedFileData === 'string' ? (uploadedFileData.length > 20 ? uploadedFileData.substring(0, 20) + '...' : uploadedFileData) : (uploadedFileData?.content?.[0]?.path ? 'File attached' : 'Current File'))}
-              </Typography>
-            </>
+            <Box sx={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: 1 }}>
+              {(() => {
+                const fileObj = file ? null : (uploadedFileData?.content?.[0] || (typeof uploadedFileData === 'object' ? uploadedFileData : null));
+                const isImage = file ? file.type.startsWith("image/") : (fileObj && imageTypes.includes(fileObj.mime));
+
+                if (isImage) {
+                  const imgSrc = file
+                    ? URL.createObjectURL(file)
+                    : `${STORAGE_BASE_URL}/${fileObj.path}/${fileObj.mime === '.webp' ? '150x150.webp' : `original${fileObj.mime}`}`;
+
+                  return (
+                    <Box
+                      component="img"
+                      src={imgSrc}
+                      alt="Preview"
+                      sx={{
+                        width: 100,
+                        height: 100,
+                        borderRadius: "8px",
+                        objectFit: "cover",
+                        border: "1px solid",
+                        borderColor: "divider",
+                      }}
+                    />
+                  );
+                }
+
+                return (
+                  <Stack alignItems="center" spacing={1}>
+                    <InsertDriveFileIcon sx={{ fontSize: 40, color: "primary.main" }} />
+                    <Typography sx={{ fontSize: 13, fontWeight: 500, color: "text.primary", maxWidth: "200px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                      {file ? file.name : (fileObj?.path || t("tasks.document"))}
+                    </Typography>
+                  </Stack>
+                );
+              })()}
+
+              <Button
+                variant="text"
+                size="small"
+                onClick={() => fileRef.current?.click()}
+                sx={{ textTransform: "none", fontSize: 12, mt: 0.5 }}
+              >
+                {t("tasks.changeFile")}
+              </Button>
+            </Box>
           ) : (
-            <>
-              <AttachFileIcon sx={{ fontSize: 24, color: "#94a3b8", transform: "rotate(45deg)" }} />
-              <Typography sx={{ fontSize: 13, color: "text.secondary" }}>
-                Click to upload file
+            <Box
+              onClick={() => fileRef.current?.click()}
+              sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1, width: "100%" }}
+            >
+              <AttachFileIcon sx={{ fontSize: 28, color: "#94a3b8", transform: "rotate(45deg)" }} />
+              <Typography sx={{ fontSize: 13, color: "text.secondary", fontWeight: 500 }}>
+                {t("tasks.clickToUpload")}
               </Typography>
-            </>
+              <Typography sx={{ fontSize: 11, color: "#94a3b8" }}>
+                {t("tasks.uploadHint")}
+              </Typography>
+            </Box>
           )}
           <input
             ref={fileRef}
@@ -239,7 +287,6 @@ export default function EditTaskContent({ task, onClose }) {
         </Box>
 
         <Stack direction="row" spacing={1} mt={2.5} mb={1} flexWrap="wrap" useFlexGap>
-          {/* Type (formerly Status) pill */}
           <Box
             onClick={(e) => setStatusAnchor(e.currentTarget)}
             sx={{
@@ -257,7 +304,6 @@ export default function EditTaskContent({ task, onClose }) {
             {STATUS_OPTIONS.find((s) => s.value === status)?.label || status}
           </Box>
 
-          {/* Date pill */}
           <PillButton
             icon={<CalendarTodayIcon sx={{ fontSize: 13 }} />}
             label={
@@ -273,7 +319,6 @@ export default function EditTaskContent({ task, onClose }) {
             onClick={(e) => setDateAnchor(e.currentTarget)}
           />
 
-          {/* Assignee pill */}
           <PillButton
             icon={
               assignees.length > 0 ? (
@@ -312,7 +357,6 @@ export default function EditTaskContent({ task, onClose }) {
             onClick={(e) => setAssigneeAnchor(e.currentTarget)}
           />
 
-          {/* Priority pill */}
           <PillButton
             icon={
               <FlagOutlinedIcon
@@ -332,7 +376,7 @@ export default function EditTaskContent({ task, onClose }) {
             onClick={(e) => setPriorityAnchor(e.currentTarget)}
           />
         </Stack>
-      </DialogContent>
+      </DialogContent >
 
       <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1.5, px: 3, py: 2.5 }}>
         <Button
@@ -362,47 +406,56 @@ export default function EditTaskContent({ task, onClose }) {
             "&.Mui-disabled": { bgcolor: "action.disabledBackground" },
           }}
         >
-          {mutation.isPending ? "Saving…" : t("common.save")}
+          {mutation.isPending ? t("common.saving") : t("common.save")}
         </Button>
       </Box>
 
-      {statusAnchor && (
-        <StatusPopover
-          anchorEl={statusAnchor}
-          onClose={() => setStatusAnchor(null)}
-          status={status}
-          setStatus={setStatus}
-          t={t}
-        />
-      )}
-      {dateAnchor && (
-        <DatePopover
-          anchorEl={dateAnchor}
-          onClose={() => setDateAnchor(null)}
-          startDate={startDate}
-          endDate={endDate}
-          setStartDate={setStartDate}
-          setEndDate={setEndDate}
-          t={t}
-        />
-      )}
-      {assigneeAnchor && (
-        <AssigneePopover
-          anchorEl={assigneeAnchor}
-          onClose={() => setAssigneeAnchor(null)}
-          assignees={assignees}
-          setAssignees={setAssignees}
-          t={t}
-        />
-      )}
-      {priorityAnchor && (
-        <PriorityPopover
-          anchorEl={priorityAnchor}
-          onClose={() => setPriorityAnchor(null)}
-          priority={priority}
-          setPriority={setPriority}
-        />
-      )}
+      {
+        statusAnchor && (
+          <StatusPopover
+            anchorEl={statusAnchor}
+            onClose={() => setStatusAnchor(null)}
+            status={status}
+            setStatus={setStatus}
+            t={t}
+          />
+        )
+      }
+      {
+        dateAnchor && (
+          <DatePopover
+            anchorEl={dateAnchor}
+            onClose={() => setDateAnchor(null)}
+            startDate={startDate}
+            endDate={endDate}
+            setStartDate={setStartDate}
+            setEndDate={setEndDate}
+            t={t}
+          />
+        )
+      }
+      {
+        assigneeAnchor && (
+          <AssigneePopover
+            anchorEl={assigneeAnchor}
+            onClose={() => setAssigneeAnchor(null)}
+            assignees={assignees}
+            setAssignees={setAssignees}
+            t={t}
+          />
+        )
+      }
+      {
+        priorityAnchor && (
+          <PriorityPopover
+            anchorEl={priorityAnchor}
+            onClose={() => setPriorityAnchor(null)}
+            priority={priority}
+            setPriority={setPriority}
+            t={t}
+          />
+        )
+      }
     </>
   );
 }

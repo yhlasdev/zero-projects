@@ -19,6 +19,7 @@
     "loading": "Ýüklenýär...",
     "error": "Ýalňyşlyk",
     "save": "Üýtgeşmeleri ýatda sakla",
+    "saving": "Ýatda saklanylýar...",
     "cancel": "Yza dön",
     "delete": "Poz",
     "deleting": "Pozulýar...",
@@ -51,10 +52,17 @@
     "employees": "Işgärler",
     "next": "Indiki",
     "previous": "Öňki",
-    "noData": "Maglumat tapylmady",
     "search": "Gözleg",
     "select": "Saýla",
-    "export": "Eksport"
+    "export": "Eksport",
+    "yes": "Hawa",
+    "no": "Ýok",
+    "viewDetails": "Jikme-jiklikleri gör",
+    "noData": "Maglumat ýok",
+    "documentPreview": "Resminamanyň deslapky görnüşi",
+    "downloadDocument": "Resminamany ýükle",
+    "noImage": "Surat tapylmady",
+    "selectDate": "Senäni saýlaň"
   },
   "dashboard": {
     "title": "Dolandyryş paneli",
@@ -136,6 +144,7 @@
     "updateEmployee": "Işgäri täzele",
     "updating": "Täzelenýär...",
     "updateSuccess": "Işgär üstünlikli täzelendi",
+    "updateError": "Işgäri täzelemek başartmady",
     "jobId": "Wezipe ID",
     "scheduleCreated": "Iş tertibi üstünlikli döredildi!",
     "scheduleExist": "Iş tertibi eýýäm bar ýa-da nädogry!",
@@ -148,8 +157,15 @@
     "editWeeklySchedule": "Hepdelik iş tertibini üýtget",
     "currentWeek": "Häzirki hepde",
     "updateSchedule": "Iş tertibini üýtget",
-    "scheduleDeleted": "Iş tertibi üstünlikli pozuldy",
-    "scheduleDeleteFail": "Iş tertibini pozmak başartmady"
+    "scheduleDeleted": "Tertipnama üstünlikli öçürildi",
+    "scheduleDeleteFail": "Tertipnamany öçürmek başa barmady",
+    "shiftTypes": {
+      "morning": "Ertir",
+      "afternoon": "Öýlän",
+      "night": "Agşam",
+      "day_off": "Dynç güni",
+      "on_leave": "Rugsatda"
+    }
   },
   "tasks": {
     "title": "Wezipeler",
@@ -160,6 +176,7 @@
       "calendar": "Senenama"
     },
     "createTask": "Wezipe döret",
+    "editTask": "Wezipäni düzediş",
     "taskTitle": "Wezipäniň ady",
     "description": "Düşündiriş",
     "comment": "Teswir",
@@ -178,7 +195,16 @@
       "clear": "Arassala",
       "none": "Ýok"
     },
-    "createSuccess": "Wezipe üstünlikli döredildi"
+    "createSuccess": "Wezipe üstünlikli döredildi",
+    "editSuccess": "Wezipäniň maglumatlary täzelendi",
+    "editError": "Wezipäni täzelemek başartmady",
+    "file": "Resminama goşundy",
+    "clickToUpload": "Faýl ýüklemek üçin basyň",
+    "changeFile": "Faýly üýtget",
+    "document": "Resminama",
+    "uploadHint": "JPG, PNG, WEBP, PDF (Maks. 10MB)",
+    "noEmployees": "Işgär tapylmady",
+    "multipleAssignees": "{{count}} jogapkär"
   },
   "settings": {
     "title": "Kompaniýanyň sazlamalary",
@@ -334,9 +360,25 @@
     }
   },
   "letterRequests": {
-    "title": "Hat soraglary",
-    "subtitle": "Işgärleriň hatlaryny we habarlaşmalaryny dolandyryň",
-    "attachment": "Gerkebnama"
+    "title": "Hat sargytlary",
+    "subtitle": "İşgärleriň resminama sargytlaryna göz aýlaň we dolandyryň",
+    "detailsTitle": "Hata sargydynyň jikme-jiklikleri",
+    "submittedDate": "Iberilen senesi",
+    "attachment": "Goşundy",
+    "message": "Habar",
+    "adminNotes": "Admin bellikleri (Içki)",
+    "accept": "Kabul et",
+    "reject": "Red et",
+    "types": {
+      "salary": "Aýlyk hak",
+      "complaint": "Şikaýat",
+      "transfer": "Geçirilme"
+    },
+    "status": {
+      "pending": "Garaşylýar",
+      "accepted": "Kabul edildi",
+      "rejected": "Red edildi"
+    }
   },
   "documents": {
     "title": "Resminamalar",
@@ -368,6 +410,17 @@
     },
     "card": {
       "download": "Ýükle"
+    },
+    "types": {
+      "jpg": "JPG şekili",
+      "jpeg": "JPEG şekili",
+      "png": "PNG şekili",
+      "txt": "Metin faýly",
+      "pdf": "PDF resminamasy",
+      "xls": "Excel faýly (XLS)",
+      "xlsx": "Excel faýly (XLSX)",
+      "doc": "Word resminamasy (DOC)",
+      "docx": "Word resminamasy (DOCX)"
     }
   },
   "calendar": {
@@ -409,6 +462,16 @@
       "thu": "Pen",
       "fri": "Jum",
       "sat": "Şen"
+    },
+    "shortcuts": {
+      "today": "Şu gün",
+      "later": "Soňrak",
+      "tomorrow": "Ertir",
+      "thisweekend": "Şu dynç alyş",
+      "nextweek": "Indiki hepde",
+      "nextweekend": "Indiki dynç alyş",
+      "2weeks": "2 hepde",
+      "4weeks": "4 hepde"
     }
   },
   "announcements": {

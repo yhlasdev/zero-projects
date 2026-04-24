@@ -19,11 +19,13 @@
     "loading": "Loading...",
     "error": "Error",
     "save": "Save Changes",
+    "saving": "Saving...",
     "cancel": "Cancel",
     "delete": "Delete",
     "deleting": "Deleting...",
     "next": "Next",
     "previous": "Previous",
+    "search": "Search",
     "showing": "Showing",
     "of": "of",
     "id": "ID",
@@ -51,7 +53,15 @@
     "selected": "selected",
     "selectAll": "Select All",
     "employees": "Employees",
-    "export": "Export"
+    "export": "Export",
+    "yes": "Yes",
+    "no": "No",
+    "viewDetails": "View Details",
+    "noData": "No data available",
+    "documentPreview": "Document Preview",
+    "downloadDocument": "Download Document",
+    "noImage": "No image available",
+    "selectDate": "Select date"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -133,6 +143,7 @@
     "updateEmployee": "Update Employee",
     "updating": "Updating...",
     "updateSuccess": "Employee updated successfully",
+    "updateError": "Failed to update employee",
     "jobId": "Job ID",
     "scheduleCreated": "Schedule created successfully!",
     "scheduleExist": "Schedule already exists or invalid!",
@@ -146,7 +157,14 @@
     "currentWeek": "Current Week",
     "updateSchedule": "Update Schedule",
     "scheduleDeleted": "Schedule deleted successfully",
-    "scheduleDeleteFail": "Failed to delete schedule"
+    "scheduleDeleteFail": "Failed to delete schedule",
+    "shiftTypes": {
+      "morning": "Morning",
+      "afternoon": "Afternoon",
+      "night": "Night",
+      "day_off": "Day Off",
+      "on_leave": "On Leave"
+    }
   },
   "tasks": {
     "title": "Task",
@@ -176,7 +194,16 @@
       "clear": "Clear",
       "none": "None"
     },
-    "createSuccess": "Successfuly created task"
+    "createSuccess": "Successfuly created task",
+    "editSuccess": "Task updated successfully",
+    "editError": "Failed to update task",
+    "file": "File attachment",
+    "clickToUpload": "Click to upload file",
+    "changeFile": "Change file",
+    "document": "Document",
+    "uploadHint": "JPG, PNG, WEBP, PDF (Max 10MB)",
+    "noEmployees": "No employees found",
+    "multipleAssignees": "{{count}} assignees"
   },
   "settings": {
     "title": "Company Settings",
@@ -332,7 +359,25 @@
     }
   },
   "letterRequests": {
-    "attachment": "Attachment"
+    "title": "Letter Requests",
+    "subtitle": "Review and manage employee document requests",
+    "detailsTitle": "Letter Request Details",
+    "submittedDate": "Submitted Date",
+    "attachment": "Attachment",
+    "message": "Message",
+    "adminNotes": "Admin Notes (Internal)",
+    "accept": "Accept",
+    "reject": "Reject",
+    "types": {
+      "salary": "Salary",
+      "complaint": "Complaint",
+      "transfer": "Transfer"
+    },
+    "status": {
+      "pending": "Pending",
+      "accepted": "Accepted",
+      "rejected": "Rejected"
+    }
   },
   "documents": {
     "title": "Company Documents",
@@ -361,6 +406,17 @@
     },
     "card": {
       "download": "Download"
+    },
+    "types": {
+      "jpg": "JPG Image",
+      "jpeg": "JPEG Image",
+      "png": "PNG Image",
+      "txt": "Text File",
+      "pdf": "PDF Document",
+      "xls": "Excel Spreadsheet (XLS)",
+      "xlsx": "Excel Spreadsheet (XLSX)",
+      "doc": "Word Document (DOC)",
+      "docx": "Word Document (DOCX)"
     }
   },
   "calendar": {
@@ -402,6 +458,16 @@
       "thu": "Thu",
       "fri": "Fri",
       "sat": "Sat"
+    },
+    "shortcuts": {
+      "today": "Today",
+      "later": "Later",
+      "tomorrow": "Tomorrow",
+      "thisweekend": "This weekend",
+      "nextweek": "Next week",
+      "nextweekend": "Next weekend",
+      "2weeks": "2 weeks",
+      "4weeks": "4 weeks"
     }
   },
   "announcements": {

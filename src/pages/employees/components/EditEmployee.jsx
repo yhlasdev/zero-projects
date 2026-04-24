@@ -169,11 +169,11 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
       await queryClient.invalidateQueries({
         queryKey: ["employee", employeeId],
       });
-      toast.success("Employee updated successfully");
+      toast.success(t("employees.updateSuccess") || "Employee updated successfully");
       onClose();
     },
     onError: () => {
-      toast.error("Failed to update employee");
+      toast.error(t("employees.updateError") || "Failed to update employee");
     },
   });
 
@@ -478,7 +478,7 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
                           newValue ? dayjs(newValue).format("YYYY-MM-DD") : "",
                         );
                       }}
-                      placeholder="Select date"
+                      placeholder={t("common.selectDate") || "Select date"}
                     />
                   </Box>
                 )}
@@ -507,7 +507,7 @@ export default function EditEmployeeContent({ employeeId, onClose }) {
                           newValue ? dayjs(newValue).format("YYYY-MM-DD") : "",
                         );
                       }}
-                      placeholder="Select date"
+                      placeholder={t("common.selectDate") || "Select date"}
                     />
                   </Box>
                 )}

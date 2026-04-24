@@ -10,7 +10,6 @@ const DayPanel = ({ dateKey, tasks, onEdit }) => {
 
   return (
     <Box sx={{ mt: 2, borderTop: "1px solid #e5e7eb", pt: 2 }}>
-      {/* Date heading */}
       <Typography sx={{ fontWeight: 700, fontSize: "13px", mb: 1.5 }}>
         {dateLabel}
         <Typography
@@ -48,7 +47,6 @@ const DayPanel = ({ dateKey, tasks, onEdit }) => {
                   bgcolor: cfg.bg,
                 }}
               >
-                {/* Task info */}
                 <Box sx={{ flex: 1, minWidth: 0 }}>
                   <Box
                     sx={{
@@ -86,7 +84,6 @@ const DayPanel = ({ dateKey, tasks, onEdit }) => {
                     />
                   </Box>
 
-                  {/* Participants */}
                   {task.participants?.length > 0 && (
                     <Box
                       sx={{
@@ -129,7 +126,6 @@ const DayPanel = ({ dateKey, tasks, onEdit }) => {
                   )}
                 </Box>
 
-                {/* Edit icon */}
                 <IconButton
                   size="small"
                   onClick={() => onEdit?.(task)}

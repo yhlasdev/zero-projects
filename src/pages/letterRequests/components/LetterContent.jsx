@@ -8,6 +8,7 @@ import {
   Button
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { useLocale } from "../../../hooks/useLocale";
 
 const statusColors = {
   Pending: { bg: "#FEF3C7", color: "#D97706" },
@@ -22,6 +23,7 @@ const typeColors = {
 };
 
 const LetterContent = ({ data, onClose }) => {
+  const { t } = useLocale();
   return (
     <Box p={3}>
       {/* Header */}
@@ -32,7 +34,7 @@ const LetterContent = ({ data, onClose }) => {
         mb={2}
       >
         <Typography fontSize={18} fontWeight={600}>
-          Letter Request Details
+          {t("letterRequests.detailsTitle")}
         </Typography>
 
         <IconButton onClick={onClose}>
@@ -45,7 +47,7 @@ const LetterContent = ({ data, onClose }) => {
       {/* Chips */}
       <Box display="flex" gap={1} mb={3}>
         <Chip
-          label={data.type}
+          label={t(`letterRequests.types.${data.type?.toLowerCase()}`) || data.type}
           size="small"
           sx={{
             backgroundColor: typeColors[data.type]?.bg,
@@ -54,7 +56,7 @@ const LetterContent = ({ data, onClose }) => {
         />
 
         <Chip
-          label={data.status}
+          label={t(`letterRequests.status.${data.status?.toLowerCase()}`) || data.status}
           size="small"
           sx={{
             backgroundColor: statusColors[data.status]?.bg,
@@ -80,26 +82,26 @@ const LetterContent = ({ data, onClose }) => {
         <Box display="grid" gridTemplateColumns="1fr 1fr" gap={3}>
           <Box>
             <Typography fontSize={13} color="text.secondary">
-              Employee
+              {t("common.employee")}
             </Typography>
             <Typography fontWeight={600}>{data.name}</Typography>
 
             <Typography mt={2} fontSize={13} color="text.secondary">
-              Submitted Date
+              {t("letterRequests.submittedDate")}
             </Typography>
             <Typography>{data.date}</Typography>
           </Box>
 
           <Box>
             <Typography fontSize={13} color="text.secondary">
-              Department
+              {t("common.department")}
             </Typography>
             <Typography fontWeight={600}>{data.department}</Typography>
 
             <Typography mt={2} fontSize={13} color="text.secondary">
-              Attachment
+              {t("letterRequests.attachment")}
             </Typography>
-            <Typography>{data.hasAttachment ? "Yes" : "No"}</Typography>
+            <Typography>{data.hasAttachment ? t("common.yes") : t("common.no")}</Typography>
           </Box>
         </Box>
       </Paper>
@@ -107,7 +109,7 @@ const LetterContent = ({ data, onClose }) => {
       {/* Message */}
       <Box mb={3}>
         <Typography fontSize={13}  mb={1}>
-          Message
+          {t("letterRequests.message")}
         </Typography>
 
         <Paper
@@ -124,7 +126,7 @@ const LetterContent = ({ data, onClose }) => {
       {/* Admin Notes */}
       <Box mb={3}>
         <Typography fontSize={13} color="text.secondary" mb={1}>
-          Admin Notes (Internal)
+          {t("letterRequests.adminNotes")}
         </Typography>
 
         <Paper
@@ -144,11 +146,11 @@ const LetterContent = ({ data, onClose }) => {
           sx={{ backgroundColor: "#DC2626" }}
           onClick={onClose}
         >
-          Reject
+          {t("letterRequests.reject")}
         </Button>
 
         <Button variant="contained" sx={{ backgroundColor: "#16A34A" }}>
-          Accept
+          {t("letterRequests.accept")}
         </Button>
       </Box>
     </Box>

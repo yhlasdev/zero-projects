@@ -216,7 +216,7 @@ export default function DatePopover({
                     fontWeight: isSelected ? 600 : 400,
                   }}
                 >
-                  {s.label}
+                  {t(`calendar.shortcuts.${s.label.toLowerCase().replace(/\s/g, "")}`)}
                 </Typography>
                 {note && (
                   <Typography sx={{ fontSize: 13, color: "#9ca3af" }}>
@@ -247,7 +247,11 @@ export default function DatePopover({
                 letterSpacing: 0.5,
               }}
             >
-              {calView.format("MMMM YYYY").toUpperCase()}
+              {(() => {
+                const monthName = t(`calendar.months.${calView.format("MMMM").toLowerCase()}`);
+                const year = calView.format("YYYY");
+                return `${monthName} ${year}`.toUpperCase();
+              })()}
             </Typography>
             <Box sx={{ display: "flex" }}>
               <IconButton

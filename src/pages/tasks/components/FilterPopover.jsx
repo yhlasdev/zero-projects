@@ -66,10 +66,9 @@ const FilterPopover = ({ anchorEl, open, onClose, filters, setFilters }) => {
         </Typography>
 
         <List sx={{ p: 0 }}>
-          {/* Status Filter */}
           <ListItem sx={{ flexDirection: "column", alignItems: "stretch", py: 1 }}>
             <Typography variant="body2" sx={{ mb: 0.5, fontWeight: 500 }}>
-              {t("common.status") || "Status"}
+              {t("common.status")}
             </Typography>
             <Select
               size="small"
@@ -86,10 +85,9 @@ const FilterPopover = ({ anchorEl, open, onClose, filters, setFilters }) => {
             </Select>
           </ListItem>
 
-          {/* Priority Filter */}
           <ListItem sx={{ flexDirection: "column", alignItems: "stretch", py: 1 }}>
             <Typography variant="body2" sx={{ mb: 0.5, fontWeight: 500 }}>
-              {t("tasks.priority") || "Priority"}
+              {t("tasks.priority")}
             </Typography>
             <Select
               size="small"
@@ -107,7 +105,6 @@ const FilterPopover = ({ anchorEl, open, onClose, filters, setFilters }) => {
             </Select>
           </ListItem>
 
-          {/* Task Name Filter (as flag) */}
           <ListItem sx={{ py: 1 }}>
             <FormControlLabel
               control={
@@ -120,13 +117,12 @@ const FilterPopover = ({ anchorEl, open, onClose, filters, setFilters }) => {
               }
               label={
                 <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                  {t("tasks.taskTitle") || "Task name"}
+                  {t("tasks.taskTitle")}
                 </Typography>
               }
             />
           </ListItem>
 
-          {/* Date Closed (Boolean for now based on image/request) */}
           <ListItem sx={{ py: 1 }}>
             <FormControlLabel
               control={

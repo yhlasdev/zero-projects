@@ -47,3 +47,8 @@ export const deleteEmployee = async (id) => {
   const response = await api.deletePrivate('/company-service/employees/delete', { employee_id: id });
   return response;
 };
+
+export const removeParticipant = async ({ participant_id }) => {
+  const response = await api.deletePrivate("/company-service/tasks/remove-participant", { participant_id });
+  return response;
+};

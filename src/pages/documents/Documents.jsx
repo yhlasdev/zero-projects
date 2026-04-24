@@ -178,7 +178,7 @@ const DocumentsPage = () => {
                 height: "90%",
               }}
             >
-              <CircularProgress aria-label="Loading…" />
+              <CircularProgress aria-label={t("common.loading")} />
             </Box>
           ) : isError ? (
             <Box>{t("common.error")}</Box>

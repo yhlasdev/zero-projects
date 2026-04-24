@@ -19,6 +19,7 @@
     "loading": "Загрузка...",
     "error": "Ошибка",
     "save": "Сохранить изменения",
+    "saving": "Сохранение...",
     "cancel": "Отмена",
     "delete": "Удалить",
     "deleting": "Удаление...",
@@ -54,7 +55,15 @@
     "selected": "выбрано",
     "selectAll": "Выбрать все",
     "employees": "Сотрудники",
-    "export": "Экспорт"
+    "export": "Экспорт",
+    "yes": "Да",
+    "no": "Нет",
+    "viewDetails": "Просмотреть детали",
+    "noData": "Нет данных",
+    "documentPreview": "Предварительный просмотр документа",
+    "downloadDocument": "Скачать документ",
+    "noImage": "Нет изображения",
+    "selectDate": "Выберите дату"
   },
   "dashboard": {
     "title": "Панель управления",
@@ -136,6 +145,7 @@
     "updateEmployee": "Обновить сотрудника",
     "updating": "Обновление...",
     "updateSuccess": "Сотрудник успешно обновлен",
+    "updateError": "Не удалось обновить сотрудника",
     "jobId": "ID должности",
     "scheduleCreated": "Расписание успешно создано!",
     "scheduleExist": "Расписание уже существует или недействительно!",
@@ -149,7 +159,14 @@
     "currentWeek": "Текущая неделя",
     "updateSchedule": "Обновить расписание",
     "scheduleDeleted": "Расписание успешно удалено",
-    "scheduleDeleteFail": "Не удалось удалить расписание"
+    "scheduleDeleteFail": "Не удалось удалить расписание",
+    "shiftTypes": {
+      "morning": "Утро",
+      "afternoon": "День",
+      "night": "Вечер",
+      "day_off": "Выходной",
+      "on_leave": "В отпуске"
+    }
   },
   "tasks": {
     "title": "Задачи",
@@ -160,6 +177,7 @@
       "calendar": "Календарь"
     },
     "createTask": "Создать задачу",
+    "editTask": "Редактировать задачу",
     "taskTitle": "Название задачи",
     "description": "Описание",
     "comment": "Комментарий",
@@ -178,7 +196,16 @@
       "clear": "Очистить",
       "none": "Нет"
     },
-    "createSuccess": "Задача успешно создана"
+    "createSuccess": "Задача успешно создана",
+    "editSuccess": "Задача успешно обновлена",
+    "editError": "Не удалось обновить задачу",
+    "file": "Прикрепленный файл",
+    "clickToUpload": "Нажмите для загрузки файла",
+    "changeFile": "Изменить файл",
+    "document": "Документ",
+    "uploadHint": "JPG, PNG, WEBP, PDF (Макс. 10МБ)",
+    "noEmployees": "Сотрудники не найдены",
+    "multipleAssignees": "{{count}} исполнителей"
   },
   "settings": {
     "title": "Настройки компании",
@@ -334,7 +361,25 @@
     }
   },
   "letterRequests": {
-    "attachment": "Вложение"
+    "title": "Запросы на справки",
+    "subtitle": "Просмотр и управление запросами сотрудников на документы",
+    "detailsTitle": "Детали запроса справки",
+    "submittedDate": "Дата подачи",
+    "attachment": "Приложение",
+    "message": "Сообщение",
+    "adminNotes": "Заметки администратора (Внутренние)",
+    "accept": "Принять",
+    "reject": "Отклонить",
+    "types": {
+      "salary": "Зарплата",
+      "complaint": "Жалоба",
+      "transfer": "Перевод"
+    },
+    "status": {
+      "pending": "В ожидании",
+      "accepted": "Принято",
+      "rejected": "Отклонено"
+    }
   },
   "documents": {
     "title": "Документы компании",
@@ -363,6 +408,17 @@
     },
     "card": {
       "download": "Скачать"
+    },
+    "types": {
+      "jpg": "JPG изображение",
+      "jpeg": "JPEG изображение",
+      "png": "PNG изображение",
+      "txt": "Текстовый файл",
+      "pdf": "PDF документ",
+      "xls": "Excel таблица (XLS)",
+      "xlsx": "Excel таблица (XLSX)",
+      "doc": "Word документ (DOC)",
+      "docx": "Word документ (DOCX)"
     }
   },
   "calendar": {
@@ -404,6 +460,16 @@
       "thu": "Чт",
       "fri": "Пт",
       "sat": "Сб"
+    },
+    "shortcuts": {
+      "today": "Сегодня",
+      "later": "Позже",
+      "tomorrow": "Завтра",
+      "thisweekend": "В эти выходные",
+      "nextweek": "На следующей неделе",
+      "nextweekend": "В следующие выходные",
+      "2weeks": "Через 2 недели",
+      "4weeks": "Через 4 недели"
     }
   },
   "announcements": {

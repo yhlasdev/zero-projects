@@ -70,6 +70,7 @@ export default function CreateTaskModal({ onClose, initialStatus = "todo" }) {
     mutationFn: (payload) => createDocument(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
+      queryClient.invalidateQueries({ queryKey: ["taskCalendar"] });
       toast.success(t("tasks.createSuccess"));
       handleClose();
     },
@@ -109,14 +110,14 @@ export default function CreateTaskModal({ onClose, initialStatus = "todo" }) {
       status,
       priority: priority || "clear",
       start_date: startDate
-        ? startDate.startOf("day").toISOString()
-        : dayjs().startOf("day").toISOString(),
+        ? startDate.format("YYYY-MM-DD")
+        : dayjs().format("YYYY-MM-DD"),
       end_date: endDate
-        ? endDate.endOf("day").toISOString()
+        ? endDate.format("YYYY-MM-DD")
         : startDate
-          ? startDate.add(7, "day").endOf("day").toISOString()
-          : dayjs().add(7, "day").endOf("day").toISOString(),
-      participant_ids: assignees.map((a) => a.user_id),
+          ? startDate.add(7, "day").format("YYYY-MM-DD")
+          : dayjs().add(7, "day").format("YYYY-MM-DD"),
+      participant_ids: assignees.map((a) => a.user_id || a.participant_id),
       file: uploadedFileData || undefined,
     };
     mutation.mutate(payload);

@@ -379,7 +379,7 @@ export default function EmployeeView({ employee, onClose }) {
 
                 <Box flex={2}>
                   <Chip
-                    label={shiftLabel}
+                    label={t(`employees.shiftTypes.${shiftKey}`)}
                     sx={{
                       backgroundColor: color.bg,
                       color: color.text,
