@@ -6,7 +6,6 @@ import {
   Grid,
   LinearProgress,
   useColorScheme,
-  CircularProgress,
   Skeleton,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";

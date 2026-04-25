@@ -20,21 +20,36 @@ import { useEffect, useState } from "react";
 import { useWatch } from "react-hook-form";
 
 const AnnouncementContent = ({ onClose, data }) => {
+
+  console.log('this-datac-c-c-c------',data);
+
   const { t } = useLocale();
   const isEdit = Boolean(data);
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     defaultValues: {
       status: data?.Status || "",
-      target_audience: (data?.DepartmentIds?.[0] || data?.department_ids?.[0]) ? String(data?.DepartmentIds?.[0] || data?.department_ids?.[0]) : "",
-      section: (data?.PositionIds?.[0] || data?.position_ids?.[0]) ? String(data?.PositionIds?.[0] || data?.position_ids?.[0]) : "",
+      target_audience: (data?.DepartmentIDs?.[0] || data?.DepartmentIds?.[0] || data?.department_ids?.[0]) ? String(data?.DepartmentIDs?.[0] || data?.DepartmentIds?.[0] || data?.department_ids?.[0]) : "",
+      section: (data?.PositionIDs?.[0] || data?.PositionIds?.[0] || data?.position_ids?.[0]) ? String(data?.PositionIDs?.[0] || data?.PositionIds?.[0] || data?.position_ids?.[0]) : "",
       text: data?.Text || data?.text || "",
     },
     mode: "onSubmit",
   });
+
+  useEffect(() => {
+    if (data) {
+      reset({
+        status: data?.Status || "",
+        target_audience: (data?.DepartmentIDs?.[0] || data?.DepartmentIds?.[0] || data?.department_ids?.[0]) ? String(data?.DepartmentIDs?.[0] || data?.DepartmentIds?.[0] || data?.department_ids?.[0]) : "",
+        section: (data?.PositionIDs?.[0] || data?.PositionIds?.[0] || data?.position_ids?.[0]) ? String(data?.PositionIDs?.[0] || data?.PositionIds?.[0] || data?.position_ids?.[0]) : "",
+        text: data?.Text || data?.text || "",
+      });
+    }
+  }, [data, reset]);
 
   const selectedDepartment = useWatch({
     control,
@@ -103,6 +118,8 @@ const AnnouncementContent = ({ onClose, data }) => {
         : [0],
       position_ids: formData.section ? [Number(formData.section)] : [0],
     };
+
+    console.log('this-payload-++__++---------',payload);
 
     if (isEdit) {
       await mutation.mutateAsync({
