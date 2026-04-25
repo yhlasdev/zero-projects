@@ -44,7 +44,6 @@ export const HeaderAvatar = () => {
     queryFn: () => getSettingsOverview(),
   });
 
-  console.log('this-profile--------', data?.data?.data);
   const profileData = data?.data?.data;
 
   const handleOpen = (event) => setAnchorEl(event.currentTarget);

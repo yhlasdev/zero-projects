@@ -9,9 +9,9 @@ import Divider from "@mui/material/Divider";
 import { useSidebarItems } from "../../hooks/useSidebarItems";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import lightMode from "../../assets/logo/logo_light.png";
+import lightMode from "../../assets/logo/white_logo.svg";
 
-import darkMode from '../../assets/logo/logo_dark.png'
+import darkMode from '../../assets/logo/blue_logo.svg'
 
 import { useColorScheme } from "@mui/material";
 
@@ -48,7 +48,7 @@ export const Sidebar = () => {
         }}
       >
         {
-          mode === 'dark' ? <img style={{ width: '196px', height: '71px' }} src={darkMode} /> : <img style={{ width: '196px', height: '71px' }} src={lightMode} />
+          mode === 'dark' ? <img style={{ height: '71px' }} src={lightMode} /> : <img style={{ height: '71px' }} src={darkMode} />
         }
       </Box>
 
