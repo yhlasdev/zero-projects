@@ -58,6 +58,7 @@ dayjs.updateLocale("tr", {
 dayjs.locale("tr");
 
 function App() {
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="tr" >
       <ToastContainer position="bottom-right" />

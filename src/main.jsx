@@ -11,6 +11,10 @@ import { I18nextProvider } from 'react-i18next';
 import { GlobalStyles } from '@mui/material';
 import { HelmetProvider } from 'react-helmet-async';
 
+import "@fontsource/inter";
+import "@fontsource-variable/inter";
+
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {

@@ -22,19 +22,24 @@ import { toast } from "react-toastify";
 import { useLocale } from "../../../hooks/useLocale";
 import { EyeClosedIcon, EyeOpenIcon } from "../../../utils/Icon";
 
-const loginPhone = async ({ phone, password }) => {
+import { useEffect } from 'react';
+import { messaging } from "../../../firebase";
+import { getToken, onMessage } from "firebase/messaging";
+
+
+const loginPhone = async ({ phone, password, fcm_token }) => {
   const phoneNumber = "993" + phone;
   const response = await axios.post(
     "http://194.156.117.223:8007/yerinde/company-service/companies/login-phone",
-    { phone_number: phoneNumber, password },
+    { phone_number: phoneNumber, password, fcm_token },
   );
   return response.data;
 };
 
-const loginEmail = async ({ email, password }) => {
+const loginEmail = async ({ email, password, fcm_token }) => {
   const response = await axios.post(
     "http://194.156.117.223:8007/yerinde/company-service/companies/login-mail",
-    { mail: email, password },
+    { mail: email, password, fcm_token },
   );
   return response.data;
 };
@@ -74,6 +79,7 @@ const getFriendlyError = (error) => {
 };
 
 export const RightSide = () => {
+
   const { t } = useLocale();
   const [type, setType] = useState(
     localStorage.getItem("remembered_email") ? "email" : "phone",
@@ -91,13 +97,40 @@ export const RightSide = () => {
     phone: localStorage.getItem("remembered_phone") || "",
     email: localStorage.getItem("remembered_email") || "",
     password: "",
+    fcm_token: "",
   });
 
   const [errors, setErrors] = useState({
     phone: "",
     email: "",
     password: "",
+    fcm_token: ""
   });
+
+  useEffect(() => {
+    Notification.requestPermission().then(async (permission) => {
+      if (permission === "granted") {
+        const token = await getToken(messaging, {
+          vapidKey: "BGyWSkI71mFNdVNUlI0qP8x2GpAy17_Tu8aO20nas4C9OcL0SZZ20FwCkTL_UxMCExiUEKZB13RKkBPMlBedSnM",
+        });
+
+        if (token) {
+          setForm((prev) => ({ ...prev, fcm_token: token }));
+        } else {
+          console.log("no token available");
+        }
+      }
+    });
+
+    const unsubscribe = onMessage(messaging, (payload) => {
+      toast.info(payload.notification?.title || "new notification");
+    });
+
+    return () => unsubscribe();
+    /*     onMessage(messaging, (payload) => {
+          console.log(payload);
+        }); */
+  }, []);
 
   const handleChange = (key, value) => {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -117,9 +150,9 @@ export const RightSide = () => {
   const mutation = useMutation({
     mutationFn: async () => {
       if (type === "phone") {
-        return loginPhone({ phone: form.phone, password: form.password });
+        return loginPhone({ phone: form.phone, password: form.password, fcm_token: form.fcm_token });
       } else {
-        return loginEmail({ email: form.email, password: form.password });
+        return loginEmail({ email: form.email, password: form.password, fcm_token: form.fcm_token });
       }
     },
     onSuccess: (data) => {

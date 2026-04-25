@@ -1,9 +1,9 @@
-
 @layer mui, base, components, utilities;
 
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
+
 
 
 @layer base {
@@ -107,9 +107,15 @@ h6 {
 }
 
 
+:root {
+  font-family: 'Inter', sans-serif;
+}
+
 html,
 body,
 #root,
 .your-component-parent {
+  font-family: "Inter", sans-serif;
+  font-family: "Inter Variable", sans-serif;
   height: 100%;
 }
