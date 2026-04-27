@@ -7,12 +7,18 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import updateLocale from "dayjs/plugin/updateLocale";
 import "dayjs/locale/tr";
-import { ToastContainer } from 'react-toastify';
+import "dayjs/locale/tk";
+import "dayjs/locale/ru";
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useEffect } from 'react';
+import { messaging } from "./firebase";
+import { onMessage } from "firebase/messaging";
+import { useLocale } from './hooks/useLocale';
 
 dayjs.extend(updateLocale);
 
-dayjs.updateLocale("tr", {
+dayjs.updateLocale("tk", {
   weekdays: [
     "Yekşenbe",
     "Duşenbe",
@@ -29,7 +35,7 @@ dayjs.updateLocale("tr", {
     "Fewral",
     "Mart",
     "Aprel",
-    "Mai",
+    "Maý",
     "Iýun",
     "Iýul",
     "Awgust",
@@ -43,7 +49,7 @@ dayjs.updateLocale("tr", {
     "Few",
     "Mar",
     "Apr",
-    "Mai",
+    "Maý",
     "Iýn",
     "Iýl",
     "Awg",
@@ -52,12 +58,47 @@ dayjs.updateLocale("tr", {
     "Noý",
     "Dek"
   ],
-  weekStart: 1
+  weekStart: 1,
+  relativeTime: {
+    future: "%s soň",
+    past: "%s öň",
+    s: "birnäçe sekunt",
+    m: "bir minut",
+    mm: "%d minut",
+    h: "bir sagat",
+    hh: "%d sagat",
+    d: "bir gün",
+    dd: "%d gün",
+    M: "bir aý",
+    MM: "%d aý",
+    y: "bir ýyl",
+    yy: "%d ýyl"
+  }
 });
 
-dayjs.locale("tr");
+dayjs.locale("tk");
 
 function App() {
+  const { t } = useLocale();
+
+  useEffect(() => {
+    const unsubscribe = onMessage(messaging, (payload) => {
+      console.log('Message received. ', payload);
+      toast.info(payload.notification?.title || t("notifications.newNotification"));
+
+      const notifications = JSON.parse(localStorage.getItem("notifications") || "[]");
+      notifications.push({
+        ...payload.notification,
+        id: Date.now(),
+        unread: true,
+        date_time: new Date().toISOString()
+      });
+      localStorage.setItem("notifications", JSON.stringify(notifications));
+      window.dispatchEvent(new Event('notifications-updated'));
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="tr" >

@@ -519,5 +519,11 @@
     "notFound": "Not found this status",
     "viewCertificate": "View Certificate",
     "noCertificate": "No certificate available for this request"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "markAllRead": "Mark all read",
+    "noNotifications": "No notifications yet",
+    "newNotification": "new notification"
   }
 }

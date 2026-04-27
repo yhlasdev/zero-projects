@@ -21,6 +21,8 @@ import { useWatch } from "react-hook-form";
 
 const AnnouncementContent = ({ onClose, data }) => {
 
+  console.log('this-data------', data);
+
   const { t } = useLocale();
   const isEdit = Boolean(data);
   const {
@@ -31,8 +33,8 @@ const AnnouncementContent = ({ onClose, data }) => {
   } = useForm({
     defaultValues: {
       status: data?.Status || "",
-      target_audience: (data?.DepartmentIDs?.[0] || data?.DepartmentIds?.[0] || data?.department_ids?.[0]) ? String(data?.DepartmentIDs?.[0] || data?.DepartmentIds?.[0] || data?.department_ids?.[0]) : "",
-      section: (data?.PositionIDs?.[0] || data?.PositionIds?.[0] || data?.position_ids?.[0]) ? String(data?.PositionIDs?.[0] || data?.PositionIds?.[0] || data?.position_ids?.[0]) : "",
+      target_audience: (data?.DepartmentIDs?.[0]) ? String(data?.DepartmentIDs?.[0]) : "",
+      section: (data?.PositionIDs?.[0]) ? String(data?.PositionIDs?.[0]) : "",
       text: data?.Text || data?.text || "",
     },
     mode: "onSubmit",
@@ -42,8 +44,8 @@ const AnnouncementContent = ({ onClose, data }) => {
     if (data) {
       reset({
         status: data?.Status || "",
-        target_audience: (data?.DepartmentIDs?.[0] || data?.DepartmentIds?.[0] || data?.department_ids?.[0]) ? String(data?.DepartmentIDs?.[0] || data?.DepartmentIds?.[0] || data?.department_ids?.[0]) : "",
-        section: (data?.PositionIDs?.[0] || data?.PositionIds?.[0] || data?.position_ids?.[0]) ? String(data?.PositionIDs?.[0] || data?.PositionIds?.[0] || data?.position_ids?.[0]) : "",
+        target_audience: (data?.DepartmentIDs?.[0]) ? String(data?.DepartmentIDs?.[0]) : "",
+        section: (data?.PositionIDs?.[0]) ? String(data?.PositionIDs?.[0]) : "",
         text: data?.Text || data?.text || "",
       });
     }
@@ -103,7 +105,9 @@ const AnnouncementContent = ({ onClose, data }) => {
 
   const submitHandler = async (formData) => {
     let targetAudience = "all_employees";
-    if (formData.target_audience) {
+    if (formData.section) {
+      targetAudience = "positions";
+    } else if (formData.target_audience) {
       targetAudience = "departments";
     }
 
@@ -113,8 +117,8 @@ const AnnouncementContent = ({ onClose, data }) => {
       target_audience: targetAudience,
       department_ids: formData.target_audience
         ? [Number(formData.target_audience)]
-        : [0],
-      position_ids: formData.section ? [Number(formData.section)] : [0],
+        : [],
+      position_ids: formData.section ? [Number(formData.section)] : [],
     };
 
     console.log('this-payload-++__++---------', payload);

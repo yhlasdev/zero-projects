@@ -1,36 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { IconButton, Badge, Popover, Box, Typography, List, ListItem, ListItemText, Divider, Button } from "@mui/material";
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import CircleIcon from '@mui/icons-material/Circle';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import { useLocale } from '../../../hooks/useLocale';
 
-const mockNotifications = [
-    {
-        id: 1,
-        title: "New leave request",
-        description: "Sarah Johnson requested 5 days leave",
-        time: "2 hours ago",
-        unread: true
-    },
-    {
-        id: 2,
-        title: "Task completed",
-        description: "Kevin Park completed blog post task",
-        time: "5 hours ago",
-        unread: true
-    },
-    {
-        id: 3,
-        title: "New employee request",
-        description: "Alexandra Martinez applied for UX Designer",
-        time: "1 day ago",
-        unread: false
-    }
-];
-
+dayjs.extend(relativeTime);
+    
 export const NotificationBtn = () => {
+    const { t, currentLanguage } = useLocale();
     const [anchorEl, setAnchorEl] = useState(null);
+    const [notifications, setNotifications] = useState([]);
+
+    const loadNotifications = () => {
+        const stored = JSON.parse(localStorage.getItem("notifications") || "[]");
+        const sorted = stored.sort((a, b) => new Date(b.date_time) - new Date(a.date_time));
+        setNotifications(sorted);
+    };
+
+    useEffect(() => {
+        loadNotifications();
+
+        const handleStorage = (e) => {
+            if (e.key === "notifications") {
+                loadNotifications();
+            }
+        };
+        window.addEventListener('storage', handleStorage);
+
+        const handleLocalUpdate = () => loadNotifications();
+        window.addEventListener('notifications-updated', handleLocalUpdate);
+
+        return () => {
+            window.removeEventListener('storage', handleStorage);
+            window.removeEventListener('notifications-updated', handleLocalUpdate);
+        };
+    }, []);
 
     const handleClick = (event) => {
+        loadNotifications();
         setAnchorEl(event.currentTarget);
     };
 
@@ -38,13 +48,29 @@ export const NotificationBtn = () => {
         setAnchorEl(null);
     };
 
+    const handleMarkAllRead = () => {
+        const updated = notifications.map(n => ({ ...n, unread: false }));
+        localStorage.setItem("notifications", JSON.stringify(updated));
+        setNotifications(updated);
+        window.dispatchEvent(new Event('notifications-updated'));
+    };
+
+    const handleDelete = (id, e) => {
+        e.stopPropagation(); // Prevent opening/clicking the item
+        const updated = notifications.filter(n => n.id !== id);
+        localStorage.setItem("notifications", JSON.stringify(updated));
+        setNotifications(updated);
+        window.dispatchEvent(new Event('notifications-updated'));
+    };
+
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
+    const unreadCount = notifications.filter(n => n.unread).length;
 
     return (
         <>
             <IconButton onClick={handleClick}>
-                <Badge color="secondary" variant="dot" invisible={false}>
+                <Badge color="error" badgeContent={unreadCount} invisible={unreadCount === 0}>
                     <NotificationsIcon />
                 </Badge>
             </IconButton>
@@ -75,10 +101,11 @@ export const NotificationBtn = () => {
             >
                 <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Typography variant="h6" sx={{ fontWeight: 700, fontSize: '1.1rem' }}>
-                        Notifications
+                        {t("notifications.title")} ({notifications.length})
                     </Typography>
                     <Button
                         size="small"
+                        onClick={handleMarkAllRead}
                         sx={{
                             textTransform: 'none',
                             fontWeight: 500,
@@ -86,60 +113,76 @@ export const NotificationBtn = () => {
                             '&:hover': { backgroundColor: 'transparent', textDecoration: 'underline' }
                         }}
                     >
-                        Mark all read
+                        {t("notifications.markAllRead")}
                     </Button>
                 </Box>
 
                 <Divider sx={{ opacity: 0.6 }} />
 
                 <List sx={{ p: 0 }}>
-                    {mockNotifications.map((notification, index) => (
-                        <React.Fragment key={notification.id}>
-                            <ListItem
-                                alignItems="flex-start"
-                                sx={{
-                                    py: 2,
-                                    px: 2,
-                                    backgroundColor: notification.unread ? 'rgba(25, 118, 210, 0.04)' : 'transparent',
-                                    '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.02)' },
-                                    cursor: 'pointer',
-                                    transition: 'background-color 0.2s'
-                                }}
-                            >
-                                <Box sx={{ mr: 2, mt: 1, display: 'flex', alignItems: 'center' }}>
-                                    {notification.unread ? (
-                                        <CircleIcon sx={{ fontSize: 10, color: '#1976d2' }} />
-                                    ) : (
-                                        <Box sx={{ width: 10 }} />
-                                    )}
-                                </Box>
-                                <ListItemText
-                                    primary={
-                                        <Typography variant="subtitle2" sx={{ fontWeight: 600, color: '#1e293b' }}>
-                                            {notification.title}
-                                        </Typography>
+                    {notifications.length === 0 ? (
+                        <Box sx={{ p: 4, textAlign: 'center' }}>
+                            <Typography variant="body2" sx={{ color: '#64748b' }}>
+                                {t("notifications.noNotifications")}
+                            </Typography>
+                        </Box>
+                    ) : (
+                        notifications.map((notification, index) => (
+                            <React.Fragment key={notification.id}>
+                                <ListItem
+                                    alignItems="flex-start"
+                                    secondaryAction={
+                                        <IconButton edge="end" aria-label="delete" onClick={(e) => handleDelete(notification.id, e)} size="small" sx={{ color: '#94a3b8', '&:hover': { color: '#ef4444' } }}>
+                                            <DeleteOutlineIcon fontSize="small" />
+                                        </IconButton>
                                     }
-                                    secondary={
-                                        <Box component="span">
-                                            <Typography
-                                                variant="body2"
-                                                sx={{ color: '#64748b', mt: 0.5, display: 'block' }}
-                                            >
-                                                {notification.description}
+                                    sx={{
+                                        py: 2,
+                                        px: 2,
+                                        backgroundColor: notification.unread ? 'rgba(25, 118, 210, 0.04)' : 'transparent',
+                                        '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.02)' },
+                                        cursor: 'pointer',
+                                        transition: 'background-color 0.2s'
+                                    }}
+                                >
+                                    <Box sx={{ mr: 2, mt: 1, display: 'flex', alignItems: 'center' }}>
+                                        {notification.unread ? (
+                                            <CircleIcon sx={{ fontSize: 10, color: '#1976d2' }} />
+                                        ) : (
+                                            <Box sx={{ width: 10 }} />
+                                        )}
+                                    </Box>
+                                    <ListItemText
+                                        primary={
+                                            <Typography variant="subtitle2" sx={{ fontWeight: 600, color: '#1e293b' }}>
+                                                {notification.title}
                                             </Typography>
-                                            <Typography
-                                                variant="caption"
-                                                sx={{ color: '#94a3b8', mt: 1.5, display: 'block' }}
-                                            >
-                                                {notification.time}
-                                            </Typography>
-                                        </Box>
-                                    }
-                                />
-                            </ListItem>
-                            {index < mockNotifications.length - 1 && <Divider component="li" sx={{ opacity: 0.4 }} />}
-                        </React.Fragment>
-                    ))}
+                                        }
+                                        secondaryTypographyProps={{ component: 'div' }}
+                                        secondary={
+                                            <Box>
+                                                <Typography
+                                                    component="span"
+                                                    variant="body2"
+                                                    sx={{ color: '#64748b', mt: 0.5, display: 'block' }}
+                                                >
+                                                    {notification.body || notification.description}
+                                                </Typography>
+                                                <Typography
+                                                    component="span"
+                                                    variant="caption"
+                                                    sx={{ color: '#94a3b8', mt: 1.5, display: 'block' }}
+                                                >
+                                                    {dayjs(notification.date_time).locale(currentLanguage).fromNow()}
+                                                </Typography>
+                                            </Box>
+                                        }
+                                    />
+                                </ListItem>
+                                {index < notifications.length - 1 && <Divider component="li" sx={{ opacity: 0.4 }} />}
+                            </React.Fragment>
+                        ))
+                    )}
                 </List>
             </Popover>
         </>

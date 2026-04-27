@@ -32,6 +32,7 @@ const DetailSkeleton = () => (
     </Grid>
   </Box>
 );
+
 const AnnouncementDetail = ({ onClose, id }) => {
   const { t } = useLocale();
   const { data, isLoading, isError } = useQuery({

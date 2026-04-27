@@ -114,6 +114,8 @@ export const RightSide = () => {
           vapidKey: "BGyWSkI71mFNdVNUlI0qP8x2GpAy17_Tu8aO20nas4C9OcL0SZZ20FwCkTL_UxMCExiUEKZB13RKkBPMlBedSnM",
         });
 
+        console.log('this-token-----', token);
+
         if (token) {
           setForm((prev) => ({ ...prev, fcm_token: token }));
         } else {
@@ -121,15 +123,6 @@ export const RightSide = () => {
         }
       }
     });
-
-    const unsubscribe = onMessage(messaging, (payload) => {
-      toast.info(payload.notification?.title || "new notification");
-    });
-
-    return () => unsubscribe();
-    /*     onMessage(messaging, (payload) => {
-          console.log(payload);
-        }); */
   }, []);
 
   const handleChange = (key, value) => {
@@ -200,7 +193,6 @@ export const RightSide = () => {
         px: 2,
       }}
     >
-      {/* Heading */}
       <Typography
         fontSize={42}
         color="primary.main"
@@ -221,7 +213,6 @@ export const RightSide = () => {
         {t("login.subtitle")}
       </Typography>
 
-      {/* Toggle */}
       <ToggleButtonGroup
         value={type}
         exclusive
@@ -256,9 +247,6 @@ export const RightSide = () => {
                   : "#FFFFFF",
               color: "#4e4e4eff",
             },
-            // ".css-1ov0pa-MuiToggleButtonGroup-root .MuiToggleButton-root.Mui-selected": {
-            //   color: "#eeeeee",
-            // }
           },
         }}
       >
@@ -266,7 +254,6 @@ export const RightSide = () => {
         <ToggleButton value="email">{t("common.email")}</ToggleButton>
       </ToggleButtonGroup>
 
-      {/* API error */}
       {mutation.isError && (
         <Alert
           severity="error"
@@ -276,7 +263,6 @@ export const RightSide = () => {
         </Alert>
       )}
 
-      {/* Form */}
       <form onSubmit={handleSubmit} className="flex flex-col gap-3" noValidate>
         {type === "phone" ? (
           <FieldLabel

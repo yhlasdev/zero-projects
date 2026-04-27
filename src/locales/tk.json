@@ -523,5 +523,11 @@
     "notFound": "Bu ýagdaý üçin maglumat tapylmady",
     "viewCertificate": "Sertifikaty gör",
     "noCertificate": "Bu sorag üçin şahadatnama ýok"
+  },
+  "notifications": {
+    "title": "Bildirişler",
+    "markAllRead": "Ählisini okalan diýip belle",
+    "noNotifications": "Heniz bildiriş ýok",
+    "newNotification": "täze bildiriş"
   }
 }
