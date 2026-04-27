@@ -110,19 +110,22 @@ export const RightSide = () => {
   useEffect(() => {
     Notification.requestPermission().then(async (permission) => {
       if (permission === "granted") {
-        const token = await getToken(messaging, {
-          vapidKey: "BGyWSkI71mFNdVNUlI0qP8x2GpAy17_Tu8aO20nas4C9OcL0SZZ20FwCkTL_UxMCExiUEKZB13RKkBPMlBedSnM",
-        });
+        const m = await messaging;
+        if (m) {
+          const token = await getToken(m, {
+            vapidKey: "BGyWSkI71mFNdVNUlI0qP8x2GpAy17_Tu8aO20nas4C9OcL0SZZ20FwCkTL_UxMCExiUEKZB13RKkBPMlBedSnM",
+          });
 
-        console.log('this-token-----', token);
+          console.log('this-token-----', token);
 
-        if (token) {
-          setForm((prev) => ({ ...prev, fcm_token: token }));
-        } else {
-          console.log("no token available");
+          if (token) {
+            setForm((prev) => ({ ...prev, fcm_token: token }));
+          } else {
+            console.log("no token available");
+          }
         }
       }
-    });
+    })
   }, []);
 
   const handleChange = (key, value) => {

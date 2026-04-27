@@ -119,7 +119,26 @@ export const NotificationBtn = () => {
 
                 <Divider sx={{ opacity: 0.6 }} />
 
-                <List sx={{ p: 0 }}>
+                <List
+                    sx={{
+                        p: 0,
+                        maxHeight: '400px',
+                        overflowY: 'auto',
+                        '&::-webkit-scrollbar': {
+                            width: '6px',
+                        },
+                        '&::-webkit-scrollbar-track': {
+                            background: '#f1f1f1',
+                        },
+                        '&::-webkit-scrollbar-thumb': {
+                            background: '#ccc',
+                            borderRadius: '10px',
+                        },
+                        '&::-webkit-scrollbar-thumb:hover': {
+                            background: '#999',
+                        },
+                    }}
+                >
                     {notifications.length === 0 ? (
                         <Box sx={{ p: 4, textAlign: 'center' }}>
                             <Typography variant="body2" sx={{ color: '#64748b' }}>

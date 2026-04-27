@@ -82,22 +82,30 @@ function App() {
   const { t } = useLocale();
 
   useEffect(() => {
-    const unsubscribe = onMessage(messaging, (payload) => {
-      console.log('Message received. ', payload);
-      toast.info(payload.notification?.title || t("notifications.newNotification"));
+    let unsubscribe;
 
-      const notifications = JSON.parse(localStorage.getItem("notifications") || "[]");
-      notifications.push({
-        ...payload.notification,
-        id: Date.now(),
-        unread: true,
-        date_time: new Date().toISOString()
-      });
-      localStorage.setItem("notifications", JSON.stringify(notifications));
-      window.dispatchEvent(new Event('notifications-updated'));
+    messaging.then((m) => {
+      if (m) {
+        unsubscribe = onMessage(m, (payload) => {
+          console.log('Message received. ', payload);
+          toast.info(payload.notification?.title || t("notifications.newNotification"));
+
+          const notifications = JSON.parse(localStorage.getItem("notifications") || "[]");
+          notifications.push({
+            ...payload.notification,
+            id: Date.now(),
+            unread: true,
+            date_time: new Date().toISOString()
+          });
+          localStorage.setItem("notifications", JSON.stringify(notifications));
+          window.dispatchEvent(new Event('notifications-updated'));
+        });
+      }
     });
 
-    return () => unsubscribe();
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
   }, []);
 
   return (
