@@ -21,8 +21,6 @@ import { useWatch } from "react-hook-form";
 
 const AnnouncementContent = ({ onClose, data }) => {
 
-  console.log('this-data------', data);
-
   const { t } = useLocale();
   const isEdit = Boolean(data);
   const {
@@ -120,8 +118,6 @@ const AnnouncementContent = ({ onClose, data }) => {
         : [],
       position_ids: formData.section ? [Number(formData.section)] : [],
     };
-
-    console.log('this-payload-++__++---------', payload);
 
     if (isEdit) {
       await mutation.mutateAsync({

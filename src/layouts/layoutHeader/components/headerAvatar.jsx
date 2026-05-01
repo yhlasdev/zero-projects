@@ -46,6 +46,8 @@ export const HeaderAvatar = () => {
 
   const profileData = data?.data?.data;
 
+  console.log('this-profile-daa-----', profileData);
+
   const handleOpen = (event) => setAnchorEl(event.currentTarget);
   const handleClose = () => setAnchorEl(null);
 
@@ -78,7 +80,7 @@ export const HeaderAvatar = () => {
           userSelect: "none",
         }}
       >
-        <Avatar src={`http://194.156.117.223:8004/yerinde/storage-service/logo/${profileData?.id}/100x100`} sx={{ width: 40, height: 40 }} />
+        <Avatar src={ profileData?.id ? `http://194.156.117.223:8004/yerinde/storage-service/logo/${profileData?.id}/100x100` : ""} sx={{ width: 40, height: 40 }} />
 
         <Box
           sx={{ display: "flex", flexDirection: "column", textAlign: "left" }}
