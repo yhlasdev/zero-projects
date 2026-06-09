@@ -16,38 +16,37 @@ const CustomTimePicker = ({ control, name, label, errors, marginTop = 2 }) => {
         {label}
       </Typography>
 
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <Controller
-          name={name}
-          control={control}
-          render={({ field }) => (
-            <TimePicker
-              {...field}
-              value={field.value ? dayjs(field.value) : null}
-              onChange={(newValue) => {
-                field.onChange(newValue);
-              }}
-              ampm={false}
-              slotProps={{
-                textField: {
-                  fullWidth: true,
-                  size: "small",
-                  error: !!errorMessage,
-                  sx: {
-                    "& .MuiOutlinedInput-root": {
-                      borderRadius: "12px",
-                      backgroundColor: "#F5F5F5",
-                      height: "56px",
-                      fontSize: "18px",
-                    },
+      <Controller
+        name={name}
+        control={control}
+        render={({ field }) => (
+          <TimePicker
+            {...field}
+            value={field.value ? dayjs(field.value) : null}
+            onChange={(newValue) => {
+              field.onChange(newValue);
+            }}
+            ampm={false}
+            slotProps={{
+              textField: {
+                fullWidth: true,
+                size: "small",
+                error: !!errorMessage,
+                sx: {
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: "12px",
+                    backgroundColor: "#F5F5F5",
+                    height: "56px",
+                    fontSize: "18px",
                   },
                 },
-              }}
-            />
-          )}
-        />
-      </LocalizationProvider>
+              },
+            }}
+          />
+        )}
+      />
     </Box>
+
   );
 };
 

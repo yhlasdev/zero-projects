@@ -44,12 +44,11 @@ const getFileConfig = (type) => {
 
   if (["jpg", "jpeg", "png", "webp", "gif", "image", "png"].includes(t)) {
     return {
-      icon: <ImageIcon sx={{ color: "#D97706", fontSize: 22 }} />, // Amber/Orange
+      icon: <ImageIcon sx={{ color: "#D97706", fontSize: 22 }} />,
       bg: "#FFFBEB",
     };
   }
 
-  // Default / Other files
   return {
     icon: <DescriptionIcon sx={{ color: "#6B7280", fontSize: 22 }} />,
     bg: "#F3F4F6",
@@ -135,7 +134,6 @@ export const DocumentCard = ({
         </Box>
       </Stack>
 
-      {/* Description */}
       <Typography
         sx={{
           fontSize: 14,
@@ -152,7 +150,6 @@ export const DocumentCard = ({
         {description}
       </Typography>
 
-      {/* Date + Author */}
       <Stack direction="row" justifyContent="space-between" sx={{ mt: 1 }}>
         <Typography sx={{ fontSize: 12, color: "#9CA3AF" }}>
           {formattedDate}
@@ -162,7 +159,6 @@ export const DocumentCard = ({
         </Typography>
       </Stack>
 
-      {/* Actions */}
       <Stack direction="row" spacing={1} alignItems="center" sx={{ mt: 1.5 }}>
         <Button
           startIcon={<LiaDownloadSolid size={16} />}

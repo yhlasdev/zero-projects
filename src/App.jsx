@@ -76,10 +76,10 @@ dayjs.updateLocale("tk", {
   }
 });
 
-dayjs.locale("tk");
 
 function App() {
-  const { t } = useLocale();
+
+  const { t, currentLanguage } = useLocale();
 
   useEffect(() => {
     let unsubscribe;
@@ -109,11 +109,12 @@ function App() {
   }, []);
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="tr" >
+    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={currentLanguage} >
       <ToastContainer position="bottom-right" />
       <RouterProvider router={routes} />
     </LocalizationProvider>
   )
 }
+
 
 export default App;

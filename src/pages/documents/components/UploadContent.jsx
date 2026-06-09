@@ -12,7 +12,6 @@ import { updateDocument } from "../../../api/queries/put";
 import { useAppMutation } from "../../../hooks/useMutation";
 import { useLocale } from "../../../hooks/useLocale";
 
-// Upload cloud icon as SVG to match Figma exactly
 const UploadCloudIcon = () => (
   <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
@@ -327,7 +326,7 @@ const UploadContent = ({ closeSet, editingDoc }) => {
               accept=".jpg,.jpeg,.png,.txt,.pdf,.xls,.xlsx,.doc,.docx"
             />
 
-            {editingDoc?.title}
+            <Box sx={{ fontSize: '16px', fontWeight: 'bold' }}>{editingDoc?.title}</Box>
           </Box>
 
           <Box display="flex" justifyContent="flex-end" gap="12px">

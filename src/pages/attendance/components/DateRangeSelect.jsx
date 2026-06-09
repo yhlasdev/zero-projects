@@ -229,120 +229,119 @@ export default function DateRangeSelect({ value, onChange }) {
   const displayEnd = end ? end.format("DD/MM/YYYY") : "__/__/____";
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Box sx={{ position: "relative", display: "inline-block" }}>
-        <Box
-          onClick={handleInputClick}
+    <Box sx={{ position: "relative", display: "inline-block" }}>
+      <Box
+        onClick={handleInputClick}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          border: "1px solid #afa9a9",
+          borderRadius: "12px",
+          px: 1.5,
+          py: 0.5,
+          cursor: "pointer",
+          gap: 1,
+          "&:hover": { borderColor: "#0d2b5e" },
+        }}
+      >
+        <Typography
           sx={{
-            display: "flex",
-            alignItems: "center",
-            border: "1px solid #afa9a9",
-            borderRadius: "12px",
-            px: 1.5,
-            py: 0.5,
-            cursor: "pointer",
-            gap: 1,
-            "&:hover": { borderColor: "#0d2b5e" },
+            fontFamily: "monospace",
+            fontSize: 15,
+            letterSpacing: 2,
           }}
         >
-          <Typography
-            sx={{
-              fontFamily: "monospace",
-              fontSize: 15,
-              letterSpacing: 2,
-            }}
-          >
-            {displayStart}
-          </Typography>
-          <Typography sx={{ color: "#555", fontSize: 14, fontWeight: 300 }}>
-            -
-          </Typography>
-          <Typography
-            sx={{
-              fontFamily: "monospace",
-              fontSize: 15,
-              letterSpacing: 2,
-            }}
-          >
-            {displayEnd}
-          </Typography>
-          <CalendarMonthIcon sx={{ fontSize: 19 }} />
-        </Box>
+          {displayStart}
+        </Typography>
+        <Typography sx={{ color: "#555", fontSize: 14, fontWeight: 300 }}>
+          -
+        </Typography>
+        <Typography
+          sx={{
+            fontFamily: "monospace",
+            fontSize: 15,
+            letterSpacing: 2,
+          }}
+        >
+          {displayEnd}
+        </Typography>
+        <CalendarMonthIcon sx={{ fontSize: 19 }} />
+      </Box>
 
-        {/* Calendar dropdown */}
-        <Popover
-          open={open}
-          anchorEl={anchorEl}
-          onClose={handleCancel}
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "right",
-          }}
-          transformOrigin={{
-            vertical: "top",
-            horizontal: "right",
-          }}
-          slotProps={{
-            paper: {
-              elevation: 4,
-              sx: {
-                border: "1.5px solid #1565c0",
-                borderRadius: "16px",
-                overflow: "hidden",
-                mt: 1,
-              },
+      {/* Calendar dropdown */}
+      <Popover
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleCancel}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        slotProps={{
+          paper: {
+            elevation: 4,
+            sx: {
+              border: "1.5px solid #1565c0",
+              borderRadius: "16px",
+              overflow: "hidden",
+              mt: 1,
             },
-          }}
-        >
-          <Box>
-            <InlineCalendar
-              value={tempStart || start}
-              rangeStart={tempStart || start}
-              rangeEnd={tempEnd || (selecting === null ? end : null)}
-              onSelect={handleSelect}
-            />
-            {/* Cancel / Ok buttons */}
-            <Box
+          },
+        }}
+      >
+        <Box>
+          <InlineCalendar
+            value={tempStart || start}
+            rangeStart={tempStart || start}
+            rangeEnd={tempEnd || (selecting === null ? end : null)}
+            onSelect={handleSelect}
+          />
+          {/* Cancel / Ok buttons */}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              px: 3,
+              py: 1.5,
+              borderTop: "1px solid #f0f0f0",
+            }}
+          >
+            <Button
+              onClick={handleCancel}
               sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                px: 3,
-                py: 1.5,
-                borderTop: "1px solid #f0f0f0",
+                color: "#1565c0",
+                fontWeight: 600,
+                fontSize: 16,
+                textTransform: "none",
+                p: 0,
+                minWidth: 0,
+                "&:hover": { bgcolor: "transparent", color: "#0d2b5e" },
               }}
             >
-              <Button
-                onClick={handleCancel}
-                sx={{
-                  color: "#1565c0",
-                  fontWeight: 600,
-                  fontSize: 16,
-                  textTransform: "none",
-                  p: 0,
-                  minWidth: 0,
-                  "&:hover": { bgcolor: "transparent", color: "#0d2b5e" },
-                }}
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={handleOk}
-                sx={{
-                  color: "#1565c0",
-                  fontWeight: 600,
-                  fontSize: 16,
-                  textTransform: "none",
-                  p: 0,
-                  minWidth: 0,
-                  "&:hover": { bgcolor: "transparent", color: "#0d2b5e" },
-                }}
-              >
-                Ok
-              </Button>
-            </Box>
+              Cancel
+            </Button>
+            <Button
+              onClick={handleOk}
+              sx={{
+                color: "#1565c0",
+                fontWeight: 600,
+                fontSize: 16,
+                textTransform: "none",
+                p: 0,
+                minWidth: 0,
+                "&:hover": { bgcolor: "transparent", color: "#0d2b5e" },
+              }}
+            >
+              Ok
+            </Button>
           </Box>
-        </Popover>
-      </Box>
-    </LocalizationProvider>
+        </Box>
+      </Popover>
+    </Box>
   );
+
 }

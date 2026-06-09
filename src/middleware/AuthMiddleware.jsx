@@ -18,7 +18,7 @@ export default function AuthMiddleware({ children }) {
   //   };
   // };
 
-  useEffect(() => {
+  /* useEffect(() => {
     async function checkAuth() {
       try {
         const getAccessToken = () => Cookies.get("auth_token");
@@ -30,7 +30,7 @@ export default function AuthMiddleware({ children }) {
       }
     }
     checkAuth();
-  }, []);
+  }, []); */
 
   return <Layout>{children}</Layout>;
 }
